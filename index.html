@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>William Morris | Teacher. Creator. Explorer.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --earth-dark: #2C1810;
+            --earth-brown: #4A2C17;
+            --earth-warm: #6B4423;
+            --earth-gold: #B8860B;
+            --earth-sand: #D4A574;
+            --earth-cream: #F5E6D3;
+            --earth-light: #FAF6F0;
+            --accent-rust: #C75B39;
+            --accent-sage: #6B8E6B;
+            --text-dark: #2C1810;
+            --text-light: #F5E6D3;
+            --shadow: rgba(44, 24, 16, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--earth-light);
+            color: var(--text-dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(44, 24, 16, 0.95), rgba(44, 24, 16, 0.85));
+            backdrop-filter: blur(10px);
+            padding: 0.8rem 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 0.5rem 2rem;
+            background: rgba(44, 24, 16, 0.98);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--earth-cream);
+            text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--earth-sand);
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--earth-gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--earth-cream);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--earth-cream);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--earth-dark) 0%, var(--earth-brown) 50%, var(--earth-warm) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            text-align: center;
+            padding: 2rem;
+            max-width: 900px;
+            z-index: 2;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            color: var(--earth-cream);
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px var(--shadow);
+        }
+
+        .hero-tagline {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--earth-sand);
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+
+        .hero-intro {
+            font-size: 1.1rem;
+            color: var(--earth-cream);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--earth-gold);
+            color: var(--earth-dark);
+        }
+
+        .btn-primary:hover {
+            background: var(--earth-sand);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(184, 134, 11, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--earth-cream);
+            border: 2px solid var(--earth-sand);
+        }
+
+        .btn-secondary:hover {
+            background: var(--earth-sand);
+            color: var(--earth-dark);
+            transform: translateY(-2px);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--earth-sand);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: var(--earth-dark);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, var(--earth-gold), var(--accent-rust));
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--earth-warm);
+            max-width: 600px;
+            margin: 1.5rem auto 0;
+        }
+
+        /* YouTube Section */
+        .youtube-section {
+            background: linear-gradient(to bottom, var(--earth-light), var(--earth-cream));
+        }
+
+        .youtube-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            box-shadow: 0 20px 60px var(--shadow);
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .youtube-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, #FF0000, #CC0000);
+        }
+
+        .youtube-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .coming-soon-badge {
+            display: inline-block;
+            background: var(--accent-rust);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .topic-tags {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .topic-tag {
+            background: var(--earth-light);
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--earth-warm);
+            border: 1px solid var(--earth-sand);
+        }
+
+        .video-placeholder {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 15px;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-placeholder::before {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-placeholder::after {
+            content: '▶';
+            color: white;
+            font-size: 2rem;
+            z-index: 1;
+        }
+
+        .video-placeholder-text {
+            position: absolute;
+            bottom: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* AI Section */
+        .ai-section {
+            background: white;
+        }
+
+        .ai-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .ai-card {
+            background: var(--earth-light);
+            padding: 2.5rem;
+            border-radius: 15px;
+            border-left: 4px solid var(--earth-gold);
+            transition: all 0.3s ease;
+        }
+
+        .ai-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px var(--shadow);
+        }
+
+        .ai-card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .ai-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--earth-dark);
+            margin-bottom: 1rem;
+        }
+
+        .ai-card p {
+            color: var(--earth-warm);
+            font-size: 0.95rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, var(--earth-dark), var(--earth-brown));
+            color: var(--earth-cream);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .highlight-box .icon {
+            font-size: 3rem;
+        }
+
+        .highlight-box h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box p {
+            opacity: 0.9;
+        }
+
+        /* Games Section */
+        .games-section {
+            background: linear-gradient(to bottom, var(--earth-cream), var(--earth-light));
+        }
+
+        .featured-game {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px var(--shadow);
+        }
+
+        .game-header {
+            background: linear-gradient(135deg, var(--earth-dark), var(--earth-brown));
+            color: var(--earth-cream);
+            padding: 2rem 3rem;
+        }
+
+        .game-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .game-header p {
+            opacity: 0.8;
+        }
+
+        .game-versions {
+            padding: 2rem;
+        }
+
+        .version-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .version-card {
+            background: var(--earth-light);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .version-card:hover {
+            border-color: var(--earth-gold);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px var(--shadow);
+        }
+
+        .version-card.latest {
+            border-color: var(--earth-gold);
+            background: linear-gradient(135deg, var(--earth-light), var(--earth-cream));
+        }
+
+        .new-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--accent-rust);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .version-screenshot {
+            height: 150px;
+            background: linear-gradient(135deg, var(--earth-brown), var(--earth-warm));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--earth-sand);
+            font-size: 3rem;
+        }
+
+        .version-info {
+            padding: 1.5rem;
+        }
+
+        .version-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--earth-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .version-desc {
+            font-size: 0.9rem;
+            color: var(--earth-warm);
+            margin-bottom: 1rem;
+        }
+
+        .version-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .version-features li {
+            padding: 0.3rem 0;
+            font-size: 0.85rem;
+            color: var(--earth-warm);
+        }
+
+        .version-features li::before {
+            content: '✓';
+            color: var(--accent-sage);
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }
+
+        .play-btn {
+            display: inline-block;
+            background: var(--earth-gold);
+            color: var(--earth-dark);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+        }
+
+        .play-btn:hover {
+            background: var(--earth-warm);
+            color: var(--earth-cream);
+        }
+
+        /* Tech Reviews Section */
+        .tech-section {
+            background: white;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .category-tab {
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            background: var(--earth-light);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: var(--earth-warm);
+        }
+
+        .category-tab:hover,
+        .category-tab.active {
+            border-color: var(--earth-gold);
+            background: var(--earth-cream);
+            color: var(--earth-dark);
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .tech-card {
+            background: var(--earth-light);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px var(--shadow);
+        }
+
+        .tech-image {
+            height: 200px;
+            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 4rem;
+        }
+
+        .tech-info {
+            padding: 1.5rem;
+        }
+
+        .tech-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--earth-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-status {
+            display: inline-block;
+            background: var(--earth-sand);
+            color: var(--earth-dark);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Weight Loss Section */
+        .weight-section {
+            background: linear-gradient(to bottom, var(--earth-light), var(--earth-cream));
+        }
+
+        .journey-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .before-after {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .photo-placeholder {
+            aspect-ratio: 3/4;
+            background: linear-gradient(135deg, var(--earth-brown), var(--earth-warm));
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--earth-cream);
+        }
+
+        .photo-placeholder .label {
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            opacity: 0.8;
+        }
+
+        .journey-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--earth-dark);
+            margin-bottom: 1rem;
+        }
+
+        .journey-content p {
+            color: var(--earth-warm);
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline {
+            margin-top: 2rem;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-left: 3px solid var(--earth-sand);
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 1.3rem;
+            width: 13px;
+            height: 13px;
+            background: var(--earth-gold);
+            border-radius: 50%;
+        }
+
+        .timeline-date {
+            font-weight: 600;
+            color: var(--earth-gold);
+            min-width: 100px;
+        }
+
+        .timeline-text {
+            color: var(--earth-warm);
+        }
+
+        /* Travel Section */
+        .travel-section {
+            background: white;
+        }
+
+        .travel-hero {
+            background: linear-gradient(135deg, var(--earth-dark), var(--earth-brown));
+            border-radius: 20px;
+            padding: 3rem;
+            color: var(--earth-cream);
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .travel-hero h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .countdown {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            text-align: center;
+        }
+
+        .countdown-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--earth-gold);
+        }
+
+        .countdown-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, var(--earth-sand), var(--earth-warm));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--earth-cream);
+            font-size: 3rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .gallery-item span {
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Life in China Section */
+        .china-section {
+            background: linear-gradient(to bottom, var(--earth-cream), var(--earth-light));
+        }
+
+        .china-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .china-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .china-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .china-card-image {
+            height: 180px;
+            background: linear-gradient(135deg, var(--accent-rust), var(--earth-gold));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .china-card-content {
+            padding: 1.5rem;
+        }
+
+        .china-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--earth-dark);
+            margin-bottom: 0.8rem;
+        }
+
+        .china-card p {
+            color: var(--earth-warm);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--earth-dark);
+            color: var(--earth-cream);
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--earth-gold);
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: var(--earth-sand);
+            text-decoration: none;
+            line-height: 2;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--earth-cream);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--earth-gold);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--earth-sand);
+        }
+
+        .footer-bottom .heart {
+            color: var(--accent-rust);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 280px;
+            }
+
+            .journey-container {
+                grid-template-columns: 1fr;
+            }
+
+            .before-after {
+                order: -1;
+            }
+
+            section {
+                padding: 4rem 1.5rem;
+            }
+
+            .youtube-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .game-header {
+                padding: 1.5rem;
+            }
+
+            .highlight-box {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">William Morris</a>
+            <ul class="nav-links">
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#youtube">YouTube</a></li>
+                <li><a href="#ai">AI in School</a></li>
+                <li><a href="#games">Games</a></li>
+                <li><a href="#tech">Tech Reviews</a></li>
+                <li><a href="#weight">Journey</a></li>
+                <li><a href="#travel">Travel</a></li>
+                <li><a href="#china">Life in China</a></li>
+            </ul>
+            <button class="mobile-menu-btn">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">William Morris</h1>
+            <p class="hero-tagline">Teacher. Creator. Explorer.</p>
+            <p class="hero-intro">
+                An international educator based in China, blending traditional teaching with cutting-edge technology. 
+                Passionate about empowering students through AI, creating engaging educational games, and sharing 
+                insights on tech, travel, and life as a global citizen.
+            </p>
+            <div class="hero-buttons">
+                <a href="#games" class="btn btn-primary">Explore My Work</a>
+                <a href="#china" class="btn btn-secondary">About Me</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- YouTube Channel Section -->
+    <section id="youtube" class="youtube-section reveal">
+        <div class="section-header">
+            <h2 class="section-title">YouTube Channel</h2>
+            <p class="section-subtitle">Join me on a journey through education, technology, and life in China</p>
+        </div>
+        <div class="youtube-card">
+            <div class="youtube-icon">📺</div>
+            <span class="coming-soon-badge">🚀 Launching Soon</span>
+            <h3>Channel Coming 2026</h3>
+            <p style="color: var(--earth-warm); margin: 1rem 0;">
+                Get ready for honest, practical content from a veteran teacher navigating the intersection 
+                of education and technology in the world's most dynamic classroom.
+            </p>
+            <div class="video-placeholder">
+                <span class="video-placeholder-text">Latest Video Preview</span>
+            </div>
+            <a href="#" class="btn btn-primary" style="display: inline-block; margin-top: 1rem;">Subscribe for Updates</a>
+            <div class="topic-tags">
+                <span class="topic-tag">👨‍🏫 Teacher Life</span>
+                <span class="topic-tag">💻 EdTech</span>
+                <span class="topic-tag">🤖 AI in Classroom</span>
+                <span class="topic-tag">📱 Tech Reviews</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI in School Section -->
+    <section id="ai" class="ai-section reveal">
+        <div class="section-header">
+            <h2 class="section-title">AI in School</h2>
+            <p class="section-subtitle">Practical AI integration for modern educators</p>
+        </div>
+        <div class="ai-grid">
+            <div class="ai-card">
+                <div class="ai-card-icon">💬</div>
+                <h3>ChatGPT in the Classroom</h3>
+                <p>Discover how to leverage conversational AI for lesson planning, student engagement, and personalized learning experiences.</p>
+            </div>
+            <div class="ai-card">
+                <div class="ai-card-icon">🛠️</div>
+                <h3>AI Tools for Teachers</h3>
+                <p>A curated collection of AI-powered tools that save time, enhance creativity, and help you focus on what matters most—your students.</p>
+            </div>
+            <div class="ai-card">
+                <div class="ai-card-icon">🎓</div>
+                <h3>Student AI Projects</h3>
+                <p>Real-world examples of student work using AI tools. From creative writing to coding projects, see what's possible when students embrace AI.</p>
+            </div>
+        </div>
+        <div class="highlight-box">
+            <div class="icon">📊</div>
+            <div>
+                <h3>AI Presentation at NAS Jiaxing</h3>
+                <p>A comprehensive workshop on integrating AI into daily teaching practice. Resources, slides, and recordings available for fellow educators.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Games Section -->
+    <section id="games" class="games-section reveal">
+        <div class="section-header">
+            <h2 class="section-title">Educational Games</h2>
+            <p class="section-subtitle">Learning through play—interactive experiences for the classroom</p>
+        </div>
+        <div class="featured-game">
+            <div class="game-header">
+                <h3>🎮 Of Mice and Men</h3>
+                <p>An interactive educational game based on Steinbeck's classic novel</p>
+            </div>
+            <div class="game-versions">
+                <div class="version-grid">
+                    <div class="version-card">
+                        <div class="version-screenshot">🌾</div>
+                        <div class="version-info">
+                            <h4 class="version-name">Classic</h4>
+                            <p class="version-desc">Original survival game prototype</p>
+                            <ul class="version-features">
+                                <li>Basic survival mechanics</li>
+                                <li>Original storyline</li>
+                                <li>Classic interface</li>
+                            </ul>
+                            <a href="./of-mice-and-men-game/classic.html" class="play-btn">Play Now</a>
+                        </div>
+                    </div>
+                    <div class="version-card">
+                        <div class="version-screenshot">🌅</div>
+                        <div class="version-info">
+                            <h4 class="version-name">Version 2.0</h4>
+                            <p class="version-desc">Day-based minigames system</p>
+                            <ul class="version-features">
+                                <li>5 unique locations</li>
+                                <li>Day/night cycle</li>
+                                <li>Minigame variety</li>
+                            </ul>
+                            <a href="./of-mice-and-men-game/index-v2.html" class="play-btn">Play Now</a>
+                        </div>
+                    </div>
+                    <div class="version-card">
+                        <div class="version-screenshot">🏜️</div>
+                        <div class="version-info">
+                            <h4 class="version-name">Version 3.2</h4>
+                            <p class="version-desc">Enhanced gameplay with Curley encounters</p>
+                            <ul class="version-features">
+                                <li>6 locations to explore</li>
+                                <li>Curley boss encounters</li>
+                                <li>Improved economy balance</li>
+                            </ul>
+                            <a href="./of-mice-and-men-game/index-v3-2.html" class="play-btn">Play Now</a>
+                        </div>
+                    </div>
+                    <div class="version-card latest">
+                        <span class="new-badge">✨ What's New</span>
+                        <div class="version-screenshot">📖</div>
+                        <div class="version-info">
+                            <h4 class="version-name">Version 4.2</h4>
+                            <p class="version-desc">Latest - Novel-style interface</p>
+                            <ul class="version-features">
+                                <li>Novel-style narrative UI</li>
+                                <li>Enhanced river ending</li>
+                                <li>Polished visuals & sound</li>
+                            </ul>
+                            <a href="./of-mice-and-men-game/index-v4-2.html" class="play-btn">Play Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Reviews Section -->
+    <section id="tech" class="tech-section reveal">
+        <div class="section-header">
+            <h2 class="section-title">Tech Reviews</h2>
+            <p class="section-subtitle">Honest reviews from a teacher's perspective</p>
+        </div>
+        <div class="category-tabs">
+            <button class="category-tab active">All</button>
+            <button class="category-tab">Cameras</button>
+            <button class="category-tab">Audio</button>
+            <button class="category-tab">Laptops</button>
+            <button class="category-tab">Software</button>
+        </div>
+        <div class="tech-grid">
+            <div class="tech-card">
+                <div class="tech-image">📱</div>
+                <div class="tech-info">
+                    <h3 class="tech-name">OnePlus Ace 6T</h3>
+                    <p style="color: var(--earth-warm); margin-bottom: 0.5rem;">Snapdragon 8 Gen 5 • 12GB RAM • 1TB Storage</p>
+                    <span class="tech-status">Coming Soon</span>
+                </div>
+            </div>
+            <div class="tech-card">
+                <div class="tech-image">📷</div>
+                <div class="tech-info">
+                    <h3 class="tech-name">Sony ZV-E10</h3>
+                    <p style="color: var(--earth-warm); margin-bottom: 0.5rem;">APS-C Vlogging Camera Review</p>
+                    <span class="tech-status">Coming Soon</span>
+                </div>
+            </div>
+            <div class="tech-card">
+                <div class="tech-image">🎤</div>
+                <div class="tech-info">
+                    <h3 class="tech-name">DJI Mic 3</h3>
+                    <p style="color: var(--earth-warm); margin-bottom: 0.5rem;">Wireless Lavalier System (3-Pack)</p>
+                    <span class="tech-status">Coming Soon</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Weight Loss Journey Section -->
+    <section id="weight" class="weight-section reveal">
+        <div class="section-header">
+            <h2 class="section-title">Weight Loss Journey</h2>
+            <p class="section-subtitle">My transformation with Mounjaro—honest experiences and practical tips</p>
+        </div>
+        <div class="journey-container">
+            <div class="journey-content">
+                <h3>A New Chapter</h3>
+                <p>
+                    After years of struggling with weight, I decided to try something different. This section 
+                    documents my honest experience with Mounjaro— the challenges, the victories, and everything in between.
+                </p>
+                <p>
+                    No medical advice, just real talk from someone who's been there. Plus healthy recipes that 
+                    actually taste good and fit a busy teacher's lifestyle.
+                </p>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <span class="timeline-date">Month 1</span>
+                        <span class="timeline-text">Started Mounjaro, adjusting to new routine</span>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-date">Month 3</span>
+                        <span class="timeline-text">First milestone reached, energy levels improving</span>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-date">Month 6</span>
+                        <span class="timeline-text">Sustainable habits formed, lifestyle transformed</span>
+                    </div>
+                </div>
+            </div>
+            <div class="before-after">
+                <div class="photo-placeholder">
+                    <span>📷</span>
+                    <span class="label">Before</span>
+                </div>
+                <div class="photo-placeholder">
+                    <span>📷</span>
+                    <span class="label">After</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Travel Diary Section -->
+    <section id="travel" class="travel-section reveal">
+        <div class="section-header">
+            <h2 class="section-title">Travel Diary</h2>
+            <p class="section-subtitle">Adventures around the world with my mother</p>
+        </div>
+        <div class="travel-hero">
+            <h3>🇨🇦 Canada 2026</h3>
+            <p>Niagara Falls and beyond—planning the ultimate mother-son adventure</p>
+            <div class="countdown">
+                <div class="countdown-item">
+                    <div class="countdown-number" id="days">--</div>
+                    <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="hours">--</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="minutes">--</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+            </div>
+        </div>
+        <h3 style="font-family: 'Playfair Display', serif; text-align: center; margin-bottom: 2rem; color: var(--earth-dark);">Where I've Been</h3>
+        <div class="gallery-grid">
+            <div class="gallery-item">🇹🇭<br><span>Thailand</span></div>
+            <div class="gallery-item">🇯🇵<br><span>Japan</span></div>
+            <div class="gallery-item">🇨🇳<br><span>China</span></div>
+            <div class="gallery-item">🇬🇧<br><span>UK</span></div>
+        </div>
+    </section>
+
+    <!-- Life in China Section -->
+    <section id="china" class="china-section reveal">
+        <div class="section-header">
+            <h2 class="section-title">Life in China</h2>
+            <p class="section-subtitle">Teaching, living, and thriving in Jiaxing, Zhejiang</p>
+        </div>
+        <div class="china-grid">
+            <div class="china-card">
+                <div class="china-card-image">🏫</div>
+                <div class="china-card-content">
+                    <h3>Teaching at NAS Jiaxing</h3>
+                    <p>Life as an international educator at Nord Anglia School Jiaxing. The challenges, rewards, and unique experiences of teaching in a bilingual environment.</p>
+                </div>
+            </div>
+            <div class="china-card">
+                <div class="china-card-image">🏮</div>
+                <div class="china-card-content">
+                    <h3>Cultural Experiences</h3>
+                    <p>From traditional festivals to modern Chinese life. Exploring the rich cultural tapestry of Zhejiang province and beyond.</p>
+                </div>
+            </div>
+            <div class="china-card">
+                <div class="china-card-image">🍜</div>
+                <div class="china-card-content">
+                    <h3>Food & Daily Life</h3>
+                    <p>Navigating local markets, discovering hidden food gems, and building a life in one of China's most beautiful regions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p>📧 editormorris@gmail.com</p>
+                <p>🏫 william.morris@nasjiaxing.cn</p>
+                <p>📍 Jiaxing, Zhejiang, China</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <p><a href="#games">Educational Games</a></p>
+                <p><a href="#ai">AI Resources</a></p>
+                <p><a href="#youtube">YouTube Channel</a></p>
+                <p><a href="#tech">Tech Reviews</a></p>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <p>Follow my journey across platforms</p>
+                <div class="social-links">
+                    <a href="#" class="social-link" title="YouTube">▶️</a>
+                    <a href="#" class="social-link" title="Twitter">𝕏</a>
+                    <a href="#" class="social-link" title="Instagram">📷</a>
+                    <a href="#" class="social-link" title="LinkedIn">💼</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Made with <span class="heart">❤️</span> in China</p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem;">© 2026 William Morris. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Reveal animations on scroll
+        const reveals = document.querySelectorAll('.reveal');
+        const revealOnScroll = () => {
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const revealPoint = 150;
+
+                if (elementTop < windowHeight - revealPoint) {
+                    element.classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll(); // Trigger on load
+
+        // Canada countdown
+        const targetDate = new Date('2026-06-30T21:00:00+08:00').getTime();
+        
+        const updateCountdown = () => {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance > 0) {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+                document.getElementById('days').textContent = days;
+                document.getElementById('hours').textContent = hours;
+                document.getElementById('minutes').textContent = minutes;
+            }
+        };
+
+        updateCountdown();
+        setInterval(updateCountdown, 60000); // Update every minute
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            navLinks.style.position = 'absolute';
+            navLinks.style.top = '100%';
+            navLinks.style.left = '0';
+            navLinks.style.right = '0';
+            navLinks.style.flexDirection = 'column';
+            navLinks.style.background = 'rgba(44, 24, 16, 0.98)';
+            navLinks.style.padding = '1rem';
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    navLinks.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

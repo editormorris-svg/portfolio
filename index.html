@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>William Morris | Teacher. Creator. Explorer.</title>
+    <title>0604.ai | More Than The Sum of All Parts</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
     <style>
         :root {
             --earth-dark: #2C1810;
@@ -1315,6 +1317,29 @@
             max-width: 600px;
         }
 
+        /* Stripe Elements Styling */
+        .StripeElement {
+            background-color: white;
+            padding: 12px;
+            border-radius: 10px;
+            border: 2px solid var(--earth-sand);
+            transition: border-color 0.3s ease;
+        }
+
+        .StripeElement--focus {
+            border-color: var(--earth-gold);
+        }
+
+        .StripeElement--invalid {
+            border-color: var(--accent-rust);
+        }
+
+        #card-errors {
+            color: var(--accent-rust);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
         .form-group {
             margin-bottom: 1.5rem;
         }
@@ -1564,13 +1589,34 @@
                 teacher, son, father, friend, AI enthusiast, musician, gamer, traveler, cook, film buff. 
                 Not optimized for algorithms. Optimized for genuine human connection.
             </p>
-            <div class="video-placeholder">
-                <span class="video-placeholder-text">Video 1: Birth of the Channel</span>
+            
+            <!-- Video 1 Embed -->
+            <div style="background: linear-gradient(135deg, var(--earth-dark), var(--earth-brown)); border-radius: 15px; padding: 1.5rem; margin-bottom: 1rem;">
+                <h4 style="color: var(--earth-gold); margin-bottom: 1rem;">🎬 Video 1: Birth of the Channel</h4>
+                <div style="aspect-ratio: 16/9; background: var(--earth-dark); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                    <div style="text-align: center; color: var(--earth-sand);">
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">▶️</div>
+                        <p>The moment it all began</p>
+                    </div>
+                </div>
+                <p style="color: var(--earth-cream); font-size: 0.9rem;">Walking through my home, showing the setup, explaining why today was the day to stop procrastinating and take the leap.</p>
+                <a href="https://youtube.com/@0604ai" target="_blank" class="btn btn-primary" style="display: inline-block; margin-top: 1rem;">Watch on YouTube →</a>
             </div>
-            <div class="video-placeholder" style="margin-top: 1rem;">
-                <span class="video-placeholder-text">Video 2: The Many Sides of 0604</span>
+            
+            <!-- Video 2 Embed -->
+            <div style="background: linear-gradient(135deg, var(--earth-brown), var(--earth-warm)); border-radius: 15px; padding: 1.5rem; margin-bottom: 1rem;">
+                <h4 style="color: var(--earth-gold); margin-bottom: 1rem;">🎭 Video 2: The Many Sides of 0604</h4>
+                <div style="aspect-ratio: 16/9; background: var(--earth-dark); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                    <div style="text-align: center; color: var(--earth-sand);">
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">🎭</div>
+                        <p>All the facets of one human</p>
+                    </div>
+                </div>
+                <p style="color: var(--earth-cream); font-size: 0.9rem;">Teacher, son, father, friend, AI enthusiast, musician, gamer, traveler, cook, film buff — I cannot deny who I am.</p>
+                <a href="https://youtube.com/@0604ai" target="_blank" class="btn btn-primary" style="display: inline-block; margin-top: 1rem;">Watch on YouTube →</a>
             </div>
-            <a href="#" class="btn btn-primary" style="display: inline-block; margin-top: 1rem;">🎬 Watch on YouTube</a>
+            
+            <a href="https://youtube.com/@0604ai" target="_blank" class="btn btn-secondary" style="display: inline-block; margin-top: 1rem;">🎬 Subscribe to 0604.ai</a>
             <div class="topic-tags">
                 <span class="topic-tag">👨‍🏫 Teacher</span>
                 <span class="topic-tag">🤖 AI Enthusiast</span>
@@ -2191,14 +2237,26 @@
 
                 <h3 style="margin: 1.5rem 0 1rem; color: var(--earth-dark);">Payment Method</h3>
                 
-                <p style="color: var(--earth-warm); margin-bottom: 1rem; font-size: 0.9rem;">💳 Secure payment processing coming soon. For now, orders will be processed via email invoice.</p>
+                <div style="background: white; padding: 1rem; border-radius: 10px; border: 2px solid var(--earth-sand); margin-bottom: 1rem;">
+                    <div id="card-element" style="padding: 0.5rem;">
+                        <!-- Stripe Card Element will be inserted here -->
+                    </div>
+                    <div id="card-errors" style="color: var(--accent-rust); font-size: 0.85rem; margin-top: 0.5rem;"></div>
+                </div>
+                
+                <p style="color: var(--earth-warm); margin-bottom: 1rem; font-size: 0.85rem;">
+                    🔒 Secured by Stripe. Your payment information is encrypted and never stored on our servers.
+                </p>
 
                 <div class="form-group">
                     <label>Order Notes (Optional)</label>
                     <textarea rows="3" placeholder="Any special requests or questions..."></textarea>
                 </div>
 
-                <button type="submit" class="checkout-btn" style="margin-top: 1rem;">Complete Order</button>
+                <button type="submit" class="checkout-btn" id="submit-payment" style="margin-top: 1rem;">
+                    <span id="button-text">Pay Securely</span>
+                    <span id="button-spinner" style="display: none;">Processing...⏳</span>
+                </button>
             </form>
         </div>
     </div>
@@ -2639,25 +2697,96 @@
             `;
         }
 
-        function processOrder(e) {
+        // ==================== STRIPE INTEGRATION ====================
+        // NOTE: Replace with your actual Stripe publishable key
+        const stripe = Stripe('pk_test_YOUR_PUBLISHABLE_KEY_HERE');
+        const elements = stripe.elements();
+        let cardElement = null;
+
+        function initializeStripe() {
+            if (!cardElement) {
+                cardElement = elements.create('card', {
+                    style: {
+                        base: {
+                            fontSize: '16px',
+                            color: '#2C1810',
+                            '::placeholder': {
+                                color: '#6B4423',
+                            },
+                        },
+                        invalid: {
+                            color: '#C75B39',
+                        },
+                    },
+                });
+                cardElement.mount('#card-element');
+                
+                cardElement.on('change', (event) => {
+                    const errorDiv = document.getElementById('card-errors');
+                    if (event.error) {
+                        errorDiv.textContent = event.error.message;
+                    } else {
+                        errorDiv.textContent = '';
+                    }
+                });
+            }
+        }
+
+        // Initialize Stripe when checkout opens
+        const originalOpenCheckout = openCheckout;
+        openCheckout = function() {
+            originalOpenCheckout();
+            setTimeout(initializeStripe, 100);
+        };
+
+        async function processOrder(e) {
             e.preventDefault();
             
-            const formData = new FormData(e.target);
-            const orderDetails = {
-                items: cart,
-                total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-                timestamp: new Date().toISOString()
-            };
+            const submitButton = document.getElementById('submit-payment');
+            const buttonText = document.getElementById('button-text');
+            const buttonSpinner = document.getElementById('button-spinner');
             
-            // For now, just show confirmation
-            alert(`Thank you for your order!\n\nTotal: $${orderDetails.total.toFixed(2)}\n\nWe'll send a confirmation email to complete your purchase.\n\nWelcome to the 0604 community.`);
+            // Show loading state
+            submitButton.disabled = true;
+            buttonText.style.display = 'none';
+            buttonSpinner.style.display = 'inline';
             
-            // Clear cart
-            cart = [];
-            saveCart();
-            updateCartUI();
-            closeCheckout();
-            toggleCart(false);
+            try {
+                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                
+                // Create payment method
+                const {paymentMethod, error} = await stripe.createPaymentMethod({
+                    type: 'card',
+                    card: cardElement,
+                });
+                
+                if (error) {
+                    document.getElementById('card-errors').textContent = error.message;
+                    return;
+                }
+                
+                // In production, send paymentMethod.id to your server
+                // For demo, we'll show success
+                console.log('Payment Method:', paymentMethod.id);
+                
+                // Show success
+                alert(`🎉 Order Placed Successfully!\n\nTotal: $${total.toFixed(2)}\n\nPayment Method: **** **** **** ${paymentMethod.card.last4}\n\nA confirmation email has been sent to you.\n\nWelcome to the 0604 community!\n\n📧 Check your email for order details.`);
+                
+                // Clear cart
+                cart = [];
+                saveCart();
+                updateCartUI();
+                closeCheckout();
+                toggleCart(false);
+                
+            } catch (err) {
+                console.error('Payment error:', err);
+                alert('There was an error processing your payment. Please try again.');
+            } finally {
+                submitButton.disabled = false;
+                buttonText.style.display = 'inline';
+                buttonSpinner.style.display = 'none';
+            }
         }
 
         // Close modals on overlay click

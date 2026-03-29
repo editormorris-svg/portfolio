@@ -346,6 +346,58 @@
             border: 1px solid var(--earth-sand);
         }
 
+        /* Gallery Section */
+        .gallery-section {
+            background: linear-gradient(to bottom, var(--earth-cream), var(--earth-light));
+            padding: 4rem 2rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 4/3;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            background: var(--earth-dark);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 16px 40px rgba(44, 24, 16, 0.25);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+
+            .gallery-item {
+                aspect-ratio: 1/1;
+            }
+        }
+
         .video-placeholder {
             background: linear-gradient(135deg, #1a1a2e, #16213e);
             border-radius: 15px;
@@ -1538,6 +1590,7 @@
                 <li><a href="#ai">AI in School</a></li>
                 <li><a href="#games">Games</a></li>
                 <li><a href="#tech">Tech Reviews</a></li>
+                <li><a href="#gallery">Career</a></li>
                 <li><a href="#weight" class="weight-link">Journey</a></li>
                 <li><a href="#travel">Travel</a></li>
                 <li><a href="#china">Life in China</a></li>
@@ -1593,27 +1646,31 @@
             <!-- Video 1 Embed -->
             <div style="background: linear-gradient(135deg, var(--earth-dark), var(--earth-brown)); border-radius: 15px; padding: 1.5rem; margin-bottom: 1rem;">
                 <h4 style="color: var(--earth-gold); margin-bottom: 1rem;">🎬 Video 1: Birth of the Channel</h4>
-                <div style="aspect-ratio: 16/9; background: var(--earth-dark); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
-                    <div style="text-align: center; color: var(--earth-sand);">
-                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">▶️</div>
-                        <p>The moment it all began</p>
+                <a href="https://youtu.be/rilBhcpHUnE" target="_blank" style="display: block; position: relative;">
+                    <div style="aspect-ratio: 16/9; background: linear-gradient(135deg, var(--earth-dark), var(--earth-brown)); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; position: relative;">
+                        <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                            <span style="font-size: 2rem; margin-left: 5px;">▶</span>
+                        </div>
+                        <div style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">NEW</div>
                     </div>
-                </div>
-                <p style="color: var(--earth-cream); font-size: 0.9rem;">Walking through my home, showing the setup, explaining why today was the day to stop procrastinating and take the leap.</p>
-                <a href="https://youtube.com/@0604ai" target="_blank" class="btn btn-primary" style="display: inline-block; margin-top: 1rem;">Watch on YouTube →</a>
+                </a>
+                <p style="color: var(--earth-cream); font-size: 0.9rem; margin-bottom: 1rem;">The moment I stopped procrastinating. A raw walkthrough of my home—where the 0604.ai domain was purchased, where the first video was shot, and where I finally decided to just START. No polish, no perfection—just the real beginning.</p>
+                <a href="https://youtu.be/rilBhcpHUnE" target="_blank" class="btn btn-primary" style="display: inline-block;">Watch on YouTube →</a>
             </div>
             
             <!-- Video 2 Embed -->
             <div style="background: linear-gradient(135deg, var(--earth-brown), var(--earth-warm)); border-radius: 15px; padding: 1.5rem; margin-bottom: 1rem;">
-                <h4 style="color: var(--earth-gold); margin-bottom: 1rem;">🎭 Video 2: The Many Sides of 0604</h4>
-                <div style="aspect-ratio: 16/9; background: var(--earth-dark); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
-                    <div style="text-align: center; color: var(--earth-sand);">
-                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">🎭</div>
-                        <p>All the facets of one human</p>
+                <h4 style="color: var(--earth-gold); margin-bottom: 1rem;">🎭 Video 2: What's in a Name?</h4>
+                <a href="https://youtu.be/km19CVDMd08" target="_blank" style="display: block; position: relative;">
+                    <div style="aspect-ratio: 16/9; background: linear-gradient(135deg, var(--earth-brown), var(--earth-warm)); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; position: relative;">
+                        <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                            <span style="font-size: 2rem; margin-left: 5px;">▶</span>
+                        </div>
+                        <div style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">NEW</div>
                     </div>
-                </div>
-                <p style="color: var(--earth-cream); font-size: 0.9rem;">Teacher, son, father, friend, AI enthusiast, musician, gamer, traveler, cook, film buff — I cannot deny who I am.</p>
-                <a href="https://youtube.com/@0604ai" target="_blank" class="btn btn-primary" style="display: inline-block; margin-top: 1rem;">Watch on YouTube →</a>
+                </a>
+                <p style="color: var(--earth-cream); font-size: 0.9rem; margin-bottom: 1rem;">The philosophy behind 0604.ai. Why this name, why now, and what this channel is actually about. Teacher, son, father, friend, AI enthusiast, musician, gamer, traveler, cook, film buff — I cannot deny who I am.</p>
+                <a href="https://youtu.be/km19CVDMd08" target="_blank" class="btn btn-primary" style="display: inline-block;">Watch on YouTube →</a>
             </div>
             
             <a href="https://youtube.com/@0604ai" target="_blank" class="btn btn-secondary" style="display: inline-block; margin-top: 1rem;">🎬 Subscribe to 0604.ai</a>
@@ -1627,6 +1684,36 @@
                 <span class="topic-tag">🎬 Film Buff</span>
                 <span class="topic-tag">👨‍👩‍👧 Father & Son</span>
             </div>
+        </div>
+    </section>
+
+    <!-- Career Highlights Gallery Section -->
+    <section id="gallery" class="gallery-section reveal">
+        <div class="section-header">
+            <h2 class="section-title">Career Highlights</h2>
+            <p class="section-subtitle">25 years across cultures — Thailand, UAE, Hong Kong, and beyond</p>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item"><img src="images/FB_2---b8c48a6f-bcab-45a9-9e71-8f18827147f4.jpg" alt="Career Highlight" loading="lazy"></div>
+            <div class="gallery-item"><img src="images/FB_3---5b43c116-95c1-4d13-97c3-b6b916f5b44d.jpg" alt="Career Highlight" loading="lazy"></div>
+            <div class="gallery-item"><img src="images/FB_5---e9afdb28-9b97-4a32-84a0-3745fd025899.jpg" alt="Career Highlight" loading="lazy"></div>
+            <div class="gallery-item"><img src="images/FB_6---d4fe0725-3d50-41e9-aa60-c507fc8409a7.jpg" alt="Career Highlight" loading="lazy"></div>
+            <div class="gallery-item"><img src="images/FB_7---292d397e-7542-41f3-8f99-b5bb687f7ab6.jpg" alt="Career Highlight" loading="lazy"></div>
+            <div class="gallery-item"><img src="images/FB_8---adb10457-3f09-43f8-b205-189ee00da7ca.jpg" alt="Career Highlight" loading="lazy"></div>
+            <div class="gallery-item"><img src="images/FB_10---19c4f3a0-ac4e-4b02-a5e6-aefec9ce807b.jpg" alt="Career Highlight" loading="lazy"></div>
+            <div class="gallery-item"><img src="images/FB_11---2ab118ef-c8b6-4db3-9b8a-68c8013597f6.jpg" alt="Career Highlight" loading="lazy"></div>
+            <div class="gallery-item"><img src="images/FB_12---fff0044d-51e6-48fc-9eb2-6e9ec6ebc1af.jpg" alt="Career Highlight" loading="lazy"></div>
+            <div class="gallery-item"><img src="images/FB_13---d63499c9-1ecf-4b32-9b61-f50ceb84a54d.jpg" alt="Career Highlight" loading="lazy"></div>
+            <div class="gallery-item"><img src="images/FB_14---e390e8b8-7fe9-4cef-b20d-3bd5c3e98271.jpg" alt="Career Highlight" loading="lazy"></div>
+            <div class="gallery-item"><img src="images/FB_15---eaa8a966-d4ec-4699-bba0-5d93547ca6d6.jpg" alt="Career Highlight" loading="lazy"></div>
+            <div class="gallery-item"><img src="images/FB_16---f65b987b-c66e-422f-8b6e-30b3dff6a36b.jpg" alt="Career Highlight" loading="lazy"></div>
+            <div class="gallery-item"><img src="images/FB_17---6e5f4139-d4d3-47b1-9a0d-69847ad1660c.jpg" alt="Career Highlight" loading="lazy"></div>
+            <div class="gallery-item"><img src="images/FB_18---a8fa0e54-2c81-4ab1-98c3-7d909ab1edb2.jpg" alt="Career Highlight" loading="lazy"></div>
+            <div class="gallery-item"><img src="images/FB_19---d8552182-f643-4479-911a-19e2e5a0144c.jpg" alt="Career Highlight" loading="lazy"></div>
+            <div class="gallery-item"><img src="images/FB_20---cedc8de9-8aeb-4170-8b13-e98062fb4013.jpg" alt="Career Highlight" loading="lazy"></div>
+            <div class="gallery-item"><img src="images/FB_21---37a9bf41-fb03-473e-b855-0791ecd061e3.jpg" alt="Career Highlight" loading="lazy"></div>
+            <div class="gallery-item"><img src="images/FB_22---5a5f0016-abe9-4d82-970a-527c21871817.jpg" alt="Career Highlight" loading="lazy"></div>
+            <div class="gallery-item"><img src="images/FB_25---955f8c8b-8943-499d-b9f1-53fa0f614a24.jpg" alt="Career Highlight" loading="lazy"></div>
         </div>
     </section>
 
@@ -2252,6 +2339,29 @@
                         <div class="timeline-item">
                             <span class="timeline-date">Month 6</span>
                             <span class="timeline-text">Sustainable habits formed, lifestyle transformed</span>
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin-top: 3rem; margin-bottom: 1.5rem;">📹 Video Journey</h3>
+                    <div class="video-playlist" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div class="video-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px var(--shadow); transition: transform 0.3s ease;">
+                            <a href="https://youtu.be/rG099Thd9R0" target="_blank" style="display: block; position: relative;">
+                                <div style="aspect-ratio: 16/9; background: linear-gradient(135deg, var(--earth-dark), var(--earth-brown)); display: flex; align-items: center; justify-content: center; position: relative;">
+                                    <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                                        <span style="font-size: 2rem; margin-left: 5px;">▶</span>
+                                    </div>
+                                    <div style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">NEW</div>
+                                </div>
+                            </a>
+                            <div style="padding: 1.5rem;">
+                                <h4 style="font-family: 'Playfair Display', serif; margin-bottom: 0.5rem; color: var(--earth-dark);">My First Mounjaro Injection</h4>
+                                <p style="color: var(--earth-warm); font-size: 0.95rem; line-height: 1.6;">After a stressful week at work, Carina, Scott and I escaped to the mall for a long lunch — a much-needed treat. That evening, still running on adrenaline, I filmed my Mounjaro injection routine and finally worked up the courage to upload my first-ever YouTube video.</p>
+                                <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                    <span style="background: var(--earth-light); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; color: var(--earth-warm);">First Video</span>
+                                    <span style="background: var(--earth-light); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; color: var(--earth-warm);">Injection Routine</span>
+                                    <span style="background: var(--earth-light); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; color: var(--earth-warm);">Behind the Scenes</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

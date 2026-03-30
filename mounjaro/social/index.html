@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Mingles — 0604.ai</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3a5f, #2d5a87, #3d7ab5);
+            min-height: 100vh;
+            color: #fff;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        header { text-align: center; margin-bottom: 50px; }
+        h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .subtitle { color: rgba(255,255,255,0.7); font-size: 1.1em; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.7); text-decoration: none; margin-bottom: 20px; transition: color 0.2s; }
+        .back-link:hover { color: #60a5fa; }
+        
+        .intro {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        .intro p { color: rgba(255,255,255,0.8); line-height: 1.7; font-size: 1.1em; }
+        
+        .social-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .social-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 35px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .social-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .social-icon { font-size: 3em; margin-bottom: 20px; }
+        .social-title { font-size: 1.4em; margin-bottom: 15px; color: #60a5fa; }
+        .social-desc { color: rgba(255,255,255,0.75); line-height: 1.7; margin-bottom: 25px; }
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: rgba(255,255,255,0.25); }
+        
+        .highlight-box {
+            background: rgba(255,255,255,0.05);
+            border-left: 4px solid #f472b6;
+            padding: 25px;
+            border-radius: 0 15px 15px 0;
+            margin-top: 40px;
+        }
+        .highlight-box h3 { color: #f472b6; margin-bottom: 10px; }
+        .highlight-box p { color: rgba(255,255,255,0.8); }
+        
+        footer { text-align: center; margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
+        footer a { color: #60a5fa; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="https://0604.ai" class="back-link">← Back to 0604.ai</a>
+        
+        <header>
+            <h1>🤝 Social Mingles</h1>
+            <p class="subtitle">How I meet people and build community in Jiaxing</p>
+        </header>
+
+        <div class="intro">
+            <p>Moving to a new city as an expat teacher can be isolating. Over the years, I've found my rhythm—balancing social connections with my health goals, discovering local communities, and creating spaces for genuine human connection. Here's how I do it.</p>
+        </div>
+
+        <div class="social-grid">
+            <div class="social-card">
+                <div class="social-icon">🎬</div>
+                <h3 class="social-title">YouTube & Social Media</h3>
+                <p class="social-desc">Documenting my journey has opened unexpected doors. Through YouTube, I've connected with fellow teachers, locals curious about expat life, and people on similar health journeys. The camera becomes a bridge to conversations that wouldn't happen otherwise.</p>
+                <a href="https://youtu.be/l86gKWNBPvo" target="_blank" class="btn">Watch: Meeting Locals →</a>
+            </div>
+
+            <div class="social-card">
+                <div class="social-icon">🎲</div>
+                <h3 class="social-title">Boardgame Club (Oasis)</h3>
+                <p class="social-desc">Every weekend, a group of us gather at Oasis for board games. DnD campaigns, MTG tournaments, or just casual party games—it's a judgment-free zone where friendships form over dice rolls and strategy. The regularity makes it easy to maintain connections without the pressure of "making plans."</p>
+                <span style="color: #888; font-style: italic;">Meetups every weekend</span>
+            </div>
+
+            <div class="social-card">
+                <div class="social-icon">🌳</div>
+                <h3 class="social-title">Jiaxing Central Park</h3>
+                <p class="social-desc">My morning walk ritual. The park becomes a village—regular faces, casual nods, occasional conversations with retirees practicing English or fellow dog walkers. It's low-pressure socializing that fits perfectly with my health routine.</p>
+                <span style="color: #888; font-style: italic;">Daily walks, spontaneous connections</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>💡 The Balance</h3>
+            <p>Social life while managing weight loss is tricky. I can't do late-night drinking sessions or endless restaurant dinners anymore. So I've shifted toward activity-based socializing—walks, board games, karaoke, YouTube collaboration. The friends who understand this are the ones who stick around. Quality over quantity.</p>
+        </div>
+
+        <footer>
+            <p>Community by <a href="https://0604.ai">0604.ai</a> | Building bridges in Jiaxing</p>
+        </footer>
+    </div>
+</body>
+</html>

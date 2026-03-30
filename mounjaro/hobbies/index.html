@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hobbies — 0604.ai</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4a1a4a, #6b2c6b, #8b3d8b);
+            min-height: 100vh;
+            color: #fff;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        header { text-align: center; margin-bottom: 50px; }
+        h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .subtitle { color: rgba(255,255,255,0.7); font-size: 1.1em; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.7); text-decoration: none; margin-bottom: 20px; transition: color 0.2s; }
+        .back-link:hover { color: #e879f9; }
+        
+        .intro {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        .intro p { color: rgba(255,255,255,0.8); line-height: 1.7; font-size: 1.1em; }
+        
+        .hobby-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .hobby-card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 35px;
+            border: 1px solid rgba(255,255,255,0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .hobby-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .hobby-icon { font-size: 3.5em; margin-bottom: 20px; display: block; }
+        .hobby-title { font-size: 1.4em; margin-bottom: 15px; color: #e879f9; }
+        .hobby-desc { color: rgba(255,255,255,0.75); line-height: 1.7; margin-bottom: 20px; }
+        .hobby-meta { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 8px; 
+            margin-top: 20px;
+        }
+        .meta-tag {
+            background: rgba(255,255,255,0.1);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .studio-section {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            text-align: center;
+        }
+        .studio-section h2 { font-size: 2em; margin-bottom: 20px; color: #e879f9; }
+        .studio-section p { color: rgba(255,255,255,0.8); line-height: 1.7; max-width: 700px; margin: 0 auto 25px; }
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #e879f9, #c026d3);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(232,121,249,0.3); }
+        
+        footer { text-align: center; margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
+        footer a { color: #e879f9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="https://0604.ai" class="back-link">← Back to 0604.ai</a>
+        
+        <header>
+            <h1>🎭 Hobbies</h1>
+            <p class="subtitle">What keeps me sane beyond teaching and health tracking</p>
+        </header>
+
+        <div class="intro">
+            <p>Teaching is consuming. Health tracking can become obsessive. These are the outlets that keep me human—creative, social, and occasionally competitive pursuits that have nothing to do with work or weight loss.</p>
+        </div>
+
+        <div class="hobby-grid">
+            <div class="hobby-card">
+                <span class="hobby-icon">🎤</span>
+                <h3 class="hobby-title">Karaoke</h3>
+                <p class="hobby-desc">Not the drunken KTV sessions of my twenties. Now it's occasional, intentional, and surprisingly therapeutic. There's something about singing that bypasses all the overthinking—pure expression, no judgment (except maybe from the machine's scoring system).</p>
+                <div class="hobby-meta">
+                    <span class="meta-tag">🎵 Stress relief</span>
+                    <span class="meta-tag">🎤 Voice practice</span>
+                </div>
+            </div>
+
+            <div class="hobby-card">
+                <span class="hobby-icon">🐉</span>
+                <h3 class="hobby-title">Dungeons & Dragons</h3>
+                <p class="hobby-desc">Weekly campaigns with the boardgame club. I'm usually the DM—crafting narratives, managing chaos, watching players surprise themselves with their choices. It's collaborative storytelling at its finest, and the friendships formed around the table are surprisingly deep.</p>
+                <div class="hobby-meta">
+                    <span class="meta-tag">📖 Storytelling</span>
+                    <span class="meta-tag">🤝 Community</span>
+                    <span class="meta-tag">🎲 Weekly sessions</span>
+                </div>
+            </div>
+
+            <div class="hobby-card">
+                <span class="hobby-icon">🃏</span>
+                <h3 class="hobby-title">Magic: The Gathering</h3>
+                <p class="hobby-desc">The perfect blend of strategy, collecting, and social interaction. Friday Night Magic at the local game store, casual commander games with friends, or just brewing new deck ideas. It's chess with infinitely more variables and way cooler art.</p>
+                <div class="hobby-meta">
+                    <span class="meta-tag">🧠 Strategy</span>
+                    <span class="meta-tag">🏆 Competition</span>
+                    <span class="meta-tag">🎨 Collecting</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="studio-section">
+            <h2>📹 YouTube Studio</h2>
+            <p>The hobby that ate all my other hobbies. What started as a weight loss documentation project has become a full creative outlet—learning Premiere Pro, experimenting with cameras and lighting, writing scripts, and slowly finding my voice. It's terrifying and exhilarating in equal measure.</p>
+            <p style="font-style: italic; color: rgba(255,255,255,0.6);">"The best time to start was 20 years ago. The second best time is now."</p>
+            <a href="https://www.youtube.com/@0604ai" target="_blank" class="btn">Visit Channel →</a>
+        </div>
+
+        <footer>
+            <p>Creative outlets by <a href="https://0604.ai">0604.ai</a> | More than just a teacher</p>
+        </footer>
+    </div>
+</body>
+</html>

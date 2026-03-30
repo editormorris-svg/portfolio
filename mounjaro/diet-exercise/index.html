@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diet & Exercise — 0604.ai</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2d5016, #3d6b1f, #4a7c26);
+            min-height: 100vh;
+            color: #fff;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .subtitle { color: rgba(255,255,255,0.7); font-size: 1.1em; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.7); text-decoration: none; margin-bottom: 20px; transition: color 0.2s; }
+        .back-link:hover { color: #a3e635; }
+        
+        .disclaimer {
+            background: rgba(0,0,0,0.3);
+            border-left: 4px solid #fbbf24;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+        .disclaimer h3 { color: #fbbf24; margin-bottom: 10px; }
+        .disclaimer p { color: rgba(255,255,255,0.8); line-height: 1.6; }
+        
+        .video-grid { display: grid; gap: 20px; }
+        .video-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .video-card:hover { transform: translateX(10px); }
+        .video-thumb {
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            flex-shrink: 0;
+        }
+        .video-info { flex-grow: 1; }
+        .video-title { font-size: 1.2em; margin-bottom: 8px; }
+        .video-desc { color: rgba(255,255,255,0.7); font-size: 0.95em; line-height: 1.5; }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: rgba(255,255,255,0.3); }
+        
+        .practice-box {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+        .practice-box h2 { margin-bottom: 20px; color: #a3e635; }
+        .practice-list { list-style: none; }
+        .practice-list li {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .practice-list li:last-child { border-bottom: none; }
+        .practice-icon { font-size: 1.5em; }
+        
+        footer { text-align: center; margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
+        footer a { color: #a3e635; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="https://0604.ai" class="back-link">← Back to 0604.ai</a>
+        
+        <header>
+            <h1>🥗 Diet & Exercise</h1>
+            <p class="subtitle">What I know + How I practice</p>
+        </header>
+
+        <div class="disclaimer">
+            <h3>⚠️ Not Medical Advice</h3>
+            <p>This is my personal journey with Mounjaro. Individual results vary significantly. Always consult healthcare professionals before starting any medication or treatment regimen. My experiences should not be interpreted as typical or guaranteed outcomes.</p>
+        </div>
+
+        <h2 style="margin-bottom: 25px; color: #a3e635;">📹 Video Journey</h2>
+        
+        <div class="video-grid">
+            <div class="video-card">
+                <div class="video-thumb">💉</div>
+                <div class="video-info">
+                    <h3 class="video-title">My First Mounjaro Injection</h3>
+                    <p class="video-desc">The beginning of my journey. After a stressful week, I worked up the courage to document my first injection and upload my first YouTube video.</p>
+                </div>
+                <a href="https://youtu.be/rG099Thd9R0" target="_blank" class="btn">Watch →</a>
+            </div>
+
+            <div class="video-card">
+                <div class="video-thumb">🦀</div>
+                <div class="video-info">
+                    <h3 class="video-title">Friend or Fitness</h3>
+                    <p class="video-desc">The eternal struggle: Scott loves food, and I love Scott. How to balance social connections with health goals without losing yourself.</p>
+                </div>
+                <a href="https://youtu.be/pZoXNCKd-H0" target="_blank" class="btn">Watch →</a>
+            </div>
+
+            <div class="video-card">
+                <div class="video-thumb">📊</div>
+                <div class="video-info">
+                    <h3 class="video-title">39.9% Body Fat</h3>
+                    <p class="video-desc">The honest numbers. Facing the reality of where I started and tracking the journey forward.</p>
+                </div>
+                <a href="https://youtu.be/v1ZTwwDnkeI" target="_blank" class="btn">Watch →</a>
+            </div>
+
+            <div class="video-card">
+                <div class="video-thumb">🍽️</div>
+                <div class="video-info">
+                    <h3 class="video-title">NO Breakfast + 12 Lunches</h3>
+                    <p class="video-desc">My intermittent fasting approach. Skipping breakfast and managing meal prep for a busy teacher's schedule.</p>
+                </div>
+                <a href="https://youtu.be/V8_8OVGUMaw" target="_blank" class="btn">Watch →</a>
+            </div>
+
+            <div class="video-card">
+                <div class="video-thumb">🛒</div>
+                <div class="video-info">
+                    <h3 class="video-title">Sam's Club Diet</h3>
+                    <p class="video-desc">Budget-friendly bulk shopping for healthy eating. What to buy, what to avoid, and meal planning on a teacher's salary.</p>
+                </div>
+                <span style="color: #888; font-style: italic;">Coming Soon</span>
+            </div>
+        </div>
+
+        <div class="practice-box">
+            <h2>📝 How I Practice</h2>
+            <ul class="practice-list">
+                <li><span class="practice-icon">💊</span> Weekly Mounjaro injection (prescribed dose)</li>
+                <li><span class="practice-icon">⏰</span> 16:8 intermittent fasting (skip breakfast)</li>
+                <li><span class="practice-icon">🚶</span> Daily walking when possible</li>
+                <li><span class="practice-icon">🥗</span> High protein, low carb meals</li>
+                <li><span class="practice-icon">🍺</span> Minimized alcohol (hardest part)</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>Personal journey by <a href="https://0604.ai">0604.ai</a> | Not medical advice</p>
+        </footer>
+    </div>
+</body>
+</html>

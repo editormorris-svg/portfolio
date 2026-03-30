@@ -2393,22 +2393,10 @@
             <p class="section-subtitle">My transformation with Mounjaro—honest experiences and practical tips</p>
         </div>
 
-        <div style="background: linear-gradient(135deg, var(--accent-rust), #a0442c); color: white; padding: 2rem; border-radius: 20px; margin-bottom: 2rem; text-align: center;">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">🔞</div>
-            <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 1rem;">Adult Content Disclaimer</h3>
-            <p style="max-width: 600px; margin: 0 auto 1.5rem; opacity: 0.95;">
-                This section contains personal health discussions, medical treatment experiences, and vulnerable content 
-                intended for adults only. Not suitable for children.
-            </p>
-            <button class="btn" onclick="openDisclaimer()" style="background: white; color: var(--accent-rust); border: none; padding: 1rem 2rem; border-radius: 50px; font-weight: 600; cursor: pointer;">
-                View Content with Disclaimer
-            </button>
-        </div>
-
-        <!-- Main content always visible -->
-        <div class="journey-container">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: stretch;">
-                <!-- Left: Text content -->
+        <!-- Main content with side-by-side layout -->
+        <div class="journey-container" style="margin-bottom: 2rem;">
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; align-items: stretch;">
+                <!-- Left: Text content (stretched wider) -->
                 <div class="journey-content" style="display: flex; flex-direction: column; justify-content: center;">
                     <h3>My Struggles</h3>
                     <p>
@@ -2435,21 +2423,18 @@
                     </div>
                 </div>
                 
-                <!-- Right: Video Journey teaser -->
+                <!-- Right: Video Journey -->
                 <div style="padding: 2rem; background: linear-gradient(135deg, var(--earth-cream), var(--earth-sand)); border-radius: 15px; text-align: center; display: flex; flex-direction: column; justify-content: center;">
                     <h3 style="margin-bottom: 1rem;">📹 Video Journey</h3>
                     <p style="color: var(--earth-warm); margin-bottom: 1.5rem;">
                         Personal vlogs documenting my Mounjaro experience, lifestyle challenges, and the reality of balancing health goals with social life.
                     </p>
-                    <button class="btn" onclick="openDisclaimer()" style="background: var(--accent-rust); color: white; border: none; padding: 1rem 2rem; border-radius: 50px; font-weight: 600; cursor: pointer;">
-                        View Videos with Disclaimer
-                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- Hidden video content - shown after disclaimer acceptance -->
-        <div id="weightVideoContent" style="display: none; margin-top: 2rem;">
+        <!-- Video content row -->
+        <div style="margin-top: 2rem;">
             <div class="video-playlist" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
                 <!-- Video 1 -->
                 <div class="video-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px var(--shadow); display: flex; flex-direction: column;">

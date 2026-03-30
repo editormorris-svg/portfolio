@@ -3306,50 +3306,94 @@
 
         // ==================== GAME GUIDES ====================
         function showGameGuide(game) {
+            const basePrompt = `I want to design a simple interactive game you can deploy on MiniMax server. The game will be played by my students at school using browser. It is based on the novel "[BOOK_TITLE]". Total game time should be 30mins-1hr. The game should have all or most major characters and based on the theme, plot and integrate some notable quotes and events. Use simple language and can include some additional fun elements + free choice options for players.
+
+I am open to suggestions on how this game can run, play and be built. My general idea is that players begin by creating their character. They enter a name in English. They choose an icon to represent their character (from the given selection of 12 different tokens resembling characters from the story with different outlook). Their character has five attributes: Power, Speed, Health, Intelligence and Beauty. You may change these attributes as you see fit (for example, you can introduce "Luck", "Skills", "Magic", "Wealth", "Wisdom" or whatever appropriate for the game. They are given 5 attribute points to allocate - each point giving +1 to the base 5 of each attribute. This modifier is added to the roll of six-sided dice to determine the outcome of a challenge. For example, an encounter with a (Power) challenge-rating (CR) 8, requires a result of a dice roll + character's attribute modifier (Power). The game has a simple map representing the layout of the city with buildings, locations and key elements from the novel. Character (token) can go to such different locations to play a mini game (related to the story) and earn some money or other tokens used in game. This mini game can be a simple trivia quiz or a fun interactive game you can build (suggest). Player can play the same mini game only once per day (game time) and a total of 5 different games per day. Different mini games requiring different attribute challenges will be spread across the map. Players can buy different items with their money. The goal is to alter the plot or fate of characters. It would be better if the game can use some Act X Scene X references too. We don't need it for all the things but for most iconic moments - it will be nice to have extracts, quotes and scene references provided/attached.`;
+
             const guides = {
                 'mice-men': {
                     title: 'How to Make: Of Mice and Men Game',
+                    book: 'Of Mice and Men',
                     steps: [
-                        'Start with a clear prompt describing the game mechanics (character stats, locations, mini-games)',
-                        'Use MiniMax 2.7 to generate the HTML/CSS/JavaScript code',
-                        'Test the game locally and iterate on the design',
-                        'Host on GitHub Pages for global access'
+                        '<strong>Step 1: Open MiniMax Desktop</strong> (Windows app, free to use)',
+                        '<strong>Step 2: Copy the prompt template</strong> below, replace [BOOK_TITLE] with "Of Mice and Men"',
+                        '<strong>Step 3: Add story details</strong> — mention George & Lennie, the ranch, Curley, Candy, Crooks, the dream farm',
+                        '<strong>Step 4: Send to MiniMax</strong> and let it generate the complete HTML file',
+                        '<strong>Step 5: Test locally</strong> — save the file and open in browser',
+                        '<strong>Step 6: Iterate</strong> — ask MiniMax for changes (colors, harder mini-games, etc.)',
+                        '<strong>Step 7: Deploy</strong> — upload to GitHub Pages (free hosting)'
                     ],
-                    prompt: 'Create an interactive game based on "Of Mice and Men" with character creation, 6 locations, mini-games, and multiple endings.',
-                    video: 'YouTube tutorial coming soon!'
+                    tips: [
+                        'Include specific locations: The Bunkhouse, Crooks\' room, The Barn, The River',
+                        'Add the iconic ending as a choice point — can players change the outcome?',
+                        'Use quotes from the book as rewards or hints in mini-games',
+                        'Make Curley a "boss battle" using the dice + stats mechanic'
+                    ],
+                    tools: 'MiniMax Desktop (free) → generates code | GitHub Pages (free) → hosts the game',
+                    time: '30-60 minutes to generate, 1-2 hours to refine'
                 },
                 'romeo-juliet': {
                     title: 'How to Make: Romeo and Juliet Game',
+                    book: 'Romeo and Juliet',
                     steps: [
-                        'Define the branching narrative structure with key decision points',
-                        'Include iconic scenes (balcony, tomb, street fights)',
-                        'Create character relationship tracking',
-                        'Build multiple ending paths based on player choices'
+                        '<strong>Step 1: Open MiniMax Desktop</strong> (Windows app, free to use)',
+                        '<strong>Step 2: Copy the prompt template</strong> below, replace [BOOK_TITLE] with "Romeo and Juliet"',
+                        '<strong>Step 3: Add story details</strong> — mention the feud, balcony scene, Friar Lawrence, the tomb',
+                        '<strong>Step 4: Send to MiniMax</strong> and let it generate the complete HTML file',
+                        '<strong>Step 5: Test locally</strong> — save the file and open in browser',
+                        '<strong>Step 6: Iterate</strong> — ask MiniMax for changes (more romance options, alternative endings)',
+                        '<strong>Step 7: Deploy</strong> — upload to GitHub Pages (free hosting)'
                     ],
-                    prompt: 'Create an interactive game based on "Romeo and Juliet" with family feud mechanics, romance choices, and tragic/comedic endings.',
-                    video: 'YouTube tutorial coming soon!'
+                    tips: [
+                        'Create a "Family Feud" mechanic that affects which locations players can visit',
+                        'Include Act 2 Scene 2 (balcony) as a critical choice point',
+                        'Add potion mechanics from Friar Lawrence — risk/reward choices',
+                        'Multiple endings: tragic (original), escape (both live), or single survivor'
+                    ],
+                    tools: 'MiniMax Desktop (free) → generates code | GitHub Pages (free) → hosts the game',
+                    time: '30-60 minutes to generate, 1-2 hours to refine'
                 },
                 'macbeth': {
                     title: 'How to Make: Macbeth Game',
+                    book: 'Macbeth',
                     steps: [
-                        'Design supernatural elements (witches, ghosts, visions)',
-                        'Create ambition/guilt mechanics that affect gameplay',
-                        'Include political intrigue and betrayal choices',
-                        'Build descent-into-madness narrative paths'
+                        '<strong>Step 1: Open MiniMax Desktop</strong> (Windows app, free to use)',
+                        '<strong>Step 2: Copy the prompt template</strong> below, replace [BOOK_TITLE] with "Macbeth"',
+                        '<strong>Step 3: Add story details</strong> — mention the witches, Duncan, Lady Macbeth, Banquo, the prophecies',
+                        '<strong>Step 4: Send to MiniMax</strong> and let it generate the complete HTML file',
+                        '<strong>Step 5: Test locally</strong> — save the file and open in browser',
+                        '<strong>Step 6: Iterate</strong> — ask MiniMax for changes (more supernatural elements, guilt mechanics)',
+                        '<strong>Step 7: Deploy</strong> — upload to GitHub Pages (free hosting)'
                     ],
-                    prompt: 'Create an interactive game based on "Macbeth" with prophecy mechanics, moral choices, and supernatural elements.',
-                    video: 'YouTube tutorial coming soon!'
+                    tips: [
+                        'Make the witches\' prophecies interactive — players choose which to believe',
+                        'Add a "Guilt" stat that affects available choices as the game progresses',
+                        'Include famous scenes: dagger vision, Banquo\'s ghost, Birnam Wood',
+                        'Endings: tyrant king, redeemed thane, or dead traitor'
+                    ],
+                    tools: 'MiniMax Desktop (free) → generates code | GitHub Pages (free) → hosts the game',
+                    time: '30-60 minutes to generate, 1-2 hours to refine'
                 },
                 'hamlet': {
                     title: 'How to Make: Hamlet Game',
+                    book: 'Hamlet',
                     steps: [
-                        'Create the ghost encounter as a central mechanic',
-                        'Design revenge vs. justice choice system',
-                        'Include play-within-a-play elements',
-                        'Build multiple endings: revenge, madness, or redemption'
+                        '<strong>Step 1: Open MiniMax Desktop</strong> (Windows app, free to use)',
+                        '<strong>Step 2: Copy the prompt template</strong> below, replace [BOOK_TITLE] with "Hamlet"',
+                        '<strong>Step 3: Add story details</strong> — mention the ghost, Claudius, Ophelia, Polonius, the play-within-a-play',
+                        '<strong>Step 4: Send to MiniMax</strong> and let it generate the complete HTML file',
+                        '<strong>Step 5: Test locally</strong> — save the file and open in browser',
+                        '<strong>Step 6: Iterate</strong> — ask MiniMax for changes (deeper philosophy choices, madness mechanics)',
+                        '<strong>Step 7: Deploy</strong> — upload to GitHub Pages (free hosting)'
                     ],
-                    prompt: 'Create an interactive game based on "Hamlet" with ghost mechanics, revenge choices, and existential themes.',
-                    video: 'YouTube tutorial coming soon!'
+                    tips: [
+                        'The ghost encounter should happen early — it drives the entire narrative',
+                        'Include "To be or not to be" as a player choice with real consequences',
+                        'Make the play-within-a-play a mini-game where players write/choose lines',
+                        'Endings: revengeful murderer, cautious diplomat, or mad prince'
+                    ],
+                    tools: 'MiniMax Desktop (free) → generates code | GitHub Pages (free) → hosts the game',
+                    time: '30-60 minutes to generate, 1-2 hours to refine'
                 }
             };
 
@@ -3360,24 +3404,51 @@
             modal.className = 'modal-overlay active';
             modal.id = 'gameGuideModal';
             modal.innerHTML = `
-                <div class="modal-content" style="max-width: 700px;">
+                <div class="modal-content" style="max-width: 800px; max-height: 90vh; overflow-y: auto;">
                     <button class="modal-close" onclick="closeGameGuide()">×</button>
-                    <h2 style="color: var(--earth-dark); margin-bottom: 1.5rem;">${guide.title}</h2>
                     
-                    <div style="background: var(--earth-light); padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
-                        <h3 style="color: var(--earth-dark); margin-bottom: 1rem;">📋 The Prompt</h3>
-                        <p style="font-style: italic; color: var(--earth-warm); line-height: 1.6;">${guide.prompt}</p>
+                    <h2 style="color: var(--earth-dark); margin-bottom: 0.5rem;">${guide.title}</h2>
+                    <p style="color: var(--earth-warm); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                        Built with <strong>MiniMax 2.7</strong> + <strong>Kimi 2.5</strong> | Hosted on <strong>GitHub Pages</strong>
+                    </p>
+
+                    <div style="background: linear-gradient(135deg, var(--earth-light), white); padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem; border-left: 4px solid var(--earth-gold);">
+                        <h3 style="color: var(--earth-dark); margin-bottom: 1rem;">📋 The Master Prompt</h3>
+                        <p style="color: var(--earth-warm); font-size: 0.9rem; margin-bottom: 1rem;">Copy this entire prompt and replace <code>[BOOK_TITLE]</code> with "${guide.book}":</p>
+                        <pre style="background: #1a1a2e; color: #f5e6d3; padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.8rem; line-height: 1.5; max-height: 200px; overflow-y: auto;">${basePrompt.replace(/\[BOOK_TITLE\]/g, guide.book)}</pre>
+                        <button onclick="navigator.clipboard.writeText(\`${basePrompt.replace(/\[BOOK_TITLE\]/g, guide.book)}\`)" 
+                            style="margin-top: 1rem; padding: 0.6rem 1.2rem; background: var(--earth-gold); color: var(--earth-dark); border: none; border-radius: 5px; cursor: pointer; font-weight: 500;">
+                            📋 Copy Prompt to Clipboard
+                        </button>
                     </div>
 
-                    <h3 style="color: var(--earth-dark); margin-bottom: 1rem;">📝 Step-by-Step</h3>
+                    <h3 style="color: var(--earth-dark); margin-bottom: 1rem;">📝 Step-by-Step Process</h3>
                     <ol style="margin-left: 1.5rem; margin-bottom: 1.5rem; color: var(--earth-warm);">
-                        ${guide.steps.map(step => `<li style="margin-bottom: 0.5rem;">${step}</li>`).join('')}
+                        ${guide.steps.map(step => `<li style="margin-bottom: 0.8rem; line-height: 1.5;">${step}</li>`).join('')}
                     </ol>
 
+                    <div style="background: var(--earth-cream); padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
+                        <h3 style="color: var(--earth-dark); margin-bottom: 1rem;">💡 Pro Tips for ${guide.book}</h3>
+                        <ul style="margin-left: 1.5rem; color: var(--earth-warm);">
+                            ${guide.tips.map(tip => `<li style="margin-bottom: 0.5rem;">${tip}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid var(--earth-sand);">
+                            <h4 style="color: var(--earth-dark); margin-bottom: 0.5rem; font-size: 0.95rem;">🛠️ Tools Needed</h4>
+                            <p style="color: var(--earth-warm); font-size: 0.85rem;">${guide.tools}</p>
+                        </div>
+                        <div style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid var(--earth-sand);">
+                            <h4 style="color: var(--earth-dark); margin-bottom: 0.5rem; font-size: 0.95rem;">⏱️ Time Investment</h4>
+                            <p style="color: var(--earth-warm); font-size: 0.85rem;">${guide.time}</p>
+                        </div>
+                    </div>
+
                     <div style="background: linear-gradient(135deg, var(--accent-rust), #a0442c); color: white; padding: 1.5rem; border-radius: 10px; text-align: center;">
-                        <h3 style="margin-bottom: 0.5rem;">🎥 Video Tutorial</h3>
-                        <p>${guide.video}</p>
-                        <p style="font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.9;">Subscribe to get notified when it drops!</p>
+                        <h3 style="margin-bottom: 0.5rem;">🎥 Video Tutorial Coming Soon</h3>
+                        <p style="font-size: 0.9rem; margin-bottom: 1rem;">I'll record the entire process — from prompt to deployed game</p>
+                        <a href="https://youtube.com/@0604ai" target="_blank" style="display: inline-block; padding: 0.8rem 1.5rem; background: white; color: var(--accent-rust); text-decoration: none; border-radius: 50px; font-weight: 600;">Subscribe for Updates →</a>
                     </div>
                 </div>
             `;

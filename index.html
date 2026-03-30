@@ -2405,86 +2405,98 @@
             </button>
         </div>
 
-        <div id="weightContent" style="display: none;">
-            <div class="journey-container">
-                <div class="journey-content">
-                    <h3>A New Chapter</h3>
-                    <p>
-                        After years of struggling with weight, I decided to try something different. This section 
-                        documents my honest experience with Mounjaro— the challenges, the victories, and everything in between.
+        <!-- Main content always visible -->
+        <div class="journey-container">
+            <div class="journey-content">
+                <h3>A New Chapter</h3>
+                <p>
+                    After years of struggling with weight, I decided to try something different. This section 
+                    documents my honest experience with Mounjaro— the challenges, the victories, and everything in between.
+                </p>
+                <p>
+                    No medical advice, just real talk from someone who's been there. Plus healthy recipes that 
+                    actually taste good and fit a busy teacher's lifestyle.
+                </p>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <span class="timeline-date">Month 1</span>
+                        <span class="timeline-text">Started Mounjaro, adjusting to new routine</span>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-date">Month 3</span>
+                        <span class="timeline-text">First milestone reached, energy levels improving</span>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-date">Month 6</span>
+                        <span class="timeline-text">Sustainable habits formed, lifestyle transformed</span>
+                    </div>
+                </div>
+                
+                <!-- Video Journey teaser -->
+                <div style="margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, var(--earth-cream), var(--earth-sand)); border-radius: 15px; text-align: center;">
+                    <h3 style="margin-bottom: 1rem;">📹 Video Journey</h3>
+                    <p style="color: var(--earth-warm); margin-bottom: 1.5rem; max-width: 500px; margin-left: auto; margin-right: auto;">
+                        Personal vlogs documenting my Mounjaro experience, lifestyle challenges, and the reality of balancing health goals with social life.
                     </p>
-                    <p>
-                        No medical advice, just real talk from someone who's been there. Plus healthy recipes that 
-                        actually taste good and fit a busy teacher's lifestyle.
-                    </p>
-                    <div class="timeline">
-                        <div class="timeline-item">
-                            <span class="timeline-date">Month 1</span>
-                            <span class="timeline-text">Started Mounjaro, adjusting to new routine</span>
+                    <button class="btn" onclick="openDisclaimer()" style="background: var(--accent-rust); color: white; border: none; padding: 1rem 2rem; border-radius: 50px; font-weight: 600; cursor: pointer;">
+                        View Videos with Disclaimer
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden video content - shown after disclaimer acceptance -->
+        <div id="weightVideoContent" style="display: none; margin-top: 2rem;">
+            <div class="video-playlist" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+                <!-- Video 1 -->
+                <div class="video-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px var(--shadow); display: flex; flex-direction: column;">
+                    <a href="https://youtu.be/rG099Thd9R0" target="_blank" style="display: block; position: relative; flex-shrink: 0;">
+                        <div style="aspect-ratio: 16/9; background: linear-gradient(135deg, var(--earth-dark), var(--earth-brown)); display: flex; align-items: center; justify-content: center; position: relative;">
+                            <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <span style="font-size: 1.2rem; margin-left: 3px;">▶</span>
+                            </div>
+                            <span style="position: absolute; top: 8px; right: 8px; background: var(--accent-rust); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">NEW</span>
                         </div>
-                        <div class="timeline-item">
-                            <span class="timeline-date">Month 3</span>
-                            <span class="timeline-text">First milestone reached, energy levels improving</span>
-                        </div>
-                        <div class="timeline-item">
-                            <span class="timeline-date">Month 6</span>
-                            <span class="timeline-text">Sustainable habits formed, lifestyle transformed</span>
+                    </a>
+                    <div style="padding: 1.2rem; flex-grow: 1; display: flex; flex-direction: column;">
+                        <h4 style="font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 0.8rem; color: var(--earth-dark);">My First Mounjaro Injection</h4>
+                        <p style="color: var(--earth-warm); font-size: 0.85rem; line-height: 1.6; flex-grow: 1;">After a stressful week at work, Carina, Scott and I escaped to the mall for a long lunch — a much-needed treat. That evening, still running on adrenaline, I filmed my Mounjaro injection routine and finally worked up the courage to upload my first-ever YouTube video.</p>
+                        <div style="margin-top: 0.8rem; display: flex; gap: 0.3rem; flex-wrap: wrap;">
+                            <span style="background: var(--earth-light); padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem; color: var(--earth-warm);">First Video</span>
+                            <span style="background: var(--earth-light); padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem; color: var(--earth-warm);">Behind the Scenes</span>
                         </div>
                     </div>
-                    
-                    <h3 style="margin-top: 3rem; margin-bottom: 1.5rem;">📹 Video Journey</h3>
-                    <div class="video-playlist" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
-                        <!-- Video 1 -->
-                        <div class="video-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px var(--shadow); display: flex; flex-direction: column;">
-                            <a href="https://youtu.be/rG099Thd9R0" target="_blank" style="display: block; position: relative; flex-shrink: 0;">
-                                <div style="aspect-ratio: 16/9; background: linear-gradient(135deg, var(--earth-dark), var(--earth-brown)); display: flex; align-items: center; justify-content: center; position: relative;">
-                                    <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                        <span style="font-size: 1.2rem; margin-left: 3px;">▶</span>
-                                    </div>
-                                    <span style="position: absolute; top: 8px; right: 8px; background: var(--accent-rust); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">NEW</span>
-                                </div>
-                            </a>
-                            <div style="padding: 1.2rem; flex-grow: 1; display: flex; flex-direction: column;">
-                                <h4 style="font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 0.8rem; color: var(--earth-dark);">My First Mounjaro Injection</h4>
-                                <p style="color: var(--earth-warm); font-size: 0.85rem; line-height: 1.6; flex-grow: 1;">After a stressful week at work, Carina, Scott and I escaped to the mall for a long lunch — a much-needed treat. That evening, still running on adrenaline, I filmed my Mounjaro injection routine and finally worked up the courage to upload my first-ever YouTube video.</p>
-                                <div style="margin-top: 0.8rem; display: flex; gap: 0.3rem; flex-wrap: wrap;">
-                                    <span style="background: var(--earth-light); padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem; color: var(--earth-warm);">First Video</span>
-                                    <span style="background: var(--earth-light); padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem; color: var(--earth-warm);">Behind the Scenes</span>
-                                </div>
+                </div>
+                
+                <!-- Video 2 -->
+                <div class="video-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px var(--shadow); display: flex; flex-direction: column;">
+                    <a href="https://youtu.be/pZoXNCKd-H0" target="_blank" style="display: block; position: relative; flex-shrink: 0;">
+                        <div style="aspect-ratio: 16/9; background: linear-gradient(135deg, #d35400, #e67e22); display: flex; align-items: center; justify-content: center; position: relative;">
+                            <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <span style="font-size: 1.2rem; margin-left: 3px;">▶</span>
                             </div>
                         </div>
-                        
-                        <!-- Video 2 -->
-                        <div class="video-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px var(--shadow); display: flex; flex-direction: column;">
-                            <a href="https://youtu.be/pZoXNCKd-H0" target="_blank" style="display: block; position: relative; flex-shrink: 0;">
-                                <div style="aspect-ratio: 16/9; background: linear-gradient(135deg, #d35400, #e67e22); display: flex; align-items: center; justify-content: center; position: relative;">
-                                    <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                        <span style="font-size: 1.2rem; margin-left: 3px;">▶</span>
-                                    </div>
-                                </div>
-                            </a>
-                            <div style="padding: 1.2rem; flex-grow: 1; display: flex; flex-direction: column;">
-                                <h4 style="font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 0.8rem; color: var(--earth-dark);">🦀 Crab Dinner: Friend or Fitness</h4>
-                                <p style="color: var(--earth-warm); font-size: 0.85rem; line-height: 1.6; flex-grow: 1;">Scott loves food. And I love Scott. Here lies the dilemma — how do I stick to a rigid diet when my best friend needs me for stress release dinners? Relationships take compromise. Accepting people for who they are, good and bad, and learning to live with them without losing yourself is a fine life skill.</p>
-                                <div style="background: var(--earth-light); padding: 0.6rem; border-radius: 6px; margin-top: 0.8rem; font-size: 0.8rem; color: var(--earth-warm); font-style: italic;">The everlasting struggle: social connection vs. health goals.</div>
+                    </a>
+                    <div style="padding: 1.2rem; flex-grow: 1; display: flex; flex-direction: column;">
+                        <h4 style="font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 0.8rem; color: var(--earth-dark);">🦀 Crab Dinner: Friend or Fitness</h4>
+                        <p style="color: var(--earth-warm); font-size: 0.85rem; line-height: 1.6; flex-grow: 1;">Scott loves food. And I love Scott. Here lies the dilemma — how do I stick to a rigid diet when my best friend needs me for stress release dinners? Relationships take compromise. Accepting people for who they are, good and bad, and learning to live with them without losing yourself is a fine life skill.</p>
+                        <div style="background: var(--earth-light); padding: 0.6rem; border-radius: 6px; margin-top: 0.8rem; font-size: 0.8rem; color: var(--earth-warm); font-style: italic;">The everlasting struggle: social connection vs. health goals.</div>
+                    </div>
+                </div>
+                
+                <!-- Video 3 -->
+                <div class="video-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px var(--shadow); display: flex; flex-direction: column;">
+                    <a href="https://youtu.be/itZkbPcq1Ok" target="_blank" style="display: block; position: relative; flex-shrink: 0;">
+                        <div style="aspect-ratio: 16/9; background: linear-gradient(135deg, #27ae60, #2ecc71); display: flex; align-items: center; justify-content: center; position: relative;">
+                            <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <span style="font-size: 1.2rem; margin-left: 3px;">▶</span>
                             </div>
                         </div>
-                        
-                        <!-- Video 3 -->
-                        <div class="video-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px var(--shadow); display: flex; flex-direction: column;">
-                            <a href="https://youtu.be/itZkbPcq1Ok" target="_blank" style="display: block; position: relative; flex-shrink: 0;">
-                                <div style="aspect-ratio: 16/9; background: linear-gradient(135deg, #27ae60, #2ecc71); display: flex; align-items: center; justify-content: center; position: relative;">
-                                    <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                        <span style="font-size: 1.2rem; margin-left: 3px;">▶</span>
-                                    </div>
-                                </div>
-                            </a>
-                            <div style="padding: 1.2rem; flex-grow: 1; display: flex; flex-direction: column;">
-                                <h4 style="font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 0.8rem; color: var(--earth-dark);">⛪ JX Old Town: First Edit on Premiere Pro</h4>
-                                <p style="color: var(--earth-warm); font-size: 0.85rem; line-height: 1.6; flex-grow: 1;">Scott and I explored JX Old Town, where a 1917 church serves as backdrop for wedding videos. We walked pebble paths that have stood for centuries and visited a museum with excavations dating back 2000 years. Scott made me climb the steep stairs to walk the ancient defensive stone walls — a reminder of how brief human life is.</p>
-                                <div style="background: var(--earth-light); padding: 0.6rem; border-radius: 6px; margin-top: 0.8rem; font-size: 0.8rem; color: var(--earth-warm); font-style: italic;">First steps into video editing — proof you don't need to be perfect to start.</div>
-                            </div>
-                        </div>
+                    </a>
+                    <div style="padding: 1.2rem; flex-grow: 1; display: flex; flex-direction: column;">
+                        <h4 style="font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 0.8rem; color: var(--earth-dark);">⛪ JX Old Town: First Edit on Premiere Pro</h4>
+                        <p style="color: var(--earth-warm); font-size: 0.85rem; line-height: 1.6; flex-grow: 1;">Scott and I explored JX Old Town, where a 1917 church serves as backdrop for wedding videos. We walked pebble paths that have stood for centuries and visited a museum with excavations dating back 2000 years. Scott made me climb the steep stairs to walk the ancient defensive stone walls — a reminder of how brief human life is.</p>
+                        <div style="background: var(--earth-light); padding: 0.6rem; border-radius: 6px; margin-top: 0.8rem; font-size: 0.8rem; color: var(--earth-warm); font-style: italic;">First steps into video editing — proof you don't need to be perfect to start.</div>
                     </div>
                 </div>
             </div>
@@ -3124,14 +3136,14 @@
             disclaimerAccepted = true;
             sessionStorage.setItem('disclaimerAccepted', 'true');
             closeDisclaimer();
-            document.getElementById('weightContent').style.display = 'block';
-            // Smooth scroll to content
-            document.getElementById('weightContent').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('weightVideoContent').style.display = 'block';
+            // Smooth scroll to videos
+            document.getElementById('weightVideoContent').scrollIntoView({ behavior: 'smooth' });
         }
 
         // Check if already accepted on page load
         if (disclaimerAccepted) {
-            document.getElementById('weightContent').style.display = 'block';
+            document.getElementById('weightVideoContent').style.display = 'block';
         }
 
         // Weight link click handler

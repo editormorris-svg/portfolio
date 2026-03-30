@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cultural Experiences — 0604.ai</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4a1c1c, #6b2d2d, #8b3a3a);
+            min-height: 100vh;
+            color: #fff;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .subtitle { color: rgba(255,255,255,0.7); font-size: 1.1em; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.7); text-decoration: none; margin-bottom: 20px; transition: color 0.2s; }
+        .back-link:hover { color: #fbbf24; }
+        
+        .intro-box {
+            background: rgba(255,255,255,0.1);
+            border-left: 4px solid #fbbf24;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+        .intro-box p { color: rgba(255,255,255,0.9); line-height: 1.6; }
+        
+        .video-grid { display: grid; gap: 20px; }
+        .video-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .video-card:hover { transform: translateX(10px); }
+        .video-thumb {
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(135deg, #2d1a1a, #1a1a2e);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            flex-shrink: 0;
+        }
+        .video-info { flex-grow: 1; }
+        .video-title { font-size: 1.2em; margin-bottom: 8px; }
+        .video-desc { color: rgba(255,255,255,0.7); font-size: 0.95em; line-height: 1.5; }
+        .video-meta { 
+            display: inline-block; 
+            margin-top: 8px; 
+            background: rgba(251, 191, 36, 0.2); 
+            color: #fbbf24; 
+            padding: 4px 12px; 
+            border-radius: 12px; 
+            font-size: 0.8rem; 
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        .btn:hover { background: rgba(255,255,255,0.3); }
+        
+        .category-section {
+            margin-bottom: 40px;
+        }
+        .category-title {
+            color: #fbbf24;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(251, 191, 36, 0.3);
+        }
+        
+        footer { text-align: center; margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
+        footer a { color: #fbbf24; text-decoration: none; }
+        
+        @media (max-width: 768px) {
+            .video-card { flex-direction: column; text-align: center; }
+            .video-thumb { width: 100%; height: 120px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="https://0604.ai" class="back-link">← Back to 0604.ai</a>
+        
+        <header>
+            <h1>🎭 Cultural Experiences</h1>
+            <p class="subtitle">Festivals, traditions, and moments that define a place</p>
+        </header>
+
+        <div class="intro-box">
+            <p>Travel isn't just about checking countries off a list. It's about the moments that stop you in your tracks — a temple ceremony at dawn, a grandmother teaching her craft, a festival that makes the whole city pulse with energy. These are the experiences that stay with you.</p>
+        </div>
+
+        <!-- China Culture -->
+        <div class="category-section">
+            <h2 class="category-title">🏮 China & Zhejiang</h2>
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-thumb">🧧</div>
+                    <div class="video-info">
+                        <h3 class="video-title">Spring Festival with Local Families</h3>
+                        <p class="video-desc">Celebrating Chinese New Year the authentic way — family dinners, red envelopes, and the stories behind every tradition.</p>
+                        <span class="video-meta">Jiaxing</span>
+                    </div>
+                    <span style="color: #888; font-style: italic;">Coming Soon</span>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumb">🐉</div>
+                    <div class="video-info">
+                        <h3 class="video-title">Dragon Boat Festival on Ancient Canals</h3>
+                        <p class="video-desc">The thunder of drums, the splash of oars, and the taste of zongzi wrapped in bamboo leaves. Experiencing Duanwu in Wuzhen.</p>
+                        <span class="video-meta">Wuzhen</span>
+                    </div>
+                    <span style="color: #888; font-style: italic;">Coming Soon</span>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumb">🎋</div>
+                    <div class="video-info">
+                        <h3 class="video-title">Mid-Autumn Moon Stories</h3>
+                        <p class="video-desc">Sharing mooncakes under the full moon and learning why Chang'e still captivates after thousands of years.</p>
+                        <span class="video-meta">Jiaxing</span>
+                    </div>
+                    <span style="color: #888; font-style: italic;">Coming Soon</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Southeast Asia -->
+        <div class="category-section">
+            <h2 class="category-title">🌴 Southeast Asia</h2>
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-thumb">🙏</div>
+                    <div class="video-info">
+                        <h3 class="video-title">Alms Giving at Dawn</h3>
+                        <p class="video-desc">The quiet ritual of morning offerings to Buddhist monks in Thailand — a meditation on gratitude and impermanence.</p>
+                        <span class="video-meta">Bangkok</span>
+                    </div>
+                    <span style="color: #888; font-style: italic;">Coming Soon</span>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumb">🏮</div>
+                    <div class="video-info">
+                        <h3 class="video-title">Yi Peng Lantern Festival</h3>
+                        <p class="video-desc">Thousands of paper lanterns rising into the night sky — the most magical night of the year in Northern Thailand.</p>
+                        <span class="video-meta">Chiang Mai</span>
+                    </div>
+                    <span style="color: #888; font-style: italic;">Coming Soon</span>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumb">🎭</div>
+                    <div class="video-info">
+                        <h3 class="video-title">Water Festival Madness</h3>
+                        <p class="video-desc">Songkran in Myanmar — when the whole country turns into a giant water fight and nobody stays dry.</p>
+                        <span class="video-meta">Yangon</span>
+                    </div>
+                    <span style="color: #888; font-style: italic;">Coming Soon</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Other Cultures -->
+        <div class="category-section">
+            <h2 class="category-title">🌍 Around the World</h2>
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-thumb">🕍</div>
+                    <div class="video-info">
+                        <h3 class="video-title">Whirling Dervishes</h3>
+                        <p class="video-desc">The mesmerizing Sufi practice of sema — spinning as meditation, music as prayer, in the city where East meets West.</p>
+                        <span class="video-meta">Istanbul</span>
+                    </div>
+                    <span style="color: #888; font-style: italic;">Coming Soon</span>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumb">🌸</div>
+                    <div class="video-info">
+                        <h3 class="video-title">Cherry Blossom Season</h3>
+                        <p class="video-desc">Hanami in Seoul — picnics under pink canopies, soju with strangers, and the Japanese-Korean cultural dialogue.</p>
+                        <span class="video-meta">Seoul</span>
+                    </div>
+                    <span style="color: #888; font-style: italic;">Coming Soon</span>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumb">🎪</div>
+                    <div class="video-info">
+                        <h3 class="video-title">Carnival in Valletta</h3>
+                        <p class="video-desc">Malta's wild pre-Lenten celebration — elaborate costumes, political satire floats, and a whole island letting loose.</p>
+                        <span class="video-meta">Valletta</span>
+                    </div>
+                    <span style="color: #888; font-style: italic;">Coming Soon</span>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Curated by <a href="https://0604.ai">0604.ai</a> | More videos coming as I make them</p>
+        </footer>
+    </div>
+</body>
+</html>

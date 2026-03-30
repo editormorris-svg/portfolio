@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food & Daily Life — 0604.ai</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3a2f, #2d5a45, #3d7a5a);
+            min-height: 100vh;
+            color: #fff;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .subtitle { color: rgba(255,255,255,0.7); font-size: 1.1em; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.7); text-decoration: none; margin-bottom: 20px; transition: color 0.2s; }
+        .back-link:hover { color: #a3e635; }
+        
+        .intro-box {
+            background: rgba(255,255,255,0.1);
+            border-left: 4px solid #a3e635;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+        .intro-box p { color: rgba(255,255,255,0.9); line-height: 1.6; }
+        
+        .video-grid { display: grid; gap: 20px; }
+        .video-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .video-card:hover { transform: translateX(10px); }
+        .video-thumb {
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(135deg, #1a2e1a, #1a1a2e);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            flex-shrink: 0;
+        }
+        .video-info { flex-grow: 1; }
+        .video-title { font-size: 1.2em; margin-bottom: 8px; }
+        .video-desc { color: rgba(255,255,255,0.7); font-size: 0.95em; line-height: 1.5; }
+        .video-meta { 
+            display: inline-block; 
+            margin-top: 8px; 
+            background: rgba(163, 230, 53, 0.2); 
+            color: #a3e635; 
+            padding: 4px 12px; 
+            border-radius: 12px; 
+            font-size: 0.8rem; 
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        .btn:hover { background: rgba(255,255,255,0.3); }
+        
+        .category-section {
+            margin-bottom: 40px;
+        }
+        .category-title {
+            color: #a3e635;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(163, 230, 53, 0.3);
+        }
+        
+        .daily-routine {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+        .daily-routine h2 { margin-bottom: 20px; color: #a3e635; }
+        .routine-list { list-style: none; }
+        .routine-list li {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .routine-list li:last-child { border-bottom: none; }
+        .routine-icon { font-size: 1.5em; }
+        .routine-time { 
+            display: inline-block; 
+            background: rgba(163, 230, 53, 0.2); 
+            color: #a3e635; 
+            padding: 2px 10px; 
+            border-radius: 10px; 
+            font-size: 0.8rem; 
+            margin-right: 10px;
+        }
+        
+        footer { text-align: center; margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
+        footer a { color: #a3e635; text-decoration: none; }
+        
+        @media (max-width: 768px) {
+            .video-card { flex-direction: column; text-align: center; }
+            .video-thumb { width: 100%; height: 120px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="https://0604.ai" class="back-link">← Back to 0604.ai</a>
+        
+        <header>
+            <h1>🍜 Food & Daily Life</h1>
+            <p class="subtitle">What I eat, where I shop, how I live</p>
+        </header>
+
+        <div class="intro-box">
+            <p>Living in China means adapting to a completely different rhythm. From morning dumplings on the street to navigating Sam's Club on a teacher's salary — this is the unfiltered reality of daily life in Jiaxing.</p>
+        </div>
+
+        <!-- Food Videos -->
+        <div class="category-section">
+            <h2 class="category-title">🥢 Food Adventures</h2>
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-thumb">🥟</div>
+                    <div class="video-info">
+                        <h3 class="video-title">Morning Dumplings from Street Vendors</h3>
+                        <p class="video-desc">The hunt for the perfect shengjian bao. Crispy bottoms, juicy pork, and the art of eating them without burning your mouth.</p>
+                        <span class="video-meta">Breakfast</span>
+                    </div>
+                    <span style="color: #888; font-style: italic;">Coming Soon</span>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumb">🛒</div>
+                    <div class="video-info">
+                        <h3 class="video-title">Sam's Club Diet</h3>
+                        <p class="video-desc">Budget-friendly bulk shopping for healthy eating. What to buy, what to avoid, and meal planning on a teacher's salary.</p>
+                        <span class="video-meta">Grocery</span>
+                    </div>
+                    <span style="color: #888; font-style: italic;">Coming Soon</span>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumb">🦐</div>
+                    <div class="video-info">
+                        <h3 class="video-title">Fresh River Shrimp from Local Fishermen</h3>
+                        <p class="video-desc">The morning market ritual — bargaining in broken Chinese, picking the liveliest crustaceans, and cooking them same-day.</p>
+                        <span class="video-meta">Market</span>
+                    </div>
+                    <span style="color: #888; font-style: italic;">Coming Soon</span>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumb">🍵</div>
+                    <div class="video-info">
+                        <h3 class="video-title">Longjing Tea from Hangzhou's Hills</h3>
+                        <p class="video-desc">Visiting the terraced tea fields, learning proper brewing technique, and understanding why this green tea commands premium prices.</p>
+                        <span class="video-meta">Hangzhou</span>
+                    </div>
+                    <span style="color: #888; font-style: italic;">Coming Soon</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daily Life -->
+        <div class="category-section">
+            <h2 class="category-title">🏠 Daily Routines</h2>
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-thumb">🌅</div>
+                    <div class="video-info">
+                        <h3 class="video-title">A Teacher's Morning in Jiaxing</h3>
+                        <p class="video-desc">5:30 AM wake-up, intermittent fasting, and the quiet moments before the school day begins.</p>
+                        <span class="video-meta">Routine</span>
+                    </div>
+                    <span style="color: #888; font-style: italic;">Coming Soon</span>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumb">🚇</div>
+                    <div class="video-info">
+                        <h3 class="video-title">High-Speed Rail Commute</h3>
+                        <p class="video-desc">The 20-minute bullet train journey from Jiaxing to Shanghai. Why I chose this city and how the HSR network shapes my life.</p>
+                        <span class="video-meta">Transport</span>
+                    </div>
+                    <span style="color: #888; font-style: italic;">Coming Soon</span>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumb">🌙</div>
+                    <div class="video-info">
+                        <h3 class="video-title">Evening Walks by South Lake</h3>
+                        <p class="video-desc">The best way to end a teaching day — sunset over Nanhu, elderly couples dancing, and the city slowing down.</p>
+                        <span class="video-meta">Relaxation</span>
+                    </div>
+                    <span style="color: #888; font-style: italic;">Coming Soon</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mounjaro & Diet -->
+        <div class="category-section">
+            <h2 class="category-title">💊 Health & Eating</h2>
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-thumb">💉</div>
+                    <div class="video-info">
+                        <h3 class="video-title">My First Mounjaro Injection</h3>
+                        <p class="video-desc">The beginning of my journey. After a stressful week, I worked up the courage to document my first injection.</p>
+                        <span class="video-meta">Health</span>
+                    </div>
+                    <a href="https://youtu.be/rG099Thd9R0" target="_blank" class="btn">Watch →</a>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumb">🦀</div>
+                    <div class="video-info">
+                        <h3 class="video-title">Friend or Fitness</h3>
+                        <p class="video-desc">The eternal struggle: Scott loves food, and I love Scott. How to balance social connections with health goals.</p>
+                        <span class="video-meta">Social</span>
+                    </div>
+                    <a href="https://youtu.be/pZoXNCKd-H0" target="_blank" class="btn">Watch →</a>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumb">🍽️</div>
+                    <div class="video-info">
+                        <h3 class="video-title">NO Breakfast + 12 Lunches</h3>
+                        <p class="video-desc">My intermittent fasting approach. Skipping breakfast and managing meal prep for a busy teacher's schedule.</p>
+                        <span class="video-meta">Diet</span>
+                    </div>
+                    <a href="https://youtu.be/V8_8OVGUMaw" target="_blank" class="btn">Watch →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daily Rhythm -->
+        <div class="daily-routine">
+            <h2>📝 My Daily Rhythm</h2>
+            <ul class="routine-list">
+                <li><span class="routine-icon">🌅</span> <span class="routine-time">05:30</span> Wake up, light stretching, prepare for the day</li>
+                <li><span class="routine-icon">🚶</span> <span class="routine-time">06:15</span> Morning walk or commute to school</li>
+                <li><span class="routine-icon">📚</span> <span class="routine-time">07:30</span> Teaching day begins at NAS Jiaxing</li>
+                <li><span class="routine-icon">🥗</span> <span class="routine-time">12:00</span> First meal of the day (intermittent fasting)</li>
+                <li><span class="routine-icon">🏫</span> <span class="routine-time">15:30</span> School ends, prep for next day</li>
+                <li><span class="routine-icon">🌙</span> <span class="routine-time">18:00</span> Evening walk, dinner, relaxation</li>
+                <li><span class="routine-icon">✍️</span> <span class="routine-time">20:00</span> YouTube work, editing, or social time</li>
+                <li><span class="routine-icon">😴</span> <span class="routine-time">22:30</span> Wind down, sleep</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>Life in Jiaxing by <a href="https://0604.ai">0604.ai</a> | Real stories, real food, real life</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Games — Max2 & Kimi Collections</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #2d1b4e 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { font-size: 2.5em; margin-bottom: 10px; background: linear-gradient(90deg, #e94560, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: #888; font-size: 1.1em; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: #888; text-decoration: none; margin-bottom: 20px; transition: color 0.2s; }
+        .back-link:hover { color: #e94560; }
+        
+        .collection-section { margin-bottom: 60px; }
+        .collection-header { 
+            background: rgba(255,255,255,0.05); 
+            border-radius: 15px; 
+            padding: 20px 30px; 
+            margin-bottom: 30px;
+            border-left: 4px solid #e94560;
+        }
+        .collection-header.kimi { border-left-color: #a855f7; }
+        .collection-header h2 { color: #fff; margin-bottom: 5px; }
+        .collection-header p { color: #888; }
+        
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .game-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s;
+        }
+        .game-card:hover { transform: translateY(-5px); }
+        .game-icon { font-size: 3em; margin-bottom: 15px; }
+        .game-title { font-size: 1.3em; margin-bottom: 10px; color: #e94560; }
+        .game-card.kimi-card .game-title { color: #a855f7; }
+        .game-desc { color: #aaa; font-size: 0.95em; line-height: 1.5; margin-bottom: 15px; }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #e94560, #c73e54);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .btn.kimi-btn { background: linear-gradient(135deg, #a855f7, #7c3aed); }
+        footer { text-align: center; margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); color: #666; }
+        footer a { color: #e94560; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="https://0604.ai" class="back-link">← Back to 0604.ai</a>
+        
+        <header>
+            <h1>All Games</h1>
+            <p class="subtitle">Complete collection of educational interactive experiences</p>
+        </header>
+
+        <!-- Max2 Collection -->
+        <div class="collection-section">
+            <div class="collection-header">
+                <h2>🎮 Max2 Games Collection</h2>
+                <p>Literature classics brought to life with MiniMax 2.7</p>
+            </div>
+            <div class="games-grid">
+                <div class="game-card">
+                    <div class="game-icon">🐭</div>
+                    <h3 class="game-title">Of Mice and Men</h3>
+                    <p class="game-desc">Steinbeck's classic brought to life. Character creation, explorable locations, multiple endings.</p>
+                    <a href="https://editormorris-svg.github.io/max2-games/mice-and-men/" class="btn">Play Now</a>
+                </div>
+                <div class="game-card">
+                    <div class="game-icon">💔</div>
+                    <h3 class="game-title">Romeo and Juliet</h3>
+                    <p class="game-desc">Star-crossed lovers' tragedy. Navigate family feuds and fate.</p>
+                    <a href="https://editormorris-svg.github.io/max2-games/romeo-and-juliet/" class="btn">Play Now</a>
+                </div>
+                <div class="game-card">
+                    <div class="game-icon">🗡️</div>
+                    <h3 class="game-title">Macbeth</h3>
+                    <p class="game-desc">Ambition, prophecy, and guilt. Witches' riddles and moral choices.</p>
+                    <a href="https://editormorris-svg.github.io/max2-games/macbeth/" class="btn">Play Now</a>
+                </div>
+                <div class="game-card">
+                    <div class="game-icon">🎭</div>
+                    <h3 class="game-title">Hamlet</h3>
+                    <p class="game-desc">The Prince of Denmark's revenge. Ghost encounters and "To be or not to be".</p>
+                    <a href="https://editormorris-svg.github.io/max2-games/hamlet/" class="btn">Play Now</a>
+                </div>
+                <div class="game-card">
+                    <div class="game-icon">🧚</div>
+                    <h3 class="game-title">A Midsummer Night's Dream</h3>
+                    <p class="game-desc">Fairies, magic, and comedic chaos. Enchanted forest adventures.</p>
+                    <a href="https://editormorris-svg.github.io/max2-games/midsummer-nights-dream/" class="btn">Play Now</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kimi Collection -->
+        <div class="collection-section">
+            <div class="collection-header kimi">
+                <h2>🌙 Kimi Game Collection</h2>
+                <p>Interactive experiences crafted with Kimi 2.5</p>
+            </div>
+            <div class="games-grid">
+                <div class="game-card kimi-card">
+                    <div class="game-icon">🎯</div>
+                    <h3 class="game-title">Story Engine</h3>
+                    <p class="game-desc">A flexible framework for creating branching narratives. Coming soon!</p>
+                    <span style="color: #666; font-size: 0.9em;">In Development</span>
+                </div>
+                <div class="game-card kimi-card">
+                    <div class="game-icon">🧩</div>
+                    <h3 class="game-title">Logic Puzzles</h3>
+                    <p class="game-desc">Brain-teasing puzzles for critical thinking. Coming soon!</p>
+                    <span style="color: #666; font-size: 0.9em;">In Development</span>
+                </div>
+                <div class="game-card kimi-card">
+                    <div class="game-icon">🌍</div>
+                    <h3 class="game-title">Cultural Explorer</h3>
+                    <p class="game-desc">Journey through cultures and history. Coming soon!</p>
+                    <span style="color: #666; font-size: 0.9em;">In Development</span>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Created by <a href="https://0604.ai">0604.ai</a> | Educational games for the modern classroom</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Reviews — 0604.ai</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        header { text-align: center; margin-bottom: 50px; }
+        h1 { font-size: 2.5em; margin-bottom: 10px; background: linear-gradient(90deg, #e94560, #ff6b6b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: #888; font-size: 1.1em; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: #888; text-decoration: none; margin-bottom: 20px; transition: color 0.2s; }
+        .back-link:hover { color: #e94560; }
+        
+        .category-tabs { 
+            display: flex; 
+            gap: 10px; 
+            justify-content: center; 
+            margin-bottom: 40px; 
+            flex-wrap: wrap;
+        }
+        .category-tab {
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .category-tab:hover, .category-tab.active {
+            background: rgba(233,69,96,0.2);
+            border-color: #e94560;
+            color: #e94560;
+        }
+        
+        .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .tech-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s;
+        }
+        .tech-card:hover { transform: translateY(-5px); }
+        .tech-name { font-size: 1.2em; margin-bottom: 8px; color: #fff; }
+        .tech-specs { color: #888; font-size: 0.9em; margin-bottom: 15px; }
+        .tech-status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+        .status-coming { background: rgba(255,193,7,0.2); color: #ffc107; }
+        .status-live { background: rgba(40,167,69,0.2); color: #28a745; }
+        
+        footer { text-align: center; margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); color: #666; }
+        footer a { color: #e94560; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="https://0604.ai" class="back-link">← Back to 0604.ai</a>
+        
+        <header>
+            <h1>Tech Reviews</h1>
+            <p class="subtitle">Honest reviews from a teacher's perspective</p>
+        </header>
+
+        <div class="category-tabs">
+            <button class="category-tab active">All</button>
+            <button class="category-tab">Cameras</button>
+            <button class="category-tab">Audio</button>
+            <button class="category-tab">Laptops</button>
+            <button class="category-tab">Software</button>
+        </div>
+
+        <div class="tech-grid">
+            <!-- Mobile -->
+            <div class="tech-card">
+                <h3 class="tech-name">OnePlus Ace 6T</h3>
+                <p class="tech-specs">Snapdragon 8 Gen 5 • 12GB RAM • 1TB Storage</p>
+                <span class="tech-status status-coming">Coming Soon</span>
+            </div>
+
+            <!-- Cameras -->
+            <div class="tech-card">
+                <h3 class="tech-name">Sony ZV-E10</h3>
+                <p class="tech-specs">APS-C Vlogging Camera</p>
+                <span class="tech-status status-coming">Coming Soon</span>
+            </div>
+
+            <div class="tech-card">
+                <h3 class="tech-name">Sony A6700</h3>
+                <p class="tech-specs">APS-C Hybrid for Cinematic Shots</p>
+                <span class="tech-status status-coming">Coming Soon</span>
+            </div>
+
+            <div class="tech-card">
+                <h3 class="tech-name">Sony F4 18-105mm OSS</h3>
+                <p class="tech-specs">Power Zoom Lens</p>
+                <span class="tech-status status-coming">Coming Soon</span>
+            </div>
+
+            <div class="tech-card">
+                <h3 class="tech-name">Viltrox F1.4 13mm</h3>
+                <p class="tech-specs">Wide-Angle Prime Lens</p>
+                <span class="tech-status status-coming">Coming Soon</span>
+            </div>
+
+            <!-- Audio -->
+            <div class="tech-card">
+                <h3 class="tech-name">DJI Mic 3</h3>
+                <p class="tech-specs">Wireless Lavalier System (3 mics)</p>
+                <span class="tech-status status-coming">Coming Soon</span>
+            </div>
+
+            <!-- Laptops/PCs -->
+            <div class="tech-card">
+                <h3 class="tech-name">AMD 7800X3D Workstation</h3>
+                <p class="tech-specs">Gaming + Editing • 32GB DDR5 • RX 7900 XTX</p>
+                <span class="tech-status status-coming">Coming Soon</span>
+            </div>
+
+            <div class="tech-card">
+                <h3 class="tech-name">AMD 7640HS Mini PC</h3>
+                <p class="tech-specs">Compact Power • 32GB DDR5 • Mini PC friendly</p>
+                <span class="tech-status status-coming">Coming Soon</span>
+            </div>
+
+            <div class="tech-card">
+                <h3 class="tech-name">Intel N95 Budget Laptop</h3>
+                <p class="tech-specs">16GB RAM • Dual Boot • Portable Workhorse</p>
+                <span class="tech-status status-coming">Coming Soon</span>
+            </div>
+
+            <!-- AI/Compute -->
+            <div class="tech-card">
+                <h3 class="tech-name">7900XTX for AI</h3>
+                <p class="tech-specs">Gaming GPU meets Local LLMs</p>
+                <span class="tech-status status-coming">Coming Soon</span>
+            </div>
+
+            <div class="tech-card">
+                <h3 class="tech-name">MiniPC vs Mac Mini</h3>
+                <p class="tech-specs">Compact Power on a Budget</p>
+                <span class="tech-status status-coming">Coming Soon</span>
+            </div>
+
+            <!-- Software -->
+            <div class="tech-card">
+                <h3 class="tech-name">Adobe Premiere Pro</h3>
+                <p class="tech-specs">Video Editing for Educators</p>
+                <span class="tech-status status-coming">Coming Soon</span>
+            </div>
+
+            <div class="tech-card">
+                <h3 class="tech-name">DaVinci Resolve</h3>
+                <p class="tech-specs">Color Grading & Editing</p>
+                <span class="tech-status status-coming">Coming Soon</span>
+            </div>
+
+            <div class="tech-card">
+                <h3 class="tech-name">OBS / Meld Studio</h3>
+                <p class="tech-specs">Streaming & Screen Recording</p>
+                <span class="tech-status status-coming">Coming Soon</span>
+            </div>
+        </div>
+
+        <footer>
+            <p>Reviews by <a href="https://0604.ai">0604.ai</a> | Real-world testing from a teacher's perspective</p>
+        </footer>
+    </div>
+</body>
+</html>

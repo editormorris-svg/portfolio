@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>The Great Gatsby - Interactive Adventure</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}:root{--primary:#1a1a2e;--gold:#d4af37;--pink:#f8bbd9;--cream:#fdf5e6;--dark:#0d0d0d;--jazz:#8b5cf6;--text:#eee;--panel:rgba(26,26,46,0.95)}body{font-family:'Georgia',serif;background:linear-gradient(180deg,#0d0d0d 0%,#1a1a2e 50%,#2d1f3d 100%);min-height:100vh;color:var(--text)}.game-container{max-width:1200px;margin:0 auto;padding:20px}.screen{display:none;animation:fadeIn .5s}.screen.active{display:block}@keyframes fadeIn{from{opacity:0}to{opacity:1}}.title-screen{text-align:center;padding:50px 20px}.title-screen h1{font-size:3rem;color:var(--gold);text-shadow:0 0 30px rgba(212,175,55,0.5);margin-bottom:10px}.title-screen .subtitle{font-size:1.5rem;color:var(--pink);margin-bottom:40px;font-style:italic}.btn{background:linear-gradient(135deg,#2d1f3d,var(--jazz));border:2px solid var(--gold);color:#fff;padding:15px 40px;font-size:1.2rem;font-family:inherit;cursor:pointer;border-radius:30px;transition:all .3s;margin:10px}.btn:hover{transform:scale(1.05);box-shadow:0 0 30px rgba(212,175,55,0.4)}.btn:disabled{opacity:.5}.btn-secondary{background:linear-gradient(135deg,var(--jazz),#6b21a8);border-color:var(--pink)}.btn-small{padding:8px 20px;font-size:.9rem}.creation-panel{background:var(--panel);border-radius:20px;padding:30px;border:2px solid var(--gold);margin-bottom:20px}.creation-panel h2{color:var(--gold);margin-bottom:20px;text-align:center}.input-group{margin-bottom:20px}.input-group label{display:block;margin-bottom:8px}.input-group input{width:100%;padding:12px;font-size:1.1rem;border:2px solid var(--jazz);border-radius:10px;background:rgba(255,255,255,0.1);color:#fff;font-family:inherit}.token-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:15px;margin:20px 0}.token-option{aspect-ratio:1;background:rgba(255,255,255,0.1);border:3px solid transparent;border-radius:15px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px;transition:all .3s}.token-option:hover{border-color:var(--pink);transform:scale(1.05)}.token-option.selected{border-color:var(--gold);background:rgba(212,175,55,0.2)}.token-icon{font-size:50px;margin-bottom:5px}.token-name{font-size:.75rem}.attributes-panel{display:grid;grid-template-columns:repeat(5,1fr);gap:15px;margin:20px 0}.attribute-card{background:rgba(255,255,255,0.1);border-radius:15px;padding:15px;text-align:center}.attribute-name{font-size:.9rem;margin-bottom:10px;color:var(--gold)}.attribute-value{font-size:2rem;font-weight:bold;margin-bottom:10px}.attribute-controls{display:flex;justify-content:center;gap:10px}.attr-btn{width:35px;height:35px;border-radius:50%;border:2px solid var(--gold);background:transparent;color:var(--gold);font-size:1.2rem;cursor:pointer}.attr-btn:hover:not(:disabled){background:var(--gold);color:var(--dark)}.attr-btn:disabled{opacity:.3}.points-remaining{text-align:center;font-size:1.3rem;color:var(--gold);margin-top:20px}.game-header{display:flex;justify-content:space-between;align-items:center;background:var(--panel);padding:15px 25px;border-radius:15px;margin-bottom:20px;border:2px solid var(--jazz);flex-wrap:wrap;gap:15px}.player-info{display:flex;align-items:center;gap:15px}.player-token{width:50px;height:50px;background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem}.stat-item{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);padding:8px 15px;border-radius:20px}.map-container{background:var(--panel);border-radius:20px;padding:30px;border:2px solid var(--pink);margin-bottom:20px}.map-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px}.location-card{background:linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.05));border-radius:15px;padding:20px;text-align:center;cursor:pointer;transition:all .3s;border:2px solid transparent;position:relative}.location-card:hover{border-color:var(--gold)}.location-card.current{border-color:var(--gold);background:rgba(212,175,55,0.1)}.location-icon{font-size:3rem;margin-bottom:10px}.location-name{font-size:1.1rem;color:var(--gold);margin-bottom:5px}.location-desc{font-size:.85rem;opacity:.8}.location-badge{position:absolute;top:10px;right:10px;background:var(--jazz);padding:3px 10px;border-radius:10px;font-size:.7rem}.location-detail{background:var(--panel);border-radius:20px;padding:30px;border:2px solid var(--gold);margin-bottom:20px}.story-panel{background:rgba(0,0,0,0.3);border-radius:15px;padding:20px;margin-bottom:20px;border-left:4px solid var(--gold)}.story-panel .chapter{color:var(--gold);font-size:.9rem;margin-bottom:10px}.story-panel .quote{font-style:italic;color:var(--pink);margin:10px 0;padding:10px;background:rgba(248,187,217,0.1);border-radius:8px}.mini-games-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-top:20px}.mini-game-card{background:linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.05));border-radius:15px;padding:20px;text-align:center;cursor:pointer;transition:all .3s;border:2px solid transparent}.mini-game-card:hover:not(.disabled){border-color:var(--pink)}.mini-game-card.completed{border-color:#10b981;background:rgba(16,185,129,0.2)}.mini-game-icon{font-size:2.5rem;margin-bottom:10px}.mini-game-reward{font-size:.85rem;color:var(--gold)}.quiz-container{background:var(--panel);border-radius:20px;padding:30px;border:2px solid var(--jazz);margin-bottom:20px}.quiz-question{font-size:1.2rem;margin-bottom:20px;padding:20px;background:rgba(0,0,0,0.3);border-radius:10px}.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:15px}.quiz-option{background:rgba(255,255,255,0.1);border:2px solid transparent;border-radius:10px;padding:15px;cursor:pointer;text-align:center}.quiz-option.correct{border-color:#10b981;background:rgba(16,185,129,0.3)}.quiz-option.wrong{border-color:#ef4444}.quiz-progress{display:flex;justify-content:center;gap:10px;margin-bottom:20px}.quiz-dot{width:15px;height:15px;border-radius:50%;background:rgba(255,255,255,0.2)}.quiz-dot.completed{background:#10b981}.quiz-dot.current{background:var(--gold)}.dice-container{text-align:center;padding:30px}.dice{width:100px;height:100px;background:linear-gradient(135deg,#fff,#d4af37);border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:3rem;font-weight:bold;color:var(--dark);margin:20px auto;box-shadow:0 5px 20px rgba(0,0,0,0.3);transition:transform .5s}.dice.rolling{animation:roll .5s infinite}@keyframes roll{0%{transform:rotate(0deg)}25%{transform:rotate(90deg)}50%{transform:rotate(180deg)}75%{transform:rotate(270deg)}100%{transform:rotate(360deg)}}.dice-breakdown{font-size:1.1rem;color:var(--gold);margin:10px 0}.dialogue-container{background:var(--panel);border-radius:20px;padding:30px;border:2px solid var(--gold);margin-bottom:20px}.dialogue-npc{text-align:center;margin-bottom:20px}.dialogue-npc .avatar{width:80px;height:80px;background:rgba(255,255,255,0.1);border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:3rem}.dialogue-choices{display:flex;flex-direction:column;gap:10px}.dialogue-choice{background:rgba(255,255,255,0.1);border:2px solid transparent;border-radius:10px;padding:15px;cursor:pointer;text-align:left;color:#fff;font-family:inherit;font-size:1rem}.dialogue-choice:hover{border-color:var(--gold)}.dialogue-choice .attr-hint{font-size:.8rem;color:var(--pink);margin-top:5px}.shop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin-top:20px}.shop-item{background:linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.05));border-radius:15px;padding:20px;text-align:center;border:2px solid transparent}.shop-item:hover{border-color:var(--gold)}.shop-item.owned{border-color:#10b981}.shop-item-icon{font-size:2.5rem;margin-bottom:10px}.shop-item-price{color:var(--gold);margin-bottom:10px}.day-info{background:rgba(0,0,0,0.3);padding:10px 20px;border-radius:10px}.faction-panel{background:rgba(255,255,255,0.05);border-radius:15px;padding:20px;margin:20px 0;text-align:center}.faction-buttons{display:flex;justify-content:center;gap:20px;flex-wrap:wrap}.faction-btn{padding:15px 30px;border-radius:10px;border:2px solid;font-size:1rem;cursor:pointer;font-family:inherit}.faction-btn.oldmoney{border-color:var(--gold);background:rgba(212,175,55,0.2);color:var(--gold)}.faction-btn.newmoney{border-color:var(--pink);background:rgba(248,187,217,0.2);color:var(--pink)}.faction-btn:hover{transform:scale(1.05)}.ending-screen{text-align:center;padding:50px 20px}.ending-art{font-size:100px;margin:30px 0}.stats-summary{background:var(--panel);border-radius:20px;padding:30px;margin:30px auto;max-width:500px;text-align:left}.stats-summary h3{color:var(--gold);margin-bottom:15px;text-align:center}.stat-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.1)}.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:1000;align-items:center;justify-content:center;padding:20px}.modal.active{display:flex}.modal-content{background:var(--panel);border-radius:20px;padding:30px;max-width:500px;border:2px solid var(--gold);text-align:center}.modal-title{color:var(--gold);font-size:1.5rem;margin-bottom:15px}@media(max-width:768px){.token-grid{grid-template-columns:repeat(4,1fr)}.attributes-panel{grid-template-columns:repeat(3,1fr)}.map-grid,.quiz-options{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="game-container">
+<div id="title-screen" class="screen active">
+<div class="title-screen">
+<div style="font-size:80px;margin:30px 0">&#127800;</div>
+<h1>The Great Gatsby</h1>
+<p class="subtitle">An Interactive Adventure</p>
+<p style="margin-bottom:30px;opacity:.8">In the summer of 1922, ambition and desire collide.<br>Roaring parties, hidden secrets, and the American Dream<br>await in the glittering world of West Egg.</p>
+<button class="btn" onclick="showScreen('creation-screen')">Begin Your Summer</button>
+<button class="btn btn-secondary" onclick="loadGame()">Continue</button>
+</div>
+</div>
+
+<div id="creation-screen" class="screen">
+<div class="creation-panel">
+<h2>&#127800; Create Your Character &#127800;</h2>
+<div class="input-group">
+<label>Enter Your Character's Name:</label>
+<input type="text" id="player-name" placeholder="Enter name..." maxlength="20">
+</div>
+<h3 style="color:var(--gold);margin:20px 0">Choose Your Role</h3>
+<div class="token-grid" id="token-grid"></div>
+<h3 style="color:var(--gold);margin:20px 0">Allocate Attributes</h3>
+<p style="opacity:.8;margin-bottom:15px">Distribute <strong>5 points</strong>.</p>
+<div class="attributes-panel" id="attributes-panel"></div>
+<p class="points-remaining">Points: <span id="points-left">5</span></p>
+<div class="faction-panel">
+<p><strong>Choose Your World:</strong></p>
+<div class="faction-buttons">
+<button class="faction-btn oldmoney" onclick="setFaction('old')">&#128081; Old Money - East Egg</button>
+<button class="faction-btn newmoney" onclick="setFaction('new')">&#127882; New Money - West Egg</button>
+</div>
+<p id="faction-display" style="margin-top:10px;opacity:.8">Choose your world...</p>
+</div>
+<div style="text-align:center;margin-top:30px">
+<button class="btn btn-secondary" onclick="showScreen('title-screen')">Back</button>
+<button class="btn" id="start-btn" onclick="startGame()" disabled>Begin</button>
+</div>
+</div>
+</div>
+
+<div id="game-screen" class="screen">
+<div class="game-header">
+<div class="player-info">
+<div class="player-token" id="header-token"></div>
+<div class="player-details"><h3 id="header-name">Player</h3><p id="header-token-name">Character</p></div>
+</div>
+<div class="day-info"><span style="color:var(--gold)" id="day-display">Summer 1922</span><span id="games-display" style="margin-left:15px;color:#10b981">5 actions left</span></div>
+<div class="game-stats">
+<div class="stat-item"><span>&#127882;</span><span id="gold-display">20</span> Dollars</div>
+<div class="stat-item"><span>&#10084;</span><span id="health-display">100</span></div>
+</div>
+</div>
+<div class="location-detail" id="main-area">
+<div class="location-header">
+<h2 id="location-title">West Egg</h2>
+<button class="btn btn-small btn-secondary" onclick="showMap()">View Map</button>
+</div>
+<div id="location-content"></div>
+</div>
+<div class="map-container" id="map-container" style="display:none">
+<h2 style="color:var(--gold);text-align:center">Long Island, 1922</h2>
+<div class="map-grid" id="map-grid"></div>
+</div>
+</div>
+
+<div id="quiz-screen" class="screen">
+<div class="quiz-container">
+<div class="quiz-progress" id="quiz-progress"></div>
+<h2 style="color:var(--gold);text-align:center" id="quiz-title">Trivia</h2>
+<div class="quiz-question" id="quiz-question"></div>
+<div class="quiz-options" id="quiz-options"></div>
+<div style="text-align:center;margin-top:20px"><button class="btn btn-secondary" onclick="returnFromMiniGame()">Back</button></div>
+</div>
+</div>
+
+<div id="challenge-screen" class="screen">
+<div class="quiz-container">
+<h2 style="color:var(--gold);text-align:center" id="challenge-title">Challenge</h2>
+<div style="background:rgba(0,0,0,0.3);padding:20px;border-radius:15px;margin-bottom:20px;text-align:center">
+<p id="challenge-desc"></p>
+<p style="font-size:2rem;color:var(--gold)">CR: <span id="challenge-cr">8</span></p>
+<p style="color:var(--pink);margin-top:10px">Attribute: <span id="challenge-attr"></span></p>
+</div>
+<div class="dice-container">
+<div class="dice" id="dice">?</div>
+<p class="dice-breakdown" id="dice-breakdown"></p>
+<p style="font-size:1.5rem;margin:20px 0" id="dice-result"></p>
+<button class="btn" id="roll-btn" onclick="rollDice()">Roll the Dice</button>
+</div>
+<div style="text-align:center"><button class="btn btn-secondary" onclick="returnFromMiniGame()">Back</button></div>
+</div>
+</div>
+
+<div id="dialogue-screen" class="screen">
+<div class="dialogue-container">
+<div class="dialogue-npc"><div class="avatar" id="dialogue-avatar"></div><p class="name" style="color:var(--gold)" id="dialogue-name">Character</p></div>
+<div class="story-panel" id="dialogue-story"></div>
+<div class="dialogue-text" style="background:rgba(0,0,0,0.3);padding:20px;border-radius:15px;font-style:italic;margin-bottom:20px" id="dialogue-text"></div>
+<div class="dialogue-choices" id="dialogue-choices"></div>
+<div style="text-align:center;margin-top:20px"><button class="btn btn-secondary" onclick="returnFromMiniGame()">Back</button></div>
+</div>
+</div>
+
+<div id="shop-screen" class="screen">
+<div class="quiz-container">
+<h2 style="color:var(--gold);text-align:center" id="shop-title">Shop</h2>
+<p style="text-align:center;margin-bottom:20px">Your Dollars: <span id="shop-gold">0</span></p>
+<div class="shop-grid" id="shop-grid"></div>
+<div style="text-align:center;margin-top:20px"><button class="btn btn-secondary" onclick="returnFromMiniGame()">Back</button></div>
+</div>
+</div>
+
+<div id="ending-screen" class="screen">
+<div class="ending-screen">
+<div class="ending-art" id="ending-art">&#127800;</div>
+<h1 class="ending-title" style="font-size:2.5rem;color:var(--gold);margin-bottom:20px" id="ending-title">The End</h1>
+<p class="ending-subtitle" style="font-size:1.5rem;color:var(--pink);margin-bottom:30px" id="ending-subtitle"></p>
+<div class="story-panel" id="ending-story"></div>
+<div class="stats-summary" id="stats-summary"></div>
+<button class="btn" onclick="newGame()">New Game</button>
+</div>
+</div>
+</div>
+
+<div class="modal" id="result-modal">
+<div class="modal-content">
+<h2 class="modal-title" id="modal-title">Result</h2>
+<p id="modal-text" style="margin-bottom:20px;line-height:1.6"></p>
+<button class="btn" onclick="closeModal()">Continue</button>
+</div>
+</div>
+
+<script>
+const CHARACTERS=[
+{id:'nick',name:'Nick',icon:'&#128100;',desc:'The narrator'},
+{id:'gatsby',name:'Gatsby',icon:'&#128137;',desc:'The mysterious millionaire'},
+{id:'daisy',name:'Daisy',icon:'&#128141;',desc:'The golden girl'},
+{id:'tom',name:'Tom',icon:'&#128147;',desc:'Old money, brute force'},
+{id:'jordan',name:'Jordan',icon:'&#128130;',desc:'The golfer'},
+{id:'myrtle',name:'Myrtle',icon:'&#128129;',desc:'George\'s wife'},
+{id:'george',name:'George',icon:'&#128187;',desc:'Garage owner'},
+{id:'meyer',name:'Meyer',icon:'&#128279;',desc:'Gatsby\'s friend'},
+{id:'owl',name:'Owl Eyes',icon:'&#128062;',desc:'The bookworm'},
+{id:'charlie',name:'Charlie',icon:'&#128588;',desc:'Party guest'},
+{id:'ethel',name:'Ethel',icon:'&#128105;',desc:'Wilson\'s neighbor'},
+{id:'klipspringer',name:'Klipspringer',icon:'&#127917;',desc:'Gatsby\'s pianist'}
+];
+
+const LOCATIONS=[
+{id:'westeeg',name:'West Egg',icon:'&#127968;',desc:'Your modest home',ref:'Ch. 1',quote:'"Gatsby believed in the green light."',miniGames:['trivia','dialogue'],shop:true},
+{id:'easttegg',name:'East Egg',icon:'&#128081;',desc:'Where the old money lives',ref:'Ch. 1',quote:'"I hope she\'ll be a fool."',miniGames:['charm','dialogue'],shop:true},
+{id:'gatsbyparty',name:'Gatsby\'s Party',icon:'&#127881;',desc:'Legendary all-night bashes',ref:'Ch. 3',quote:'"I have been drunk for a week."',miniGames:['trivia','dice'],shop:false},
+{id:'valley',name:'The Valley of Ashes',icon:'&#128167;',desc:'Between West Egg and New York',ref:'Ch. 2',quote:'"The eyes of Doctor T.J. Eckleburg."',miniGames:['dice','dialogue'],shop:false},
+{id:'plazahotel',name:'Plaza Hotel',icon:'&#127943;',desc:'The dramatic confrontation',ref:'Ch. 7',quote:'"I told her the truth."',miniGames:['finale'],shop:false,isEndLocation:true}
+];
+
+const QUIZ=[
+{q:"Who narrates The Great Gatsby?",options:["Gatsby","Nick","Tom","Jordan"],correct:1,ref:"Ch. 1"},
+{q:"What color is Gatsby's car?",options:["Black","White","Yellow","Green"],correct:2,ref:"Ch. 3"},
+{q:"Where does Gatsby's mansion sit?",options:["East Egg","West Egg","New York","Valley of Ashes"],correct:1,ref:"Ch. 1"},
+{q:"Who is Gatsby's true love?",options:["Jordan","Myrtle","Daisy","Ethel"],correct:2,ref:"Ch. 1"},
+{q:"What did Gatsby buy to impress Daisy?",options:["A mansion","A ring","A car","A plane"],correct:2,ref:"Ch. 4"},
+{q:"What were the eyes on the billboard?",options:["Gatsby","Eckleburg","T.J.","Doctor"],correct:1,ref:"Ch. 2"},
+{q:"Who dies at the end of the novel?",options:["Tom","Gatsby","Nick","Daisy"],correct:1,ref:"Ch. 8"},
+{q:"What year is the novel set?",options:["1920","1922","1924","1919"],correct:1,ref:"Ch. 1"},
+{q:"Where did Gatsby get his money?",options:["Inheritance","Bootlegging","Speculation","Gambling"],correct:1,ref:"Ch. 4"},
+{q:"Who killed Myrtle?",options:["Tom","Gatsby","Nick","Jordan"],correct:1,ref:"Ch. 7"}
+];
+
+const SHOP_ITEMS=[
+{id:'suit',name:'Fancy Suit',icon:'&#128084;',price:50,desc:'Impress at parties',effect:'+1 Charm permanently'},
+{id:'car',name:'Luxury Car',icon:'&#128663;',price:80,desc:'Get around faster',effect:'Unlocks Plaza Hotel early'},
+{id:'perfume',name:'French Perfume',icon:'&#129718;',price:30,desc:'Appealing scent',consumable:true,effect:'+2 to charm tests'},
+{id:'book',name:'Book Collection',icon:'&#128218;',price:40,desc:'Knowledge is power',effect:'+1 Wisdom'},
+{id:'ring',name:'Daisy Ring',icon:'&#128141;',price:100,desc:'Symbol of love',effect:'Required for true ending'}
+];
+
+const DIALOGUES={
+westeeg:[
+{npc:'gatsby',npcName:'Jay Gatsby',npcIcon:'&#128137;',story:{act:'Ch. 1',text:'Gatsby stands by the water, reaching toward the green light.'},text:'"Can\'t repeat the past? Why of course you can! I\'m going to fix everything just the way it was before."',choices:[{text:'"Old sport, let me help you."',attr:'Charm',successRate:5},{text:'"Some things can\'t be fixed."',attr:'Wisdom',successRate:6},{text:'"Tell me your secret."',attr:'Cunning',successRate:7}]},
+{npc:'owl',npcName:'Owl Eyes',npcIcon:'&#128062;',story:{act:'Ch. 3',text:'The scholarly man examines books in Gatsby\'s library.'},text:'"I\'m rather fixed myself. I find a large salary is more important than anything else."',choices:[{text:'"Wisdom comes from books."',attr:'Wisdom',successRate:6},{text:'"Money is the answer."',attr:'Cunning',successRate:7},{text:'"Tell me about Gatsby."',attr:'Charm',successRate:5}]}
+],
+easttegg:[
+{npc:'daisy',npcName:'Daisy Buchanan',npcIcon:'&#128141;',story:{act:'Ch. 1',text:'Daisy floats through the room, her voice full of money.'},text:'"I hope she\'ll be a fool—that\'s the best thing a girl can be in this world, a beautiful little fool."',choices:[{text:'"You don\'t seem foolish."',attr:'Charm',successRate:5},{text:'"Life isn\'t that simple."',attr:'Wisdom',successRate:6},{text:'"What do you truly want?"',attr:'Cunning',successRate:7}]},
+{npc:'tom',npcName:'Tom Buchanan',npcIcon:'&#128147;',story:{act:'Ch. 1',text:'Tom sprawls in his chair, physically imposing.'},text:'"I\'ve got a nice place right here. It\'s a big town, but they don\'t know much."',choices:[{text:'"Money isn\'t everything."',attr:'Might',successRate:8},{text:'"I respect your success."',attr:'Charm',successRate:7},{text:'"Tell me about your investments."',attr:'Cunning',successRate:6}]}
+],
+valley:[
+{npc:'george',npcName:'George Wilson',npcIcon:'&#128187;',story:{act:'Ch. 2',text:'George looks out at the desolate valley, his eyes fixed on the billboard.'},text:'"I spoke to her [Myrtle] last night, and I told her I might re-marry. I want to get ready for my [Myrtle]."',choices:[{text:'"You deserve happiness."',attr:'Charm',successRate:5},{text:'"The city offers opportunity."',attr:'Cunning',successRate:6},{text:'"Don\'t give up hope."',attr:'Might',successRate:7}]}
+]
+};
+
+const CHALLENGES={
+westeeg:[
+{name:'Party Planning',desc:'Organize a grand event.',cr:7,attr:'Cunning',success:'The party is legendary!',fail:'Guests seem unimpressed.'},
+{name:'Business Negotiation',desc:'Close a deal.',cr:8,attr:'Cunning',success:'You secure the deal!',fail:'The other party walks away.'}
+],
+easttegg:[
+{name:'Social Confrontation',desc:'Stand up to old money.',cr:8,attr:'Might',success:'They respect your courage!',fail:'They dismiss you.'},
+{name:'Elegant Dance',desc:'Impress at a ball.',cr:7,attr:'Charm',success:'Everyone watches in awe!',fail:'Awkward missteps.'}
+],
+gatsbyparty:[
+{name:'Drinking Contest',desc:'Outdrink the competition.',cr:7,attr:'Vitality',success:'You hold your liquor!',fail:'You\'ve had too much!'},
+{name:'Romantic Gesture',desc:'Make a grand impression.',cr:8,attr:'Charm',success:'She is moved by your charm!',fail:'The gesture falls flat.'}
+],
+valley:[
+{name:'Physical Labor',desc:'Help with repairs.',cr:6,attr:'Might',success:'You work hard and well!',fail:'The work exhausts you.'},
+{name:'Comforting Words',desc:'Cheer up the grieving.',cr:7,attr:'Charm',success:'Your words bring comfort.',fail:'Nothing you say helps.'}
+]
+};
+
+let gameState={
+player:{Name:'',token:null,faction:null,attributes:{Might:5,Cunning:5,Vitality:5,Wisdom:5,Charm:5},gold:20,health:100,items:{}},
+day:1,gamesPlayed:0,gamesPerDay:5,currentLocation:'westeeg',completedMiniGames:[],
+totalGoldEarned:0,challengesWon:0,challengesLost:0,triviaCorrect:0,triviaTotal:0
+};
+
+let selectedToken=null,attributePoints=5,currentChallenge=null,currentQuiz=null,quizIndex=0,currentDialogue=null;
+
+function rollD6(){return Math.floor(Math.random()*6)+1}
+function getMod(attr){return gameState.player.attributes[attr]-5}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+function showModal(title,text){document.getElementById('modal-title').textContent=title;document.getElementById('modal-text').textContent=text;document.getElementById('result-modal').classList.add('active')}
+function closeModal(){document.getElementById('result-modal').classList.remove('active')}
+
+function initCreation(){
+const tg=document.getElementById('token-grid');
+CHARACTERS.forEach(c=>{const d=document.createElement('div');d.className='token-option';d.dataset.id=c.id;d.innerHTML=`<div class="token-icon">${c.icon}</div><span class="token-name">${c.name}</span>`;d.onclick=()=>selectToken(c);tg.appendChild(d)});
+const ap=document.getElementById('attributes-panel');
+['Might','Cunning','Vitality','Wisdom','Charm'].forEach(a=>{const c=document.createElement('div');c.className='attribute-card';c.innerHTML=`<div class="attribute-name">${a}</div><div class="attribute-value" id="attr-${a}">5</div><div class="attribute-controls"><button class="attr-btn" onclick="decreaseAttr('${a}')">-</button><button class="attr-btn" onclick="increaseAttr('${a}')">+</button></div>`;ap.appendChild(c)});
+document.getElementById('player-name').addEventListener('input',checkCanStart);
+}
+
+function setFaction(f){gameState.player.faction=f;document.getElementById('faction-display').textContent=f==='old'?'East Egg - Old Money':'West Egg - New Money';checkCanStart()}
+function selectToken(c){document.querySelectorAll('.token-option').forEach(t=>t.classList.remove('selected'));document.querySelector(`[data-id="${c.id}"]`).classList.add('selected');selectedToken=c;checkCanStart()}
+function increaseAttr(a){if(attributePoints>0&&gameState.player.attributes[a]<10){gameState.player.attributes[a]++;document.getElementById(`attr-${a}`).textContent=gameState.player.attributes[a];attributePoints--;document.getElementById('points-left').textContent=attributePoints;updateButtons()}}
+function decreaseAttr(a){if(gameState.player.attributes[a]>5){gameState.player.attributes[a]--;document.getElementById(`attr-${a}`).textContent=gameState.player.attributes[a];attributePoints++;document.getElementById('points-left').textContent=attributePoints;updateButtons()}}
+function updateButtons(){['Might','Cunning','Vitality','Wisdom','Charm'].forEach(a=>{const b=document.querySelectorAll(`#attr-${a}`)[0].parentElement.querySelectorAll('.attr-btn');b[0].disabled=gameState.player.attributes[a]<=5;b[1].disabled=attributePoints<=0||gameState.player.attributes[a]>=10})}
+function checkCanStart(){const n=document.getElementById('player-name').value.trim();document.getElementById('start-btn').disabled=!(n.length>0&&selectedToken&&gameState.player.faction)}
+
+function startGame(){gameState.player.name=document.getElementById('player-name').value.trim();gameState.player.token=selectedToken;gameState.day=1;gameState.gamesPlayed=0;gameState.currentLocation='westeeg';gameState.completedMiniGames=[];updateHeader();showMap();showScreen('game-screen');saveGame()}
+
+function updateHeader(){document.getElementById('header-token').innerHTML=gameState.player.token.icon;document.getElementById('header-name').textContent=gameState.player.name;document.getElementById('header-token-name').textContent=gameState.player.token.name;document.getElementById('gold-display').textContent=gameState.player.gold;document.getElementById('health-display').textContent=gameState.player.health;document.getElementById('games-display').textContent=`${gameState.gamesPerDay-gameState.gamesPlayed} actions left`}
+
+function showMap(){document.getElementById('map-container').style.display='block';document.getElementById('main-area').style.display='none';const mg=document.getElementById('map-grid');mg.innerHTML='';LOCATIONS.forEach(l=>{const unlocked=l.id!=='plazahotel'||gameState.player.items['car']||gameState.day>=3;const cur=gameState.currentLocation===l.id;const c=document.createElement('div');c.className=`location-card ${cur?'current':''} ${!unlocked?'disabled':''}`;c.innerHTML=`<div class="location-badge">${l.ref}</div><div class="location-icon">${l.icon}</div><div class="location-name">${l.name}</div><div class="location-desc">${l.desc}</div>${!unlocked?'<p style="color:#ef4444;font-size:.8rem">Needs Car</p>':''}`;if(unlocked)c.onclick=()=>enterLocation(l.id);mg.appendChild(c)})}
+
+function enterLocation(locId){gameState.currentLocation=locId;const loc=LOCATIONS.find(l=>l.id===locId);document.getElementById('map-container').style.display='none';document.getElementById('main-area').style.display='block';document.getElementById('location-title').textContent=loc.name;let content=`<div class="story-panel"><p class="chapter">${loc.ref}</p><p class="quote">${loc.quote}</p><p>${loc.desc}</p></div><h3 style="color:var(--gold);margin:20px 0">Activities</h3><div class="mini-games-grid">`;loc.miniGames.forEach(g=>{const k=`${locId}-${g}`;const done=gameState.completedMiniGames.includes(k);const info=getInfo(g);content+=`<div class="mini-game-card ${done?'completed':''}" onclick="${done?'':`startMG('${g}','${locId}')`}"><div class="mini-game-icon">${info.icon}</div><div class="mini-game-name">${info.name}</div><div class="mini-game-reward">+${info.reward} Dollars</div><div class="mini-game-attr" style="color:var(--pink)">${info.attr}</div>${done?'<p style="color:#10b981;font-size:.8rem">Done</p>':''}</div>`});content+='</div>';if(loc.shop)content+=`<div style="margin-top:30px"><button class="btn btn-secondary" onclick="openShop('${locId}')">Visit Shop</button></div>`;if(loc.isEndLocation)content+=`<div style="margin-top:30px;text-align:center"><button class="btn" onclick="attemptEnding()">Climax Your Story</button></div>`;document.getElementById('location-content').innerHTML=content;updateHeader();saveGame()}
+
+function getInfo(g){const i={trivia:{name:'Trivia',icon:'&#128218;',attr:'Wisdom',reward:25},dialogue:{name:'Dialogue',icon:'&#128172;',attr:'Charm',reward:25},charm:{name:'Social Challenge',icon:'&#128149;',attr:'Charm',reward:30},dice:{name:'Dice Challenge',icon:'&#127922;',attr:'Might',reward:25},finale:{name:'Final Scene',icon:'&#127881;',attr:'All',reward:100}};return i[g]||i.trivia}
+
+function startMG(gameType,locId){if(gameState.gamesPlayed>=gameState.gamesPerDay){showModal('No Actions','Used all actions today.');return}gameState.completedMiniGames.push(`${locId}-${gameType}`);gameState.gamesPlayed++;switch(gameType){case'trivia':startTrivia();break;case'dialogue':case'charm':startDialogue(locId);break;case'dice':startChallenge(gameType,locId);break;case'finale':attemptEnding();break}}
+
+function startTrivia(){currentQuiz=[...QUIZ].sort(()=>Math.random()-0.5).slice(0,5);quizIndex=0;document.getElementById('quiz-progress').innerHTML=currentQuiz.map((_,i)=>`<div class="quiz-dot ${i===0?'current':''}" id="qd-${i}"></div>`).join('');showTQ();showScreen('quiz-screen')}
+function showTQ(){const q=currentQuiz[quizIndex];document.getElementById('quiz-title').textContent=`Question ${quizIndex+1}/5`;document.getElementById('quiz-question').textContent=`${q.ref}: ${q.q}`;document.getElementById('quiz-options').innerHTML=q.options.map((o,i)=>`<div class="quiz-option" onclick="ansQ(${i})" id="qo-${i}">${o}</div>`).join('')}
+function ansQ(idx){const q=currentQuiz[quizIndex],c=idx===q.correct;document.getElementById(`qo-${idx}`).classList.add(c?'correct':'wrong');if(!c)document.getElementById(`qo-${q.correct}`).classList.add('correct');gameState.triviaTotal++;if(c)gameState.triviaCorrect++;setTimeout(()=>{quizIndex++;document.getElementById(`qd-${quizIndex-1}`).classList.remove('current');document.getElementById(`qd-${quizIndex-1}`).classList.add('completed');if(quizIndex>=5)endT();else{document.getElementById(`qd-${quizIndex}`).classList.add('current');showTQ()}},1000)}
+function endT(){const c=gameState.triviaCorrect,r=Math.floor((c/5)*25);gameState.player.gold+=r;gameState.totalGoldEarned+=r;showScreen('game-screen');updateHeader();showMap();enterLocation(gameState.currentLocation);showModal('Trivia Complete!',`${c}/5 correct!\n\nEarned $${r}!`);saveGame()}
+
+function startChallenge(type,locId){const ch=(CHALLENGES[locId]||CHALLENGES.westeeg)[Math.floor(Math.random()*2)];currentChallenge=ch;document.getElementById('challenge-title').textContent=ch.name;document.getElementById('challenge-desc').textContent=ch.desc;document.getElementById('challenge-cr').textContent=ch.cr;document.getElementById('challenge-attr').textContent=ch.attr;document.getElementById('dice').textContent='?';document.getElementById('dice-breakdown').textContent='';document.getElementById('dice-result').textContent='';document.getElementById('roll-btn').disabled=false;showScreen('challenge-screen')}
+function rollDice(){document.getElementById('roll-btn').disabled=true;const d=document.getElementById('dice');d.classList.add('rolling');d.textContent='?';setTimeout(()=>{d.classList.remove('rolling');const r=rollD6(),m=getMod(currentChallenge.attr),t=r+m,s=t>=currentChallenge.cr;d.textContent=r;document.getElementById('dice-breakdown').textContent=`Roll: ${r} + ${currentChallenge.attr} ${m>=0?'+':''}${m} = ${t} vs CR ${currentChallenge.cr}`;if(s){document.getElementById('dice-result').innerHTML=`<span style="color:#10b981">SUCCESS!</span><br>${currentChallenge.success}`;gameState.challengesWon++;const rw=15+m;gameState.player.gold+=rw;gameState.totalGoldEarned+=rw;updateHeader()}else{document.getElementById('dice-result').innerHTML=`<span style="color:#ef4444">FAILURE!</span><br>${currentChallenge.fail}`;gameState.challengesLost++;gameState.player.health-=15;updateHeader()}saveGame()},1000)}
+
+function startDialogue(locId){const ds=(DIALOGUES[locId]||DIALOGUES.westeeg);currentDialogue=ds[Math.floor(Math.random()*ds.length)];document.getElementById('dialogue-avatar').innerHTML=currentDialogue.npcIcon;document.getElementById('dialogue-name').textContent=currentDialogue.npcName;document.getElementById('dialogue-story').innerHTML=`<p class="chapter">${currentDialogue.story.act}</p><p>${currentDialogue.story.text}</p>`;document.getElementById('dialogue-text').textContent=currentDialogue.text;document.getElementById('dialogue-choices').innerHTML=currentDialogue.choices.map((c,i)=>`<button class="dialogue-choice" onclick="makeC(${i})">${c.text}<div class="attr-hint">Test: ${c.attr} (CR ${c.successRate})</div></button>`).join('');showScreen('dialogue-screen')}
+function makeC(idx){const c=currentDialogue.choices[idx],r=rollD6(),m=getMod(c.attr),t=r+m,s=t>=c.successRate;if(s){const rw=25+m;gameState.player.gold+=rw;gameState.totalGoldEarned+=rw;updateHeader();showModal('Success!',`Rolled ${r}+${c.attr}${m>=0?'+':''}${m}=${t}\n\nEarned $${rw}!`)}else showModal('Failed',`Rolled ${r}+${c.attr}${m>=0?'+':''}${m}=${t}\n\nNot convincing...`);saveGame();returnFromMiniGame()}
+
+function openShop(locId){document.getElementById('shop-title').textContent=locId==='westeeg'?"West Egg Shop":"East Egg Boutique";document.getElementById('shop-gold').textContent=gameState.player.gold;document.getElementById('shop-grid').innerHTML=SHOP_ITEMS.map(i=>{const o=gameState.player.items[i.id],ca=gameState.player.gold>=i.price,dis=!ca||(o&&!i.consumable);return`<div class="shop-item ${o&&!i.consumable?'owned':''} ${dis?'disabled':''}"><div class="shop-item-icon">${i.icon}</div><div class="shop-item-name" style="color:var(--gold)">${i.name}</div><div class="shop-item-price">$${i.price}</div><p style="font-size:.8rem;opacity:.8">${i.desc}</p><p style="font-size:.75rem;color:#10b981">${i.effect}</p>${o&&!i.consumable?'<p style="color:#10b981">Owned</p>':i.consumable&&o?`<p>Owned: ${gameState.player.items[i.id]}</p>`:''}<button class="btn btn-small" onclick="buy('${i.id}')" ${dis?'disabled':''}>${ca?'Buy':'Need $'}</button></div>`}).join('');showScreen('shop-screen')}
+function buy(id){const i=SHOP_ITEMS.find(x=>x.id===id);if(gameState.player.gold<i.price){showModal('No Funds',`Need $${i.price}, have $${gameState.player.gold}`);return}gameState.player.gold-=i.price;if(i.consumable)gameState.player.items[id]=(gameState.player.items[id]||0)+1;else{gameState.player.items[id]=1;if(id==='suit')gameState.player.attributes.Charm++;if(id==='book')gameState.player.attributes.Wisdom++}updateHeader();openShop(gameState.currentLocation);saveGame();showModal('Purchased!',`You bought ${i.name}!`)}
+
+function attemptEnding(){const f=gameState.player.faction,hasRing=gameState.player.items['ring'];let title,subtitle,art,text;if(f==='new'){if(hasRing){title='The American Dream';subtitle='Love Redeemed';art='&#128141;';text='<p><strong>You live Gatsby\'s dream:</strong> The green light burns bright across the water. In the end, you understand that Gatsby\'s dream was never just about Daisy—it was about the hope itself, the belief that tomorrow will be better than today.</p><p class="quote">"Gatsby believed in the green light, the orgastic future that year by year recedes before us."</p><p>You achieve what Gatsby could not—transcending the shallowness of wealth to find genuine connection and meaning.</p>'}else{title='Green Light Fades';subtitle='Ambitious Hope';art='&#127800;';text='<p><strong>The dream continues:</strong> You see the green light across the bay, forever out of reach. Like Gatsby, you understand that the past cannot be repeated, but you keep reaching anyway.</p><p class="quote">"So we beat on, boats against the current, borne back ceaselessly into the past."</p><p>You leave Long Island richer in experience than in happiness, but with dreams still burning bright.</p>'}}else{if(hasRing){title='The Observer\'s Tale';subtitle='Understanding Others';art='&#128100;';text='<p><strong>Nick\'s wisdom prevails:</strong> You see through the facade of both old and new money. The Buchanans are careless people who destroy things and dash themselves against rocks, while Gatsby represents something more noble—hope itself.</p><p class="quote">"They were careless people, Tom and Daisy—they smushed up things and creatures and then retreated back into their money."</p><p>You write the story that others might learn from, turning tragedy into wisdom.</p>'}else{title='Disillusionment';subtitle='The Empty Pursuit';art='&#128531;';text='<p><strong>East Egg corrupts:</strong> The parties, the money, the glamour—all hollow. You see the Buchanans destroy everything they touch, and Gatsby\'s dream was always doomed.</p><p class="quote">"I\'ve been drunk for about a week now, and I thought it might be a good idea to get laid."</p><p>You return to the Midwest, forever marked by the summer of 1922, understanding that some things cannot be fixed.</p>'}}document.getElementById('ending-art').innerHTML=art;document.getElementById('ending-title').textContent=title;document.getElementById('ending-subtitle').textContent=subtitle;document.getElementById('ending-story').innerHTML=text;document.getElementById('stats-summary').innerHTML=`<h3>Your Summer Summary</h3><div class="stat-row"><span>Character:</span><span>${gameState.player.name}</span></div><div class="stat-row"><span>Class:</span><span>${f==='old'?'Old Money':'New Money'}</span></div><div class="stat-row"><span>Gold Earned:</span><span>$${gameState.totalGoldEarned}</span></div><div class="stat-row"><span>Challenges Won:</span><span>${gameState.challengesWon}</span></div><div class="stat-row"><span>Trivia Accuracy:</span><span>${Math.round(gameState.triviaCorrect/gameState.triviaTotal*100)||0}%</span></div>`;showScreen('ending-screen')}
+function returnFromMiniGame(){showScreen('game-screen');showMap();enterLocation(gameState.currentLocation)}
+function saveGame(){localStorage.setItem('gatsbyGame',JSON.stringify(gameState))}
+function loadGame(){const s=localStorage.getItem('gatsbyGame');if(s){gameState=JSON.parse(s);updateHeader();showMap();enterLocation(gameState.currentLocation);showScreen('game-screen')}else showModal('No Save','No saved game found.')}
+function newGame(){localStorage.removeItem('gatsbyGame');location.reload()}
+window.onload=function(){initCreation()};
+</script>
+</body>
+</html>

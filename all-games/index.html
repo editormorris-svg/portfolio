@@ -31,18 +31,26 @@
         .collection-header h2 { color: #fff; margin-bottom: 5px; }
         .collection-header p { color: #888; }
         
+        /* Category-specific header colors */
+        .collection-header.fantasy { border-left-color: #9b59b6; }
+        .collection-header.american { border-left-color: #3498db; }
+        .collection-header.dystopian { border-left-color: #e74c3c; }
+        .collection-header.gothic { border-left-color: #2c3e50; }
+        .collection-header.drama { border-left-color: #f39c12; }
+        
         .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
         .game-card {
             background: rgba(255,255,255,0.05);
             border-radius: 15px;
             padding: 25px;
             border: 1px solid rgba(255,255,255,0.1);
-            transition: transform 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-        .game-card:hover { transform: translateY(-5px); }
+        .game-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .game-icon { font-size: 3em; margin-bottom: 15px; }
         .game-title { font-size: 1.3em; margin-bottom: 10px; color: #e94560; }
         .game-card.kimi-card .game-title { color: #a855f7; }
+        .game-author { font-size: 0.85em; color: #666; margin-bottom: 8px; font-style: italic; }
         .game-desc { color: #aaa; font-size: 0.95em; line-height: 1.5; margin-bottom: 15px; }
         .btn {
             display: inline-block;
@@ -53,8 +61,33 @@
             border-radius: 25px;
             font-weight: bold;
             font-size: 0.9em;
+            transition: transform 0.2s;
         }
+        .btn:hover { transform: scale(1.05); }
         .btn.kimi-btn { background: linear-gradient(135deg, #a855f7, #7c3aed); }
+        
+        /* Category-specific button colors */
+        .btn.fantasy-btn { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        .btn.american-btn { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .btn.dystopian-btn { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .btn.gothic-btn { background: linear-gradient(135deg, #2c3e50, #1a252f); }
+        .btn.drama-btn { background: linear-gradient(135deg, #f39c12, #d68910); }
+        
+        .stats-bar {
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 40px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .stat-item { text-align: center; }
+        .stat-number { font-size: 2em; font-weight: bold; color: #e94560; }
+        .stat-label { color: #888; font-size: 0.9em; }
+        
         footer { text-align: center; margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); color: #666; }
         footer a { color: #e94560; text-decoration: none; }
     </style>
@@ -65,45 +98,181 @@
         
         <header>
             <h1>All Games</h1>
-            <p class="subtitle">Complete collection of educational interactive experiences</p>
+            <p class="subtitle">Literature classics brought to life through interactive experiences</p>
         </header>
 
-        <!-- Max2 Collection -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number">15</div>
+                <div class="stat-label">Total Games</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Categories</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">10</div>
+                <div class="stat-label">New Classics</div>
+            </div>
+        </div>
+
+        <!-- Original Max2 Collection -->
         <div class="collection-section">
             <div class="collection-header">
-                <h2>🎮 Max2 Games Collection</h2>
-                <p>Literature classics brought to life with MiniMax 2.7</p>
+                <h2>🎮 Max2 Original Collection</h2>
+                <p>The foundation — Steinbeck and Shakespeare classics</p>
             </div>
             <div class="games-grid">
                 <div class="game-card">
                     <div class="game-icon">🐭</div>
                     <h3 class="game-title">Of Mice and Men</h3>
+                    <p class="game-author">John Steinbeck</p>
                     <p class="game-desc">Steinbeck's classic brought to life. Character creation, explorable locations, multiple endings.</p>
-                    <a href="https://editormorris-svg.github.io/max2-games/mice-and-men/" class="btn">Play Now</a>
+                    <a href="https://editormorris-svg.github.io/max2-games/mice-and-men/" class="btn" target="_blank">Play Now</a>
                 </div>
                 <div class="game-card">
                     <div class="game-icon">💔</div>
                     <h3 class="game-title">Romeo and Juliet</h3>
+                    <p class="game-author">William Shakespeare</p>
                     <p class="game-desc">Star-crossed lovers' tragedy. Navigate family feuds and fate.</p>
-                    <a href="https://editormorris-svg.github.io/max2-games/romeo-and-juliet/" class="btn">Play Now</a>
+                    <a href="https://editormorris-svg.github.io/max2-games/romeo-and-juliet/" class="btn" target="_blank">Play Now</a>
                 </div>
                 <div class="game-card">
                     <div class="game-icon">🗡️</div>
                     <h3 class="game-title">Macbeth</h3>
+                    <p class="game-author">William Shakespeare</p>
                     <p class="game-desc">Ambition, prophecy, and guilt. Witches' riddles and moral choices.</p>
-                    <a href="https://editormorris-svg.github.io/max2-games/macbeth/" class="btn">Play Now</a>
+                    <a href="https://editormorris-svg.github.io/max2-games/macbeth/" class="btn" target="_blank">Play Now</a>
                 </div>
                 <div class="game-card">
                     <div class="game-icon">🎭</div>
                     <h3 class="game-title">Hamlet</h3>
+                    <p class="game-author">William Shakespeare</p>
                     <p class="game-desc">The Prince of Denmark's revenge. Ghost encounters and "To be or not to be".</p>
-                    <a href="https://editormorris-svg.github.io/max2-games/hamlet/" class="btn">Play Now</a>
+                    <a href="https://editormorris-svg.github.io/max2-games/hamlet/" class="btn" target="_blank">Play Now</a>
                 </div>
                 <div class="game-card">
                     <div class="game-icon">🧚</div>
                     <h3 class="game-title">A Midsummer Night's Dream</h3>
+                    <p class="game-author">William Shakespeare</p>
                     <p class="game-desc">Fairies, magic, and comedic chaos. Enchanted forest adventures.</p>
-                    <a href="https://editormorris-svg.github.io/max2-games/midsummer-nights-dream/" class="btn">Play Now</a>
+                    <a href="https://editormorris-svg.github.io/max2-games/midsummer-nights-dream/" class="btn" target="_blank">Play Now</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Literature Classics by Category -->
+        <div class="collection-section">
+            <div class="collection-header fantasy">
+                <h2>✨ Fantasy & Adventure</h2>
+                <p>Magical realms, epic journeys, and impossible wonders</p>
+            </div>
+            <div class="games-grid">
+                <div class="game-card">
+                    <div class="game-icon">🐇</div>
+                    <h3 class="game-title">Alice in Wonderland</h3>
+                    <p class="game-author">Lewis Carroll</p>
+                    <p class="game-desc">Fall down the rabbit hole into a world of curious characters. Features character creation, 8 explorable locations, trivia, memory games, and multiple endings.</p>
+                    <a href="fantasy-adventure/alice-in-wonderland.html" class="btn fantasy-btn" target="_blank">Play Now</a>
+                </div>
+                <div class="game-card">
+                    <div class="game-icon">🐵</div>
+                    <h3 class="game-title">Journey to the West</h3>
+                    <p class="game-author">Wu Cheng'en</p>
+                    <p class="game-desc">Join Sun Wukong and the pilgrims on their epic quest. An interactive RPG through ancient China's most beloved adventure tale.</p>
+                    <a href="fantasy-adventure/journey-to-the-west.html" class="btn fantasy-btn" target="_blank">Play Now</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="collection-section">
+            <div class="collection-header american">
+                <h2>🇺🇸 Classic American Literature</h2>
+                <p>The American experience from the Jazz Age to the civil rights era</p>
+            </div>
+            <div class="games-grid">
+                <div class="game-card">
+                    <div class="game-icon">🍸</div>
+                    <h3 class="game-title">The Great Gatsby</h3>
+                    <p class="game-author">F. Scott Fitzgerald</p>
+                    <p class="game-desc">The Jazz Age tragedy of Jay Gatsby and the green light. Experience the Roaring Twenties and the American Dream's dark underbelly.</p>
+                    <a href="classic-american/great-gatsby.html" class="btn american-btn" target="_blank">Play Now</a>
+                </div>
+                <div class="game-card">
+                    <div class="game-icon">🛶</div>
+                    <h3 class="game-title">Huckleberry Finn</h3>
+                    <p class="game-author">Mark Twain</p>
+                    <p class="game-desc">Adventure down the Mississippi with Huck and Jim. A journey of friendship, freedom, and moral awakening in pre-Civil War America.</p>
+                    <a href="classic-american/huckleberry.html" class="btn american-btn" target="_blank">Play Now</a>
+                </div>
+                <div class="game-card">
+                    <div class="game-icon">🌳</div>
+                    <h3 class="game-title">To Kill a Mockingbird</h3>
+                    <p class="game-author">Harper Lee</p>
+                    <p class="game-desc">Step into Scout's shoes in Depression-era Alabama. A powerful exploration of racial injustice and moral growth.</p>
+                    <a href="classic-american/to-kill-mockingbird.html" class="btn american-btn" target="_blank">Play Now</a>
+                </div>
+                <div class="game-card">
+                    <div class="game-icon">🚬</div>
+                    <h3 class="game-title">The Outsiders</h3>
+                    <p class="game-author">S.E. Hinton</p>
+                    <p class="game-desc">Stay gold in this coming-of-age story of greasers and Socs. A raw look at class conflict, loyalty, and finding your place.</p>
+                    <a href="classic-american/outsiders.html" class="btn american-btn" target="_blank">Play Now</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="collection-section">
+            <div class="collection-header dystopian">
+                <h2>⚠️ Dystopian & Political</h2>
+                <p>Warning tales of power, corruption, and human nature</p>
+            </div>
+            <div class="games-grid">
+                <div class="game-card">
+                    <div class="game-icon">🐷</div>
+                    <h3 class="game-title">Animal Farm</h3>
+                    <p class="game-author">George Orwell</p>
+                    <p class="game-desc">"All animals are equal, but some animals are more equal than others." Experience Orwell's biting allegory of totalitarianism.</p>
+                    <a href="dystopian-political/animal-farm.html" class="btn dystopian-btn" target="_blank">Play Now</a>
+                </div>
+                <div class="game-card">
+                    <div class="game-icon">🏝️</div>
+                    <h3 class="game-title">Lord of the Flies</h3>
+                    <p class="game-author">William Golding</p>
+                    <p class="game-desc">Stranded on a deserted island, boys descend into savagery. A chilling examination of civilization's thin veneer.</p>
+                    <a href="dystopian-political/lord-of-flies.html" class="btn dystopian-btn" target="_blank">Play Now</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="collection-section">
+            <div class="collection-header gothic">
+                <h2>⚰️ Gothic & Horror</h2>
+                <p>The macabre, the monstrous, and the depths of human ambition</p>
+            </div>
+            <div class="games-grid">
+                <div class="game-card">
+                    <div class="game-icon">🧟</div>
+                    <h3 class="game-title">Frankenstein</h3>
+                    <p class="game-author">Mary Shelley</p>
+                    <p class="game-desc">The original science fiction horror. Play as Victor Frankenstein and face the consequences of playing God.</p>
+                    <a href="gothic-horror/frankenstein.html" class="btn gothic-btn" target="_blank">Play Now</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="collection-section">
+            <div class="collection-header drama">
+                <h2>🎭 Drama & Epic</h2>
+                <p>Timeless theatrical masterpieces</p>
+            </div>
+            <div class="games-grid">
+                <div class="game-card">
+                    <div class="game-icon">⚡</div>
+                    <h3 class="game-title">The Tempest</h3>
+                    <p class="game-author">William Shakespeare</p>
+                    <p class="game-desc">Magic, betrayal, and reconciliation on a remote island. Prospero's final play—Shakespeare's farewell to the stage.</p>
+                    <a href="drama-epic/tempest.html" class="btn drama-btn" target="_blank">Play Now</a>
                 </div>
             </div>
         </div>
@@ -138,6 +307,7 @@
 
         <footer>
             <p>Created by <a href="https://0604.ai">0604.ai</a> | Educational games for the modern classroom</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">All games designed by Max2 using MiniMax 2.7</p>
         </footer>
     </div>
 </body>

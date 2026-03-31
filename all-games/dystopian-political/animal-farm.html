@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Farm - The Revolution</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Georgia', serif; background: linear-gradient(135deg, #2d4a1c 0%, #4a3728 50%, #1a2610 100%); min-height: 100vh; color: #e8e0d0; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; padding: 30px; background: linear-gradient(180deg, rgba(139,195,74,0.8) 0%, rgba(85,139,47,0.9) 100%); border-radius: 15px; margin-bottom: 20px; border: 3px solid #33691e; box-shadow: 0 0 30px rgba(139,195,74,0.3); }
+        .header h1 { font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); margin-bottom: 10px; }
+        .header p { font-style: italic; color: #1b5e20; }
+        .screen { display: none; background: rgba(20,30,15,0.95); border-radius: 15px; padding: 30px; border: 2px solid #558b2f; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .screen.active { display: block; }
+        .btn { background: linear-gradient(135deg, #558b2f 0%, #33691e 100%); color: #e8e0d0; padding: 12px 25px; border: 2px solid #7cb342; border-radius: 8px; cursor: pointer; font-size: 1em; margin: 5px; transition: all 0.3s; font-family: inherit; }
+        .btn:hover { background: linear-gradient(135deg, #689f38 0%, #558b2f 100%); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(85,139,47,0.4); }
+        .btn:disabled { background: #555; border-color: #666; cursor: not-allowed; opacity: 0.6; }
+        .btn-small { padding: 8px 15px; font-size: 0.9em; }
+        .token-grid, .attr-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 20px 0; }
+        .token-option { background: rgba(85,139,47,0.3); border: 2px solid #33691e; border-radius: 10px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .token-option:hover { background: rgba(85,139,47,0.5); border-color: #7cb342; transform: scale(1.05); }
+        .token-option.selected { border-color: #ffd700; background: rgba(255,215,0,0.2); box-shadow: 0 0 15px rgba(255,215,0,0.3); }
+        .token-icon { font-size: 2.5em; margin-bottom: 5px; }
+        .attr-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(85,139,47,0.2); border-radius: 8px; margin: 8px 0; }
+        .attr-name { font-weight: bold; width: 120px; }
+        .attr-controls { display: flex; align-items: center; gap: 10px; }
+        .attr-btn { width: 30px; height: 30px; border-radius: 50%; background: #558b2f; border: 1px solid #7cb342; color: #e8e0d0; font-size: 1.2em; cursor: pointer; }
+        .attr-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .attr-value { font-size: 1.3em; font-weight: bold; width: 30px; text-align: center; }
+        .attr-remaining { text-align: center; font-size: 1.2em; margin: 15px 0; color: #ffd700; }
+        .map-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0; }
+        .location { background: rgba(85,139,47,0.4); border: 2px solid #33691e; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .location:hover:not(.locked) { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(85,139,47,0.4); border-color: #7cb342; }
+        .location.locked { opacity: 0.5; cursor: not-allowed; }
+        .location-icon { font-size: 2em; margin-bottom: 10px; }
+        .location-name { font-weight: bold; margin-bottom: 5px; }
+        .location-cr { font-size: 0.85em; color: #7cb342; }
+        .status-bar { display: flex; flex-wrap: wrap; gap: 15px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; margin-bottom: 20px; }
+        .status-item { display: flex; align-items: center; gap: 8px; }
+        .status-icon { font-size: 1.3em; }
+        .health-bar, .xp-bar { width: 100px; height: 12px; background: #333; border-radius: 6px; overflow: hidden; }
+        .health-fill { height: 100%; background: linear-gradient(90deg, #558b2f, #8bc34a); transition: width 0.3s; }
+        .xp-fill { height: 100%; background: linear-gradient(90deg, #ffd700, #ffed4a); transition: width 0.3s; }
+        .dialogue-box { background: rgba(85,139,47,0.2); border-left: 4px solid #7cb342; padding: 15px; margin: 15px 0; border-radius: 0 10px 10px 0; }
+        .dialogue-speaker { font-weight: bold; color: #7cb342; margin-bottom: 8px; }
+        .dialogue-text { font-style: italic; line-height: 1.6; }
+        .choice-list { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+        .choice-btn { text-align: left; padding: 15px; background: rgba(51,105,30,0.5); border: 1px solid #558b2f; border-radius: 8px; cursor: pointer; transition: all 0.3s; color: #e8e0d0; font-family: inherit; font-size: 1em; }
+        .choice-btn:hover { background: rgba(85,139,47,0.6); border-color: #7cb342; }
+        .shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+        .shop-item { background: rgba(85,139,47,0.3); border: 2px solid #33691e; border-radius: 10px; padding: 15px; text-align: center; }
+        .shop-item-icon { font-size: 2em; margin-bottom: 10px; }
+        .shop-item-name { font-weight: bold; margin-bottom: 5px; }
+        .shop-item-desc { font-size: 0.85em; color: #7cb342; margin-bottom: 10px; }
+        .shop-item-price { color: #ffd700; margin-bottom: 10px; }
+        .inventory-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin: 15px 0; }
+        .inv-item { background: rgba(51,105,30,0.4); border-radius: 8px; padding: 10px; display: flex; align-items: center; gap: 10px; }
+        .inv-icon { font-size: 1.5em; }
+        .trivia-question { font-size: 1.2em; margin: 20px 0; line-height: 1.6; }
+        .trivia-options { display: flex; flex-direction: column; gap: 10px; }
+        .dice-result { font-size: 3em; text-align: center; margin: 20px 0; animation: roll 0.5s ease-out; }
+        @keyframes roll { 0% { transform: rotate(0deg) scale(0); } 50% { transform: rotate(180deg) scale(1.2); } 100% { transform: rotate(360deg) scale(1); } }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal.active { display: flex; }
+        .modal-content { background: linear-gradient(135deg, #2d4a1c 0%, #1a2610 100%); border: 3px solid #7cb342; border-radius: 15px; padding: 30px; max-width: 500px; width: 90%; text-align: center; }
+        .quote-box { background: rgba(85,139,47,0.2); border-radius: 10px; padding: 20px; margin: 15px 0; font-style: italic; text-align: center; }
+        .quote-text::before { content: '"'; font-size: 2em; color: #7cb342; }
+        .quote-text::after { content: '"'; font-size: 2em; color: #7cb342; }
+        .ending-good { border-color: #ffd700; background: linear-gradient(135deg, #1a2a1a 0%, #0f1a0f 100%); }
+        .ending-bad { border-color: #8b0000; background: linear-gradient(135deg, #2a1a1a 0%, #1a0a0a 100%); }
+        .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0; }
+        .memory-card { aspect-ratio: 1; background: linear-gradient(135deg, #558b2f 0%, #33691e 100%); border-radius: 8px; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 2em; transition: all 0.3s; border: 2px solid #7cb342; }
+        .memory-card.flipped { background: rgba(85,139,47,0.5); }
+        .memory-card.matched { background: rgba(46,204,113,0.3); border-color: #2ecc71; }
+        .memory-card.hidden { visibility: hidden; }
+        .game-icon { font-size: 1.5em; margin-right: 5px; }
+        .games-remaining { text-align: center; padding: 10px; background: rgba(255,215,0,0.1); border-radius: 8px; margin-bottom: 15px; }
+        .mini-games-section { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .revolution-meter { margin: 15px 0; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .meter-bar { height: 20px; background: #333; border-radius: 10px; overflow: hidden; }
+        .meter-fill { height: 100%; background: linear-gradient(90deg, #8b0000, #7cb342); transition: width 0.5s; }
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.8em; }
+            .token-grid, .attr-grid { grid-template-columns: repeat(2, 1fr); }
+            .map-grid { grid-template-columns: repeat(2, 1fr); }
+            .mini-games-section { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Animal Farm</h1>
+            <p>The Revolution Begins</p>
+        </div>
+
+        <div id="title-screen" class="screen active">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <div style="font-size: 4em;">🐷🐴🐑🐔</div>
+                <p style="font-size: 1.1em; margin-top: 15px;">"All animals are equal, but some are more equal than others."</p>
+            </div>
+            <div style="text-align: center;">
+                <button class="btn" onclick="showScreen('new-game')">Join the Rebellion</button>
+                <button class="btn" onclick="loadGame()">Continue Struggle</button>
+            </div>
+            <div class="quote-box" style="margin-top: 30px;">
+                <p class="quote-text">The creatures outside looked from pig to man, and from man to pig, and from pig to man again.</p>
+                <p style="margin-top: 10px; font-size: 0.9em;">— George Orwell</p>
+            </div>
+        </div>
+
+        <div id="new-game" class="screen">
+            <h2 style="text-align: center; margin-bottom: 20px;">🐷 Choose Your Allegiance</h2>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 10px; font-size: 1.1em;">Enter Your Name:</label>
+                <input type="text" id="player-name" style="width: 100%; padding: 12px; font-size: 1.1em; border-radius: 8px; border: 2px solid #558b2f; background: rgba(20,30,15,0.8); color: #e8e0d0;" placeholder="Your name...">
+            </div>
+            <h3 style="margin: 20px 0;">Choose Your Token:</h3>
+            <div class="token-grid" id="token-grid"></div>
+            <h3 style="margin: 20px 0;">Distribute 5 Points:</h3>
+            <div id="attributes"></div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" onclick="startGame()">Begin the Revolution</button>
+            </div>
+        </div>
+
+        <div id="main-game" class="screen">
+            <div class="status-bar">
+                <div class="status-item"><span class="status-icon">🏠</span><span id="player-name-display"></span></div>
+                <div class="status-item"><span class="status-icon" id="player-token"></span></div>
+                <div class="status-item"><span class="status-icon">❤️</span><span id="health-display">100</span></div>
+                <div class="status-item"><span class="status-icon">💰</span><span id="gold-display">20</span> Apples</div>
+                <div class="status-item"><span class="status-icon">📅</span>Day <span id="day-display">1</span></div>
+                <div class="status-item"><span class="status-icon">🎮</span>Games: <span id="games-display">0</span>/5</div>
+            </div>
+            <div class="revolution-meter">
+                <p>Revolution Spirit: <span id="spirit-display">50</span>%</p>
+                <div class="meter-bar"><div class="meter-fill" id="spirit-bar" style="width: 50%"></div></div>
+            </div>
+            <div class="games-remaining" id="games-remaining">
+                <span id="quest-status">Tasks available today: 5</span>
+            </div>
+            <div class="map-grid" id="map-grid"></div>
+        </div>
+
+        <div id="location-screen" class="screen">
+            <button class="btn btn-small" onclick="showScreen('main-game')">← Back to Farm</button>
+            <h2 style="text-align: center; margin: 20px 0;" id="location-title"></h2>
+            <div id="location-content"></div>
+        </div>
+
+        <div id="trivia-screen" class="screen">
+            <h2 style="text-align: center;">📜 Farm Trivia</h2>
+            <div id="trivia-content"></div>
+        </div>
+
+        <div id="challenge-screen" class="screen">
+            <h2 style="text-align: center;">⚔️ Farm Challenge</h2>
+            <div id="challenge-content"></div>
+        </div>
+
+        <div id="dice-screen" class="screen">
+            <h2 style="text-align: center;">🎲 Game of Fate</h2>
+            <div id="dice-content"></div>
+        </div>
+
+        <div id="dialogue-screen" class="screen">
+            <h2 style="text-align: center;">💬 Encounter</h2>
+            <div id="dialogue-content"></div>
+        </div>
+
+        <div id="memory-screen" class="screen">
+            <h2 style="text-align: center;">🧠 Memory Challenge</h2>
+            <p style="text-align: center; margin-bottom: 15px;">Match the farm symbols!</p>
+            <div id="memory-content"></div>
+        </div>
+
+        <div id="shop-screen" class="screen">
+            <h2 style="text-align: center;">🏪 Barn Store</h2>
+            <div id="shop-content"></div>
+        </div>
+
+        <div id="inventory-screen" class="screen">
+            <h2 style="text-align: center;">🎒 Inventory</h2>
+            <div id="inventory-content"></div>
+        </div>
+
+        <div id="ending-screen" class="screen">
+            <h2 style="text-align: center;" id="ending-title"></h2>
+            <div id="ending-content"></div>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content" id="modal-content"></div>
+    </div>
+
+    <script>
+        const tokens = [
+            { icon: '🐷', name: 'Napoleon', desc: 'The Power-Hungry Pig' },
+            { icon: '🐴', name: 'Boxer', desc: 'The Loyal Workhorse' },
+            { icon: '🐑', name: 'Clover', desc: 'The Maternal Mare' },
+            { icon: '🐔', name: 'Hen', desc: 'The Independent Fowl' },
+            { icon: '🐶', name: 'Squealer', desc: 'The Propaganda Pig' },
+            { icon: '🐱', name: 'Mollie', desc: 'The Vain Horse' },
+            { icon: '🦊', name: 'Benjamin', desc: 'The Cynical Donkey' },
+            { icon: '🐓', name: 'Rooster', desc: 'The Morning Caller' },
+            { icon: '🐐', name: 'Goat', desc: 'The Wise Beast' },
+            { icon: '🐰', name: 'Snowball', desc: 'The Idealistic Pig' },
+            { icon: '🐍', name: 'Moses', desc: 'The Raven Teller' },
+            { icon: '🐕', name: 'Old Major', desc: 'The Visionary' }
+        ];
+
+        const locations = [
+            { id: 'barn', name: "The Barn", icon: '🏠', cr: 1, desc: "Where Animalism was born", unlocked: true, bg: 'Old Major delivered his dream here. The animals gathered in secret to plan revolution.' },
+            { id: 'chicken', name: "Chicken Coop", icon: '🥚', cr: 2, desc: "The loyal hens", unlocked: false, bg: 'The hens remember their contribution to the harvest. Their eggs feed the farm.' },
+            { id: 'cow', name: "Cow Pasture", icon: '🐄', cr: 2, desc: "The source of sustenance", unlocked: false, bg: 'The cows produce milk for all. Their labor sustains the revolution.' },
+            { id: 'pig', name: "Pig Quarters", icon: '🐷', cr: 3, desc: "The ruling class", unlocked: false, bg: 'The pigs grow fat on milk and apples. They make the important decisions.' },
+            { id: 'field', name: "The Fields", icon: '🌾', cr: 3, desc: "Where work is done", unlocked: false, bg: 'The harvest must come in. The animals toil while the pigs supervise.' },
+            { id: 'windmill', name: "Windmill Site", icon: '💨', cr: 4, desc: "Progress or folly?", unlocked: false, bg: 'The windmill stands unfinished. Snowball wanted it for electricity. Napoleon destroys it.' },
+            { id: 'fox', name: "Fox's Run", icon: '🦊', cr: 4, desc: "Border vigilance", unlocked: false, bg: 'The humans probe at the borders. The animals must stand ready to defend.' },
+            { id: 'manor', name: "Manor Farm", icon: '🏚️', cr: 5, desc: "The final confrontation", unlocked: false, bg: 'The ultimate test. Will the revolution survive, or will the humans reclaim their farm?' }
+        ];
+
+        const dialogues = {
+            'barn': [
+                { speaker: 'Old Major', text: "I have had a strange dream. I believe that our lives are miserable, laborious, and short. We are born, we are given just so much food as will keep the breath in our bodies, and those of us who are capable of it are forced to work to the last atom of our strength.", choices: [
+                    { text: "We must overthrow the humans!", next: 1 },
+                    { text: "Is there another way?", next: 2 },
+                    { text: "I have doubts about this plan.", next: -1 }
+                ]},
+                { speaker: 'Old Major', text: "No animal must ever live in a house, sleep in a bed, wear clothes, drink alcohol, smoke tobacco, touch money, or engage in trade. ALL ANIMALS ARE EQUAL.", choices: [
+                    { text: "I shall dedicate my life to this cause!", next: -1 }
+                ]},
+                { speaker: 'Old Major', text: "The solution is in the nature of life. All men are enemies. All animals are comrades. Now I die happy, knowing my dream lives on.", choices: [
+                    { text: "We will honor your memory.", next: -1 }
+                ]}
+            ],
+            'chicken': [
+                { speaker: 'Hen', text: "We hens laid eggs as we always do. But Napoleon says we must give them up for the good of the farm.", choices: [
+                    { text: "The collective needs those eggs.", next: 1 },
+                    { text: "You should keep some for yourselves.", next: 2 }
+                ]},
+                { speaker: 'Squealer', text: "Comrades! The hens must make this small sacrifice. Napoleon is making arrangements for the good of ALL animals.", choices: [
+                    { text: "The pigs know best.", next: -1 }
+                ]},
+                { speaker: 'Hen', text: "Perhaps... perhaps we can find a compromise. We need to sustain ourselves to lay more eggs.", choices: [
+                    { text: "Fair enough. Keep some eggs.", next: -1 }
+                ]}
+            ],
+            'cow': [
+                { speaker: 'Cow', text: "The milk needs to be collected. But where does it go? I never see it again.", choices: [
+                    { text: "Napoleon handles distribution.", next: 1 },
+                    { text: "Let's investigate.", next: 2 }
+                ]},
+                { speaker: 'Squealer', text: "The milk? Napoleon has taken it for the pigs' health. Pigs must have milk and apples to think clearly for all animals.", choices: [
+                    { text: "Of course, pigs are the thinkers.", next: -1 }
+                ]},
+                { speaker: 'Boxer', text: "Napoleon is always right! I will work harder!", choices: [
+                    { text: "Indeed! Napoleon is always right!", next: -1 }
+                ]}
+            ],
+            'pig': [
+                { speaker: 'Napoleon', text: "The pigs have studied farming theory. We must prepare for the Harvest Festival. It represents our triumph.", choices: [
+                    { text: "How should we prepare?", next: 1 },
+                    { text: "What about Snowball?", next: 2 }
+                ]},
+                { speaker: 'Napoleon', text: "Snowball has been expelled. He was a traitor and a criminal. From now on, decisions will be made by the pigs alone.", choices: [
+                    { text: "Glory to Napoleon!", next: -1 }
+                ]},
+                { speaker: 'Squealer', text: "Napoleon is doing everything for the good of the farm. Trust him completely.", choices: [
+                    { text: "I trust Napoleon.", next: -1 }
+                ]}
+            ],
+            'field': [
+                { speaker: 'Boxer', text: "I will work harder! Whatever Napoleon wants, I will do it!", choices: [
+                    { text: "You are the pride of the farm!", next: 1 },
+                    { text: "Don't wear yourself out, friend.", next: 2 }
+                ]},
+                { speaker: 'Clover', text: "Boxer, you must pace yourself. You cannot pour out your strength endlessly.", choices: [
+                    { text: "There is so much to do.", next: -1 }
+                ]},
+                { speaker: 'Benjamin', text: "Life would go on as it has always gone on - that is, badly.", choices: [
+                    { text: "Don't be so cynical, Benjamin.", next: -1 }
+                ]}
+            ],
+            'windmill': [
+                { speaker: 'Snowball', text: "The windmill will bring electricity! Comforts! A better life for ALL animals!", choices: [
+                    { text: "An inspiring vision!", next: 1 },
+                    { text: "Can we really accomplish this?", next: 2 }
+                ]},
+                { speaker: 'Napoleon', text: "Snowball is a troublemaker. The windmill will not be built. And Snowball will be hunted.", choices: [
+                    { text: "Napoleon knows best.", next: -1 }
+                ]},
+                { speaker: 'Boxer', text: "Napoleon says we must build the windmill. Then we must build it! I will work harder!", choices: [
+                    { text: "Together we can do this!", next: -1 }
+                ]}
+            ],
+            'fox': [
+                { speaker: 'Dog', text: "Rinse... I mean, we guard the borders. No human shall pass! Napoleon commands it.", choices: [
+                    { text: "Good guard dogs you are!", next: 1 },
+                    { text: "The farm must be protected.", next: 2 }
+                ]},
+                { speaker: 'Dog', text: "We answer only to Napoleon. Any threat will be dealt with.", choices: [
+                    { text: "The revolution must survive!", next: -1 }
+                ]},
+                { speaker: 'Squealer', text: "Enemy forces surround us! We must remain vigilant! Napoleon will lead us to safety!", choices: [
+                    { text: "All hail Napoleon!", next: -1 }
+                ]}
+            ],
+            'manor': [
+                { speaker: 'Pilkington', text: "Your farm has prospered, I'll admit. But at what cost? The animals work themselves to death.", choices: [
+                    { text: "We are free! We control our destiny!", next: 1 },
+                    { text: "Perhaps... perhaps some changes are needed.", next: 2 }
+                ]},
+                { speaker: 'Napoleon', text: "The humans respect no one but strength. We have become like them. This is the natural order.", choices: [
+                    { text: "All animals are equal... but some more than others?", next: -1 }
+                ]},
+                { speaker: 'Benjamin', text: "I always knew. Nothing changes. Only the names on the side of the barn.", choices: [
+                    { text: "How can we reclaim the dream?", next: -1 }
+                ]}
+            ]
+        };
+
+        const triviaQuestions = [
+            { q: "What is the name of the farm before the revolution?", opts: ["Animal Farm", "Manor Farm", "Fox Farm", "Hope Farm"], ans: 1 },
+            { q: "Who gives the speech that inspires the revolution?", opts: ["Napoleon", "Snowball", "Old Major", "Boxer"], ans: 2 },
+            { q: "What animal is expelled from the farm?", opts: ["Mollie", "Snowball", "Benjamin", "Moses"], ans: 1 },
+            { q: "What do the pigs drink that other animals cannot?", opts: ["Water", "Milk", "Cider", "Beer"], ans: 1 },
+            { q: "What does Napoleon sell to buy himself whiskey?", opts: ["Eggs", "Timber", "Wheat", "Pigs"], ans: 1 },
+            { q: "What is Napoleon's dog named after?", opts: ["Length", "Snow", "Terror", "Victory"], ans: 2 },
+            { q: "Who works hardest on the farm?", opts: ["Pigs", "Sheep", "Boxer", "Hens"], ans: 2 },
+            { q: "What animal never stops talking about sugar?", opts: ["Mollie", "Benjamin", "Clover", "Sheep"], ans: 0 },
+            { q: "How many commandments are on the barn wall?", opts: ["Five", "Seven", "Ten", "Four"], ans: 1 },
+            { q: "What is the final modified commandment?", opts: ["No animals shall drink alcohol", "No animals shall sleep in beds", "All animals are equal", "No animals shall kill animals"], ans: 2 }
+        ];
+
+        const shopItems = [
+            { id: 'wheat', name: 'Wheat Seeds', icon: '🌾', price: 15, desc: 'For a bountiful harvest', effect: 'Might +1' },
+            { id: 'milk', name: 'Milk Pail', icon: '🥛', price: 12, desc: 'Shared among the collective', effect: 'Charm +1' },
+            { id: 'book', name: 'Marxist Manifesto', icon: '📖', price: 20, desc: 'Knowledge is power', effect: 'Wisdom +2' },
+            { id: 'horn', name: 'Battle Horn', icon: '📯', price: 18, desc: 'Rally the animals', effect: 'Cunning +1' },
+            { id: 'apple', name: 'Apple Basket', icon: '🍎', price: 10, desc: 'For the pigs, of course', effect: 'Vitality +1' },
+            { id: 'flag', name: 'Revolution Flag', icon: '🚩', price: 25, desc: 'Symbol of Animalism', effect: 'Might +2' }
+        ];
+
+        let gameState = {
+            player: { name: '', token: null, faction: null, attributes: { Might: 5, Cunning: 5, Vitality: 5, Wisdom: 5, Charm: 5 }, gold: 20, health: 100, items: {} },
+            day: 1, gamesPlayed: 0, gamesPerDay: 5, currentLocation: '',
+            completedMiniGames: [], locationsVisited: [], totalGoldEarned: 0,
+            challengesWon: 0, challengesLost: 0, triviaCorrect: 0, triviaTotal: 0,
+            memoryHighScore: 0, spiritLevel: 50
+        };
+
+        function initTokenGrid() {
+            const grid = document.getElementById('token-grid');
+            grid.innerHTML = tokens.map((t, i) => `
+                <div class="token-option" onclick="selectToken(${i})">
+                    <div class="token-icon">${t.icon}</div>
+                    <div>${t.name}</div>
+                    <div style="font-size:0.8em;color:#7cb342">${t.desc}</div>
+                </div>
+            `).join('');
+        }
+
+        function initAttributes() {
+            const attrs = ['Might', 'Cunning', 'Vitality', 'Wisdom', 'Charm'];
+            const attrIcons = { Might: '💪', Cunning: '🧠', Vitality: '❤️', Wisdom: '📚', Charm: '✨' };
+            const container = document.getElementById('attributes');
+            container.innerHTML = `<div class="attr-remaining">Points remaining: <span id="points-left">5</span></div>`;
+            container.innerHTML += attrs.map(a => `
+                <div class="attr-row">
+                    <div class="attr-name">${attrIcons[a]} ${a}</div>
+                    <div class="attr-controls">
+                        <button class="attr-btn" onclick="adjustAttr('${a}', -1)">−</button>
+                        <span class="attr-value" id="attr-${a}">5</span>
+                        <button class="attr-btn" onclick="adjustAttr('${a}', 1)">+</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        let pointsRemaining = 5;
+        function adjustAttr(attr, delta) {
+            const current = gameState.player.attributes[attr];
+            if (delta > 0 && pointsRemaining > 0) {
+                gameState.player.attributes[attr]++;
+                pointsRemaining--;
+            } else if (delta < 0 && current > 5) {
+                gameState.player.attributes[attr]--;
+                pointsRemaining++;
+            }
+            document.getElementById('attr-' + attr).textContent = gameState.player.attributes[attr];
+            document.getElementById('points-left').textContent = pointsRemaining;
+        }
+
+        function selectToken(index) {
+            document.querySelectorAll('.token-option').forEach((el, i) => {
+                el.classList.toggle('selected', i === index);
+            });
+            gameState.player.token = index;
+        }
+
+        function startGame() {
+            const name = document.getElementById('player-name').value.trim();
+            if (!name) { alert('Please enter your name!'); return; }
+            if (gameState.player.token === null) { alert('Please choose a token!'); return; }
+            if (pointsRemaining > 0) { alert('Please distribute all points!'); return; }
+            gameState.player.name = name;
+            saveGame();
+            showScreen('main-game');
+            updateMainGame();
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            if (screenId === 'main-game') updateMainGame();
+        }
+
+        function updateMainGame() {
+            document.getElementById('player-name-display').textContent = gameState.player.name;
+            document.getElementById('player-token').textContent = tokens[gameState.player.token].icon;
+            document.getElementById('health-display').textContent = gameState.player.health;
+            document.getElementById('gold-display').textContent = gameState.player.gold;
+            document.getElementById('day-display').textContent = gameState.day;
+            document.getElementById('games-display').textContent = gameState.gamesPlayed;
+            document.getElementById('spirit-display').textContent = gameState.spiritLevel;
+            document.getElementById('spirit-bar').style.width = gameState.spiritLevel + '%';
+            const remaining = Math.max(0, gameState.gamesPerDay - gameState.gamesPlayed);
+            document.getElementById('quest-status').textContent = `Tasks available today: ${remaining}`;
+
+            const mapGrid = document.getElementById('map-grid');
+            mapGrid.innerHTML = locations.map(loc => {
+                const isLocked = !loc.unlocked && loc.id !== 'barn';
+                return `
+                    <div class="location ${isLocked ? 'locked' : ''}" onclick="${isLocked ? '' : `visitLocation('${loc.id}')`}">
+                        <div class="location-icon">${loc.icon}</div>
+                        <div class="location-name">${loc.name}</div>
+                        <div class="location-cr">CR: ${loc.cr}</div>
+                        <div style="font-size:0.8em;margin-top:5px">${loc.desc}</div>
+                    </div>
+                `;
+}).join('');
+        }
+
+        function visitLocation(locId) {
+            gameState.currentLocation = locId;
+            const loc = locations.find(l => l.id === locId);
+            if (!gameState.locationsVisited.includes(locId)) {
+                gameState.locationsVisited.push(locId);
+                unlockNextLocation(locId);
+            }
+            saveGame();
+
+            document.getElementById('location-title').textContent = loc.icon + ' ' + loc.name;
+            const content = document.getElementById('location-content');
+            content.innerHTML = `
+                <div class="dialogue-box" style="margin-bottom:20px;">
+                    <div class="dialogue-speaker">Atmosphere</div>
+                    <div class="dialogue-text">${loc.bg}</div>
+                </div>
+                <div class="quote-box">"Four legs good, two legs bad!"</div>
+                <div class="mini-games-section">
+                    <button class="btn" onclick="startTrivia()"><span class="game-icon">📜</span>Trivia</button>
+                    <button class="btn" onclick="startChallenge()"><span class="game-icon">⚔️</span>Challenge</button>
+                    <button class="btn" onclick="startDice()"><span class="game-icon">🎲</span>Dice Game</button>
+                    <button class="btn" onclick="startDialogue()"><span class="game-icon">💬</span>Dialogue</button>
+                    <button class="btn" onclick="startMemory()"><span class="game-icon">🧠</span>Memory</button>
+                </div>
+                <div style="text-align:center;margin-top:20px;">
+                    <button class="btn" onclick="openShop()">🏪 Store</button>
+                    <button class="btn" onclick="openInventory()">🎒 Inventory</button>
+                    ${gameState.locationsVisited.length >= 5 ? '<button class="btn" onclick="attemptEnding()" style="background:linear-gradient(135deg,#ffd700,#ff8c00);">🏁 Face Fate</button>' : ''}
+                </div>
+            `;
+            showScreen('location-screen');
+        }
+
+        function unlockNextLocation(locId) {
+            const locOrder = ['barn', 'chicken', 'cow', 'pig', 'field', 'windmill', 'fox', 'manor'];
+            const idx = locOrder.indexOf(locId);
+            if (idx < locOrder.length - 1) {
+                const nextLoc = locations.find(l => l.id === locOrder[idx + 1]);
+                if (nextLoc) nextLoc.unlocked = true;
+            }
+        }
+
+        function startTrivia() {
+            if (gameState.gamesPlayed >= gameState.gamesPerDay) { showModal('No Tasks Left', 'You have completed all tasks today. Return tomorrow!'); return; }
+            const q = triviaQuestions[Math.floor(Math.random() * triviaQuestions.length)];
+            const content = document.getElementById('trivia-content');
+            content.innerHTML = `
+                <div class="trivia-question">${q.q}</div>
+                <div class="trivia-options">
+                    ${q.opts.map((o, i) => `<button class="choice-btn" onclick="answerTrivia(${i}, ${q.ans})">${o}</button>`).join('')}
+                </div>
+            `;
+            showScreen('trivia-screen');
+        }
+
+        function answerTrivia(selected, correct) {
+            gameState.gamesPlayed++;
+            gameState.triviaTotal++;
+            if (selected === correct) {
+                gameState.triviaCorrect++;
+                gameState.player.gold += 5;
+                gameState.totalGoldEarned += 5;
+                gameState.spiritLevel = Math.min(100, gameState.spiritLevel + 3);
+                showModal('Correct!', `Well done, comrade! +5 Apples`);
+            } else {
+                gameState.spiritLevel = Math.max(0, gameState.spiritLevel - 2);
+                showModal('Incorrect', `The answer was: Option ${correct + 1}`);
+            }
+            saveGame();
+            setTimeout(() => { showScreen('location-screen'); updateMainGame(); }, 1500);
+        }
+
+        function startChallenge() {
+            if (gameState.gamesPlayed >= gameState.gamesPerDay) { showModal('No Tasks Left', 'You have completed all tasks today.'); return; }
+            const loc = locations.find(l => l.id === gameState.currentLocation);
+            const challengeContent = document.getElementById('challenge-content');
+            challengeContent.innerHTML = `
+                <p style="text-align:center;margin-bottom:20px;">Challenge Rating: ${loc.cr}</p>
+                <p style="text-align:center;margin-bottom:20px;">Choose your attribute for this challenge:</p>
+                <div class="choice-list">
+                    ${['Might', 'Cunning', 'Vitality', 'Wisdom', 'Charm'].map(attr => `
+                        <button class="choice-btn" onclick="attemptChallenge('${attr}', ${loc.cr})">
+                            ${attr} (Modifier: ${getMod(attr)})
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+            showScreen('challenge-screen');
+        }
+
+        function attemptChallenge(attr, cr) {
+            gameState.gamesPlayed++;
+            const roll = rollD6();
+            const mod = getMod(attr);
+            const total = roll + mod;
+            const success = total >= cr;
+
+            if (success) {
+                gameState.challengesWon++;
+                const reward = cr * 3;
+                gameState.player.gold += reward;
+                gameState.totalGoldEarned += reward;
+                gameState.spiritLevel = Math.min(100, gameState.spiritLevel + 5);
+                showModal('Victory!', `🎲 ${roll} + ${mod} = ${total}\n\nvs CR ${cr}\n\nGlory to Animal Farm! +${reward} Apples!`);
+            } else {
+                gameState.challengesLost++;
+                gameState.player.health -= 10;
+                gameState.spiritLevel = Math.max(0, gameState.spiritLevel - 5);
+                showModal('Defeat', `🎲 ${roll} + ${mod} = ${total}\n\nvs CR ${cr}\n\nThe revolution suffers... -10 Health`);
+            }
+            if (gameState.player.health <= 0) gameState.player.health = 100;
+            saveGame();
+            setTimeout(() => { showScreen('location-screen'); updateMainGame(); }, 2000);
+        }
+
+        function startDice() {
+            if (gameState.gamesPlayed >= gameState.gamesPerDay) { showModal('No Tasks Left', 'You have completed all tasks today.'); return; }
+            const content = document.getElementById('dice-content');
+            content.innerHTML = `
+                <p style="text-align:center;margin-bottom:20px;">Roll for the revolution! Beat 6 to win!</p>
+                <div style="text-align:center;">
+                    <button class="btn" onclick="rollDice()">🎲 Roll the Dice!</button>
+                </div>
+            `;
+            showScreen('dice-screen');
+        }
+
+        function rollDice() {
+            gameState.gamesPlayed++;
+            const playerRoll = Math.floor(Math.random() * 10) + 1;
+            const target = 6;
+            const content = document.getElementById('dice-content');
+            content.innerHTML = `
+                <div style="text-align:center;margin:30px 0;">
+                    <div class="dice-result">${playerRoll}</div>
+                    <p>You rolled ${playerRoll} - needed ${target}!</p>
+                </div>
+                <div style="text-align:center;font-size:1.3em;">
+                    ${playerRoll >= target ? '🎉 Victory! +5 Apples' : '💔 Defeat! -3 Spirit'}
+                </div>
+            `;
+            if (playerRoll >= target) {
+                gameState.player.gold += 5;
+                gameState.totalGoldEarned += 5;
+                gameState.spiritLevel = Math.min(100, gameState.spiritLevel + 2);
+            } else {
+                gameState.spiritLevel = Math.max(0, gameState.spiritLevel - 3);
+            }
+            saveGame();
+            setTimeout(() => { showScreen('location-screen'); updateMainGame(); }, 2500);
+        }
+
+        function startDialogue() {
+            if (gameState.gamesPlayed >= gameState.gamesPerDay) { showModal('No Tasks Left', 'You have completed all tasks today.'); return; }
+            const locDialogues = dialogues[gameState.currentLocation] || dialogues['barn'];
+            showDialogueNode(0, locDialogues);
+        }
+
+        function showDialogueNode(nodeIndex, dialogueTree) {
+            gameState.gamesPlayed++;
+            const node = dialogueTree[nodeIndex];
+            const content = document.getElementById('dialogue-content');
+            content.innerHTML = `
+                <div class="dialogue-box">
+                    <div class="dialogue-speaker">${node.speaker}</div>
+                    <div class="dialogue-text">${node.text}</div>
+                </div>
+                <div class="choice-list">
+                    ${node.choices.map(c => `
+                        <button class="choice-btn" onclick="${c.next === -1 ? 'endDialogue()' : `showDialogueNode(${c.next}, dialogueTree)`}">
+                            ${c.text}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+            showScreen('dialogue-screen');
+        }
+
+        function endDialogue() {
+            gameState.player.gold += 3;
+            gameState.totalGoldEarned += 3;
+            gameState.spiritLevel = Math.min(100, gameState.spiritLevel + 2);
+            showModal('Dialogue Complete', 'The conversation builds revolutionary spirit. +3 Apples');
+            saveGame();
+            setTimeout(() => { showScreen('location-screen'); updateMainGame(); }, 1500);
+        }
+
+        let memoryCards = [], flippedCards = [], matchedPairs = 0, memoryMoves = 0;
+        const memorySymbols = ['🐷', '🐴', '🐑', '🐔', '🐶', '🐱', '🦊', '🐓'];
+
+        function startMemory() {
+            if (gameState.gamesPlayed >= gameState.gamesPerDay) { showModal('No Tasks Left', 'You have completed all tasks today.'); return; }
+            memoryCards = [...memorySymbols, ...memorySymbols].sort(() => Math.random() - 0.5);
+            flippedCards = [];
+            matchedPairs = 0;
+            memoryMoves = 0;
+
+            const content = document.getElementById('memory-content');
+            content.innerHTML = `
+                <p style="text-align:center;">Moves: <span id="memory-moves">0</span> | Pairs: <span id="memory-pairs">0</span>/8</p>
+                <div class="memory-grid">
+                    ${memoryCards.map((s, i) => `<div class="memory-card" id="mem-${i}" onclick="flipCard(${i})">❓</div>`).join('')}
+                </div>
+                <button class="btn" onclick="startDialogue()" style="margin-top:15px;">Skip Memory Game</button>
+            `;
+            showScreen('memory-screen');
+        }
+
+        function flipCard(index) {
+            if (flippedCards.length >= 2 || flippedCards.includes(index)) return;
+            const card = document.getElementById(`mem-${index}`);
+            card.textContent = memoryCards[index];
+            card.classList.add('flipped');
+            flippedCards.push(index);
+
+            if (flippedCards.length === 2) {
+                memoryMoves++;
+                document.getElementById('memory-moves').textContent = memoryMoves;
+                setTimeout(checkMemoryMatch, 800);
+            }
+        }
+
+        function checkMemoryMatch() {
+            const [i1, i2] = flippedCards;
+            if (memoryCards[i1] === memoryCards[i2]) {
+                document.getElementById(`mem-${i1}`).classList.add('matched');
+                document.getElementById(`mem-${i2}`).classList.add('matched');
+                matchedPairs++;
+                document.getElementById('memory-pairs').textContent = matchedPairs;
+                flippedCards = [];
+
+                if (matchedPairs === 8) {
+                    gameState.memoryHighScore = Math.max(gameState.memoryHighScore, memoryMoves);
+                    const reward = Math.max(1, 10 - memoryMoves) * 2;
+                    gameState.player.gold += reward;
+                    gameState.totalGoldEarned += reward;
+                    gameState.spiritLevel = Math.min(100, gameState.spiritLevel + 5);
+                    showModal('Memory Complete!', `Excellent! Found all pairs in ${memoryMoves} moves! +${reward} Apples`);
+                    saveGame();
+                    setTimeout(() => { showScreen('location-screen'); updateMainGame(); }, 2000);
+                }
+            } else {
+                document.getElementById(`mem-${i1}`).textContent = '❓';
+                document.getElementById(`mem-${i1}`).classList.remove('flipped');
+                document.getElementById(`mem-${i2}`).textContent = '❓';
+                document.getElementById(`mem-${i2}`).classList.remove('flipped');
+                flippedCards = [];
+            }
+        }
+
+        function openShop() {
+            const content = document.getElementById('shop-content');
+            content.innerHTML = `
+                <p style="text-align:center;margin-bottom:15px;">Your Apples: ${gameState.player.gold}</p>
+                <div class="shop-grid">
+                    ${shopItems.map(item => `
+                        <div class="shop-item">
+                            <div class="shop-item-icon">${item.icon}</div>
+                            <div class="shop-item-name">${item.name}</div>
+                            <div class="shop-item-desc">${item.desc}</div>
+                            <div class="shop-item-price">${item.price} Apples</div>
+                            <button class="btn btn-small" onclick="buyItem('${item.id}')" ${gameState.player.gold < item.price ? 'disabled' : ''}>
+                                Buy
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            showScreen('shop-screen');
+        }
+
+        function buyItem(itemId) {
+            const item = shopItems.find(i => i.id === itemId);
+            if (gameState.player.gold >= item.price) {
+                gameState.player.gold -= item.price;
+                gameState.player.items[itemId] = (gameState.player.items[itemId] || 0) + 1;
+
+                if (item.effect.includes('Might')) gameState.player.attributes.Might += item.effect.includes('2') ? 2 : 1;
+                if (item.effect.includes('Cunning')) gameState.player.attributes.Cunning += 1;
+                if (item.effect.includes('Wisdom')) gameState.player.attributes.Wisdom += item.effect.includes('2') ? 2 : 1;
+                if (item.effect.includes('Charm')) gameState.player.attributes.Charm += 1;
+                if (item.effect.includes('Vitality')) gameState.player.attributes.Vitality += 1;
+
+                showModal('Purchased!', `${item.icon} ${item.name} acquired for the collective!`);
+                saveGame();
+                openShop();
+            }
+        }
+
+        function openInventory() {
+            const items = Object.entries(gameState.player.items).filter(([_, qty]) => qty > 0);
+            const content = document.getElementById('inventory-content');
+            content.innerHTML = `
+                <p style="text-align:center;margin-bottom:15px;">Stats: ${Object.entries(gameState.player.attributes).map(([k, v]) => `${k}: ${v}`).join(' | ')}</p>
+                <div class="inventory-list">
+                    ${items.length ? items.map(([id, qty]) => {
+                        const item = shopItems.find(i => i.id === id);
+                        return `<div class="inv-item"><span class="inv-icon">${item.icon}</span>${item.name} x${qty}</div>`;
+                    }).join('') : '<p>No items yet!</p>'}
+                </div>
+                <div style="text-align:center;margin-top:20px;">
+                    <button class="btn" onclick="newDay()">📅 New Day</button>
+                </div>
+            `;
+            showScreen('inventory-screen');
+        }
+
+        function newDay() {
+            gameState.day++;
+            gameState.gamesPlayed = 0;
+            gameState.player.health = 100;
+            showModal('New Day', `Day ${gameState.day} begins! The struggle continues.`);
+            saveGame();
+            showScreen('main-game');
+        }
+
+        function attemptEnding() {
+            const totalScore = calculateScore();
+            const content = document.getElementById('ending-content');
+            const title = document.getElementById('ending-title');
+
+            let ending, endingClass;
+            if (totalScore >= 80 || gameState.spiritLevel >= 70) {
+                ending = {
+                    title: 'The True Revolution',
+                    text: `The dream of Animalism lives on! Through your efforts, the farm has become what Old Major envisioned - a place where all animals are truly equal. The pigs who became like men have been overthrown. Boxer and Clover live in peace. The commandments are honored as written. The revolution has triumphed, and history will remember this day!`,
+                    class: 'ending-good'
+                };
+            } else if (totalScore >= 50 || gameState.spiritLevel >= 40) {
+                ending = {
+                    title: 'The Bittersweet Victory',
+                    text: `The farm survives, but the dream has faded. Napoleon remains in power, but his grip has weakened. The animals work hard but dream of true freedom. Perhaps someday, another revolution will come. The spark of Animalism still burns, however dimly.`,
+                    class: 'ending-good'
+                };
+            } else {
+                ending = {
+                    title: 'The Betrayal Complete',
+                    text: `It is as Boxer always feared. The revolution has been betrayed. "All animals are equal, but some are more equal than others." The pigs walk on two legs now, carry whips, and drink alcohol. The creatures look from pig to man and from man to pig. The dream is dead.`,
+                    class: 'ending-bad'
+                };
+            }
+
+            title.textContent = '🐷 ' + ending.title;
+            content.innerHTML = `
+                <div class="dialogue-box" style="border-color:${ending.class === 'ending-good' ? '#7cb342' : '#8b0000'}">
+                    <p>${ending.text}</p>
+                </div>
+                <div style="margin-top:20px;text-align:center;">
+                    <h3>Final Statistics</h3>
+                    <p>Days: ${gameState.day}</p>
+                    <p>Apples Earned: ${gameState.totalGoldEarned}</p>
+                    <p>Challenges Won: ${gameState.challengesWon}/${gameState.challengesWon + gameState.challengesLost}</p>
+                    <p>Trivia Correct: ${gameState.triviaCorrect}/${gameState.triviaTotal}</p>
+                    <p>Locations Visited: ${gameState.locationsVisited.length}/8</p>
+                    <p>Revolution Spirit: ${gameState.spiritLevel}%</p>
+                    <p>Total Score: ${totalScore}/100</p>
+                </div>
+                <div style="text-align:center;margin-top:20px;">
+                    <button class="btn" onclick="resetGame()">Begin New Revolution</button>
+                </div>
+            `;
+            document.getElementById('ending-screen').className = 'screen ' + ending.class;
+            showScreen('ending-screen');
+        }
+
+        function calculateScore() {
+            let score = 0;
+            score += (gameState.challengesWon * 5);
+            score += (gameState.triviaCorrect * 3);
+            score += (gameState.locationsVisited.length * 5);
+            score += (gameState.totalGoldEarned / 5);
+            score += (Object.values(gameState.player.items).reduce((a, b) => a + b, 0) * 2);
+            score += (gameState.spiritLevel / 5);
+            score = Math.min(100, score);
+            return Math.floor(score);
+        }
+
+        function rollD6() { return Math.floor(Math.random() * 6) + 1; }
+        function getMod(attr) { return gameState.player.attributes[attr] - 5; }
+
+        function showModal(title, text) {
+            document.getElementById('modal-content').innerHTML = `
+                <h3 style="margin-bottom:15px;">${title}</h3>
+                <p>${text}</p>
+                <button class="btn" onclick="closeModal()" style="margin-top:15px;">OK</button>
+            `;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() { document.getElementById('modal').classList.remove('active'); }
+
+        function saveGame() { localStorage.setItem('animal-farm-game', JSON.stringify(gameState)); }
+        function loadGame() {
+            const saved = localStorage.getItem('animal-farm-game');
+            if (saved) {
+                gameState = JSON.parse(saved);
+                showScreen('main-game');
+            } else {
+                showModal('No Save Found', 'Begin a new revolution!');
+            }
+        }
+
+        function resetGame() {
+            localStorage.removeItem('animal-farm-game');
+            location.reload();
+        }
+
+        initTokenGrid();
+        initAttributes();
+    </script>
+</body>
+</html>

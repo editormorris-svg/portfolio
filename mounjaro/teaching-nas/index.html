@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teaching at NAS Jiaxing — 0604.ai</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a365d, #2c5282, #2b6cb0);
+            min-height: 100vh;
+            color: #fff;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .subtitle { color: rgba(255,255,255,0.7); font-size: 1.1em; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.7); text-decoration: none; margin-bottom: 20px; transition: color 0.2s; }
+        .back-link:hover { color: #63b3ed; }
+        
+        .intro-box {
+            background: rgba(255,255,255,0.1);
+            border-left: 4px solid #63b3ed;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+        .intro-box p { color: rgba(255,255,255,0.9); line-height: 1.6; }
+        
+        .video-grid { display: grid; gap: 20px; }
+        .video-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .video-card:hover { transform: translateX(10px); }
+        .video-thumb {
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(135deg, #1a2a4a, #1a1a3e);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            flex-shrink: 0;
+        }
+        .video-info { flex-grow: 1; }
+        .video-title { font-size: 1.2em; margin-bottom: 8px; }
+        .video-desc { color: rgba(255,255,255,0.7); font-size: 0.95em; line-height: 1.5; }
+        .video-meta { 
+            display: inline-block; 
+            margin-top: 8px; 
+            background: rgba(99, 179, 237, 0.2); 
+            color: #63b3ed; 
+            padding: 4px 12px; 
+            border-radius: 12px; 
+            font-size: 0.8rem; 
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        .btn:hover { background: rgba(255,255,255,0.3); }
+        
+        .category-section {
+            margin-bottom: 40px;
+        }
+        .category-title {
+            color: #63b3ed;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(99, 179, 237, 0.3);
+        }
+        
+        .school-info {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        .school-info h2 { margin-bottom: 20px; color: #63b3ed; }
+        .school-details { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 20px; 
+        }
+        .school-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .school-detail-icon { font-size: 1.5em; }
+        
+        footer { text-align: center; margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
+        footer a { color: #63b3ed; text-decoration: none; }
+        
+        @media (max-width: 768px) {
+            .video-card { flex-direction: column; text-align: center; }
+            .video-thumb { width: 100%; height: 120px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="https://0604.ai" class="back-link">← Back to 0604.ai</a>
+        
+        <header>
+            <h1>🏫 Teaching at NAS Jiaxing</h1>
+            <p class="subtitle">A career reborn in Zhejiang province</p>
+        </header>
+
+        <div class="intro-box">
+            <p>After years of searching, I found my place at Nord Anglia School Jiaxing. This isn't just a job — it's a community that welcomed me when I needed a fresh start. These videos capture life inside and outside the classroom.</p>
+        </div>
+
+        <!-- School Info -->
+        <div class="school-info">
+            <h2>📍 NAS Jiaxing</h2>
+            <div class="school-details">
+                <div class="school-detail-item">
+                    <span class="school-detail-icon">📍</span>
+                    <span>No. 353 Qingze Road, Jiaxing, Zhejiang</span>
+                </div>
+                <div class="school-detail-item">
+                    <span class="school-detail-icon">📞</span>
+                    <span>(+86) 0573-8388 3000</span>
+                </div>
+                <div class="school-detail-item">
+                    <span class="school-detail-icon">🌐</span>
+                    <a href="https://www.nasjiaxing.cn" target="_blank" style="color: #63b3ed;">www.nasjiaxing.cn</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campus Life -->
+        <div class="category-section">
+            <h2 class="category-title">🎓 Campus & Community</h2>
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-thumb">🏫</div>
+                    <div class="video-info">
+                        <h3 class="video-title">A Walk Around NAS Jiaxing</h3>
+                        <p class="video-desc">Touring the campus that became my second home. From classrooms to common areas, this is where the next chapter began.</p>
+                        <span class="video-meta">Campus Tour</span>
+                    </div>
+                    <a href="https://youtu.be/lSSGXcgNP3A" target="_blank" class="btn">Watch →</a>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumb">🍽️</div>
+                    <div class="video-info">
+                        <h3 class="video-title">NO Breakfast + 12 Lunches</h3>
+                        <p class="video-desc">How I navigate the school day with intermittent fasting. Teacher meal prep and navigating the cafeteria on a schedule.</p>
+                        <span class="video-meta">Teacher Life</span>
+                    </div>
+                    <a href="https://youtu.be/V8_8OVGUMaw" target="_blank" class="btn">Watch →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Social & Events -->
+        <div class="category-section">
+            <h2 class="category-title">🎉 Social & Performances</h2>
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-thumb">🎤</div>
+                    <div class="video-info">
+                        <h3 class="video-title">Karaoke Night</h3>
+                        <p class="video-desc">Singing with colleagues after hours. The social side of teaching that makes NAS Jiaxing feel like family.</p>
+                        <span class="video-meta">Social</span>
+                    </div>
+                    <span style="color: #888; font-style: italic;">Coming Soon</span>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumb">❄️</div>
+                    <div class="video-info">
+                        <h3 class="video-title">Winter Show + Dinner</h3>
+                        <p class="video-desc">End-of-year celebrations with students, parents, and staff. The performances, the food, and the community spirit.</p>
+                        <span class="video-meta">Annual Event</span>
+                    </div>
+                    <span style="color: #888; font-style: italic;">Coming Soon</span>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumb">🧧</div>
+                    <div class="video-info">
+                        <h3 class="video-title">Chinese New Year Performance</h3>
+                        <p class="video-desc">Celebrating Spring Festival with the school community. Traditional dances, music, and the blending of cultures.</p>
+                        <span class="video-meta">Cultural Event</span>
+                    </div>
+                    <span style="color: #888; font-style: italic;">Coming Soon</span>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Teaching journey by <a href="https://0604.ai">0604.ai</a> | Forever grateful to NAS Jiaxing</p>
+        </footer>
+    </div>
+</body>
+</html>

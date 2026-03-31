@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countries Visited — 0604.ai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --earth-dark: #2C1810;
+            --earth-brown: #4A2C17;
+            --earth-warm: #6B4423;
+            --earth-gold: #B8860B;
+            --earth-sand: #D4A574;
+            --earth-cream: #F5E6D3;
+            --earth-light: #FAF6F0;
+            --accent-rust: #C75B39;
+            --accent-sage: #6B8E6B;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--earth-dark), var(--earth-brown));
+            min-height: 100vh;
+            color: var(--earth-cream);
+        }
+        
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 40px 20px; 
+        }
+        
+        header { 
+            text-align: center; 
+            margin-bottom: 50px; 
+        }
+        
+        .back-link { 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px; 
+            color: rgba(255,255,255,0.7); 
+            text-decoration: none; 
+            margin-bottom: 30px; 
+            transition: color 0.2s; 
+        }
+        
+        .back-link:hover { 
+            color: var(--earth-gold); 
+        }
+        
+        h1 { 
+            font-family: 'Playfair Display', serif;
+            font-size: 3em; 
+            margin-bottom: 10px;
+            color: var(--earth-gold);
+        }
+        
+        .subtitle { 
+            color: rgba(255,255,255,0.7); 
+            font-size: 1.1em; 
+        }
+
+        /* Stats Box */
+        .stats-box {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .stats-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 6rem;
+            font-weight: 700;
+            color: var(--earth-gold);
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .stats-label {
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.8);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        /* Region Cards */
+        .regions-grid {
+            display: grid;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .region-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .region-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .region-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .region-icon {
+            font-size: 2.5rem;
+        }
+
+        .region-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--earth-gold);
+        }
+
+        .region-count {
+            margin-left: auto;
+            background: var(--accent-rust);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .countries-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .country-tag {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 18px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .country-tag:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+        }
+
+        .country-flag {
+            font-size: 1.3rem;
+        }
+
+        /* Americas & Oceania special styling */
+        .region-card.oceania .countries-list {
+            justify-content: center;
+        }
+
+        /* Facebook Link Section */
+        .facebook-section {
+            background: linear-gradient(135deg, rgba(59, 89, 152, 0.2), rgba(59, 89, 152, 0.1));
+            border: 1px solid rgba(59, 89, 152, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .facebook-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--earth-cream);
+        }
+
+        .facebook-section p {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 25px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .facebook-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #3b5998;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .facebook-btn:hover {
+            background: #4a6aa8;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(59, 89, 152, 0.4);
+        }
+        
+        footer { 
+            text-align: center; 
+            margin-top: 60px; 
+            padding-top: 40px; 
+            border-top: 1px solid rgba(255,255,255,0.1); 
+            color: rgba(255,255,255,0.5); 
+        }
+        
+        footer a { 
+            color: var(--earth-gold); 
+            text-decoration: none; 
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .stats-number { font-size: 4rem; }
+            .region-title { font-size: 1.4rem; }
+            .countries-list { gap: 8px; }
+            .country-tag { padding: 8px 12px; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="https://0604.ai" class="back-link">← Back to 0604.ai</a>
+        
+        <header>
+            <h1>🌍 Countries Visited</h1>
+            <p class="subtitle">Adventures around the world with my mother</p>
+        </header>
+
+        <!-- Stats Box -->
+        <div class="stats-box">
+            <div class="stats-number">59</div>
+            <div class="stats-label">Countries</div>
+        </div>
+
+        <!-- Regions -->
+        <div class="regions-grid">
+            <!-- Asia -->
+            <div class="region-card">
+                <div class="region-header">
+                    <span class="region-icon">🏯</span>
+                    <h2 class="region-title">Asia</h2>
+                    <span class="region-count">14 countries</span>
+                </div>
+                <div class="countries-list">
+                    <div class="country-tag"><span class="country-flag">🇲🇲</span> Myanmar</div>
+                    <div class="country-tag"><span class="country-flag">🇹🇭</span> Thailand</div>
+                    <div class="country-tag"><span class="country-flag">🇨🇳</span> China</div>
+                    <div class="country-tag"><span class="country-flag">🇭🇰</span> Hong Kong</div>
+                    <div class="country-tag"><span class="country-flag">🇲🇴</span> Macau</div>
+                    <div class="country-tag"><span class="country-flag">🇲🇾</span> Malaysia</div>
+                    <div class="country-tag"><span class="country-flag">🇸🇬</span> Singapore</div>
+                    <div class="country-tag"><span class="country-flag">🇮🇩</span> Indonesia</div>
+                    <div class="country-tag"><span class="country-flag">🇻🇳</span> Vietnam</div>
+                    <div class="country-tag"><span class="country-flag">🇰🇭</span> Cambodia</div>
+                    <div class="country-tag"><span class="country-flag">🇦🇪</span> UAE</div>
+                    <div class="country-tag"><span class="country-flag">🇦🇿</span> Azerbaijan</div>
+                    <div class="country-tag"><span class="country-flag">🇰🇷</span> South Korea</div>
+                    <div class="country-tag"><span class="country-flag">🇪🇬</span> Egypt</div>
+                </div>
+            </div>
+
+            <!-- Europe -->
+            <div class="region-card">
+                <div class="region-header">
+                    <span class="region-icon">🏰</span>
+                    <h2 class="region-title">Europe</h2>
+                    <span class="region-count">10 countries</span>
+                </div>
+                <div class="countries-list">
+                    <div class="country-tag"><span class="country-flag">🇬🇧</span> UK</div>
+                    <div class="country-tag"><span class="country-flag">🇨🇭</span> Switzerland</div>
+                    <div class="country-tag"><span class="country-flag">🇮🇹</span> Italy</div>
+                    <div class="country-tag"><span class="country-flag">🇪🇸</span> Spain</div>
+                    <div class="country-tag"><span class="country-flag">🇳🇴</span> Norway</div>
+                    <div class="country-tag"><span class="country-flag">🇸🇪</span> Sweden</div>
+                    <div class="country-tag"><span class="country-flag">🇧🇪</span> Belgium</div>
+                    <div class="country-tag"><span class="country-flag">🇫🇷</span> France</div>
+                    <div class="country-tag"><span class="country-flag">🇷🇺</span> Russia</div>
+                    <div class="country-tag"><span class="country-flag">🇬🇪</span> Georgia</div>
+                </div>
+            </div>
+
+            <!-- Americas & Oceania -->
+            <div class="region-card oceania">
+                <div class="region-header">
+                    <span class="region-icon">🌎</span>
+                    <h2 class="region-title">Americas & Oceania</h2>
+                    <span class="region-count">4 countries</span>
+                </div>
+                <div class="countries-list">
+                    <div class="country-tag"><span class="country-flag">🇺🇸</span> USA</div>
+                    <div class="country-tag"><span class="country-flag">🇨🇦</span> Canada</div>
+                    <div class="country-tag"><span class="country-flag">🇦🇺</span> Australia</div>
+                    <div class="country-tag"><span class="country-flag">🇳🇿</span> New Zealand</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Facebook Section -->
+        <div class="facebook-section">
+            <h3>📘 Follow Our Journey</h3>
+            <p>See more travel photos, stories, and updates from our adventures around the world.</p>
+            <a href="https://facebook.com" target="_blank" class="facebook-btn">
+                <span>📘</span> Follow on Facebook
+            </a>
+        </div>
+        
+        <footer>
+            <p>Travel diary by <a href="https://0604.ai">0604.ai</a> | Adventures with Mom</p>
+        </footer>
+    </div>
+</body>
+</html>

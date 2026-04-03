@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jiaxing Local Eats — 0604.ai</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c1810, #4a2c17, #6b4423);
+            min-height: 100vh;
+            color: #fff;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .subtitle { color: rgba(255,255,255,0.7); font-size: 1.1em; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.7); text-decoration: none; margin-bottom: 20px; transition: color 0.2s; }
+        .back-link:hover { color: #d4a574; }
+        
+        .intro-box {
+            background: rgba(255,255,255,0.1);
+            border-left: 4px solid #d4a574;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+        .intro-box p { color: rgba(255,255,255,0.9); line-height: 1.6; }
+        
+        .video-grid { display: grid; gap: 20px; }
+        .video-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .video-card:hover { transform: translateX(10px); }
+        .video-card.featured {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.2), rgba(255,255,255,0.1));
+            border: 2px solid rgba(212, 165, 116, 0.5);
+        }
+        .video-thumb {
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(135deg, #1a1a1a, #2d1a1a);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            flex-shrink: 0;
+        }
+        .video-info { flex-grow: 1; }
+        .video-title { font-size: 1.2em; margin-bottom: 8px; }
+        .video-desc { color: rgba(255,255,255,0.7); font-size: 0.95em; line-height: 1.5; }
+        .video-meta { 
+            display: inline-block; 
+            margin-top: 8px; 
+            background: rgba(212, 165, 116, 0.2); 
+            color: #d4a574; 
+            padding: 4px 12px; 
+            border-radius: 12px; 
+            font-size: 0.8rem; 
+            margin-right: 8px;
+        }
+        .video-price {
+            display: inline-block;
+            background: rgba(163, 230, 53, 0.2);
+            color: #a3e635;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        .btn:hover { background: rgba(255,255,255,0.3); }
+        .btn-primary {
+            background: #d4a574;
+            color: #2c1810;
+        }
+        .btn-primary:hover {
+            background: #b8860b;
+            color: white;
+        }
+        
+        .category-section {
+            margin-bottom: 40px;
+        }
+        .category-title {
+            color: #d4a574;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(212, 165, 116, 0.3);
+        }
+        
+        .quick-list {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        .quick-list h3 {
+            color: #d4a574;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        .quick-list ul {
+            list-style: none;
+        }
+        .quick-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .quick-list li:last-child { border-bottom: none; }
+        .quick-list .tag {
+            background: rgba(212, 165, 116, 0.2);
+            color: #d4a574;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+        }
+        
+        footer { text-align: center; margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
+        footer a { color: #d4a574; text-decoration: none; }
+        
+        @media (max-width: 768px) {
+            .video-card { flex-direction: column; text-align: center; }
+            .video-thumb { width: 100%; height: 120px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="https://0604.ai" class="back-link">← Back to 0604.ai</a>
+        
+        <header>
+            <h1>🍜 Jiaxing Local Eats</h1>
+            <p class="subtitle">Real recommendations from a teacher on the ground</p>
+        </header>
+
+        <div class="intro-box">
+            <p>After months of exploring Jiaxing, here are the spots that actually deliver. No paid promotions, no tourist traps—just places I eat at regularly and recommend to fellow teachers and friends.</p>
+        </div>
+
+        <!-- Featured -->
+        <div class="category-section">
+            <h2 class="category-title">⭐ Scott's Picks</h2>
+            <div class="video-grid">
+                <div class="video-card featured">
+                    <div class="video-thumb">🍛</div>
+                    <div class="video-info">
+                        <h3 class="video-title">Hidden Gem: Japanese Curry Rice</h3>
+                        <p class="video-desc">Tucked away near CBD's boardgame bars. Authentic Japanese katsu curry—crispy pork, amazing sauce, self-serve rice. Scott's regular lunch spot for good reason.</p>
+                        <span class="video-meta">📍 CBD Area</span>
+                        <span class="video-price">¥30</span>
+                    </div>
+                    <a href="https://youtu.be/Y82uqXIerBk" target="_blank" class="btn btn-primary">Watch →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coming Soon -->
+        <div class="category-section">
+            <h2 class="category-title">📝 More Spots Coming</h2>
+            <div class="quick-list">
+                <h3>On My List to Document</h3>
+                <ul>
+                    <li><span>🥟</span> Best shengjian bao (fried dumplings) <span class="tag">Breakfast</span></li>
+                    <li><span>🍜</span> Late-night noodle spots near South Lake <span class="tag">Late Night</span></li>
+                    <li><span>🦐</span> Riverside seafood restaurants <span class="tag">Dinner</span></li>
+                    <li><span>☕</span> Quiet coffee shops for grading papers <span class="tag">Work</span></li>
+                    <li><span>🍻</span> Bars that welcome foreigners <span class="tag">Social</span></li>
+                </ul>
+                <p style="margin-top: 15px; color: rgba(255,255,255,0.6); font-size: 0.9em;">Have a recommendation? Email me at <a href="mailto:1@0604.ai" style="color: #d4a574;">1@0604.ai</a></p>
+            </div>
+        </div>
+
+        <footer>
+            <p>Jiaxing food guide by <a href="https://0604.ai">0604.ai</a> | Real eats, real reviews</p>
+        </footer>
+    </div>
+</body>
+</html>

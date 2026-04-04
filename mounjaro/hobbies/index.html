@@ -54,7 +54,25 @@
             color: rgba(255,255,255,0.7);
         }
         
-        .studio-section {
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .video-card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .video-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+        .video-card h4 { color: #e879f9; margin-bottom: 10px; font-size: 1.1em; }
+        .video-card p { color: rgba(255,255,255,0.7); font-size: 0.9em; line-height: 1.5; margin-bottom: 15px; }
+        .video-link { display: inline-flex; align-items: center; gap: 8px; color: #e879f9; text-decoration: none; font-weight: 500; }
+        .video-link:hover { text-decoration: underline; }
             background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
             border-radius: 20px;
             padding: 40px;
@@ -130,7 +148,27 @@
             <h2>📹 YouTube Studio</h2>
             <p>The hobby that ate all my other hobbies. What started as a weight loss documentation project has become a full creative outlet—learning Premiere Pro, experimenting with cameras and lighting, writing scripts, and slowly finding my voice. It's terrifying and exhilarating in equal measure.</p>
             <p style="font-style: italic; color: rgba(255,255,255,0.6);">"The best time to start was 20 years ago. The second best time is now."</p>
-            <a href="https://www.youtube.com/@0604ai" target="_blank" class="btn">Visit Channel →</a>
+            
+            <h3 style="margin: 40px 0 20px; color: #e879f9; font-size: 1.3em;">🎬 Featured Videos</h3>
+            <div class="video-grid">
+                <div class="video-card">
+                    <h4>The Birth of 0604.ai</h4>
+                    <p>The moment everything changed. The leap, the launch, and the birth of a new identity.</p>
+                    <a href="https://youtu.be/rilBhcpHUnE" target="_blank" class="video-link">▶ Watch on YouTube</a>
+                </div>
+                <div class="video-card">
+                    <h4>What's in a name?</h4>
+                    <p>Exploring the philosophy behind 0604.ai—Shakespeare, identity, and the power of names.</p>
+                    <a href="https://youtu.be/km19CVDMd08" target="_blank" class="video-link">▶ Watch on YouTube</a>
+                </div>
+                <div class="video-card">
+                    <h4>Why 0604.ai?</h4>
+                    <p>The deeper meaning—the prisoner, the bot, the human. The duality of existence.</p>
+                    <a href="https://youtu.be/IHHOlVH6UKo" target="_blank" class="video-link">▶ Watch on YouTube</a>
+                </div>
+            </div>
+            
+            <a href="https://www.youtube.com/@0604ai" target="_blank" class="btn" style="margin-top: 30px;">Visit Channel →</a>
         </div>
 
         <footer>

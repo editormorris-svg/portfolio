@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videos | 0604.ai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --earth-dark: #2C1810;
+            --earth-brown: #4A2C17;
+            --earth-warm: #6B4423;
+            --earth-gold: #B8860B;
+            --earth-sand: #D4A574;
+            --earth-cream: #F5E6D3;
+            --earth-light: #FAF6F0;
+            --accent-rust: #C75B39;
+            --accent-sage: #6B8E6B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--earth-light);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--earth-dark), var(--earth-brown));
+            color: var(--earth-cream);
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1rem;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--earth-gold);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .featured-section {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--earth-dark);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .video-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .video-thumbnail {
+            position: relative;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, var(--earth-dark), var(--earth-brown));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-thumbnail.featured-1 {
+            background: linear-gradient(135deg, var(--accent-rust), #a0442c);
+        }
+
+        .video-thumbnail.featured-2 {
+            background: linear-gradient(135deg, var(--earth-dark), var(--earth-brown));
+        }
+
+        .video-thumbnail.featured-3 {
+            background: linear-gradient(135deg, var(--earth-brown), var(--earth-warm));
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            text-decoration: none;
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+        }
+
+        .play-button span {
+            font-size: 2rem;
+            margin-left: 5px;
+            color: var(--earth-dark);
+        }
+
+        .badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--earth-gold);
+            color: var(--earth-dark);
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .video-info {
+            padding: 1.5rem;
+        }
+
+        .video-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--earth-dark);
+            margin-bottom: 0.8rem;
+        }
+
+        .video-info p {
+            color: var(--earth-warm);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .video-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--earth-sand);
+        }
+
+        .video-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: var(--earth-gold);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .video-link:hover {
+            text-decoration: underline;
+        }
+
+        .category-section {
+            padding: 3rem 0;
+            border-top: 1px solid var(--earth-sand);
+        }
+
+        .category-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--earth-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .video-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .video-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            border-left: 4px solid var(--earth-gold);
+            transition: all 0.3s ease;
+        }
+
+        .video-item:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .video-item h4 {
+            font-family: 'Playfair Display', serif;
+            color: var(--earth-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .video-item p {
+            color: var(--earth-warm);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .subscribe-banner {
+            background: linear-gradient(135deg, #FF0000, #CC0000);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            margin: 4rem 0;
+        }
+
+        .subscribe-banner h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .subscribe-banner p {
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: white;
+            color: #FF0000;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        footer {
+            background: var(--earth-dark);
+            color: var(--earth-cream);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        footer a {
+            color: var(--earth-gold);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🎬 0604.ai Videos</h1>
+            <p>Stories, adventures, and slices of life from China and beyond</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="/" class="back-link">← Back to 0604.ai</a>
+
+        <!-- Featured Videos -->
+        <section class="featured-section">
+            <h2 class="section-title">Featured This Week</h2>
+            
+            <div class="video-grid">
+                <!-- Featured 1: Birthday Hotpot -->
+                <div class="video-card">
+                    <div class="video-thumbnail featured-1">
+                        <span class="badge">Featured #1</span>
+                        <a href="https://youtu.be/iRL51-FfiHg" target="_blank" class="play-button">
+                            <span>▶</span>
+                        </a>
+                    </div>
+                    <div class="video-info">
+                        <h3>🎂 Birthday Hotpot & Karaoke</h3>
+                        <p>Early 0604 birthday celebration with colleagues — epic hotpot feast at Wanda Mall, dancing noodles, and karaoke until late. A night to remember!</p>
+                        <div class="video-meta">
+                            <span>📍 Jiaxing, China</span>
+                            <span>🍲 Food & Social</span>
+                        </div>
+                        <a href="https://youtu.be/iRL51-FfiHg" target="_blank" class="video-link">Watch on YouTube →</a>
+                    </div>
+                </div>
+
+                <!-- Featured 2 -->
+                <div class="video-card">
+                    <div class="video-thumbnail featured-2">
+                        <span class="badge">Featured #2</span>
+                        <a href="https://youtu.be/caD4EcFTqz0" target="_blank" class="play-button">
+                            <span>▶</span>
+                        </a>
+                    </div>
+                    <div class="video-info">
+                        <h3>🎬 Featured Video #2</h3>
+                        <p>Check out the latest upload on the 0604.ai channel.</p>
+                        <div class="video-meta">
+                            <span>📍 0604.ai</span>
+                            <span>🎥 Latest</span>
+                        </div>
+                        <a href="https://youtu.be/caD4EcFTqz0" target="_blank" class="video-link">Watch on YouTube →</a>
+                    </div>
+                </div>
+
+                <!-- Featured 3 -->
+                <div class="video-card">
+                    <div class="video-thumbnail featured-3">
+                        <span class="badge">Featured #3</span>
+                        <a href="https://youtu.be/5-jcRZIfDgM" target="_blank" class="play-button">
+                            <span>▶</span>
+                        </a>
+                    </div>
+                    <div class="video-info">
+                        <h3>🎬 Featured Video #3</h3>
+                        <p>Another fresh upload from 0604.ai — more stories, more adventures.</p>
+                        <div class="video-meta">
+                            <span>📍 0604.ai</span>
+                            <span>🎥 Latest</span>
+                        </div>
+                        <a href="https://youtu.be/5-jcRZIfDgM" target="_blank" class="video-link">Watch on YouTube →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Subscribe Banner -->
+        <div class="subscribe-banner">
+            <h2>Subscribe to 0604.ai</h2>
+            <p>New videos every week — teaching, travel, tech, and life in China</p>
+            <a href="https://youtube.com/@0604ai" target="_blank" class="btn">Subscribe on YouTube</a>
+        </div>
+
+        <!-- More Videos by Category -->
+        <section class="category-section">
+            <h2 class="category-title">🍜 Food & Dining</h2>
+            <div class="video-list">
+                <div class="video-item">
+                    <h4>🎂 Birthday Hotpot & Karaoke</h4>
+                    <p>Early birthday celebration with epic hotpot and late-night karaoke.</p>
+                    <a href="https://youtu.be/iRL51-FfiHg" target="_blank">Watch →</a>
+                </div>
+                <div class="video-item">
+                    <h4>🥩 Japanese Porkchop</h4>
+                    <p>A Japanese-style porkchop experience. The crisp, the sauce, the whole experience.</p>
+                    <a href="https://youtu.be/Y82uqXIerBk" target="_blank">Watch →</a>
+                </div>
+                <div class="video-item">
+                    <h4>🦀 Crab Dinner</h4>
+                    <p>Fresh crab, good company, and the mess that comes with both.</p>
+                    <a href="https://youtu.be/pZoXNCKd-H0" target="_blank">Watch →</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="category-section">
+            <h2 class="category-title">🏞️ Places & Travel</h2>
+            <div class="video-list">
+                <div class="video-item">
+                    <h4>🏫 A Walk Around NAS Jiaxing</h4>
+                    <p>Tour of Nord Anglia School Jiaxing — my home base in China.</p>
+                    <a href="https://youtu.be/lSSGXcgNP3A" target="_blank">Watch →</a>
+                </div>
+                <div class="video-item">
+                    <h4>🏞️ JX Central Park</h4>
+                    <p>Exploring Jiaxing's Central Park. Serene landscapes in the heart of the city.</p>
+                    <a href="https://youtu.be/9_hMJxbCS4s" target="_blank">Watch →</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="category-section">
+            <h2 class="category-title">🎬 Channel Origins</h2>
+            <div class="video-list">
+                <div class="video-item">
+                    <h4>🚀 The Birth of 0604.ai</h4>
+                    <p>The first video — capturing the moment of taking the leap and launching the channel.</p>
+                    <a href="https://youtu.be/caD4EcFTqz0" target="_blank">Watch →</a>
+                </div>
+                <div class="video-item">
+                    <h4>🎭 The Many Sides of 0604</h4>
+                    <p>Exploring the different roles and facets of who I am — teacher, son, father, friend, creator.</p>
+                    <a href="https://youtu.be/5-jcRZIfDgM" target="_blank">Watch →</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>0604.ai — More Than The Sum of All Parts</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem;">
+            <a href="/">Back to Home</a> | 
+            <a href="https://youtube.com/@0604ai" target="_blank">YouTube Channel</a>
+        </p>
+    </footer>
+</body>
+</html>

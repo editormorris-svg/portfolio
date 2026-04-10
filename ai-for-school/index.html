@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI for School | Educational Resources | 0604.ai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --earth-dark: #2C1810;
+            --earth-brown: #4A2C17;
+            --earth-warm: #6B4423;
+            --earth-gold: #B8860B;
+            --earth-sand: #D4A574;
+            --earth-cream: #F5E6D3;
+            --earth-light: #FAF6F0;
+            --accent-rust: #C75B39;
+            --accent-sage: #6B8E6B;
+            --text-dark: #2C1810;
+            --text-light: #F5E6D3;
+            --shadow: rgba(44, 24, 16, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--earth-light);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(44, 24, 16, 0.95), rgba(44, 24, 16, 0.85));
+            backdrop-filter: blur(10px);
+            padding: 0.8rem 2rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--earth-cream);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--earth-sand);
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover { color: var(--earth-cream); }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--earth-cream);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 60vh;
+            background: linear-gradient(135deg, var(--earth-dark) 0%, var(--earth-brown) 50%, var(--earth-warm) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+        }
+
+        .hero-content { max-width: 800px; }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            color: var(--earth-cream);
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--earth-sand);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-desc {
+            color: var(--earth-cream);
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--earth-dark);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, var(--earth-gold), var(--accent-rust));
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--earth-warm);
+            max-width: 600px;
+            margin: 1.5rem auto 0;
+        }
+
+        /* Games Section */
+        .games-section {
+            background: linear-gradient(to bottom, var(--earth-light), var(--earth-cream));
+        }
+
+        .featured-game {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px var(--shadow);
+            margin-bottom: 3rem;
+        }
+
+        .game-header {
+            background: linear-gradient(135deg, var(--earth-dark), var(--earth-brown));
+            color: var(--earth-cream);
+            padding: 2.5rem;
+            text-align: center;
+        }
+
+        .game-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .game-header p {
+            opacity: 0.8;
+            font-size: 1.1rem;
+        }
+
+        .game-info {
+            padding: 2rem;
+        }
+
+        .game-description {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            text-align: center;
+            color: var(--earth-warm);
+            line-height: 1.8;
+        }
+
+        .version-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .version-card {
+            background: var(--earth-light);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .version-card:hover {
+            border-color: var(--earth-gold);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px var(--shadow);
+        }
+
+        .version-card.latest {
+            border-color: var(--earth-gold);
+            background: linear-gradient(135deg, var(--earth-light), var(--earth-cream));
+        }
+
+        .new-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--accent-rust);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .version-screenshot {
+            height: 150px;
+            background: linear-gradient(135deg, var(--earth-brown), var(--earth-warm));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--earth-sand);
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .version-info {
+            padding: 1.5rem;
+        }
+
+        .version-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--earth-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .version-desc {
+            font-size: 0.9rem;
+            color: var(--earth-warm);
+            margin-bottom: 1rem;
+        }
+
+        .version-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .version-features li {
+            padding: 0.3rem 0;
+            font-size: 0.85rem;
+            color: var(--earth-warm);
+        }
+
+        .version-features li::before {
+            content: '✓';
+            color: var(--accent-sage);
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }
+
+        .play-btn {
+            display: inline-block;
+            background: var(--earth-gold);
+            color: var(--earth-dark);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+        }
+
+        .play-btn:hover {
+            background: var(--earth-warm);
+            color: var(--earth-cream);
+        }
+
+        /* Literature Section */
+        .literature-section {
+            background: white;
+        }
+
+        .literature-intro {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            color: var(--earth-warm);
+        }
+
+        .literature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .book-card {
+            background: var(--earth-light);
+            border-radius: 15px;
+            padding: 2rem;
+            border-left: 4px solid var(--earth-gold);
+            transition: all 0.3s ease;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px var(--shadow);
+        }
+
+        .book-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .book-icon {
+            font-size: 2.5rem;
+        }
+
+        .book-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--earth-dark);
+        }
+
+        .book-author {
+            font-size: 0.9rem;
+            color: var(--earth-warm);
+        }
+
+        .book-details {
+            list-style: none;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            color: var(--earth-warm);
+        }
+
+        .book-details li {
+            padding: 0.3rem 0;
+        }
+
+        .book-details li::before {
+            content: '•';
+            color: var(--earth-gold);
+            margin-right: 0.5rem;
+        }
+
+        .download-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .download-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 0.7rem 1rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn.reader {
+            background: var(--earth-gold);
+            color: var(--earth-dark);
+        }
+
+        .download-btn.reader:hover {
+            background: var(--earth-warm);
+            color: var(--earth-cream);
+        }
+
+        .download-btn.key {
+            background: transparent;
+            border: 2px solid var(--earth-sand);
+            color: var(--earth-warm);
+        }
+
+        .download-btn.key:hover {
+            background: var(--earth-sand);
+            color: var(--earth-dark);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .badge.new {
+            background: var(--accent-rust);
+            color: white;
+        }
+
+        .badge.popular {
+            background: var(--earth-gold);
+            color: var(--earth-dark);
+        }
+
+        /* Tools Section */
+        .tools-section {
+            background: linear-gradient(to bottom, var(--earth-cream), var(--earth-light));
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .tool-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            border-left: 4px solid var(--accent-sage);
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px var(--shadow);
+        }
+
+        .tool-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--earth-dark);
+            margin-bottom: 1rem;
+        }
+
+        .tool-card p {
+            color: var(--earth-warm);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tool-link {
+            display: inline-block;
+            color: var(--earth-gold);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .tool-link:hover {
+            color: var(--earth-warm);
+        }
+
+        /* Tech Reviews Section */
+        .tech-section {
+            background: white;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .category-tab {
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            background: var(--earth-light);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: var(--earth-warm);
+        }
+
+        .category-tab:hover,
+        .category-tab.active {
+            border-color: var(--earth-gold);
+            background: var(--earth-cream);
+            color: var(--earth-dark);
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .tech-card {
+            background: var(--earth-light);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px var(--shadow);
+        }
+
+        .tech-image {
+            height: 200px;
+            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 4rem;
+        }
+
+        .tech-info {
+            padding: 1.5rem;
+        }
+
+        .tech-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--earth-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-status {
+            display: inline-block;
+            background: var(--earth-sand);
+            color: var(--earth-dark);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--earth-dark);
+            color: var(--earth-cream);
+            padding: 4rem 2rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            color: var(--earth-sand);
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--earth-sand);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover { color: var(--earth-cream); }
+
+        .footer-copy {
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .hero { padding-top: 6rem; }
+            section { padding: 3rem 1.5rem; }
+            .version-grid { grid-template-columns: 1fr; }
+            .literature-grid { grid-template-columns: 1fr; }
+            .download-group { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">0604.ai</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/#gallery">Career</a></li>
+                <li><a href="/#youtube">YouTube</a></li>
+                <li><a href="/ai-for-school/">AI for School</a></li>
+                <li><a href="/#travel">Travel</a></li>
+                <li><a href="/#orphanage">Project</a></li>
+            </ul>
+            <button class="mobile-menu-btn">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>🎓 AI for School</h1>
+            <p class="hero-subtitle">Educational Games, Literature Sets & AI Tools</p>
+            <p class="hero-desc">Free resources for teachers and students. Interactive games, adapted literature for EAL learners, and AI-powered classroom tools.</p>
+        </div>
+    </section>
+
+    <!-- Games Section -->
+    <section class="games-section" id="games">
+        <div class="section-header">
+            <h2 class="section-title">🎮 Educational Games</h2>
+            <p class="section-subtitle">Interactive literature experiences that bring classic stories to life</p>
+        </div>
+
+        <div class="featured-game">
+            <div class="game-header">
+                <h2>Of Mice and Men: The Farm Survival Game</h2>
+                <p>Experience Steinbeck's classic through immersive gameplay</p>
+            </div>
+            <div class="game-info">
+                <p class="game-description">
+                    Step into the world of 1930s California as George Milton, a ranch worker with a dream. 
+                    Make choices that matter, manage your resources, and navigate the complex friendships 
+                    and challenges of life on a ranch. Educational gameplay meets literary depth.
+                </p>
+                <div class="version-grid">
+                    <div class="version-card latest">
+                        <div class="version-screenshot">
+                            <span class="new-badge">Latest</span>
+                            📖
+                        </div>
+                        <div class="version-info">
+                            <h3 class="version-name">v4.2 — Novel Experience</h3>
+                            <p class="version-desc">Book-style narrative with immersive storytelling</p>
+                            <ul class="version-features">
+                                <li>Book-style page turns</li>
+                                <li>Rich narrative depth</li>
+                                <li>Dialogue-driven choices</li>
+                                <li>Stats sidebar</li>
+                            </ul>
+                            <a href="/of-mice-and-men-v4.html" class="play-btn">Play Now →</a>
+                        </div>
+                    </div>
+                    <div class="version-card">
+                        <div class="version-screenshot">🎲</div>
+                        <div class="version-info">
+                            <h3 class="version-name">v2.0 — Enhanced Game</h3>
+                            <p class="version-desc">Full RPG mechanics with work minigames</p>
+                            <ul class="version-features">
+                                <li>Day/night cycles</li>
+                                <li>Interactive map</li>
+                                <li>Friendship system</li>
+                                <li>Mini-games</li>
+                            </ul>
+                            <a href="/index-v2.html" class="play-btn">Play Now →</a>
+                        </div>
+                    </div>
+                    <div class="version-card">
+                        <div class="version-screenshot">🌾</div>
+                        <div class="version-info">
+                            <h3 class="version-name">Classic — Survival</h3>
+                            <p class="version-desc">The original farm survival experience</p>
+                            <ul class="version-features">
+                                <li>Core survival mechanics</li>
+                                <li>Story quiz events</li>
+                                <li>Simple choices</li>
+                                <li>Quick sessions</li>
+                            </ul>
+                            <a href="/classic.html" class="play-btn">Play Now →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Literature Section -->
+    <section class="literature-section" id="literature">
+        <div class="section-header">
+            <h2 class="section-title">📚 EAL Literature Sets</h2>
+            <p class="section-subtitle">Grade 6 adapted readers with vocabulary and teacher answer keys</p>
+        </div>
+
+        <div class="literature-intro">
+            <p>Complete literature study sets designed for English as an Additional Language (EAL) learners. Each set includes a 12-lesson adapted reader and comprehensive teacher's answer key. Free to download for educators.</p>
+        </div>
+
+        <div class="literature-grid">
+            <!-- Book 1 -->
+            <div class="book-card">
+                <div class="book-header">
+                    <span class="book-icon">📖</span>
+                    <div>
+                        <h3 class="book-title">Of Mice and Men <span class="badge popular">Popular</span></h3>
+                        <p class="book-author">by John Steinbeck</p>
+                    </div>
+                </div>
+                <ul class="book-details">
+                    <li>12 sequential lessons</li>
+                    <li>60 vocabulary words</li>
+                    <li>5-minute activities per lesson</li>
+                    <li>Age-appropriate themes</li>
+                    <li>Complete answer key included</li>
+                </ul>
+                <div class="download-group">
+                    <a href="/downloads/Of_Mice_and_Men_EAL_Reader.docx" class="download-btn reader">📥 Student Reader</a>
+                    <a href="/downloads/Of_Mice_and_Men_Answer_Key.docx" class="download-btn key">📥 Answer Key</a>
+                </div>
+            </div>
+
+            <!-- Book 2 -->
+            <div class="book-card">
+                <div class="book-header">
+                    <span class="book-icon">🐇</span>
+                    <div>
+                        <h3 class="book-title">Alice's Adventures in Wonderland</h3>
+                        <p class="book-author">by Lewis Carroll</p>
+                    </div>
+                </div>
+                <ul class="book-details">
+                    <li>12 sequential lessons</li>
+                    <li>60 vocabulary words</li>
+                    <li>Wonderland-themed activities</li>
+                    <li>Discussion questions</li>
+                    <li>Complete answer key included</li>
+                </ul>
+                <div class="download-group">
+                    <a href="/downloads/Alice_in_Wonderland_EAL_Reader.docx" class="download-btn reader">📥 Student Reader</a>
+                    <a href="/downloads/Alice_in_Wonderland_Answer_Key.docx" class="download-btn key">📥 Answer Key</a>
+                </div>
+            </div>
+
+            <!-- Book 3 -->
+            <div class="book-card">
+                <div class="book-header">
+                    <span class="book-icon">🌹</span>
+                    <div>
+                        <h3 class="book-title">Beauty and the Beast</h3>
+                        <p class="book-author">Traditional Fairy Tale</p>
+                    </div>
+                </div>
+                <ul class="book-details">
+                    <li>12 sequential lessons</li>
+                    <li>60 vocabulary words</li>
+                    <li>Character analysis activities</li>
+                    <li>Theme exploration</li>
+                    <li>Complete answer key included</li>
+                </ul>
+                <div class="download-group">
+                    <a href="/downloads/Beauty_and_the_Beast_EAL_Reader.docx" class="download-btn reader">📥 Student Reader</a>
+                    <a href="/downloads/Beauty_and_the_Beast_Answer_Key.docx" class="download-btn key">📥 Answer Key</a>
+                </div>
+            </div>
+
+            <!-- Book 4 -->
+            <div class="book-card">
+                <div class="book-header">
+                    <span class="book-icon">🐺</span>
+                    <div>
+                        <h3 class="book-title">The Jungle Book</h3>
+                        <p class="book-author">by Rudyard Kipling</p>
+                    </div>
+                </div>
+                <ul class="book-details">
+                    <li>12 sequential lessons</li>
+                    <li>60 vocabulary words</li>
+                    <li>Jungle adventure themes</li>
+                    <li>Friendship & loyalty focus</li>
+                    <li>Complete answer key included</li>
+                </ul>
+                <div class="download-group">
+                    <a href="/downloads/The_Jungle_Book_EAL_Reader.docx" class="download-btn reader">📥 Student Reader</a>
+                    <a href="/downloads/The_Jungle_Book_Answer_Key.docx" class="download-btn key">📥 Answer Key</a>
+                </div>
+            </div>
+
+            <!-- Book 5 -->
+            <div class="book-card">
+                <div class="book-header">
+                    <span class="book-icon">🏹</span>
+                    <div>
+                        <h3 class="book-title">The Black Arrow</h3>
+                        <p class="book-author">by Robert Louis Stevenson</p>
+                    </div>
+                </div>
+                <ul class="book-details">
+                    <li>12 sequential lessons</li>
+                    <li>60 vocabulary words</li>
+                    <li>Medieval adventure setting</li>
+                    <li>Justice vs. revenge themes</li>
+                    <li>Complete answer key included</li>
+                </ul>
+                <div class="download-group">
+                    <a href="/downloads/The_Black_Arrow_EAL_Reader.docx" class="download-btn reader">📥 Student Reader</a>
+                    <a href="/downloads/The_Black_Arrow_Answer_Key.docx" class="download-btn key">📥 Answer Key</a>
+                </div>
+            </div>
+
+            <!-- Book 6 -->
+            <div class="book-card">
+                <div class="book-header">
+                    <span class="book-icon">⚓</span>
+                    <div>
+                        <h3 class="book-title">Great Expectations</h3>
+                        <p class="book-author">by Charles Dickens</p>
+                    </div>
+                </div>
+                <ul class="book-details">
+                    <li>12 sequential lessons</li>
+                    <li>60 vocabulary words</li>
+                    <li>Social class & true worth</li>
+                    <li>Magwitch's secret revealed</li>
+                    <li>Complete answer key included</li>
+                </ul>
+                <div class="download-group">
+                    <a href="/downloads/Great_Expectations_EAL_Reader.docx" class="download-btn reader">📥 Student Reader</a>
+                    <a href="/downloads/Great_Expectations_Answer_Key.docx" class="download-btn key">📥 Answer Key</a>
+                </div>
+            </div>
+
+            <!-- Book 7 -->
+            <div class="book-card">
+                <div class="book-header">
+                    <span class="book-icon">💎</span>
+                    <div>
+                        <h3 class="book-title">Rajah's Diamond</h3>
+                        <p class="book-author">by Robert Louis Stevenson</p>
+                    </div>
+                </div>
+                <ul class="book-details">
+                    <li>12 sequential lessons</li>
+                    <li>60 vocabulary words</li>
+                    <li>Greed & curse of wealth</li>
+                    <li>Moral lessons</li>
+                    <li>Complete answer key included</li>
+                </ul>
+                <div class="download-group">
+                    <a href="/downloads/The_Rajahs_Diamond_EAL_Reader.docx" class="download-btn reader">📥 Student Reader</a>
+                    <a href="/downloads/The_Rajahs_Diamond_Answer_Key.docx" class="download-btn key">📥 Answer Key</a>
+                </div>
+            </div>
+
+            <!-- Book 8 -->
+            <div class="book-card">
+                <div class="book-header">
+                    <span class="book-icon">🎭</span>
+                    <div>
+                        <h3 class="book-title">Hamlet <span class="badge new">New</span></h3>
+                        <p class="book-author">by William Shakespeare</p>
+                    </div>
+                </div>
+                <ul class="book-details">
+                    <li>12 sequential lessons</li>
+                    <li>60 vocabulary words</li>
+                    <li>Simplified Shakespeare</li>
+                    <li>Revenge tragedy themes</li>
+                    <li>Complete answer key included</li>
+                </ul>
+                <div class="download-group">
+                    <a href="/downloads/Hamlet_EAL_Reader.docx" class="download-btn reader">📥 Student Reader</a>
+                    <a href="/downloads/Hamlet_Answer_Key.docx" class="download-btn key">📥 Answer Key</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section class="tools-section" id="tools">
+        <div class="section-header">
+            <h2 class="section-title">🛠️ Tools for Teachers</h2>
+            <p class="section-subtitle">AI-powered resources to streamline your classroom</p>
+        </div>
+
+        <div class="tools-grid">
+            <div class="tool-card">
+                <div class="tool-icon">📝</div>
+                <h3>AI Writing Prompts</h3>
+                <p>Curated prompt templates for generating lesson plans, rubrics, student feedback, and differentiated assignments. Works with ChatGPT, Claude, and Kimi.</p>
+                <a href="#" class="tool-link">Coming Soon →</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">🎯</div>
+                <h3>Vocabulary Builder</h3>
+                <p>Generate tiered vocabulary lists from any text. Automatic definitions, example sentences, and differentiated activities for EAL learners.</p>
+                <a href="#" class="tool-link">Coming Soon →</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">📊</div>
+                <h3>Reading Assessment</h3>
+                <p>AI-generated comprehension questions, discussion prompts, and assessment rubrics tailored to your literature units.</p>
+                <a href="#" class="tool-link">Coming Soon →</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">🗣️</div>
+                <h3>Discussion Starters</h3>
+                <p>Socratic seminar questions, debate topics, and conversation prompts generated for any novel or short story.</p>
+                <a href="#" class="tool-link">Coming Soon →</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">📖</div>
+                <h3>Text Simplifier</h3>
+                <p>Adapt complex texts for different reading levels while preserving meaning. Perfect for mixed-ability classrooms.</p>
+                <a href="#" class="tool-link">Coming Soon →</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">✨</div>
+                <h3>Creative Projects</h3>
+                <p>Project-based learning ideas, cross-curricular connections, and creative assessment alternatives for literature units.</p>
+                <a href="#" class="tool-link">Coming Soon →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Reviews Section -->
+    <section class="tech-section" id="tech">
+        <div class="section-header">
+            <h2 class="section-title">💻 Tech Reviews</h2>
+            <p class="section-subtitle">Honest reviews of classroom technology, from a teacher's budget</p>
+        </div>
+
+        <div class="category-tabs">
+            <button class="category-tab active">All</button>
+            <button class="category-tab">Cameras</button>
+            <button class="category-tab">Audio</button>
+            <button class="category-tab">Laptops</button>
+            <button class="category-tab">Software</button>
+        </div>
+
+        <div class="tech-grid">
+            <div class="tech-card">
+                <div class="tech-image">📹</div>
+                <div class="tech-info">
+                    <h3 class="tech-name">Sony ZV-E10</h3>
+                    <span class="tech-status">Review Coming</span>
+                    <p style="color: var(--earth-warm); margin-top: 0.5rem; font-size: 0.9rem;">APS-C vlogging camera for classroom content creation</p>
+                </div>
+            </div>
+
+            <div class="tech-card">
+                <div class="tech-image">🎙️</div>
+                <div class="tech-info">
+                    <h3 class="tech-name">DJI Mic 3</h3>
+                    <span class="tech-status">In Testing</span>
+                    <p style="color: var(--earth-warm); margin-top: 0.5rem; font-size: 0.9rem;">Wireless lavalier system for oral exams & recordings</p>
+                </div>
+            </div>
+
+            <div class="tech-card">
+                <div class="tech-image">📱</div>
+                <div class="tech-info">
+                    <h3 class="tech-name">OnePlus Ace 6T</h3>
+                    <span class="tech-status">Review Coming</span>
+                    <p style="color: var(--earth-warm); margin-top: 0.5rem; font-size: 0.9rem;">Mobile B-roll capture and mobile workflow</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">0604.ai</div>
+            <p class="footer-tagline">"What's in a name?" — Resources for teachers, by a teacher.</p>
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <a href="/#youtube">YouTube</a>
+                <a href="/ai-for-school/">AI for School</a>
+                <a href="/#travel">Travel</a>
+                <a href="/#orphanage">Orphanage Project</a>
+            </div>
+            <p class="footer-copy">© 2026 William Morris. All resources free for educational use.</p>
+        </div>
+    </footer>
+</body>
+</html>

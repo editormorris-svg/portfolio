@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI in the Classroom: A Practical Guide for Teachers | 2-Hour PD Workshop | 0604.ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #264653;
+            --primary-teal: #2A9D8F;
+            --accent-gold: #E9C46A;
+            --accent-orange: #F4A261;
+            --accent-coral: #E76F51;
+            --bg-light: #F8F9FA;
+            --text-dark: #264653;
+            --text-light: #FFFFFF;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+        
+        /* Navigation */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(38, 70, 83, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 3px solid var(--accent-gold);
+        }
+        .nav-brand {
+            font-family: 'Playfair Display', serif;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .nav-btn {
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .nav-btn:hover { background: var(--accent-orange); }
+        
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-teal) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 6rem 3rem 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            right: -5%;
+            width: 500px;
+            height: 500px;
+            background: var(--accent-gold);
+            opacity: 0.15;
+            border-radius: 50%;
+        }
+        .hero-content {
+            max-width: 900px;
+            position: relative;
+            z-index: 1;
+        }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--accent-gold);
+            margin-bottom: 2rem;
+        }
+        .hero-meta {
+            display: flex;
+            gap: 2rem;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        .hero-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .cta-primary {
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .cta-secondary {
+            background: transparent;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px solid white;
+        }
+        
+        /* Workshop Overview */
+        .overview {
+            padding: 4rem 3rem;
+            background: white;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+        }
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .overview-card {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary-teal);
+        }
+        .overview-card h3 {
+            color: var(--primary-teal);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        .overview-card p {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        /* Agenda */
+        .agenda {
+            padding: 4rem 3rem;
+            background: var(--bg-light);
+        }
+        .agenda-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .agenda-item {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 2rem;
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 15px;
+            align-items: center;
+        }
+        .agenda-time {
+            font-weight: 700;
+            color: var(--primary-teal);
+            font-size: 1.1rem;
+        }
+        .agenda-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+        .agenda-content p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        .agenda-tag {
+            display: inline-block;
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+            padding: 0.2rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        
+        /* Module Sections */
+        .module {
+            padding: 4rem 3rem;
+        }
+        .module-dark { background: var(--primary-dark); color: white; }
+        .module-light { background: white; }
+        .module-teal { background: var(--primary-teal); color: white; }
+        .module-coral { background: var(--accent-coral); color: white; }
+        
+        .module-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .module-number {
+            width: 70px;
+            height: 70px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+            flex-shrink: 0;
+        }
+        .module-title h2 {
+            margin-bottom: 0.3rem;
+        }
+        .module-title p {
+            opacity: 0.9;
+        }
+        .module-dark .module-title h2,
+        .module-teal .module-title h2,
+        .module-coral .module-title h2 {
+            color: white;
+        }
+        
+        /* Activity Boxes */
+        .activity-box {
+            background: rgba(255,255,255,0.15);
+            border: 2px solid var(--accent-gold);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        .activity-box h3 {
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Tool Cards */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .tool-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            border-top: 4px solid var(--accent-gold);
+        }
+        .tool-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+        .tool-card p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        .tool-link {
+            color: var(--primary-teal);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .tool-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Prompt Library */
+        .prompt-library {
+            background: var(--bg-light);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        .prompt-item {
+            background: white;
+            border-left: 4px solid var(--primary-teal);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+        .prompt-item .label {
+            font-size: 0.75rem;
+            color: var(--primary-teal);
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 0.3rem;
+        }
+        .prompt-item code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+        }
+        
+        /* Checklist */
+        .checklist {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+        }
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        .checklist-item:last-child { border-bottom: none; }
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--primary-teal);
+            border-radius: 5px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        /* Ethics Grid */
+        .ethics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .ethics-box {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+        }
+        .ethics-do { border-left: 5px solid #2E7D32; }
+        .ethics-dont { border-left: 5px solid #C62828; }
+        .ethics-box h3 {
+            margin-bottom: 1rem;
+        }
+        .ethics-do h3 { color: #2E7D32; }
+        .ethics-dont h3 { color: #C62828; }
+        .ethics-box ul {
+            list-style: none;
+        }
+        .ethics-box li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .ethics-do li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #2E7D32;
+            font-weight: bold;
+        }
+        .ethics-dont li::before {
+            content: '✗';
+            position: absolute;
+            left: 0;
+            color: #C62828;
+            font-weight: bold;
+        }
+        
+        /* Resources Section */
+        .resources {
+            padding: 4rem 3rem;
+            background: var(--bg-light);
+        }
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .resource-card-large {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            border: 2px solid var(--accent-gold);
+        }
+        .resource-card-large h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+        }
+        .resource-card-large p {
+            margin-bottom: 1.5rem;
+            color: #666;
+        }
+        .download-btn-large {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--primary-teal);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .download-btn-large:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* Two Column Layout */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .overview-grid,
+            .tools-grid,
+            .ethics-grid,
+            .resource-grid,
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+            .agenda-item {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="/" class="nav-brand">← 0604.ai</a>
+        <div class="nav-links">
+            <a href="#workshop" class="nav-btn">Start Workshop</a>
+            <a href="#downloads" class="nav-btn">Download Materials</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>AI in the Classroom:<br>A Practical Guide for Teachers</h1>
+            <p class="hero-subtitle">From Zero to AI-Enhanced Teaching in 2 Hours</p>
+            <div class="hero-meta">
+                <span>⏱️ 2 Hours</span>
+                <span>🎯 Beginner-Intermediate</span>
+                <span>📚 6 Ready-to-Use Tools</span>
+                <span>✋ Hands-On Activities</span>
+            </div>
+            <div class="cta-buttons">
+                <a href="#module1" class="cta-primary">Start the Workshop →</a>
+                <a href="#downloads" class="cta-secondary">Download All Materials</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="overview" id="workshop">
+        <div class="container">
+            <h2>Workshop Overview</h2>
+            <p>This workshop is designed for teachers who are new to AI or have dabbled with tools like ChatGPT but aren't sure how to integrate them into daily teaching. By the end, you'll have practical skills, ready-to-use resources, and a clear roadmap for AI-enhanced teaching.</p>
+            
+            <div class="overview-grid">
+                <div class="overview-card">
+                    <h3>Level</h3>
+                    <p>Beginner to Intermediate</p>
+                </div>
+                <div class="overview-card">
+                    <h3>Duration</h3>
+                    <p>2 Hours (with breaks)</p>
+                </div>
+                <div class="overview-card">
+                    <h3>Outcome</h3>
+                    <p>6 AI Tools + Resources</p>
+                </div>
+                <div class="overview-card">
+                    <h3>Format</h3>
+                    <p>Learn → Practice → Apply</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Agenda -->
+    <section class="agenda">
+        <div class="container">
+            <h2>Workshop Agenda</h2>
+            
+            <div class="agenda-timeline">
+                <div class="agenda-item">
+                    <div class="agenda-time">0:00</div>
+                    <div class="agenda-content">
+                        <h3>Welcome & Overview <span class="agenda-tag">15 min</span></h3>
+                        <p>Introductions, setting expectations, and what you'll create today</p>
+                    </div>
+                </div>
+                
+                <div class="agenda-item">
+                    <div class="agenda-time">0:15</div>
+                    <div class="agenda-content">
+                        <h3>Module 1: AI Fundamentals <span class="agenda-tag">20 min</span></h3>
+                        <p>What AI can (and can't) do for teachers. Understanding the basics.</p>
+                    </div>
+                </div>
+                
+                <div class="agenda-item">
+                    <div class="agenda-time">0:35</div>
+                    <div class="agenda-content">
+                        <h3>Module 2: Your First AI Lesson Plan <span class="agenda-tag">25 min</span></h3>
+                        <p>Hands-on: Create a complete lesson plan using AI. Break included.</p>
+                    </div>
+                </div>
+                
+                <div class="agenda-item">
+                    <div class="agenda-time">1:00</div>
+                    <div class="agenda-content">
+                        <h3>Break <span class="agenda-tag">10 min</span></h3>
+                        <p>☕ Stretch, grab coffee, process what you've learned</p>
+                    </div>
+                </div>
+                
+                <div class="agenda-item">
+                    <div class="agenda-time">1:10</div>
+                    <div class="agenda-content">
+                        <h3>Module 3: The 6 Essential Tools <span class="agenda-tag">30 min</span></h3>
+                        <p>Explore vocabulary builders, writing prompts, assessments, and more.</p>
+                    </div>
+                </div>
+                
+                <div class="agenda-item">
+                    <div class="agenda-time">1:40</div>
+                    <div class="agenda-content">
+                        <h3>Module 4: Assessment & Feedback <span class="agenda-tag">15 min</span></h3>
+                        <p>Using AI for rubrics, feedback, and saving grading time.</p>
+                    </div>
+                </div>
+                
+                <div class="agenda-item">
+                    <div class="agenda-time">1:55</div>
+                    <div class="agenda-content">
+                        <h3>Module 5: Ethics & Next Steps <span class="agenda-tag">5 min</span></h3>
+                        <p>Best practices, avoiding pitfalls, and your 30-day action plan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module 1 -->
+    <section class="module module-dark" id="module1">
+        <div class="container">
+            <div class="module-header">
+                <div class="module-number">1</div>
+                <div class="module-title">
+                    <h2>AI Fundamentals</h2>
+                    <p>Understanding What AI Can Do for You</p>
+                </div>
+            </div>
+            
+            <div class="two-col">
+                <div>
+                    <h3 style="color: var(--accent-gold); margin-bottom: 1rem;">🤔 What is AI, Really?</h3>
+                    <p style="opacity: 0.9; margin-bottom: 1.5rem;">Think of AI as a very capable teaching assistant who never sleeps, has read almost everything, and can help with routine tasks—but still needs your expertise and judgment.</p>
+                    
+                    <h3 style="color: var(--accent-gold); margin-bottom: 1rem;">✅ What AI Does Well:</h3>
+                    <ul style="list-style: none; margin-bottom: 1.5rem;">
+                        <li style="padding: 0.3rem 0;">📝 Generate first drafts and ideas</li>
+                        <li style="padding: 0.3rem 0;">🔄 Adapt content for different levels</li>
+                        <li style="padding: 0.3rem 0;">⏰ Save time on routine tasks</li>
+                        <li style="padding: 0.3rem 0;">💡 Suggest creative approaches</li>
+                        <li style="padding: 0.3rem 0;">📊 Create varied assessment items</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 style="color: var(--accent-coral); margin-bottom: 1rem;">❌ What AI Doesn't Do:</h3>
+                    <ul style="list-style: none; margin-bottom: 1.5rem;">
+                        <li style="padding: 0.3rem 0;">🚫 Replace teacher judgment</li>
+                        <li style="padding: 0.3rem 0;">🚫 Understand your specific students</li>
+                        <li style="padding: 0.3rem 0;">🚫 Know your school's context</li>
+                        <li style="padding: 0.3rem 0;">🚫 Get facts right 100% of the time</li>
+                        <li style="padding: 0.3rem 0;">🚫 Build relationships with students</li>
+                    </ul>
+                    
+                    <div class="activity-box">
+                        <h3>💡 Key Insight</h3>
+                        <p>AI is a multiplier, not a replacement. It amplifies what you already do well by handling time-consuming tasks, freeing you to focus on what matters most: your students.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module 2 -->
+    <section class="module module-light">
+        <div class="container">
+            <div class="module-header">
+                <div class="module-number">2</div>
+                <div class="module-title">
+                    <h2>Your First AI Lesson Plan</h2>
+                    <p>From Prompt to Ready-to-Teach in 15 Minutes</p>
+                </div>
+            </div>
+            
+            <p>Let's create something practical right now. Choose a topic you're teaching soon, and follow along.</p>
+            
+            <div class="prompt-library">
+                <h3 style="margin-bottom: 1.5rem;">🎯 The PERFECT Lesson Plan Prompt</h3>
+                
+                <div class="prompt-item">
+                    <div class="label">The Magic Formula</div>
+                    <code>"Create a [duration] lesson plan on [topic] for [grade level] students. Include: a hook activity, main content with [specific focus], a hands-on activity, and a 5-minute exit ticket. Align with [standards if applicable]."</code>
+                </div>
+                
+                <div class="prompt-item">
+                    <div class="label">Example - Middle School Science</div>
+                    <code>"Create a 45-minute lesson plan on photosynthesis for Grade 7 students. Include: a surprising hook, the main process explained simply, a drawing activity, and a 3-question exit ticket."</code>
+                </div>
+                
+                <div class="prompt-item">
+                    <div class="label">Example - High School Literature</div>
+                    <code>"Create a 60-minute lesson on themes in 'Of Mice and Men' Chapter 4 for Grade 10. Include: a discussion opener, key quotes analysis, a small group activity, and a written reflection prompt."</code>
+                </div>
+            </div>
+            
+            <div class="activity-box" style="border-color: var(--primary-teal);">
+                <h3 style="color: var(--primary-teal);">✋ HANDS-ON ACTIVITY (10 minutes)</h3>
+                <p><strong>Your Turn:</strong> Open ChatGPT, Claude, or your preferred AI tool. Use the prompt formula above to create a lesson plan for something you're teaching next week.</p>
+                <p style="margin-top: 1rem;"><strong>Pro Tip:</strong> After you get the first draft, ask the AI to "make it more engaging" or "adapt for students who need extra support" to see how quickly you can iterate.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module 3 -->
+    <section class="module module-teal">
+        <div class="container">
+            <div class="module-header">
+                <div class="module-number">3</div>
+                <div class="module-title">
+                    <h2>The 6 Essential Tools</h2>
+                    <p>Ready-to-Use Resources for Your Classroom</p>
+                </div>
+            </div>
+            
+            <p>These 6 tools are built specifically for teachers and ready to use immediately. Each one includes prompt templates you can copy and adapt.</p>
+            
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <h3>📝 AI Writing Prompts</h3>
+                    <p>Generate creative writing prompts, essay topics, and discussion starters for any text or theme.</p>
+                    <a href="../ai-for-school/tools/ai-writing-prompts.html" class="tool-link">Try this tool →</a>
+                </div>
+                
+                <div class="tool-card">
+                    <h3>📚 Vocabulary Builder</h3>
+                    <p>Create vocabulary lists, definitions, example sentences, and practice activities instantly.</p>
+                    <a href="../ai-for-school/tools/vocabulary-builder.html" class="tool-link">Try this tool →</a>
+                </div>
+                
+                <div class="tool-card">
+                    <h3>📖 Reading Assessment</h3>
+                    <p>Generate comprehension questions, analysis prompts, and discussion guides for any text.</p>
+                    <a href="../ai-for-school/tools/reading-assessment.html" class="tool-link">Try this tool →</a>
+                </div>
+                
+                <div class="tool-card">
+                    <h3>💬 Discussion Starters</h3>
+                    <p>Create thought-provoking questions for literature, current events, and critical thinking.</p>
+                    <a href="../ai-for-school/tools/discussion-starters.html" class="tool-link">Try this tool →</a>
+                </div>
+                
+                <div class="tool-card">
+                    <h3>✂️ Text Simplifier</h3>
+                    <p>Adapt complex texts for different reading levels while keeping core meaning intact.</p>
+                    <a href="../ai-for-school/tools/text-simplifier.html" class="tool-link">Try this tool →</a>
+                </div>
+                
+                <div class="tool-card">
+                    <h3>🎨 Creative Projects</h3>
+                    <p>Generate project ideas, rubrics, and step-by-step guides for engaging student work.</p>
+                    <a href="../ai-for-school/tools/creative-projects.html" class="tool-link">Try this tool →</a>
+                </div>
+            </div>
+            
+            <div class="activity-box">
+                <h3>✋ EXPLORATION ACTIVITY (15 minutes)</h3>
+                <p><strong>Choose 2 tools</strong> that relate to what you teach. Click through, read the prompt templates, and mentally (or actually) adapt one for your next unit.</p>
+                <p style="margin-top: 1rem;">💡 <strong>Think about:</strong> Which tool would save you the most time this week? Bookmark it!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module 4 -->
+    <section class="module module-light">
+        <div class="container">
+            <div class="module-header">
+                <div class="module-number">4</div>
+                <div class="module-title">
+                    <h2>Assessment & Feedback</h2>
+                    <p>Cut Your Grading Time in Half</p>
+                </div>
+            </div>
+            
+            <div class="two-col">
+                <div>
+                    <h3 style="color: var(--primary-teal); margin-bottom: 1rem;">🤖 AI for Assessment Creation</h3>
+                    
+                    <div class="prompt-library" style="margin: 0;">
+                        <div class="prompt-item">
+                            <div class="label">Quiz Generator</div>
+                            <code>"Create a 10-question multiple choice quiz on [topic] for [grade level]. Include an answer key and brief explanations for each answer."</code>
+                        </div>
+                        
+                        <div class="prompt-item">
+                            <div class="label">Rubric Builder</div>
+                            <code>"Create a rubric for a [type of assignment] with 4 levels (Excellent, Good, Developing, Beginning) and 3 criteria. Use student-friendly language."</code>
+                        </div>
+                        
+                        <div class="prompt-item">
+                            <div class="label">Differentiation</div>
+                            <code>"Create 3 versions of this assessment: one for advanced students, one for grade level, and one with extra support for struggling learners."</code>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 style="color: var(--primary-teal); margin-bottom: 1rem;">✍️ AI for Feedback</h3>
+                    
+                    <div class="checklist">
+                        <div class="checklist-item">
+                            <div class="checkbox"></div>
+                            <div>
+                                <strong>First Draft Feedback</strong>
+                                <p style="font-size: 0.9rem; color: #666;">Paste student writing and ask: "Give 3 strengths and 2 specific areas to improve for a [grade level] student."</p>
+                            </div>
+                        </div>
+                        
+                        <div class="checklist-item">
+                            <div class="checkbox"></div>
+                            <div>
+                                <strong>Comment Bank</strong>
+                                <p style="font-size: 0.9rem; color: #666;">"Generate 10 comments for strong essays, 10 for developing essays, and 10 for essays needing significant revision."</p>
+                            </div>
+                        </div>
+                        
+                        <div class="checklist-item">
+                            <div class="checkbox"></div>
+                            <div>
+                                <strong>Grammar Help</strong>
+                                <p style="font-size: 0.9rem; color: #666;">"Explain the 3 most important grammar issues in this paragraph, with examples of how to fix them."</p>
+                            </div>
+                        </div>
+                        
+                        <div class="checklist-item">
+                            <div class="checkbox"></div>
+                            <div>
+                                <strong>Progress Reports</strong>
+                                <p style="font-size: 0.9rem; color: #666;">"Write a brief progress report comment for a student who [describe performance]. Keep it encouraging and specific."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="activity-box" style="border-color: var(--accent-coral); margin-top: 2rem;">
+                <h3 style="color: var(--accent-coral);">⚠️ IMPORTANT: The Golden Rule</h3>
+                <p><strong>Always review AI-generated assessments and feedback before using them.</strong> AI can make mistakes, miss nuances, or create questions that don't align with your teaching goals. Use it as a starting point, not a final product.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module 5 -->
+    <section class="module module-coral">
+        <div class="container">
+            <div class="module-header">
+                <div class="module-number">5</div>
+                <div class="module-title">
+                    <h2>Ethics & Best Practices</h2>
+                    <p>Using AI Responsibly in Education</p>
+                </div>
+            </div>
+            
+            <div class="ethics-grid">
+                <div class="ethics-box ethics-do">
+                    <h3>✓ DO</h3>
+                    <ul>
+                        <li>Always review AI-generated content before using</li>
+                        <li>Verify facts with trusted sources</li>
+                        <li>Add your expertise and personal touch</li>
+                        <li>Be transparent with students about AI use</li>
+                        <li>Use AI to enhance, not replace, teaching</li>
+                        <li>Protect student privacy (no names/IDs in AI tools)</li>
+                        <li>Encourage critical thinking about AI outputs</li>
+                        <li>Start small and build confidence gradually</li>
+                    </ul>
+                </div>
+                
+                <div class="ethics-box ethics-dont">
+                    <h3>✗ DON'T</h3>
+                    <ul>
+                        <li>Use AI outputs without reviewing or editing</li>
+                        <li>Trust AI-generated facts blindly</li>
+                        <li>Share sensitive student information with AI</li>
+                        <li>Let AI grade high-stakes work unsupervised</li>
+                        <li>Use AI to replace human connection</li>
+                        <li>Ignore bias or inappropriate content</li>
+                        <li>Forget to cite AI assistance when required</li>
+                        <li>Try to do everything with AI at once</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Action Plan -->
+    <section class="module module-light">
+        <div class="container">
+            <h2>Your 30-Day Action Plan</h2>
+            <p>Don't try to implement everything at once. Here's a sustainable approach:</p>
+            
+            <div class="agenda-timeline" style="margin-top: 2rem;">
+                <div class="agenda-item">
+                    <div class="agenda-time">Week 1</div>
+                    <div class="agenda-content">
+                        <h3>Choose Your Tool <span class="agenda-tag">Start Here</span></h3>
+                        <p>Pick ONE tool from the 6 we explored. Use it to create something for next week's lessons.</p>
+                    </div>
+                </div>
+                
+                <div class="agenda-item">
+                    <div class="agenda-time">Week 2</div>
+                    <div class="agenda-content">
+                        <h3>Build Your Prompt Library</h3>
+                        <p>Save 3-5 prompts that worked well in a document. Refine them for your teaching style.</p>
+                    </div>
+                </div>
+                
+                <div class="agenda-item">
+                    <div class="agenda-time">Week 3</div>
+                    <div class="agenda-content">
+                        <h3>Try Assessment Creation</h3>
+                        <p>Use AI to generate a quiz or rubric. Compare it to your usual method. What was faster? What needed tweaking?</p>
+                    </div>
+                </div>
+                
+                <div class="agenda-item">
+                    <div class="agenda-time">Week 4</div>
+                    <div class="agenda-content">
+                        <h3>Share & Reflect</h3>
+                        <p>Show a colleague what you've created. Share one success and one challenge. Teaching is collaborative!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Downloads -->
+    <section class="resources" id="downloads">
+        <div class="container">
+            <h2>Download Workshop Materials</h2>
+            <p>Take these resources with you. Use them in your own PD sessions, share with colleagues, or keep as reference.</p>
+            
+            <div class="resource-grid">
+                <div class="resource-card-large">
+                    <h3>📊 Presentation Slides (PPTX)</h3>
+                    <p>The complete workshop as a PowerPoint presentation. 25+ slides covering all modules with speaker notes included. Perfect for presenting to your own staff.</p>
+                    <a href="materials/AI-Classroom-Workshop.pptx" class="download-btn-large" download>Download PPTX</a>
+                </div>
+                
+                <div class="resource-card-large">
+                    <h3>📋 Teacher Handout (PDF)</h3>
+                    <p>A 4-page printable handout with all prompts, the 6 tools summary, and the 30-day action plan. Keep it on your desk for quick reference.</p>
+                    <a href="materials/AI-Workshop-Handout.pdf" class="download-btn-large" download>Download PDF</a>
+                </div>
+                
+                <div class="resource-card-large">
+                    <h3>🎯 Prompt Cheat Sheet</h3>
+                    <p>One-page printable with the most effective prompts for lesson planning, assessment, and differentiation. Laminate it!</p>
+                    <a href="materials/Prompt-Cheat-Sheet.pdf" class="download-btn-large" download>Download PDF</a>
+                </div>
+                
+                <div class="resource-card-large">
+                    <h3>📚 All 6 Tools Collection</h3>
+                    <p>Direct links to all AI tools for teachers: Writing Prompts, Vocabulary Builder, Reading Assessment, Discussion Starters, Text Simplifier, and Creative Projects.</p>
+                    <a href="../ai-for-school/" class="download-btn-large">View All Tools →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <section class="module module-dark" style="text-align: center; padding: 3rem;">
+        <div class="container">
+            <h2 style="color: white; margin-bottom: 1rem;">Questions? Let's Connect!</h2>
+            <p style="opacity: 0.9; margin-bottom: 2rem;">This workshop was created by William Morris at NAS Jiaxing as part of 0604.ai — resources for teachers, by a teacher.</p>
+            <p style="opacity: 0.7;">📧 <a href="mailto:1@0604.ai" style="color: var(--accent-gold);">1@0604.ai</a> | 🌐 <a href="/" style="color: var(--accent-gold);">0604.ai</a></p>
+        </div>
+    </section>
+</body>
+</html>

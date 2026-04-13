@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Builder for EAL | 0604.ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --earth-dark: #2C1810;
+            --earth-brown: #4A2C17;
+            --earth-warm: #6B4423;
+            --earth-gold: #B8860B;
+            --earth-sand: #D4A574;
+            --earth-cream: #F5E6D3;
+            --earth-light: #FAF6F0;
+            --accent-rust: #C75B39;
+            --accent-sage: #6B8E6B;
+            --accent-forest: #2E5A2E;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--earth-light);
+            color: var(--earth-dark);
+            line-height: 1.7;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        header {
+            background: linear-gradient(135deg, var(--accent-forest), var(--accent-sage));
+            color: var(--earth-cream);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        header p { opacity: 0.9; max-width: 600px; margin: 0 auto; }
+        .breadcrumb {
+            background: var(--earth-cream);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--earth-sand);
+        }
+        .breadcrumb a {
+            color: var(--earth-warm);
+            text-decoration: none;
+        }
+        .breadcrumb a:hover { color: var(--earth-gold); }
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--earth-dark);
+            margin: 2.5rem 0 1rem;
+            border-bottom: 2px solid var(--accent-sage);
+            padding-bottom: 0.5rem;
+        }
+        h3 {
+            font-size: 1.3rem;
+            color: var(--earth-warm);
+            margin: 1.5rem 0 0.5rem;
+        }
+        .tier-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+        .tier-1 { background: #81C784; color: white; }
+        .tier-2 { background: var(--accent-sage); color: white; }
+        .tier-3 { background: var(--earth-gold); color: white; }
+        .vocab-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--accent-sage);
+        }
+        .vocab-card h4 {
+            color: var(--accent-forest);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .word-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        .word-tag {
+            background: var(--earth-cream);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid var(--earth-sand);
+        }
+        .activity-box {
+            background: linear-gradient(135deg, #f1f8e9, #dcedc8);
+            border-left: 4px solid var(--accent-sage);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .activity-box h4 {
+            color: var(--accent-forest);
+            margin-bottom: 0.5rem;
+        }
+        .prompt-box {
+            background: white;
+            border: 2px solid var(--earth-sand);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        .prompt-box h4 {
+            color: var(--earth-gold);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        .prompt-box pre {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .framework-box {
+            background: var(--earth-dark);
+            color: var(--earth-cream);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+        .framework-box h4 {
+            color: var(--earth-gold);
+            margin-bottom: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        th {
+            background: var(--accent-forest);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+        }
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        tr:hover { background: #f9f9f9; }
+        ul, ol { margin: 1rem 0 1rem 1.5rem; }
+        li { margin: 0.5rem 0; }
+        .example-sentence {
+            background: #f5f5f5;
+            padding: 0.8rem 1rem;
+            border-left: 3px solid var(--accent-sage);
+            margin: 0.5rem 0;
+            font-style: italic;
+        }
+        .tip-box {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            border-left: 4px solid var(--earth-gold);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .tip-box strong { color: var(--earth-warm); }
+        .word-entry {
+            background: white;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .word-entry h4 {
+            font-size: 1.4rem;
+            color: var(--accent-forest);
+            margin-bottom: 0.5rem;
+        }
+        .word-meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        footer {
+            background: var(--earth-dark);
+            color: var(--earth-cream);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎯 Vocabulary Builder for EAL</h1>
+        <p>Generate tiered vocabulary lists from any text with automatic definitions, example sentences, and differentiated activities designed for English as an Additional Language learners.</p>
+    </header>
+
+    <div class="breadcrumb">
+        <div class="container" style="padding: 0;">
+            <a href="/ai-for-school/">← Back to AI for School</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>The Three-Tier Vocabulary System</h2>
+        
+        <p>Not all words are created equal. The Three-Tier system helps EAL students focus their limited cognitive resources on the words that matter most:</p>
+
+        <div class="vocab-card">
+            <h4><span class="tier-badge tier-1">Tier 1</span> Basic Vocabulary</h4>
+            <p><strong>What:</strong> High-frequency words used in everyday speech (happy, walk, house)</p>
+            <p><strong>For EAL:</strong> Often familiar from spoken language; focus on spelling and academic usage</p>
+            <div class="word-list">
+                <span class="word-tag">beautiful</span>
+                <span class="word-tag">slowly</span>
+                <span class="word-tag">important</span>
+                <span class="word-tag">friend</span>
+                <span class="word-tag">story</span>
+            </div>
+        </div>
+
+        <div class="vocab-card">
+            <h4><span class="tier-badge tier-2">Tier 2</span> General Academic Vocabulary ⭐ PRIORITY</h4>
+            <p><strong>What:</strong> Words that appear across subjects but aren't common in conversation (analyze, demonstrate, consequence)</p>
+            <p><strong>For EAL:</strong> <strong>Highest ROI for instruction</strong>—unlocks comprehension across all subjects</p>
+            <div class="word-list">
+                <span class="word-tag">significant</span>
+                <span class="word-tag">investigate</span>
+                <span class="word-tag">establish</span>
+                <span class="word-tag">previous</span>
+                <span class="word-tag">predict</span>
+                <span class="word-tag">complex</span>
+            </div>
+        </div>
+
+        <div class="vocab-card">
+            <h4><span class="tier-badge tier-3">Tier 3</span> Domain-Specific Vocabulary</h4>
+            <p><strong>What:</strong> Content-specific words (photosynthesis, metaphor, democracy)</p>
+            <p><strong>For EAL:</strong> Teach as needed for the unit; often cognates exist in other languages</p>
+            <div class="word-list">
+                <span class="word-tag">alliteration</span>
+                <span class="word-tag">ecosystem</span>
+                <span class="word-tag">revolution</span>
+                <span class="word-tag">photosynthesis</span>
+            </div>
+        </div>
+
+        <div class="tip-box">
+            <strong>💡 The 80/20 Rule for EAL Vocabulary:</strong> Focus 80% of your explicit instruction on Tier 2 words. These 2,000-3,000 words account for the majority of academic text complexity. Native speakers acquire these gradually; EAL students need intentional support.
+        </div>
+
+        <h2>AI Prompts for Vocabulary Extraction</h2>
+
+        <h3>Prompt 1: Text Analysis</h3>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>Analyze this text and extract vocabulary by tier:
+
+[PASTE TEXT HERE]
+
+For each tier, provide:
+- Word
+- Part of speech
+- Student-friendly definition
+- Example sentence from context
+- Cognate or language connection (if any)
+
+Format as a table. Target: 15 Tier 2 words maximum.</pre>
+        </div>
+
+        <h3>Prompt 2: Pre-Teaching List</h3>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>Create a pre-teaching vocabulary list for [TEXT/UNIT] for [GRADE] EAL students.
+
+Prioritize words that:
+1. Appear multiple times in the text
+2. Are essential for comprehension
+3. Have no clear context clues
+4. Are useful beyond this text (Tier 2)
+
+For each word:
+- Student-friendly definition (max 10 words)
+- Visualizable? (Yes/No)
+- Cognate-friendly language
+- Related words (word family)
+
+Output: 10-12 words maximum.</pre>
+        </div>
+
+        <h3>Prompt 3: Differentiated Lists by Proficiency</h3e>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>From [TEXT], create 3 vocabulary lists:
+
+EMERGING (Beginner EAL):
+- 8 words: concrete, high-frequency, visualizable
+- Focus: Recognition and basic usage
+
+DEVELOPING (Intermediate EAL):
+- 10 words: Include some abstract concepts
+- Focus: Usage in sentences and word families
+
+EXPANDING (Advanced EAL):
+- 12 words: Nuanced meanings, collocations, connotations
+- Focus: Academic register and precise usage</pre>
+        </div>
+
+        <h2>The 7-Step Vocabulary Instruction Sequence</h2>
+
+        <p>Research shows EAL students need <strong>12-14 meaningful exposures</strong> to truly acquire a new word. Here's a systematic approach:</p>
+
+        <table>
+            <tr>
+                <th>Step</th>
+                <th>Activity</th>
+                <th>Time</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td><strong>Contextualize</strong></td>
+                <td>2 min</td>
+                <td>Show word in original text context</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td><strong>Define</strong></td>
+                <td>1 min</td>
+                <td>Student-friendly definition (avoid dictionary)</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td><strong>Visualize</strong></td>
+                <td>2 min</td>
+                <td>Image, gesture, or diagram</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td><strong>Connect</strong></td>
+                <td>2 min</td>
+                <td>Cognates, synonyms, word families</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td><strong>Process</strong></td>
+                <td>3 min</td>
+                <td>Turn and talk, write sentence</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td><strong>Consolidate</strong></td>
+                <td>5 min</td>
+                <td>Game, sorting, or matching activity</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td><strong>Review</strong></td>
+                <td>2 min</td>
+                <td>Spaced repetition in later lessons</td>
+            </tr>
+        </table>
+
+        <h2>Vocabulary Activity Templates</h2>
+
+        <h3>Activity 1: Frayer Model (Visual Organizer)</h3>
+        <div class="activity-box">
+            <h4>📋 How to Use</h4>
+            <p>Divide a page into 4 quadrants around a target word:</p>
+            <ul>
+                <li><strong>Top Left:</strong> Definition (student's own words)</li>
+                <li><strong>Top Right:</strong> Characteristics (What is it like?)</li>
+                <li><strong>Bottom Left:</strong> Examples</li>
+                <li><strong>Bottom Right:>Non-examples</li>
+            </ul>
+            <p><strong>AI Prompt:</strong> "Create a completed Frayer Model for [WORD] suitable for [GRADE] students."</p>
+        </div>
+
+        <h3>Activity 2: Word Gradient (Shades of Meaning)</h3>
+        <div class="activity-box">
+            <h4>📋 How to Use</h4>
+            <p>Create a spectrum from weak to strong:</p>
+            <div class="example-sentence">
+                <strong>Example - "Walk":</strong> Stroll → Walk → March → Trudge → Plod
+            </div>
+            <p>Students place words on a continuum and discuss the nuances.</p>
+            <p><strong>AI Prompt:</strong> "Generate a word gradient for [WORD] with 5 synonyms showing increasing intensity."</p>
+        </div>
+
+        <h3>Activity 3: Semantic Mapping (Word Webs)</h3e>
+        <div class="activity-box">
+            <h4>📋 How to Use</h4>
+            <p>Start with a central word. Branch to:</p>
+            <ul>
+                <li>Synonyms</li>
+                <li>Antonyms</li>
+                <li>Word family (noun, verb, adjective forms)</li>
+                <li>Collocations (words that go with it)</li>
+                <li>Examples from the text</li>
+            </ul>
+            <p><strong>AI Prompt:</strong> "Create a semantic map for [WORD] including synonyms, antonyms, word family, and common collocations."</p>
+        </div>
+
+        <h3>Activity 4: Vocabulary in Context (Cloze)</h3e>
+        <div class="activity-box">
+            <h4>📋 How to Use</h4>
+            <p>Students fill in blanks using target words:</p>
+            <div class="example-sentence">
+                "The evidence seemed __________ at first, but closer inspection revealed flaws. (convincing/compelling/superficial)"
+            </div>
+            <p><strong>AI Prompt:</strong> "Create 5 cloze sentences using these words: [LIST]. Include a word bank and context clues."</p>
+        </div>
+
+        <h3>Activity 5: Four Square Vocabulary</h3e>
+        <div class="activity-box">
+            <h4>📋 How to Use</h4>
+            <p>Students complete:</p>
+            <ol>
+                <li>Write the word</li>
+                <li>Write a definition in their own words</li>
+                <li>Draw a picture or symbol</li>
+                <li>Write a sentence using the word</li>
+            </ol>
+            <p><strong>Best for:</strong> Visual learners, concrete words, interactive notebooks</p>
+        </div>
+
+        <h2>The Cognate Advantage</h2>
+
+        <p>EAL students from Romance language backgrounds (Spanish, French, Portuguese, Italian) can recognize thousands of English words through cognates. Help them activate this knowledge:</p>
+
+        <div class="framework-box">
+            <h4>🌉 Cognate Categories</h4>
+            <table style="background: transparent; color: inherit; margin: 0;">
+                <tr>
+                    <td><strong>Perfect Cognates</strong></td>
+                    <td>Identical spelling/meaning: <em>animal, natural, original, secret, simple</em></td>
+                </tr>
+                <tr>
+                    <td><strong>Near Cognates</strong></td>
+                    <td>Slight spelling changes: <em>accident/accidente, education/educación, information/información</em></td>
+                </tr>
+                <tr>
+                    <td><strong>False Friends</strong></td>
+                    <td>Watch out: <em>embarazada ≠ embarrassed, actual ≠ actual, sensible ≠ sensible</em></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="prompt-box">
+            <h4>🎯 Cognate-Focused Prompt</h4>
+            <pre>From this vocabulary list [LIST], identify cognates for Spanish speakers.
+
+For each cognate:
+- Highlight the connection
+- Note any spelling pattern (-tion/-ción, -ity/-idad)
+- Warn about false friends
+- Provide pronunciation guide for tricky sounds</pre>
+        </div>
+
+        <h2>Assessment Strategies</h2>
+
+        <h3>Receptive vs. Productive Knowledge</h3>
+        <p>EAL students often have <strong>receptive</strong> understanding (they recognize words when reading) before <strong>productive</strong> ability (using words in speech/writing). Assess both:</p>
+
+        <table>
+            <tr>
+                <th>Receptive Assessment</th>
+                <th>Productive Assessment</th>
+            </tr>
+            <tr>
+                <td>Multiple choice definitions</td>
+                <td>Original sentence writing</td>
+            </tr>
+            <tr>
+                <td>Matching words to pictures</td>
+                <td>Story using target words</td>
+            </tr>
+            <tr>
+                <td>Cloze with word bank</td>
+                <td>Explaining word to a partner</td>
+            </tr>
+            <tr>
+                <td>Sorting by meaning/category</td>
+                <td>Creating word associations</td>
+            </tr>
+        </table>
+
+        <h3>Prompt: Vocabulary Quiz Generator</h3e>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>Create a vocabulary assessment for these words: [LIST]
+
+Format:
+Section 1 (Receptive): 5 matching items, 3 multiple choice
+Section 2 (Productive): 3 cloze sentences, 2 sentence completions
+
+Differentiation: Provide word bank for emerging level, no bank for expanding level</pre>
+        </div>
+
+        <h2>Digital Tools for Vocabulary</h2>
+
+        <table>
+            <tr>
+                <th>Tool</th>
+                <th>Best For</th>
+                <th>Free?\u003c/th>
+            </tr>
+            <tr>
+                <td><strong>Quizlet</strong></td>
+                <td>Flashcards, games, spaced repetition</td>
+                <td>Yes (limited)</td>
+            </tr>
+            <tr>
+                <td><strong>Padlet</strong></td>
+                <td>Collaborative word walls, visual vocab</td>
+                <td>Yes (3 free boards)</td>
+            </tr>
+            <tr>
+                <td><strong>Kahoot</strong></td>
+                <td>Competitive review games</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <td><strong>Google Slides</strong></td>
+                <td>Digital vocabulary journals</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <td><strong>Lingro</strong></td>
+                <td>Clickable definitions on any website</td>
+                <td>Yes</td>
+            </tr>
+        </table>
+
+        <h2>Complete Example: AI-Generated Vocabulary Unit</h2>
+
+        <p>Here's what AI can produce when given a well-structured prompt:</p>
+
+        <div class="word-entry">
+            <h4>Analyze</h4>
+            <p class="word-meta"><span class="tier-badge tier-2">Tier 2</span> Verb | /ˈænəlaɪz/ | Spanish cognate: <em>analizar</em></p>
+            
+            <p><strong>Definition:</strong> To examine something carefully to understand it or explain it</p>
+            
+            <p><strong>Word Family:</strong> analysis (n), analytical (adj), analyst (n)</p>
+            
+            <p><strong>Collocations:</strong> analyze data, analyze a text, analyze the results</p>
+            
+            <div class="example-sentence">"We need to analyze the evidence before we can draw any conclusions."</div>
+            
+            <p><strong>Visual:</strong> Magnifying glass over a document 📄🔍</p>
+        </div>
+
+        <div class="tip-box">
+            <strong>🎯 The Full Prompt for Complete Entries:</strong><br><br>
+            "Create vocabulary entries for [LIST OF WORDS] for [GRADE] EAL students. For each word include: tier level, part of speech, pronunciation, cognates (Spanish), student-friendly definition, word family, collocations, example sentence, and visual suggestion."
+        </div>
+
+    </div>
+
+    <footer>
+        <p>© 2026 William Morris | 0604.ai | Free resources for educators worldwide</p>
+        <p><a href="/ai-for-school/" style="color: var(--earth-sand);">← Back to AI for School</a></p>
+    </footer>
+</body>
+</html>

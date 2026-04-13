@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Writing Prompts for Teachers | 0604.ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --earth-dark: #2C1810;
+            --earth-brown: #4A2C17;
+            --earth-warm: #6B4423;
+            --earth-gold: #B8860B;
+            --earth-sand: #D4A574;
+            --earth-cream: #F5E6D3;
+            --earth-light: #FAF6F0;
+            --accent-rust: #C75B39;
+            --accent-sage: #6B8E6B;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--earth-light);
+            color: var(--earth-dark);
+            line-height: 1.7;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        header {
+            background: linear-gradient(135deg, var(--earth-dark), var(--earth-brown));
+            color: var(--earth-cream);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        header p { opacity: 0.9; max-width: 600px; margin: 0 auto; }
+        .breadcrumb {
+            background: var(--earth-cream);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--earth-sand);
+        }
+        .breadcrumb a {
+            color: var(--earth-warm);
+            text-decoration: none;
+        }
+        .breadcrumb a:hover { color: var(--earth-gold); }
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--earth-dark);
+            margin: 2.5rem 0 1rem;
+            border-bottom: 2px solid var(--earth-gold);
+            padding-bottom: 0.5rem;
+        }
+        h3 {
+            font-size: 1.3rem;
+            color: var(--earth-warm);
+            margin: 1.5rem 0 0.5rem;
+        }
+        .prompt-box {
+            background: white;
+            border-left: 4px solid var(--earth-gold);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .prompt-box h4 {
+            color: var(--earth-gold);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        .prompt-box pre {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .tip-box {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-left: 4px solid var(--accent-sage);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .tip-box strong { color: var(--accent-sage); }
+        .example-output {
+            background: var(--earth-cream);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 1px dashed var(--earth-sand);
+        }
+        .example-output h4 {
+            color: var(--earth-warm);
+            margin-bottom: 0.5rem;
+        }
+        .tag {
+            display: inline-block;
+            background: var(--earth-gold);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+        }
+        ul, ol { margin: 1rem 0 1rem 1.5rem; }
+        li { margin: 0.5rem 0; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        th {
+            background: var(--earth-dark);
+            color: var(--earth-cream);
+            padding: 1rem;
+            text-align: left;
+        }
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        tr:hover { background: #f9f9f9; }
+        .cta-box {
+            background: linear-gradient(135deg, var(--earth-gold), var(--earth-warm));
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+        .cta-box h3 { color: white; margin-bottom: 1rem; }
+        footer {
+            background: var(--earth-dark);
+            color: var(--earth-cream);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📝 AI Writing Prompts for Teachers</h1>
+        <p>Curated prompt templates for lesson plans, rubrics, student feedback, and differentiated assignments. Works with ChatGPT, Claude, Kimi, and other AI assistants.</p>
+    </header>
+
+    <div class="breadcrumb">
+        <div class="container" style="padding: 0;">
+            <a href="/ai-for-school/">← Back to AI for School</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Why Use AI Writing Prompts?</h2>
+        <p>AI can be your teaching assistant—if you know how to ask. The right prompt transforms vague AI responses into classroom-ready materials. Below are battle-tested templates organized by teaching task.</p>
+
+        <h2>1. Lesson Plan Generation</h2>
+        
+        <h3>Standard Lesson Plan</h3>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>Create a 45-minute lesson plan for [GRADE LEVEL] on [TOPIC/TEXT]. 
+
+Requirements:
+- Learning objective aligned with [SPECIFIC STANDARD, e.g., CCSS.ELA-LITERACY.RL.9-10.2]
+- Opening hook (5 min) that connects to students' lives
+- Main activity (25 min) with step-by-step instructions
+- Formative assessment (10 min)
+- Exit ticket question
+- Differentiation for EAL learners and advanced students
+
+Context: My class has [NUMBER] students, mixed ability, [SPECIFIC CONTEXT].</pre>
+        </div>
+
+        <div class="example-output">
+            <h4>💡 Example Output Preview</h4>
+            <p><strong>Lesson:</strong> Grade 10 - Theme in "Of Mice and Men"</p>
+            <p><strong>Hook:</strong> "Think of a time you dreamed of something that didn't happen. Share with a partner."</p>
+            <p><strong>Main Activity:</strong> Gallery walk with 6 quote stations, students identify theme evidence...</p>
+        </div>
+
+        <h3>Literature Circle Lesson</h3>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>Design a 5-day literature circle unit for [BOOK TITLE] at [GRADE LEVEL].
+
+Each day should include:
+- Reading assignment (page/chapter breakdown)
+- Role sheet (Discussion Director, Vocabulary Enricher, Illustrator, Connector, Summarizer)
+- Discussion questions at 3 complexity levels
+- Mini-lesson on a literary device
+
+Final product: Group presentation option.</pre>
+        </div>
+
+        <h2>2. Rubric Creation</h2>
+
+        <h3>Analytical Rubric</h3>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>Create an analytical rubric for [ASSIGNMENT TYPE] on a 4-point scale (Exemplary, Proficient, Developing, Beginning).
+
+Categories:
+- Content/Understanding
+- Organization/Structure
+- Use of Evidence
+- Language/Conventions
+
+For each category, include:
+- Specific descriptors at each level
+- Point values
+- "Look-fors" for quick assessment
+
+Topic: [SPECIFIC ASSIGNMENT DETAILS]</pre>
+        </div>
+
+        <h3>Single-Point Rubric (For Feedback Focus)</h3>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>Create a single-point rubric for [ASSIGNMENT].
+
+Format:
+- Middle column: Proficient criteria (what success looks like)
+- Left column: Concerns area (what's missing)
+- Right column: Advanced area (exceeds expectations)
+
+Include 4-5 criteria and space for teacher comments.</pre>
+        </div>
+
+        <div class="tip-box">
+            <strong>💡 Pro Tip:</strong> Single-point rubrics reduce grading time by 40% while providing clearer feedback. Students focus on one target instead of deciphering multiple levels.
+        </div>
+
+        <h2>3. Student Feedback & Comments</h2>
+
+        <h3>Report Card Comments</h3>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>Write 3 variations of report card comments for a student who [PERFORMANCE DESCRIPTION].
+
+Tone: Professional, constructive, specific
+Length: 2-3 sentences each
+Include: Strength, area for growth, next step
+
+Example performance: Strong reader, struggles with written expression, participates well in discussions</pre>
+        </div>
+
+        <h3>Assignment Feedback</h3>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>Provide feedback on this student writing sample using the "Glow, Grow, Goal" format:
+
+[GIVE AI THE STUDENT WORK]
+
+Glow: What they did well (specific, with evidence)
+Grow: One specific area to improve
+Goal: Actionable next step
+
+Keep tone encouraging. Use second person ("You...")</pre>
+        </div>
+
+        <h3>Participation Feedback</h3>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>Generate 10 comment stems for different participation patterns:
+
+1. Strong contributor who dominates
+2. Quiet but thoughtful when called on
+3. Engaged listener, rarely volunteers
+4. Distracted/disengaged
+5. Collaborative group member
+
+Format: "[Student] consistently..." or "I've noticed [Student]..."
+Include specific behavior examples in each.</pre>
+        </div>
+
+        <h2>4. Differentiated Assignments</h2>
+
+        <h3>Tiered Assignment</h3>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>Create 3 versions of an assignment on [TOPIC]:
+
+Level 1 (Approaching): Scaffolding provided, sentence starters, graphic organizers
+Level 2 (At Grade): Standard expectations
+Level 3 (Advanced): Open-ended, extension questions, creative options
+
+Same learning objective, different complexity. Include:
+- Clear instructions for each level
+- Time estimates
+- Success criteria</pre>
+        </div>
+
+        <h3>Choice Board</h3>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>Design a 3x3 choice board for [UNIT/TEXT] with 9 different activities.
+
+Format options:
+- Visual (draw, design, map)
+- Written (essay, letter, diary entry)
+- Kinesthetic (drama, debate, hands-on)
+- Tech (video, podcast, slideshow)
+
+Each activity should:
+- Connect to same learning objectives
+- Take approximately same time
+- Have clear success criteria</pre>
+        </div>
+
+        <h2>5. Quick Teaching Tasks</h2>
+
+        <table>
+            <tr>
+                <th>Task</th>
+                <th>Prompt Template</th>
+                <th>Time Saved</th>
+            </tr>
+            <tr>
+                <td><span class="tag">Email</span> Parent communication</td>
+                <td>"Draft a professional email to parents about [ISSUE/EVENT]. Tone: informative, collaborative. Include action items if needed."</td>
+                <td>10 min</td>
+            </tr>
+            <tr>
+                <td><span class="tag">Questions</span> Discussion prompts</td>
+                <td>"Generate 10 open-ended discussion questions for [TEXT] at [GRADE]. Include 3 connect-to-self, 3 text-analysis, 3 beyond-text, 1 synthesis."</td>
+                <td>15 min</td>
+            </tr>
+            <tr>
+                <td><span class="tag">Quiz</span> Quick assessment</td>
+                <td>"Create a 5-question quiz on [TOPIC]. Mix: 2 MC, 2 short answer, 1 creative response. Include answer key."</td>
+                <td>10 min</td>
+            </tr>
+            <tr>
+                <td><span class="tag">Subs</span> Sub plans</td>
+                <td>"Write emergency sub plans for [SUBJECT/GRADE]. 45-min period, minimal prep, clear instructions, engaging activity."</td>
+                <td>20 min</td>
+            </tr>
+            <tr>
+                <td><span class="tag">Warmup</span> Bell ringers</td>
+                <td>"Generate 5 days of 5-minute warmups for [UNIT]. Monday: Vocab, Tuesday: Quote analysis, Wednesday: Grammar, Thursday: Creative, Friday: Review."</td>
+                <td>15 min</td>
+            </tr>
+        </table>
+
+        <h2>6. AI Prompt Engineering Tips</h2>
+
+        <div class="tip-box">
+            <strong>🔑 The RICE Framework for Better Results:</strong><br><br>
+            <strong>R</strong>ole - Tell the AI who it is ("You are an experienced EAL teacher...")<br>
+            <strong>I</strong>nstructions - Be specific about what you want<br>
+            <strong>C</strong>ontext - Give background on your students, school, situation<br>
+            <strong>E</strong>xamples - Show samples of what good looks like
+        </div>
+
+        <h3>Before vs After</h3>
+
+        <div class="prompt-box">
+            <h4>❌ Weak Prompt</h4>
+            <pre>Write a lesson plan about Romeo and Juliet.</pre>
+        </div>
+
+        <div class="prompt-box">
+            <h4>✅ Strong Prompt</h4>
+            <pre>You are an experienced high school English teacher with 15 years in EAL classrooms.
+
+Create a 50-minute lesson on dramatic irony in Romeo and Juliet Act 3, Scene 1 for Grade 10 mixed-ability learners.
+
+Requirements:
+- Hook using a modern TV/movie clip comparison
+- Students identify 3 examples of dramatic irony in the scene
+- Partner activity with sentence frames for EAL support
+- Exit ticket: "Explain how dramatic irony creates tension for the audience"
+
+My class: 24 students, 8 EAL learners (intermediate), 4 reluctant readers.</pre>
+        </div>
+
+        <h2>7. Subject-Specific Prompts</h2>
+
+        <h3>Science</h3>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>Create a lab report template for [GRADE] with:
+- Section-by-section guidance
+- Sentence starters for hypothesis, procedure, conclusion
+- Checklist for self-assessment
+- Exemplar paragraph for each section
+
+Make it accessible for EAL students without oversimplifying the science.</pre>
+        </div>
+
+        <h3>History/Social Studies</h3>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>Generate a Document-Based Question (DBQ) for [HISTORICAL EVENT]:
+- 2-3 primary source documents (include excerpts)
+- Scaffolding questions for each document
+- Essay prompt with clear thesis requirement
+- Graphic organizer for evidence gathering</pre>
+        </div>
+
+        <h3>Math</h3>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>Create error analysis problems for [MATH TOPIC]:
+- 3 worked examples with common mistakes
+- Students identify the error, explain why it's wrong, solve correctly
+- Reflection question: "What mistake are you most likely to make? How will you check?"</pre>
+        </div>
+
+        <h2>8. Saving & Organizing Your Prompts</h2>
+
+        <p>Build your personal prompt library:</p>
+        <ol>
+            <li><strong>Create a Prompt Bank:</strong> Use Notion, Google Docs, or even a simple spreadsheet</li>
+            <li><strong>Tag by Use:</strong> Lesson plans, assessment, differentiation, parent comms</li>
+            <li><strong>Include Context:</strong> Note what worked, what to tweak</li>
+            <li><strong>Version Control:</strong> Mark prompts as v1, v2 as you refine them</li>
+            <li><strong>Share with Colleagues:</strong> Build department-level prompt libraries</li>
+        </ol>
+
+        <div class="cta-box">
+            <h3>Start Small, Build Momentum</h3>
+            <p>Pick ONE prompt from this page. Use it this week. Tweak it. Next week, add another. In a month, you'll have a custom toolkit that saves hours every week.</p>
+        </div>
+
+        <h2>Prompt Quick Reference</h2>
+        <table>
+            <tr>
+                <th>Need This</th>
+                <th>Start With</th>
+            </tr>
+            <tr>
+                <td>Full lesson plan</td>
+                <td>"Create a [TIME] lesson on [TOPIC] for [GRADE]. Include hook, main activity, assessment, differentiation."</td>
+            </tr>
+            <tr>
+                <td>Rubric</td>
+                <td>"Create a 4-point rubric for [ASSIGNMENT] with categories: [LIST]. Include descriptors."</td>
+            </tr>
+            <tr>
+                <td>Student feedback</td>
+                <td>"Give feedback using [GLOW/GROW/GOAL or other framework] on: [STUDENT WORK]"</td>
+            </tr>
+            <tr>
+                <td>Differentiation</td>
+                <td>"Create 3 tiers of [ASSIGNMENT] for approaching, at-level, and advanced students."</td>
+            </tr>
+            <tr>
+                <td>Discussion questions</td>
+                <td>"Generate [NUMBER] open-ended questions about [TEXT]. Mix analysis, connection, and evaluation."</td>
+            </tr>
+            <tr>
+                <td>Parent email</td>
+                <td>"Draft a professional email about [TOPIC]. Tone: [COLLABORATIVE/INFORMATIVE/URGENT]."</td>
+            </tr>
+        </table>
+    </div>
+
+    <footer>
+        <p>© 2026 William Morris | 0604.ai | Free resources for educators worldwide</p>
+        <p><a href="/ai-for-school/" style="color: var(--earth-sand);">← Back to AI for School</a></p>
+    </footer>
+</body>
+</html>

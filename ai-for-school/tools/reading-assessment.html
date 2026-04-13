@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Assessment Tools | 0604.ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --earth-dark: #2C1810;
+            --earth-brown: #4A2C17;
+            --earth-warm: #6B4423;
+            --earth-gold: #B8860B;
+            --earth-sand: #D4A574;
+            --earth-cream: #F5E6D3;
+            --earth-light: #FAF6F0;
+            --accent-sage: #6B8E6B;
+            --accent-rust: #C75B39;
+            --text-dark: #2C1810;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--earth-light);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        .back-link { display: inline-block; color: var(--earth-gold); text-decoration: none; margin-bottom: 2rem; }
+        .back-link:hover { color: var(--earth-warm); }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--earth-dark);
+            margin-bottom: 1rem;
+        }
+        .subtitle { color: var(--earth-warm); font-size: 1.1rem; margin-bottom: 3rem; }
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--earth-dark);
+            margin: 2.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--earth-sand);
+        }
+        h3 { color: var(--earth-warm); margin: 1.5rem 0 0.5rem; }
+        .question-type {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--earth-gold);
+        }
+        .question-type h4 {
+            color: var(--earth-dark);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .difficulty-tag {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .easy { background: #E8F5E9; color: #2E7D32; }
+        .medium { background: #FFF3E0; color: #E65100; }
+        .hard { background: #FCE4EC; color: #C2185B; }
+        .example-box {
+            background: var(--earth-light);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+        .prompt-box {
+            background: var(--earth-dark);
+            color: var(--earth-cream);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        .prompt-box code {
+            color: var(--earth-sand);
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            display: block;
+            margin-top: 1rem;
+        }
+        .rubric-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .rubric-table th {
+            background: var(--earth-dark);
+            color: var(--earth-cream);
+            padding: 1rem;
+            text-align: left;
+        }
+        .rubric-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--earth-cream);
+        }
+        .rubric-table tr:last-child td { border-bottom: none; }
+        .strategy-card {
+            background: linear-gradient(135deg, var(--earth-cream), white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        .strategy-card h4 { color: var(--earth-gold); margin-bottom: 0.5rem; }
+        .checklist {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        .checklist li {
+            margin: 0.5rem 0;
+            list-style: none;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            color: var(--earth-gold);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/ai-for-school/" class="back-link">← Back to AI for School</a>
+        
+        <h1>📊 Reading Assessment Tools</h1>
+        <p class="subtitle">AI-generated comprehension questions, rubrics, and assessment strategies for literature units</p>
+
+        <h2>🎯 Types of Comprehension Questions</h2>
+        <p>Use a mix of these question types to assess different levels of understanding. The best assessments hit all four levels.</p>
+
+        <div class="question-type">
+            <h4><span class="difficulty-tag easy">LITERAL</span> Right There Questions</h4>
+            <p>Answer is directly stated in the text. Tests basic comprehension.</p>
+            <div class="example-box">
+                <strong>Examples:</strong><br>
+                • "What did Lennie want to tend on the farm?"<br>
+                • "Where did Alice first meet the Cheshire Cat?"<br>
+                • "How many years has it been since the animals took over the farm?"
+            </div>
+            <p style="margin-top: 0.5rem;"><strong>EAL tip:</strong> These build confidence for language learners. Start here.</p>
+        </div>
+
+        <div class="question-type">
+            <h4><span class="difficulty-tag medium">INFERENTIAL</span> Think and Search</h4>
+            <p>Answer requires connecting information from multiple parts of the text.</p>
+            <div class="example-box">
+                <strong>Examples:</strong><br>
+                • "Why does George get angry at Lennie even though he cares about him?"<br>
+                • "What does the Queen's behavior tell us about power in Wonderland?"<br>
+                • "How do the other animals feel about Napoleon by Chapter 5?"
+            </div>
+        </div>
+
+        <div class="question-type">
+            <h4><span class="difficulty-tag medium">CRITICAL</span> Author and Me</h4>
+            <p>Requires understanding author's purpose, techniques, and craft decisions.</p>
+            <div class="example-box">
+                <strong>Examples:</strong><br>
+                • "Why did Steinbeck choose to make Lennie's character the way he is?"<br>
+                • "How does Carroll use nonsense to comment on Victorian society?"<br>
+                • "What effect does Orwell create by using animals instead of people?"
+            </div>
+        </div>
+
+        <div class="question-type">
+            <h4><span class="difficulty-tag hard">EVALUATIVE</span> On My Own</h4>
+            <p>Connects text to broader themes, personal experience, or other texts.</p>
+            <div class="example-box">
+                <strong>Examples:</strong><br>
+                • "Is George right to do what he does at the end? Defend your answer."<br>
+                • "How does Alice's journey mirror real experiences of growing up?"<br>
+                • "Does Animal Farm suggest revolution is always doomed to fail?"
+            </div>
+        </div>
+
+        <h2>🤖 AI Prompts for Assessment Creation</h2>
+
+        <div class="prompt-box">
+            <strong>Comprehension Questions Generator</strong>
+            <code>Generate a reading comprehension assessment for [CHAPTER/TEXT] from [BOOK].
+
+Include:
+- 3 literal questions (direct text evidence)
+- 3 inferential questions (reading between the lines)
+- 2 critical questions (author's craft and purpose)
+- 2 evaluative questions (personal connection/theme)
+
+For each question:
+- Indicate the answer with a brief key
+- Note which page/paragraph supports the answer
+- Suggest how many points each is worth
+
+Target audience: [GRADE LEVEL]</code>
+        </div>
+
+        <div class="prompt-box">
+            <strong>Alternative Assessment Generator</strong>
+            <code>Create 3 alternative assessment options for [BOOK/CHAPTER] that don't use traditional essays:
+
+Option 1: Visual/Art-based
+Option 2: Speaking/Presentation-based  
+Option 3: Creative writing/creative response
+
+For each option:
+- Clear instructions students can follow
+- What to submit
+- How it demonstrates comprehension
+- Approximate time needed
+- A simple 4-point rubric</code>
+        </div>
+
+        <div class="prompt-box">
+            <strong>Differentiated Assessment Generator</strong>
+            <code>Create three versions of the same assessment on [TOPIC/TEXT]:
+
+Version A: Scaffolded (for students reading 2+ years below grade level)
+- Sentence starters provided
+- Word bank included
+- Fewer questions, more support
+
+Version B: Standard (on-grade level)
+- Regular complexity
+- Mix of question types
+
+Version C: Advanced (for high achievers)
+- Open-ended questions
+- Requires synthesis across chapters
+- Optional extension tasks
+
+All versions should assess the same learning objectives.</code>
+        </div>
+
+        <h2>📋 Sample Rubric: Reading Response</h2>
+
+        <table class="rubric-table">
+            <tr>
+                <th>Criteria</th>
+                <th>4 - Exceeds</th>
+                <th>3 - Meets</th>
+                <th>2 - Approaching</th>
+                <th>1 - Beginning</th>
+            </tr>
+            <tr>
+                <td><strong>Text Evidence</strong></td>
+                <td>Multiple specific quotes with correct citations</td>
+                <td>Relevant quotes with citations</td>
+                <td>Some evidence, may lack citations</td>
+                <td>Few or no quotes from text</td>
+            </tr>
+            <tr>
+                <td><strong>Analysis</strong></td>
+                <td>Explains how evidence supports ideas; shows insight</td>
+                <td>Explains connection between evidence and ideas</td>
+                <td>Some explanation, may be unclear</td>
+                <td>Little to no explanation</td>
+            </tr>
+            <tr>
+                <td><strong>Understanding</strong></td>
+                <td>Demonstrates deep understanding of themes and characters</td>
+                <td>Shows solid comprehension of main ideas</td>
+                <td>Basic understanding, some gaps</td>
+                <td>Significant misunderstanding or confusion</td>
+            </tr>
+            <tr>
+                <td><strong>Organization</strong></td>
+                <td>Clear structure, smooth transitions, focused</td>
+                <td>Logical order, mostly clear</td>
+                <td>Some organization, may wander</td>
+                <td>Hard to follow, disorganized</td>
+            </tr>
+        </table>
+
+        <h2>🎨 Alternative Assessment Ideas</h2>
+
+        <div class="strategy-card">
+            <h4>🎭 Character Social Media Profile</h4>
+            <p>Students create an Instagram/TikTok profile for a character including:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Bio that captures their personality and situation</li>
+                <li>3-4 posts showing key moments from their perspective</li>
+                <li>Comments from other characters</li>
+                <li>Hashtags that reflect themes</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>Assessment:</strong> Does the profile show understanding of character motivations, relationships, and story events?</p>
+        </div>
+
+        <div class="strategy-card">
+            <h4>📰 Newspaper Front Page</h4>
+            <p>Create a newspaper from the world of the book:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Headline story about a major event</li>
+                <li>Interview with a character</li>
+                <li>Editorial opinion piece on a theme</li>
+                <li>Advertisements relevant to the setting</li>
+            </ul>
+        </div>
+
+        <div class="strategy-card">
+            <h4>🎬 Movie Pitch</h4>
+            <p>Students pitch a film adaptation:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Logline (one-sentence summary)</li>
+                <li>Casting choices with justification</li>
+                <li>One scene they'd change and why</li>
+                <li>Marketing tagline</li>
+            </ul>
+        </div>
+
+        <div class="strategy-card">
+            <h4>💬 Socratic Seminar</h4>
+            <p>Discussion-based assessment:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Students prepare by writing 3 discussion questions</li>
+                <li>Inner circle discusses (8-10 minutes)</li>
+                <li>Outer circle takes notes on contributions</li>
+                <li>Swap roles</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>Rubric criteria:</strong> Asks thoughtful questions, builds on others' ideas, uses text evidence, speaks at least twice</p>
+        </div>
+
+        <h2>✅ Assessment Design Checklist</h2>
+
+        <ul class="checklist">
+            <li>Does it assess what you actually taught?</li>
+            <li>Are instructions clear enough for students to work independently?</li>
+            <li>Is there a mix of question difficulty?</li>
+            <li>Can EAL students show what they know even with language limitations?</li>
+            <li>Does the rubric match the learning objectives?</li>
+            <li>Is there an opportunity for students to demonstrate higher-order thinking?</li>
+            <li>Is it manageable to grade in a reasonable time?</li>
+            <li>Would a student with test anxiety have another way to show mastery?</li>
+        </ul>
+
+        <h2>🌍 EAL Assessment Accommodations</h2>
+
+        <div class="question-type" style="border-left-color: var(--accent-sage);">
+            <h4>Built-In Scaffolds</h4>
+            <ul style="margin-left: 1.5rem;">
+                <li><strong>Word banks</strong> for written responses</li>
+                <li><strong>Sentence starters</strong> for essays or discussions</li>
+                <li><strong>Bilingual dictionaries</strong> allowed</li>
+                <li><strong>Extra time</strong> — language processing takes longer</li>
+                <li><strong>Visual options</strong> — allow drawing or diagrams</li>
+            </ul>
+        </div>
+
+        <div class="question-type" style="border-left-color: var(--accent-sage);">
+            <h4>Alternative Demonstrations</h4>
+            <ul style="margin-left: 1.5rem;">
+                <li><strong>Oral response</strong> instead of written</li>
+                <li><strong>Graphic organizers</strong> instead of paragraphs</li>
+                <li><strong>Partner work</strong> with language-peer support</li>
+                <li><strong>Translation permitted</strong> for showing concept understanding</li>
+            </ul>
+        </div>
+
+        <h2>📊 Quick Formative Checks</h2>
+        <p>Low-stakes ways to check understanding daily:</p>
+        <ul style="margin-left: 1.5rem;">
+            <li><strong>Exit ticket:</strong> "What's one thing that confused you today?"</li>
+            <li><strong>3-2-1:</strong> 3 things you learned, 2 things interesting, 1 question</li>
+            <li><strong>Thumbs check:</strong> Up = got it, Sideways = kind of, Down = lost</li>
+            <li><strong>Turn and talk:</strong> Partners explain a concept to each other</li>
+            <li><strong>One-word whip:</strong> Go around, each student says one word about the chapter</li>
+        </ul>
+    </div>
+</body>
+</html>

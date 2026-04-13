@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Builder for EAL | 0604.ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --earth-dark: #2C1810;
+            --earth-brown: #4A2C17;
+            --earth-warm: #6B4423;
+            --earth-gold: #B8860B;
+            --earth-sand: #D4A574;
+            --earth-cream: #F5E6D3;
+            --earth-light: #FAF6F0;
+            --accent-sage: #6B8E6B;
+            --accent-rust: #C75B39;
+            --text-dark: #2C1810;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--earth-light);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        .back-link { display: inline-block; color: var(--earth-gold); text-decoration: none; margin-bottom: 2rem; }
+        .back-link:hover { color: var(--earth-warm); }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--earth-dark);
+            margin-bottom: 1rem;
+        }
+        .subtitle { color: var(--earth-warm); font-size: 1.1rem; margin-bottom: 3rem; }
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--earth-dark);
+            margin: 2.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--earth-sand);
+        }
+        h3 { color: var(--earth-warm); margin: 1.5rem 0 0.5rem; }
+        .tier-box {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--accent-sage);
+        }
+        .tier-label {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .tier-1 { background: #E8F5E9; color: #2E7D32; }
+        .tier-2 { background: #FFF3E0; color: #E65100; }
+        .tier-3 { background: #FCE4EC; color: #C2185B; }
+        .word-list {
+            background: var(--earth-light);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+        }
+        .word-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--earth-cream);
+        }
+        .word-item:last-child { border-bottom: none; }
+        .strategy-box {
+            background: linear-gradient(135deg, var(--earth-cream), white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        .strategy-box h4 { color: var(--earth-gold); margin-bottom: 0.5rem; }
+        .activity-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .activity-card h4 { color: var(--earth-dark); margin-bottom: 0.5rem; }
+        .time-tag {
+            display: inline-block;
+            background: var(--earth-sand);
+            color: var(--earth-dark);
+            padding: 0.2rem 0.6rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+        .prompt-box {
+            background: var(--earth-dark);
+            color: var(--earth-cream);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        .prompt-box code {
+            color: var(--earth-sand);
+            font-family: 'Courier New', monospace;
+        }
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .tip-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+        .tip-card h4 { color: var(--accent-rust); margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/ai-for-school/" class="back-link">← Back to AI for School</a>
+        
+        <h1>🎯 Vocabulary Builder</h1>
+        <p class="subtitle">Tiered vocabulary instruction that reaches every learner — from beginners to native speakers</p>
+
+        <h2>🔄 The Three-Tier System</h2>
+        <p>Not all words are created equal. This system helps you focus instruction where it matters most.</p>
+
+        <div class="tier-box">
+            <span class="tier-label tier-1">TIER 1 - Basic</span>
+            <p>High-frequency words most students already know. Focus on EAL beginners only.</p>
+            <div class="word-list">
+                <strong>Examples:</strong> house, run, happy, water, book, family, school<br>
+                <strong>When to teach:</strong> Absolute beginners, young learners<br>
+                <strong>How:</strong> Pictures, gestures, realia, total physical response (TPR)
+            </div>
+        </div>
+
+        <div class="tier-box">
+            <span class="tier-label tier-2">TIER 2 - Academic</span>
+            <p>High-utility words across content areas. These are your POWER WORDS — teach these explicitly.</p>
+            <div class="word-list">
+                <strong>Examples:</strong> analyze, demonstrate, consequence, significant, observe, compare, influence<br>
+                <strong>When to teach:</strong> All students, especially EAL learners<br>
+                <strong>How:</strong> Direct instruction, word walls, repeated exposure, context practice
+            </div>
+        </div>
+
+        <div class="tier-box">
+            <span class="tier-label tier-3">TIER 3 - Domain-Specific</span>
+            <p>Content-specific vocabulary tied to specific units or subjects. Teach as needed.</p>
+            <div class="word-list">
+                <strong>Examples:</strong> photosynthesis, democracy, metaphor, circumference, imperialism<br>
+                <strong>When to teach:</strong> When the topic arises<br>
+                <strong>How:</strong> Contextual learning, glossaries, subject-specific word banks
+            </div>
+        </div>
+
+        <h2>🛠️ AI Prompt for Vocabulary Lists</h2>
+        
+        <div class="prompt-box">
+            <p><strong>Copy this prompt into your AI tool:</strong></p>
+            <code style="display: block; margin-top: 1rem; white-space: pre-wrap;">Generate a tiered vocabulary list for [TOPIC/BOOK/UNIT] suitable for [GRADE LEVEL].
+
+For each word, provide:
+- Word
+- Simple definition (student-friendly)
+- Part of speech
+- Example sentence in context
+- Cognate or connection to [STUDENTS' L1 if applicable]
+- Visual suggestion (what to draw/show)
+
+Organize by:
+- Tier 2 words (5-7 words) — essential for all students
+- Tier 3 words (5-7 words) — domain-specific
+- Idioms/expressions (2-3) — if relevant</code>
+        </div>
+
+        <h2>📋 Ready-to-Use Activities</h2>
+
+        <div class="activity-card">
+            <span class="time-tag">10 minutes</span>
+            <h4>Frayer Model Variations</h4>
+            <p>Students explore one word deeply using a four-square organizer:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li><strong>Definition</strong> — in their own words</li>
+                <li><strong>Characteristics</strong> — what it's like</li>
+                <li><strong>Examples</strong> — of this concept</li>
+                <li><strong>Non-examples</strong> — what it's NOT</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>EAL adaptation:</strong> Add a picture box for drawing. Accept L1 translations in the definition box.</p>
+        </div>
+
+        <div class="activity-card">
+            <span class="time-tag">15 minutes</span>
+            <h4>Vocabulary Charades / Pictionary</h4>
+            <p>Students act out or draw vocabulary words while others guess. Works for concrete Tier 2 and 3 words.</p>
+            <p><strong>Best for:</strong> Verbs (demonstrate, analyze), nouns that can be represented visually (monarchy, ecosystem)</p>
+            <p><strong>Extension:</strong> After guessing, the student must use the word in a sentence.</p>
+        </div>
+
+        <div class="activity-card">
+            <span class="time-tag">20 minutes</span>
+            <h4>Word Sorting (Closed or Open)</h4>
+            <p>Give students 10-15 words and have them sort into categories.</p>
+            <p><strong>Closed sort:</strong> You provide the categories (positive/negative, noun/verb/adjective)</p>
+            <p><strong>Open sort:</strong> Students create their own categories and defend their reasoning</p>
+            <p><strong>EAL support:</strong> Pair EAL students with native speakers; allow dictionaries</p>
+        </div>
+
+        <div class="activity-card">
+            <span class="time-tag">5 minutes daily</span>
+            <h4>Word Walls with Purpose</h4>
+            <p>Don't just post words — make them interactive:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Add pictures or symbols next to words</li>
+                <li>Use color coding (Tier 2 = blue, Tier 3 = green)</li>
+                <li>Include sentence frames: "_____ is significant because _____"</li>
+                <li>Student contribution: when they find the word in their reading, they add a sticky note with the sentence</li>
+            </ul>
+        </div>
+
+        <div class="activity-card">
+            <span class="time-tag">15 minutes</span>
+            <h4>Cognate Connections</h4>
+            <p>For Romance language speakers (Spanish, French, Portuguese, Italian), highlight cognates explicitly.</p>
+            <div style="background: var(--earth-light); padding: 1rem; border-radius: 5px; margin-top: 0.5rem;">
+                <strong>Examples:</strong><br>
+                analyze → analizar (Spanish)<br>
+                significant → significativo<br>
+                consequence → consecuencia<br>
+                demonstrate → demostrar
+            </div>
+            <p style="margin-top: 0.5rem;"><strong>False friends warning:</strong> Also teach words that LOOK similar but mean different things (embarrassed ≠ embarazada).</p>
+        </div>
+
+        <h2>💡 Teaching Strategies</h2>
+
+        <div class="strategy-box">
+            <h4>🎯 The 3-Exposure Rule</h4>
+            <p>Students need to encounter a word at least 3 times in different contexts to truly learn it:</p>
+            <ol style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li><strong>Introduce:</strong> Direct teaching with visual + context</li>
+                <li><strong>Apply:</strong> Students use in speaking or writing</li>
+                <li><strong>Review:</strong> Spaced repetition — bring it back days later</li>
+            </ol>
+        </div>
+
+        <div class="strategy-box">
+            <h4>🔗 Context First, Dictionary Second</h4>
+            <p>Never teach vocabulary in isolation. Always provide:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>The sentence where the word appears</li>
+                <li>A simplified definition in context</li>
+                <li>An example sentence from students' lives</li>
+                <li>A chance to use it themselves</li>
+            </ul>
+        </div>
+
+        <h2>🎮 Quick Vocabulary Games</h2>
+
+        <div class="tips-grid">
+            <div class="tip-card">
+                <h4>⏱️ Speed Vocab</h4>
+                <p>30 seconds: define the word. 30 seconds: use it in a sentence. 30 seconds: give a synonym. Pass to next student.</p>
+            </div>
+            <div class="tip-card">
+                <h4>🔗 Word Chains</h4>
+                <p>Last letter of one word starts the next. Must define each word as you go. analyze → evaluate → explain...</p>
+            </div>
+            <div class="tip-card">
+                <h4>🎲 Vocab Roll</h4>
+                <p>Roll a die: 1=define, 2=synonym, 3=antonym, 4=use in sentence, 5=draw it, 6=act it out</p>
+            </div>
+            <div class="tip-card">
+                <h4>📖 Context Clues Challenge</h4>
+                <p>Give sentences with unfamiliar words. Students guess meaning from context before you reveal.</p>
+            </div>
+        </div>
+
+        <h2>📊 Assessment Without Pain</h2>
+        <p>Quick checks that don't require formal testing:</p>
+        <ul style="margin-left: 1.5rem;">
+            <li><strong>Exit slips:</strong> "Use 2 of today's words in sentences"</li>
+            <li><strong>Turn and talk:</strong> Partners explain words to each other</li>
+            <li><strong>Thumbs up/down:</strong> Quick self-assessment of confidence</li>
+            <li><strong>Application check:</strong> Spot the words in new reading passages</li>
+        </ul>
+
+        <h2>🌍 EAL-Specific Considerations</h2>
+        <ul style="margin-left: 1.5rem;">
+            <li><strong>Pre-teach before reading.</strong> Don't let students encounter words cold.</li>
+            <li><strong>Allow L1 support.</strong> Translation is a bridge, not a crutch.</li>
+            <li><strong>Focus on Tier 2 words.</strong> These give the biggest bang for your buck.</li>
+            <li><strong>Use visuals relentlessly.</strong> Every word should have a picture, gesture, or real object.</li>
+            <li><strong>Repetition is your friend.</strong> EAL learners need 12-15 exposures, not 3.</li>
+        </ul>
+    </div>
+</body>
+</html>

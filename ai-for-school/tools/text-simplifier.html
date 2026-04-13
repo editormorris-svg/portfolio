@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Simplifier for EAL | 0604.ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --earth-dark: #2C1810;
+            --earth-brown: #4A2C17;
+            --earth-warm: #6B4423;
+            --earth-gold: #B8860B;
+            --earth-sand: #D4A574;
+            --earth-cream: #F5E6D3;
+            --earth-light: #FAF6F0;
+            --accent-sage: #6B8E6B;
+            --accent-rust: #C75B39;
+            --text-dark: #2C1810;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--earth-light);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        .back-link { display: inline-block; color: var(--earth-gold); text-decoration: none; margin-bottom: 2rem; }
+        .back-link:hover { color: var(--earth-warm); }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--earth-dark);
+            margin-bottom: 1rem;
+        }
+        .subtitle { color: var(--earth-warm); font-size: 1.1rem; margin-bottom: 3rem; }
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--earth-dark);
+            margin: 2.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--earth-sand);
+        }
+        h3 { color: var(--earth-warm); margin: 1.5rem 0 0.5rem; }
+        .prompt-box {
+            background: var(--earth-dark);
+            color: var(--earth-cream);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        .prompt-box code {
+            color: var(--earth-sand);
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            display: block;
+            margin-top: 1rem;
+        }
+        .example-box {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .original, .simplified {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+        }
+        .original { background: #f5f5f5; border-left: 4px solid #999; }
+        .simplified { background: #E8F5E9; border-left: 4px solid var(--accent-sage); }
+        .level-indicator {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .level-a1 { background: #E8F5E9; color: #2E7D32; }
+        .level-a2 { background: #FFF3E0; color: #E65100; }
+        .level-b1 { background: #E3F2FD; color: #1565C0; }
+        .technique-card {
+            background: linear-gradient(135deg, var(--earth-cream), white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        .technique-card h4 { color: var(--earth-gold); margin-bottom: 0.5rem; }
+        .warning-box {
+            background: #FFF3E0;
+            border-left: 4px solid var(--accent-rust);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+        }
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .tip-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+        .tip-card h4 { color: var(--accent-sage); margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/ai-for-school/" class="back-link">← Back to AI for School</a>
+        
+        <h1>📖 Text Simplifier</h1>
+        <p class="subtitle">Adapt complex texts for different reading levels while preserving meaning and engagement</p>
+
+        <h2>🤖 AI Simplification Prompt</h2>
+        
+        <div class="prompt-box">
+            <strong>Text Simplifier Prompt</strong>
+            <code>Simplify the following text for English language learners at [CEFR LEVEL: A1/A2/B1].
+
+ORIGINAL TEXT:
+[PASTE TEXT HERE]
+
+REQUIREMENTS:
+- Vocabulary: Use only the [1000/2000/3000] most common English words
+- Sentence length: Maximum [10/15/20] words per sentence
+- Sentence structure: Use simple subject-verb-object order
+- Tense: Use only present simple, past simple, and future with "going to"
+- Paragraphs: Maximum 3 sentences per paragraph
+- Keep all key information and main ideas
+- Maintain the original tone (formal/informal)
+
+OUTPUT FORMAT:
+- Simplified text
+- List of changed words with simple definitions
+- 3 comprehension questions about the text</code>
+        </div>
+
+        <h2>📊 Simplification Levels Explained</h2>
+
+        <div class="example-box">
+            <span class="level-indicator level-a1">A1 - Beginner</span>
+            <p><strong>Word count:</strong> Top 1000 most common words only</p>
+            <p><strong>Sentence length:</strong> Maximum 10 words</p>
+            <p><strong>Grammar:</strong> Present simple, past simple only</p>
+            <p><strong>Best for:</strong> Absolute beginners, young learners, students with very limited English</p>
+        </div>
+
+        <div class="example-box">
+            <span class="level-indicator level-a2">A2 - Elementary</span>
+            <p><strong>Word count:</strong> Top 2000 most common words</p>
+            <p><strong>Sentence length:</strong> Maximum 15 words</p>
+            <p><strong>Grammar:</strong> Add present continuous, going to future, basic comparatives</p>
+            <p><strong>Best for:</strong> EAL students in mainstream classes who need support texts</p>
+        </div>
+
+        <div class="example-box">
+            <span class="level-indicator level-b1">B1 - Intermediate</span>
+            <p><strong>Word count:</strong> Top 3000 words + academic vocabulary</p>
+            <p><strong>Sentence length:</strong> Maximum 20 words</p>
+            <p><strong>Grammar:</strong> All basic tenses, conditionals (if), passive voice in simple forms</p>
+            <p><strong>Best for:</strong> Students approaching grade-level reading with some support</p>
+        </div>
+
+        <h2>✏️ Before & After Examples</h2>
+
+        <div class="example-box">
+            <h4>Example 1: Science Text</h4>            
+            <div class="original">
+                <strong>Original (Grade 7 Level):</strong><br>
+                Photosynthesis is the process by which plants convert light energy into chemical energy. During this process, carbon dioxide from the air and water from the soil are transformed into glucose and oxygen. This occurs primarily in the leaves, where chlorophyll captures sunlight.
+            </div>            
+            <div class="simplified">
+                <strong>A2 Simplified:</strong><br>
+                Plants make their own food. They use light from the sun. They take air and water to make sugar. This happens in the leaves. Leaves have a green color called chlorophyll. Chlorophyll catches the light.
+            </div>            
+            <p style="margin-top: 1rem;"><strong>Key changes:</strong> "Photosynthesis" → "make their own food"; "convert" → "use"; "chemical energy" → "sugar"; "transformed" → "make"; "captures" → "catches"</p>
+        </div>
+
+        <div class="example-box">
+            <h4>Example 2: History Text</h4>            
+            <div class="original">
+                <strong>Original:</strong><br>
+                The Industrial Revolution brought profound changes to society. Manufacturing shifted from hand production methods to machines, fundamentally altering how goods were produced and consumed. This transformation had far-reaching consequences for employment, urbanization, and class structures.
+            </div>            
+            <div class="simplified">
+                <strong>A2 Simplified:</strong><br>
+                Big changes happened in how people made things. Before, people made things by hand. Then, machines started making things. This changed many parts of life. People moved to cities for work. New social classes developed.
+            </div>            
+            <p style="margin-top: 1rem;"><strong>Key changes:</strong> "Industrial Revolution" → "Big changes"; "profound" → removed; "manufacturing" → "how people made things"; "fundamentally altering" → "changed"; "far-reaching consequences" → "changed many parts of life"; "urbanization" → "moved to cities"</p>
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ Important:</strong> When simplifying literature (novels, stories), preserve the emotion and key plot points. Don't simplify so much that the story loses its impact.
+        </div>
+
+        <h2>🛠️ Manual Simplification Techniques</h2>
+
+        <div class="technique-card">
+            <h4>1. Break Up Long Sentences</h4>
+            <p><strong>Before:</strong> "The protagonist, who had been waiting for hours in the rain without an umbrella, finally saw the bus approaching around the corner and felt a sense of relief wash over him."</p>
+            <p><strong>After:</strong> "The main character waited for hours. It was raining. He had no umbrella. Finally, he saw the bus coming. He felt relieved."</p>
+        </div>
+
+        <div class="technique-card">
+            <h4>2. Replace Complex Words with Simple Ones</h4>
+            <table style="width: 100%; margin-top: 0.5rem;">
+                <tr><td><strong>Complex</strong></td><td><strong>Simple</strong></td><td><strong>Complex</strong></td><td><strong>Simple</strong></td></tr>
+                <tr><td>ascertain</td><td>find out</td><td>demonstrate</td><td>show</td></tr>
+                <tr><td>commence</td><td>start</td><td>illustrate</td><td>show, explain</td></tr>
+                <tr><td>desire</td><td>want</td><td>possess</td><td>have</td></tr>
+                <tr><td>enormous</td><td>very big</td><td>signify</td><td>mean</td></tr>
+                <tr><td>endeavor</td><td>try</td><td>subsequently</td><td>then, later</td></tr>
+            </table>
+        </div>
+
+        <div class="technique-card">
+            <h4>3. Change Passive to Active Voice</h4>
+            <p><strong>Passive:</strong> "The ball was thrown by the boy."</p>
+            <p><strong>Active:</strong> "The boy threw the ball."</p>
+            <p style="margin-top: 0.5rem;">Active voice is easier to understand because it follows the natural subject-verb-object order.</p>
+        </div>
+
+        <div class="technique-card">
+            <h4>4. Remove Redundancy and Fluff</h4>
+            <p><strong>Before:</strong> "It is important to note that the results were very significantly different from what we had originally anticipated at the beginning of the study."</p>
+            <p><strong>After:</strong> "The results were different from what we expected."</p>
+            <p style="margin-top: 0.5rem;">Words removed: "It is important to note that," "very significantly," "originally," "at the beginning of the study" — these add no meaning.</p>
+        </div>
+
+        <div class="technique-card">
+            <h4>5. Use Concrete Examples</h4>
+            <p><strong>Abstract:</strong> "Many agricultural products are subject to price fluctuations."</p>
+            <p><strong>Concrete:</strong> "Prices for wheat, corn, and rice go up and down."</p>
+        </div>
+
+        <h2>🎯 Subject-Specific Tips</h2>
+
+        <div class="tips-grid">
+            <div class="tip-card">
+                <h4>🔬 Science</h4>
+                <p>Keep technical terms but explain them immediately: "Photosynthesis (how plants make food)"</p>
+                <p style="margin-top: 0.5rem;">Use diagrams alongside text when possible.</p>
+            </div>
+            <div class="tip-card">
+                <h4>📜 History</h4>
+                <p>Focus on who, what, when, where. Save "why" for higher levels. Use timelines to show sequence.</p>
+            </div>
+            <div class="tip-card">
+                <h4>📚 Literature</h4>
+                <p>Preserve dialogue and key scenes. Simplify descriptions and internal thoughts. Keep the emotion.</p>
+            </div>
+            <div class="tip-card">
+                <h4>🔢 Math/Word Problems</h4>
+                <p>Use simpler numbers first. Remove unnecessary context. Teach math vocabulary explicitly.</p>
+            </div>
+        </div>
+
+        <h2>📋 Simplification Checklist</h2>
+        
+        <div class="example-box">
+            <p>Before using a simplified text, check:</p>            
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>☐ All key information is still there — nothing important was lost</li>
+                <li>☐ Students at this level can read it without looking up every other word</li>
+                <li>☐ The meaning is clear without re-reading</li>
+                <li>☐ For literature: the emotion and main plot points are preserved</li>
+                <li>☐ Sentence structures match the grammar students have learned</li>
+                <li>☐ Visual supports (pictures, headings, bold text) are added where helpful</li>
+            </ul>
+        </div>
+
+        <h2>🌍 EAL Classroom Strategies</h2>
+
+        <div class="technique-card">
+            <h4>Side-by-Side Texts</h4>
+            <p>Give EAL students the simplified version while native speakers read the original. Both groups discuss the same content.</p>
+            <p style="margin-top: 0.5rem;">Benefit: Inclusion without embarrassment.</p>
+        </div>
+
+        <div class="technique-card">
+            <h4>Jigsaw Reading</h4>
+            <p>Students read different simplified sections, then teach their section to the group. Everyone becomes an expert on one part.</p>
+        </div>
+
+        <div class="technique-card">
+            <h4>Bilingual Glossaries</strong></h4>
+            <p>Create a word bank with English + students' home languages for key terms. This validates their L1 while building English.</p>
+        </div>
+
+        <h2>⚠️ When NOT to Simplify</h2>
+
+        <div class="warning-box">
+            <ul style="margin-left: 1.5rem;">
+                <li><strong>Students are ready for challenge:</strong> If they're at B2+ level, they need exposure to complex texts</li>
+                <li><strong>Assessment purposes:</strong> Don't simplify texts for standardized test practice — they need the real thing</li>
+                <li><strong>Language arts analysis:</strong> If the lesson is about author's style, simplifying destroys the object of study</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

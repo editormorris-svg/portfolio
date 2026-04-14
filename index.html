@@ -486,10 +486,10 @@
             color: var(--earth-cream);
             padding: 1.5rem 2rem;
             border-radius: 16px;
-            margin: 2.5rem auto 0;
-            max-width: 900px;
+            margin: 2.5rem 0 0;
+            max-width: 100%;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 1.5rem;
             flex-wrap: wrap;
             border-left: 5px solid var(--accent-rust);
@@ -502,6 +502,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            margin-top: 0;
         }
 
         .highlight-box h3 {
@@ -509,6 +510,7 @@
             font-size: 1.35rem;
             margin-bottom: 0.4rem;
             line-height: 1.3;
+            margin-top: 0;
         }
 
         .highlight-box .hook-badge {
@@ -522,13 +524,15 @@
             padding: 0.25rem 0.6rem;
             border-radius: 50px;
             margin-bottom: 0.5rem;
+            margin-top: 0;
         }
 
         .highlight-box p {
-            opacity: 0.9;
+            opacity: 1;
             font-size: 0.95rem;
             line-height: 1.6;
             margin-bottom: 1rem;
+            color: var(--earth-cream);
         }
 
         .highlight-box .resource-links {
@@ -538,8 +542,34 @@
         }
 
         .highlight-box .resource-btn {
-            padding: 0.6rem 1.2rem;
-            font-size: 0.9rem;
+            padding: 0.7rem 1.4rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .highlight-box .resource-btn.primary {
+            background: var(--accent-rust);
+            color: white;
+            border: 2px solid var(--accent-rust);
+        }
+
+        .highlight-box .resource-btn.primary:hover {
+            background: #c0392b;
+            border-color: #c0392b;
+        }
+
+        .highlight-box .resource-btn.secondary {
+            background: transparent;
+            color: var(--earth-cream);
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+
+        .highlight-box .resource-btn.secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: white;
         }
 
         /* Games Section */
@@ -1953,13 +1983,13 @@
         <div class="ai-grid">
             <div class="ai-card">
                 <div class="ai-card-icon">🎮</div>
-                <h3>Educational Games <span style="background: var(--accent-rust); color: white; padding: 0.2rem 0.5rem; border-radius: 50px; font-size: 0.7rem; margin-left: 0.5rem;">23 Games</span></h3>
+                <h3>Educational Games <span style="background: var(--accent-rust); color: white; padding: 0.2rem 0.5rem; border-radius: 50px; font-size: 0.7rem; margin-left: 0.5rem;">22 Games</span></h3>
                 <p>Interactive literature games. Step into classic novels as the protagonist — make choices, manage resources, and experience the story. From <em>Of Mice and Men</em> to <em>The Jungle Book</em>.</p>
                 <a href="/all-games/" style="display: inline-block; margin-top: 15px; color: var(--earth-gold); font-weight: 500;">View All Games →</a>
             </div>
             <div class="ai-card" style="border: 2px solid var(--earth-gold); background: linear-gradient(135deg, var(--earth-light), var(--earth-cream));">
                 <div class="ai-card-icon">📚</div>
-                <h3>EAL Literature Sets <span style="background: var(--accent-rust); color: white; padding: 0.2rem 0.5rem; border-radius: 50px; font-size: 0.7rem; margin-left: 0.5rem;">8 Books</span></h3>
+                <h3>EAL Literature Sets <span style="background: var(--accent-rust); color: white; padding: 0.2rem 0.5rem; border-radius: 50px; font-size: 0.7rem; margin-left: 0.5rem;">22 Books</span></h3>
                 <p>Complete book sets for Grade 6 EAL learners. 12-lesson readers with vocab, activities, and teacher answer keys. Each book has a matching browser game. Free downloads.</p>
                 <a href="/ai-for-school/#literature" style="display: inline-block; margin-top: 15px; color: var(--earth-gold); font-weight: 500;">Download Books →</a>
             </div>

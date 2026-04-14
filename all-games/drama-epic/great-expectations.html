@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Great Expectations - An Interactive Adventure</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Georgia', serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; color: #e8e8e8; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        h1 { text-align: center; color: #ffd700; text-shadow: 2px 2px 4px #000; margin-bottom: 20px; font-size: 2.5em; }
+        h2 { color: #b8860b; margin-bottom: 15px; }
+        .screen { display: none; background: rgba(10,10,20,0.85); border-radius: 15px; padding: 30px; margin-bottom: 20px; border: 3px solid #4a4a6a; }
+        .screen.active { display: block; }
+        .btn { background: linear-gradient(180deg, #4a4a6a, #2a2a4a); color: #ffd700; border: 2px solid #b8860b; padding: 12px 25px; font-size: 16px; cursor: pointer; border-radius: 8px; margin: 5px; transition: all 0.3s; font-family: inherit; }
+        .btn:hover { background: linear-gradient(180deg, #6a6a8a, #4a4a6a); transform: scale(1.05); }
+        .btn:disabled { background: #333; cursor: not-allowed; opacity: 0.6; }
+        .character-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
+        .character-card { background: rgba(74,74,106,0.3); border: 2px solid #3a3a5a; border-radius: 10px; padding: 15px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .character-card:hover, .character-card.selected { border-color: #ffd700; background: rgba(255,215,0,0.15); transform: scale(1.05); }
+        .character-card h3 { color: #ffd700; margin-bottom: 10px; }
+        .stats-panel { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+        .stat { text-align: center; padding: 10px 20px; background: rgba(74,74,106,0.3); border-radius: 8px; }
+        .stat-name { color: #b8860b; font-size: 12px; text-transform: uppercase; }
+        .stat-value { color: #ffd700; font-size: 24px; font-weight: bold; }
+        .location-map { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .location { background: rgba(74,74,106,0.3); border: 2px solid #4a4a6a; border-radius: 10px; padding: 15px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .location:hover { background: rgba(74,74,106,0.5); border-color: #ffd700; transform: scale(1.02); }
+        .location.locked { opacity: 0.5; cursor: not-allowed; }
+        .location h3 { color: #ffd700; margin-bottom: 5px; }
+        .location p { font-size: 12px; color: #aaa; }
+        .narrative { background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px; margin-bottom: 20px; line-height: 1.8; font-size: 16px; border-left: 4px solid #b8860b; }
+        .dialogue { background: rgba(30,30,50,0.5); padding: 15px; border-radius: 10px; margin: 10px 0; border-left: 4px solid #ffd700; }
+        .speaker { color: #b8860b; font-weight: bold; }
+        .choices { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+        .choice-btn { background: rgba(74,74,106,0.3); border: 2px solid #3a3a5a; padding: 15px; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-align: left; }
+        .choice-btn:hover { background: rgba(74,74,106,0.6); border-color: #ffd700; }
+        .inventory { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
+        .item { background: rgba(255,215,0,0.15); padding: 8px 15px; border-radius: 20px; border: 1px solid #ffd700; font-size: 14px; }
+        .mini-game { background: rgba(20,20,40,0.6); padding: 20px; border-radius: 10px; text-align: center; margin: 20px 0; }
+        .game-area { min-height: 200px; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 20px; margin: 15px 0; }
+        .writing-area { background: #f5f5dc; color: #000; padding: 20px; border-radius: 10px; min-height: 150px; margin: 15px 0; font-family: 'Times New Roman', serif; }
+        .writing-prompt { font-style: italic; margin-bottom: 15px; color: #333; }
+        .vocab-word { display: inline-block; background: #e8e8e8; padding: 2px 8px; border-radius: 4px; margin: 2px; cursor: help; }
+        .riddle-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+        .dice-container { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
+        .dice { width: 80px; height: 80px; background: #f5f5dc; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 40px; color: #000; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .ending { text-align: center; padding: 40px; }
+        .ending h2 { font-size: 2em; margin-bottom: 20px; }
+        .quiz-question { background: rgba(30,30,50,0.5); padding: 20px; border-radius: 10px; margin: 15px 0; }
+        .quiz-options { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 15px; }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 5px #ffd700; } 50% { box-shadow: 0 0 20px #ffd700; } }
+        .glow { animation: glow 2s infinite; }
+        .game-title { font-size: 14px; color: #888; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Great Expectations</h1>
+        <p class="game-title">Charles Dickens - An Interactive Adventure for EAL Learners</p>
+        
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen active">
+            <h2>London, circa 1860</h2>
+            <div class="narrative">
+                <p>The year is 1812. You are Philip Pirrip, known as Pip, a young orphan being raised by your sister in the marsh country of Kent. Your life is about to change in ways you cannot imagine.</p>
+                <p style="margin-top: 15px;">One fateful day, you encounter an escaped convict in the churchyard where your parents are buried. This encounter sets you on a path toward "great expectations" - a mysterious fortune that will transform you from a common blacksmith's apprentice into a gentleman.</p>
+                <p style="margin-top: 15px; color: #b8860b;">"I had been in the Habit of calling myself and thinking of myself as a young man of great expectations." - Pip</p>
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn" onclick="startCharacterSelect()">Begin Your Story</button>
+            </div>
+        </div>
+        
+        <!-- Character Select -->
+        <div id="character-screen" class="screen">
+            <h2>Choose Your Path</h2>
+            <p style="margin-bottom: 20px;">How will you navigate Victorian society?</p>
+            <div class="character-grid">
+                <div class="character-card" onclick="selectCharacter('pip')">
+                    <h3>Pip</h3>
+                    <p><strong>The Orphan</strong></p>
+                    <p style="font-size: 12px; color: #ccc; margin-top: 10px;">The protagonist. Your choices shape your destiny and determine who you become.</p>
+                    <p style="font-size: 11px; color: #888; margin-top: 10px;">Balanced attributes</p>
+                </div>
+                <div class="character-card" onclick="selectCharacter('estella')">
+                    <h3>Estella</h3>
+                    <p><strong>The Lady</strong></p>
+                    <p style="font-size: 12px; color: #ccc; margin-top: 10px;">Raised by Miss Havisham to break men's hearts. Cold but fascinating.</p>
+                    <p style="font-size: 11px; color: #888; margin-top: 10px;">+3 Intelligence, +2 Empathy</p>
+                </div>
+                <div class="character-card" onclick="selectCharacter('joe')">
+                    <h3>Joe Gargery</h3>
+                    <p><strong>The Blacksmith</strong></p>
+                    <p style="font-size: 12px; color: #ccc; margin-top: 10px;">Your kind-hearted brother-in-law and only true friend.</p>
+                    <p style="font-size: 11px; color: #888; margin-top: 10px;">+3 Kindness, +2 Strength</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" id="confirm-char-btn" onclick="confirmCharacter()" disabled>Confirm Character</button>
+            </div>
+        </div>
+        
+        <!-- Main Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="stats-panel">
+                <div class="stat"><div class="stat-name">Education</div><div class="stat-value" id="stat-education">5</div></div>
+                <div class="stat"><div class="stat-name">Kindness</div><div class="stat-value" id="stat-kindness">5</div></div>
+                <div class="stat"><div class="stat-name">Empathy</div><div class="stat-value" id="stat-empathy">5</div></div>
+                <div class="stat"><div class="stat-name">Intelligence</div><div class="stat-value" id="stat-intelligence">5</div></div>
+                <div class="stat"><div class="stat-name">Confidence</div><div class="stat-value" id="stat-confidence">5</div></div>
+                <div class="stat"><div class="stat-name">Pence</div><div class="stat-value" id="stat-gold">10</div></div>
+            </div>
+            <div class="inventory" id="inventory"></div>
+
+            <h2 id="location-title">The Marshes</h2>
+            <div id="narrative-area" class="narrative"></div>
+            <div id="dialogue-area"></div>
+            <div id="game-area"></div>
+            <div id="choices-area" class="choices"></div>
+        </div>
+        
+        <!-- Mini-Game Screen -->
+        <div id="minigame-screen" class="screen">
+            <h2 id="minigame-title">Mini-Game</h2>
+            <div id="minigame-content" class="mini-game"></div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" onclick="exitMinigame()">Return to Story</button>
+            </div>
+        </div>
+        
+        <!-- Ending Screen -->
+        <div id="ending-screen" class="screen">
+            <div class="ending">
+                <h2 id="ending-title"></h2>
+                <div id="ending-content"></div>
+                <div style="margin-top: 30px;">
+                    <button class="btn" onclick="saveGame()">Save Progress</button>
+                    <button class="btn" onclick="loadGame()">Load Game</button>
+                    <button class="btn" onclick="restartGame()">Play Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        let gameState = {
+            character: null,
+            stats: { education: 5, kindness: 5, empathy: 5, intelligence: 5, confidence: 5 },
+            gold: 10,
+            inventory: [],
+            currentLocation: 'marshes',
+            visitedLocations: ['marshes'],
+            storyProgress: 0,
+            choices: [],
+            estellaAffection: 30,
+            missHavishamTrust: 0,
+            pipWealth: 0,
+            discoveredBenefactor: false
+        };
+
+        // Locations
+        const locations = {
+            'marshes': { 
+                name: 'The Marshes', 
+                desc: 'The wild, foggy marshes of Kent. The gibbet stands silent, a reminder of the convicts who once hung there. The churchyard where your parents lie is nearby.',
+                minigame: 'vocabulary',
+                npcs: ['joe', 'mrs-joe'],
+                unlocked: true
+            },
+            'smithy': { 
+                name: 'The Forge', 
+                desc: 'Joe Gargery\'s blacksmith forge. The heat of the furnace, the ring of hammers on iron. Here you learned your trade, though your heart was never in it.',
+                minigame: 'strength',
+                npcs: ['joe'],
+                unlocked: false
+            },
+            'satis-house': { 
+                name: 'Satis House', 
+                desc: 'The decaying mansion of Miss Havisham. Everything is frozen in time - the clocks stopped, the wedding feast rotted, and she still wears her yellowed wedding dress.',
+                minigame: 'riddle',
+                npcs: ['miss-havisham', 'estella'],
+                unlocked: false
+            },
+            'london': { 
+                name: 'London', 
+                desc: 'The great metropolis! Grand buildings, crowded streets, and the law offices of Jaggers. Here your education as a gentleman begins.',
+                minigame: 'education',
+                npcs: ['jaggers', 'wopsle'],
+                unlocked: false
+            },
+            'prison': { 
+                name: 'Newgate Prison', 
+                desc: 'Where criminals await their fate. Jaggers\' clients gather here. One face among them seems oddly familiar...',
+                minigame: 'memory',
+                npcs: ['magwitch'],
+                unlocked: false
+            },
+            'inn': { 
+                name: 'The Three Jolly Purposefuls', 
+                desc: 'A coaching inn where gentlemen gather to discuss matters of business and politics. Rumors flow as freely as the ale.',
+                minigame: 'dice',
+                npcs: ['gentleman'],
+                unlocked: false
+            },
+            'garden': { 
+                name: 'Miss Havisham\'s Garden', 
+                desc: 'The overgrown garden behind Satis House. Among the dead plants and broken statues, something catches your eye. Something valuable.',
+                minigame: 'stealth',
+                npcs: ['estella'],
+                unlocked: false
+            }
+        };
+
+        // NPCs
+        const npcs = {
+            'joe': {
+                name: 'Joe Gargery',
+                portrait: '🔨',
+                dialogues: [
+                    { text: "You and me is always friends, Pip. And whatever you becomes, I shall be proud of you. Though I'll miss the forge when you're gone.", options: [
+                        { text: "I'll never forget where I came from, Joe.", effect: () => { modifyStat('kindness', 2); modifyStat('empathy', 1); gameState.estellaAffection -= 5; } },
+                        { text: "Perhaps you could visit me in London?", effect: () => { modifyStat('kindness', 1); modifyStat('confidence', 1); } }
+                    ]}
+                ]
+            },
+            'mrs-joe': {
+                name: 'Mrs. Joe',
+                portrait: '👩',
+                dialogues: [
+                    { text: "I've brought you up by hand! Do you think I'll let you become some sort of gentleman? You'll stay at the forge and learn a proper trade!", options: [
+                        { text: "I must follow my dreams, Mrs. Joe.", effect: () => { modifyStat('confidence', 2); modifyStat('kindness', -1); } },
+                        { text: "I respect your hard work, Mrs. Joe.", effect: () => { modifyStat('kindness', 1); modifyStat('empathy', 1); } }
+                    ]}
+                ]
+            },
+            'miss-havisham': {
+                name: 'Miss Havisham',
+                portrait: '👰',
+                dialogues: [
+                    { text: "How do you like my bride's cake, dear boy? Let me show you the room where I stopped time itself. Estella, entertain our guest.", options: [
+                        { text: "I am honored, Miss Havisham.", effect: () => { modifyStat('confidence', 1); modifyStat('empathy', -1); gameState.missHavishamTrust += 10; } },
+                        { text: "This house is so... sad.", effect: () => { modifyStat('empathy', 2); gameState.missHavishamTrust += 5; } }
+                    ]}
+                ]
+            },
+            'estella': {
+                name: 'Estella',
+                portrait: '💐',
+                dialogues: [
+                    { text: "Why do you stare at me? I am not for you. I am for breaking hearts. Miss Havisham has made me so. You should know this by now.", options: [
+                        { text: "I cannot help how I feel about you.", effect: () => { modifyStat('empathy', 1); gameState.estellaAffection += 15; } },
+                        { text: "Perhaps you're wrong about yourself.", effect: () => { modifyStat('intelligence', 1); gameState.estellaAffection += 10; } },
+                        { text: "Then break my heart and have done with it.", effect: () => { modifyStat('confidence', 1); modifyStat('kindness', -1); gameState.estellaAffection += 5; } }
+                    ]}
+                ]
+            },
+            'jaggers': {
+                name: 'Mr. Jaggers',
+                portrait: '⚖️',
+                dialogues: [
+                    { text: "You will do well in London, Pip. Study hard. Do not make friends carelessly. And wash your hands frequently - you will see many things that do not bear thinking about.", options: [
+                        { text: "I understand, sir. I will learn.", effect: () => { modifyStat('education', 2); modifyStat('intelligence', 1); } },
+                        { text: "What should I expect in London?", effect: () => { modifyStat('intelligence', 2); modifyStat('confidence', 1); } }
+                    ]}
+                ]
+            },
+            'wopsle': {
+                name: 'Mr. Wopsle',
+                portrait: '🎭',
+                dialogues: [
+                    { text: "I have given up the church for the stage! I play Hamlet in London next week. Would you like to see my Hamlet impressions?", options: [
+                        { text: "I would be honored!", effect: () => { modifyStat('education', 2); modifyStat('kindness', 1); } },
+                        { text: "Perhaps another time.", effect: () => { modifyStat('confidence', 1); modifyStat('kindness', -1); } }
+                    ]}
+                ]
+            },
+            'magwitch': {
+                name: 'The Convict',
+                portrait: '⛓️',
+                dialogues: [
+                    { text: "Don't you know me, boy? I am the one you helped in the marshes. I've returned, and I have a fortune to give you. You shall become a gentleman!", options: [
+                        { text: "But... the convict! How is this possible?", effect: () => { modifyStat('empathy', 2); modifyStat('intelligence', 1); gameState.discoveredBenefactor = true; } },
+                        { text: "I cannot accept charity!", effect: () => { modifyStat('confidence', 2); modifyStat('kindness', -1); gameState.discoveredBenefactor = true; } }
+                    ]}
+                ]
+            },
+            'gentleman': {
+                name: 'Drummle',
+                portrait: '🎩',
+                dialogues: [
+                    { text: "So you're the young man with great expectations. I am Drummle, heir to a fortune. Perhaps you'd care to wager on a game of chance?", options: [
+                        { text: "I accept your challenge.", effect: () => { modifyStat('confidence', 1); modifyGold(-10); } },
+                        { text: "I prefer to keep my money.", effect: () => { modifyStat('intelligence', 1); modifyStat('kindness', 1); } }
+                    ]}
+                ]
+            }
+        };
+
+        // Vocabulary words
+        const vocabWords = [
+            { word: "expectation", definition: "a strong belief that something will happen" },
+            { word: "marsh", definition: "an area of low, wet land" },
+            { word: "forge", definition: "a workshop for making metal objects" },
+            { word: "gentleman", definition: "a man of good birth and social position" },
+            { word: "benefactor", definition: "a person who gives money or help" },
+            { word: "convict", definition: "a person found guilty of a crime" },
+            { word: "fortune", definition: "a large amount of money" },
+            { word: "humble", definition: "having a modest view of oneself" }
+        ];
+
+        let vocabIndex = 0;
+
+        // Functions
+        function startCharacterSelect() {
+            showScreen('character-screen');
+        }
+
+        function selectCharacter(char) {
+            gameState.character = char;
+            document.querySelectorAll('.character-card').forEach(c => c.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            document.getElementById('confirm-char-btn').disabled = false;
+        }
+
+        function confirmCharacter() {
+            if (!gameState.character) return;
+            
+            switch(gameState.character) {
+                case 'pip':
+                    Object.keys(gameState.stats).forEach(s => gameState.stats[s] += 2);
+                    break;
+                case 'estella':
+                    gameState.stats.intelligence += 3;
+                    gameState.stats.empathy += 2;
+                    break;
+                case 'joe':
+                    gameState.stats.kindness += 3;
+                    gameState.stats.confidence += 2;
+                    break;
+            }
+            
+            updateStats();
+            showScreen('game-screen');
+            enterLocation('marshes');
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function modifyStat(stat, amount) {
+            gameState.stats[stat] = Math.max(0, Math.min(20, gameState.stats[stat] + amount));
+            updateStats();
+        }
+
+        function modifyGold(amount) {
+            gameState.gold = Math.max(0, gameState.gold + amount);
+            updateStats();
+        }
+
+        function addItem(item) {
+            if (!gameState.inventory.includes(item)) {
+                gameState.inventory.push(item);
+                updateInventory();
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('stat-education').textContent = gameState.stats.education;
+            document.getElementById('stat-kindness').textContent = gameState.stats.kindness;
+            document.getElementById('stat-empathy').textContent = gameState.stats.empathy;
+            document.getElementById('stat-intelligence').textContent = gameState.stats.intelligence;
+            document.getElementById('stat-confidence').textContent = gameState.stats.confidence;
+            document.getElementById('stat-gold').textContent = gameState.gold;
+        }
+
+        function updateInventory() {
+            const inv = document.getElementById('inventory');
+            inv.innerHTML = '<strong>Items:</strong> ';
+            gameState.inventory.forEach(item => {
+                inv.innerHTML += `<span class="item">${item}</span> `;
+            });
+        }
+
+        function enterLocation(locId) {
+            const loc = locations[locId];
+            if (!loc || loc.locked) return;
+            
+            gameState.currentLocation = locId;
+            if (!gameState.visitedLocations.includes(locId)) {
+                gameState.visitedLocations.push(locId);
+            }
+            
+            document.getElementById('location-title').textContent = loc.name;
+            document.getElementById('narrative-area').innerHTML = `<p>${loc.desc}</p>`;
+            
+            gameState.storyProgress = Math.min(100, gameState.storyProgress + 12);
+            checkLocationUnlocks();
+            showNPCDialogue();
+        }
+
+        function checkLocationUnlocks() {
+            if (gameState.storyProgress >= 12) {
+                locations['smithy'].unlocked = true;
+                locations['satis-house'].unlocked = true;
+            }
+            if (gameState.missHavishamTrust >= 20) {
+                locations['garden'].unlocked = true;
+            }
+            if (gameState.stats.education >= 8) {
+                locations['london'].unlocked = true;
+            }
+            if (gameState.stats.confidence >= 8) {
+                locations['inn'].unlocked = true;
+            }
+            if (gameState.discoveredBenefactor) {
+                locations['prison'].unlocked = true;
+            }
+        }
+
+        function showNPCDialogue() {
+            const loc = locations[gameState.currentLocation];
+            if (!loc.npcs || loc.npcs.length === 0) {
+                showLocationChoices();
+                return;
+            }
+            
+            const npcId = loc.npcs[0];
+            const npc = npcs[npcId];
+            const dialogue = npc.dialogues[0];
+            
+            let dialogueHtml = `<div class="dialogue"><span class="speaker">${npc.portrait} ${npc.name}:</span> "${dialogue.text}"</div>`;
+            
+            let choicesHtml = '<div class="choices">';
+            dialogue.options.forEach((opt, idx) => {
+                choicesHtml += `<button class="choice-btn" onclick="chooseDialogue(${idx}, '${npcId}')">${opt.text}</button>`;
+            });
+            choicesHtml += '</div>';
+            
+            document.getElementById('dialogue-area').innerHTML = dialogueHtml;
+            document.getElementById('choices-area').innerHTML = choicesHtml;
+            document.getElementById('game-area').innerHTML = '';
+        }
+
+        function chooseDialogue(idx, npcId) {
+            const npc = npcs[npcId];
+            const dialogue = npc.dialogues[0];
+            
+            if (dialogue.options[idx].effect) {
+                dialogue.options[idx].effect();
+            }
+            
+            gameState.choices.push({ npc: npcId, choice: idx });
+            
+            document.getElementById('dialogue-area').innerHTML = `<div class="dialogue"><span class="speaker">${npc.portrait} ${npc.name}:</span> "We shall see what the future holds..."</div>`;
+            showLocationChoices();
+        }
+
+        function showLocationChoices() {
+            const loc = locations[gameState.currentLocation];
+            
+            let html = `<div class="location-map">`;
+            Object.keys(locations).forEach(locId => {
+                const l = locations[locId];
+                const isUnlocked = l.unlocked;
+                const isVisited = gameState.visitedLocations.includes(locId);
+                html += `<div class="location ${isUnlocked ? '' : 'locked'}" onclick="${isUnlocked ? `enterLocation('${locId}')` : ''}">
+                    <h3>${l.name}</h3>
+                    <p>${isUnlocked ? (isVisited ? 'Visited' : 'New Area') : 'Locked'}</p>
+                </div>`;
+            });
+            html += '</div>';
+            
+            html += '<h3 style="margin-top: 20px; color: #b8860b;">Actions</h3>';
+            html += '<div class="choices">';
+            html += `<button class="choice-btn" onclick="startMinigame('${loc.minigame}')">Learn: ${getMinigameName(loc.minigame)} (Costs 5 Pence)</button>`;
+            html += '<button class="choice-btn" onclick="checkEnding()">Discover Your Future</button>';
+            html += '<button class="choice-btn" onclick="saveGame()">Save Progress</button>';
+            html += '<button class="choice-btn" onclick="loadGame()">Load Game</button>';
+            html += '</div>';
+            
+            document.getElementById('game-area').innerHTML = html;
+            document.getElementById('choices-area').innerHTML = '';
+        }
+
+        function getMinigameName(game) {
+            const names = {
+                'vocabulary': 'Vocabulary Builder - Learn Dickens\' Words',
+                'riddle': 'Tennis Court Challenge - Play with Estella',
+                'education': 'Study Session - Master Latin and French',
+                'memory': 'Memory Match - Remember the Characters',
+                'dice': 'Dice Game - Fortune of the Gentleman',
+                'strength': 'Forge Work - Help Joe at the Anvil',
+                'stealth': 'Garden Discovery - Find Hidden Treasure'
+            };
+            return names[game] || 'Mini-Game';
+        }
+
+        function startMinigame(game) {
+            if (gameState.gold < 5) {
+                alert('Not enough money! You need at least 5 pence.');
+                return;
+            }
+            modifyGold(-5);
+            
+            showScreen('minigame-screen');
+            
+            switch(game) {
+                case 'vocabulary': startVocabGame(); break;
+                case 'riddle': startRiddleGame(); break;
+                case 'education': startEducationGame(); break;
+                case 'memory': startMemoryGame(); break;
+                case 'dice': startDiceGame(); break;
+                case 'strength': startStrengthGame(); break;
+                case 'stealth': startStealthGame(); break;
+            }
+        }
+
+        // Vocabulary Game
+        function startVocabGame() {
+            document.getElementById('minigame-title').textContent = "Learn Victorian Vocabulary";
+            
+            let html = '<p>Learn vocabulary from the novel! Match the words to their meanings.</p>';
+            html += `<div class="quiz-question">`;
+            html += `<p><strong>What does "${vocabWords[vocabIndex].word}" mean?</strong></p>`;
+            html += '<div class="quiz-options">';
+            
+            let options = [vocabWords[vocabIndex].definition];
+            while (options.length < 4) {
+                const def = vocabWords[Math.floor(Math.random() * vocabWords.length)].definition;
+                if (!options.includes(def)) options.push(def);
+            }
+            options.sort(() => Math.random() - 0.5);
+            
+            options.forEach(opt => {
+                html += `<button class="choice-btn" onclick="checkVocabAnswer('${opt}', '${vocabWords[vocabIndex].definition}')">${opt}</button>`;
+            });
+            
+            html += '</div></div>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function checkVocabAnswer(selected, correct) {
+            if (selected === correct) {
+                modifyStat('education', 1);
+                modifyStat('intelligence', 1);
+                alert('Correct! Your vocabulary improves.');
+            } else {
+                alert(`The answer was: "${correct}"`);
+            }
+            
+            vocabIndex = (vocabIndex + 1) % vocabWords.length;
+            showLocationChoices();
+            showScreen('game-screen');
+        }
+
+        // Education Game
+        function startEducationGame() {
+            document.getElementById('minigame-title').textContent = "Study as a Gentleman";
+            
+            let html = '<p>Your tutor sets you a challenge. Complete this Latin translation.</p>';
+            html += '<div class="writing-area">';
+            html += '<p class="writing-prompt">Translate: "Omnia mutantur, nihil interit"<br>(Everything changes, nothing perishes)</p>';
+            html += '<p>You write your translation in your exercise book...</p>';
+            html += '</div>';
+            html += '<div class="quiz-options">';
+            html += `<button class="choice-btn" onclick="checkEducation(true)">"Everything changes, nothing is lost." (Correct translation)</button>`;
+            html += `<button class="choice-btn" onclick="checkEducation(false)">"All men die, nothing remains."</button>`;
+            html += `<button class="choice-btn" onclick="checkEducation(false)">"Love changes everything."</button>`;
+            html += '</div>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function checkEducation(correct) {
+            if (correct) {
+                modifyStat('education', 2);
+                modifyStat('intelligence', 1);
+                modifyGold(10);
+                alert('Excellent! Your tutor is pleased with your progress.');
+            } else {
+                modifyStat('education', 1);
+                alert('Not quite right, but you learn from your mistakes.');
+            }
+            showLocationChoices();
+            showScreen('game-screen');
+        }
+
+        // Memory Game
+        let memoryCards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        const memorySymbols = ['👰', '💐', '⚖️', '🔨', '⚔️', '🏰', '💰', '📜'];
+
+        function startMemoryGame() {
+            document.getElementById('minigame-title').textContent = "Remember the Characters";
+            matchedPairs = 0;
+            flippedCards = [];
+            memoryCards = [...memorySymbols, ...memorySymbols].sort(() => Math.random() - 0.5);
+            
+            let html = '<p>Match the characters to test your memory!</p>';
+            html += '<div class="memory-grid" style="grid-template-columns: repeat(4, 1fr); max-width: 350px;">';
+            memoryCards.forEach((sym, idx) => {
+                html += `<div class="memory-card" id="mem-${idx}" onclick="flipCard(${idx})" style="aspect-ratio:1; font-size:24px;">?</div>`;
+            });
+            html += '</div>';
+            html += '<p id="memory-status">Matches: 0 / 8</p>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function flipCard(idx) {
+            if (flippedCards.length >= 2) return;
+            if (flippedCards.includes(idx)) return;
+            
+            const card = document.getElementById(`mem-${idx}`);
+            card.textContent = memoryCards[idx];
+            card.classList.add('flipped');
+            flippedCards.push(idx);
+            
+            if (flippedCards.length === 2) {
+                setTimeout(checkMemoryMatch, 800);
+            }
+        }
+
+        function checkMemoryMatch() {
+            const [idx1, idx2] = flippedCards;
+            
+            if (memoryCards[idx1] === memoryCards[idx2]) {
+                document.getElementById(`mem-${idx1}`).classList.add('matched');
+                document.getElementById(`mem-${idx2}`).classList.add('matched');
+                matchedPairs++;
+                document.getElementById('memory-status').textContent = `Matches: ${matchedPairs} / 8`;
+                
+                if (matchedPairs === 8) {
+                    setTimeout(() => {
+                        modifyStat('intelligence', 2);
+                        modifyStat('education', 1);
+                        modifyGold(15);
+                        alert('Excellent! You have a fine memory for faces.');
+                        showLocationChoices();
+                        showScreen('game-screen');
+                    }, 500);
+                }
+            } else {
+                document.getElementById(`mem-${idx1}`).textContent = '?';
+                document.getElementById(`mem-${idx2}`).textContent = '?';
+                document.getElementById(`mem-${idx1}`).classList.remove('flipped');
+                document.getElementById(`mem-${idx2}`).classList.remove('flipped');
+            }
+            flippedCards = [];
+        }
+
+        // Riddle Game
+        function startRiddleGame() {
+            document.getElementById('minigame-title').textContent = "Play with Estella";
+            
+            const riddles = [
+                { q: "I am always hungry and must always be fed. The finger I touch will soon turn red. What am I?", a: "fire", options: ["fire", "hunger", "sun", "heart"] },
+                { q: "The more you take, the more you leave behind. What am I?", a: "footsteps", options: ["memories", "footsteps", "time", "breath"] },
+                { q: "What has keys but no locks, space but no room?", a: "keyboard", options: ["book", "keyboard", "map", "window"] }
+            ];
+            
+            const riddle = riddles[Math.floor(Math.random() * riddles.length)];
+            
+            let html = `<p>Estella challenges you: "${riddle.q}"</p>`;
+            html += '<div class="quiz-options">';
+            riddle.options.forEach(opt => {
+                html += `<button class="choice-btn" onclick="answerRiddle('${opt}', '${riddle.a}')">${opt.charAt(0).toUpperCase() + opt.slice(1)}</button>`;
+            });
+            html += '</div>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function answerRiddle(answer, correct) {
+            if (answer === correct) {
+                modifyStat('intelligence', 1);
+                gameState.estellaAffection += 10;
+                alert('Estella nods approvingly: "Perhaps there is hope for you after all."');
+            } else {
+                gameState.estellaAffection -= 5;
+                alert('Estella laughs coldly: "You have much to learn."');
+            }
+            showLocationChoices();
+            showScreen('game-screen');
+        }
+
+        // Strength Game
+        function startStrengthGame() {
+            document.getElementById('minigame-title').textContent = "Work at the Forge";
+            
+            let html = '<p>Help Joe at the forge! Click rapidly to hammer the iron.</p>';
+            html += '<p>Hits: <span id="forge-hits">0</span> / 20</p>';
+            html += '<div style="width: 200px; height: 200px; background: linear-gradient(180deg, #4a4a4a, #8b4513); border-radius: 10px; margin: 20px auto; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="forgeHit()">';
+            html += '<span style="font-size: 60px;">🔨</span>';
+            html += '</div>';
+            html += '<button class="btn" onclick="finishForge()">Finish Work</button>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        let forgeHits = 0;
+        function forgeHit() {
+            forgeHits++;
+            document.getElementById('forge-hits').textContent = forgeHits;
+            if (forgeHits >= 20) {
+                modifyStat('intelligence', 1);
+                modifyGold(15);
+                alert('A good day\'s work!');
+                forgeHits = 0;
+                showLocationChoices();
+                showScreen('game-screen');
+            }
+        }
+
+        function finishForge() {
+            const reward = Math.floor(forgeHits / 4);
+            modifyGold(reward);
+            modifyStat('intelligence', 1);
+            alert(`You earned ${reward} pence.`);
+            forgeHits = 0;
+            showLocationChoices();
+            showScreen('game-screen');
+        }
+
+        // Stealth Game
+        function startStealthGame() {
+            document.getElementById('minigame-title').textContent = "Search the Garden";
+            
+            let html = '<p>Search carefully among the ruins. Something valuable might be hidden!</p>';
+            html += '<p>Items found: <span id="stealth-found">0</span> / 3</p>';
+            html += '<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 300px; margin: 20px auto;">';
+            
+            const items = ['leaves', 'leaves', 'stone', 'treasure', 'leaves', 'stone', 'leaves', 'stone'];
+            items.sort(() => Math.random() - 0.5);
+            
+            items.forEach((item, idx) => {
+                const icon = item === 'treasure' ? '📦' : item === 'stone' ? '🪨' : '🍂';
+                html += `<div onclick="searchSpot(this, '${item}')" style="aspect-ratio:1; background:#2a2a4a; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:30px;">❓</div>`;
+            });
+            html += '</div>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        let stealthFound = 0;
+        function searchSpot(el, item) {
+            if (el.style.background === 'rgb(184, 134, 11)') return;
+            
+            if (item === 'treasure') {
+                el.textContent = '💎';
+                el.style.background = '#b8860b';
+                stealthFound++;
+                document.getElementById('stealth-found').textContent = stealthFound;
+                
+                if (stealthFound >= 1) {
+                    setTimeout(() => {
+                        modifyStat('kindness', 2);
+                        modifyGold(50);
+                        alert('You found a hidden cache of valuables!');
+                        stealthFound = 0;
+                        showLocationChoices();
+                        showScreen('game-screen');
+                    }, 500);
+                }
+            } else {
+                el.textContent = item === 'stone' ? '🪨' : '🍂';
+                el.style.background = '#444';
+            }
+        }
+
+        // Dice Game
+        function startDiceGame() {
+            document.getElementById('minigame-title').textContent = "A Gentleman's Dice";
+            
+            let html = '<p>Test your luck with the other gentlemen!</p>';
+            html += '<div class="dice-container">';
+            html += '<div class="dice" id="dice1">?</div>';
+            html += '<div class="dice" id="dice2">?</div>';
+            html += '</div>';
+            html += '<p>Roll 7 or 11 to win! Win: 2x bet | Lose: lose bet</p>';
+            html += '<button class="btn" onclick="rollDice()">Roll Dice (Bet 5 Pence)</button>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function rollDice() {
+            if (gameState.gold < 5) {
+                alert('Not enough money!');
+                return;
+            }
+            modifyGold(-5);
+            
+            const d1 = Math.floor(Math.random() * 6) + 1;
+            const d2 = Math.floor(Math.random() * 6) + 1;
+            
+            document.getElementById('dice1').textContent = d1;
+            document.getElementById('dice2').textContent = d2;
+            
+            setTimeout(() => {
+                const total = d1 + d2;
+                if (total === 7 || total === 11) {
+                    modifyGold(15);
+                    alert(`You rolled ${total}! You win 15 pence!`);
+                } else if (total === 2 || total === 12) {
+                    alert(`You rolled ${total}. Snake eyes! You lose.`);
+                } else {
+                    modifyGold(5);
+                    alert(`You rolled ${total}. Push - your bet is returned.`);
+                }
+                showLocationChoices();
+                showScreen('game-screen');
+            }, 1000);
+        }
+
+        function exitMinigame() {
+            showLocationChoices();
+            showScreen('game-screen');
+        }
+
+        function checkEnding() {
+            gameState.storyProgress = 100;
+            
+            let endingTitle = '';
+            let endingContent = '';
+            
+            if (gameState.estellaAffection >= 60 && gameState.stats.kindness >= 10) {
+                endingTitle = 'A Hopeful Heart';
+                endingContent = `
+                    <p>Years pass. Miss Havisham passes away, leaving Satis House to Estella. But something has changed in Estella - your kindness has touched her heart.</p>
+                    <p style="margin-top: 20px;">"I have been bent and broken, but I hope - into a better shape," Estella tells you.</p>
+                    <p style="margin-top: 20px; color: #b8860b;">"I would not wander with it (the past). I would not have it rose up out of the marshes and come swimming towards me..."</p>
+                    <p style="margin-top: 20px;"><strong>Estella Affection:</strong> ${gameState.estellaAffection} | <strong>Kindness:</strong> ${gameState.stats.kindness}</p>
+                `;
+            } else if (gameState.stats.kindness >= 12 && gameState.stats.empathy >= 10) {
+                endingTitle = 'True Wealth';
+                endingContent = `
+                    <p>You return to the marshes not as a poor boy, but as a man of good character. Joe welcomes you home, and together you rebuild what matters most.</p>
+                    <p style="margin-top: 20px; color: #b8860b;">"I am the same Pip I once was, and I have learned that the most valuable treasure is the love of those who remain true to us."</p>
+                    <p style="margin-top: 20px;"><strong>Kindness:</strong> ${gameState.stats.kindness} | <strong>Empathy:</strong> ${gameState.stats.empathy}</p>
+                `;
+            } else if (gameState.discoveredBenefactor && gameState.stats.intelligence >= 12) {
+                endingTitle = 'The Full Truth';
+                endingContent = `
+                    <p>You discover that Magwitch, the convict, was your true benefactor all along. Miss Havisham was only a pawn in his grand design.</p>
+                    <p style="margin-top: 20px;">Though your "expectations" came from unexpected sources, you have become a gentleman in more than name.</p>
+                    <p style="margin-top: 20px;"><strong>Intelligence:</strong> ${gameState.stats.intelligence} | <strong>Discovered Benefactor:</strong> ${gameState.discoveredBenefactor ? 'Yes' : 'No'}</p>
+                `;
+            } else if (gameState.stats.education >= 12) {
+                endingTitle = 'The Scholar';
+                endingContent = `
+                    <p>You pursue knowledge above all else. Your education opens doors you never imagined.</p>
+                    <p style="margin-top: 20px;">You become a respected member of society, your wit and learning admired by all.</p>
+                    <p style="margin-top: 20px;"><strong>Education:</strong> ${gameState.stats.education}</p>
+                `;
+            } else {
+                endingTitle = 'A Changed Man';
+                endingContent = `
+                    <p>The "great expectations" have come and gone. The fortune faded, the lady remained cold, and the truth of your benefactor brought no comfort.</p>
+                    <p style="margin-top: 20px;">But you have learned something valuable: who you are matters more than what you have.</p>
+                    <p style="margin-top: 20px; color: #888;">"In a word, I was too cowardly to do what I knew to be right."</p>
+                    <p style="margin-top: 20px;"><strong>Final Stats:</strong> Education ${gameState.stats.education} | Kindness ${gameState.stats.kindness} | Empathy ${gameState.stats.empathy} | Intelligence ${gameState.stats.intelligence} | Confidence ${gameState.stats.confidence}</p>
+                `;
+            }
+            
+            document.getElementById('ending-title').textContent = endingTitle;
+            document.getElementById('ending-content').innerHTML = endingContent;
+            showScreen('ending-screen');
+        }
+
+        function saveGame() {
+            localStorage.setItem('greatExpectationsSave', JSON.stringify(gameState));
+            alert('Game saved!');
+        }
+
+        function loadGame() {
+            const saved = localStorage.getItem('greatExpectationsSave');
+            if (saved) {
+                gameState = JSON.parse(saved);
+                updateStats();
+                updateInventory();
+                showScreen('game-screen');
+                enterLocation(gameState.currentLocation);
+            } else {
+                alert('No saved game found!');
+            }
+        }
+
+        function restartGame() {
+            gameState = {
+                character: null,
+                stats: { education: 5, kindness: 5, empathy: 5, intelligence: 5, confidence: 5 },
+                gold: 10,
+                inventory: [],
+                currentLocation: 'marshes',
+                visitedLocations: ['marshes'],
+                storyProgress: 0,
+                choices: [],
+                estellaAffection: 30,
+                missHavishamTrust: 0,
+                pipWealth: 0,
+                discoveredBenefactor: false
+            };
+            
+            Object.keys(locations).forEach(k => {
+                if (k !== 'marshes') locations[k].unlocked = false;
+            });
+            locations['smithy'].unlocked = true;
+            locations['satis-house'].unlocked = true;
+            vocabIndex = 0;
+            
+            showScreen('start-screen');
+        }
+    </script>
+</body>
+</html>

@@ -484,27 +484,62 @@
         .highlight-box {
             background: linear-gradient(135deg, var(--earth-dark), var(--earth-brown));
             color: var(--earth-cream);
-            padding: 2rem;
-            border-radius: 15px;
-            margin-top: 3rem;
+            padding: 1.5rem 2rem;
+            border-radius: 16px;
+            margin: 2.5rem auto 0;
+            max-width: 900px;
             display: flex;
             align-items: center;
-            gap: 2rem;
+            gap: 1.5rem;
             flex-wrap: wrap;
+            border-left: 5px solid var(--accent-rust);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
         }
 
         .highlight-box .icon {
-            font-size: 3rem;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--accent-rust), var(--accent-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .highlight-box h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
+            font-size: 1.35rem;
+            margin-bottom: 0.4rem;
+            line-height: 1.3;
+        }
+
+        .highlight-box .hook-badge {
+            display: inline-block;
+            background: var(--accent-rust);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0.25rem 0.6rem;
+            border-radius: 50px;
             margin-bottom: 0.5rem;
         }
 
         .highlight-box p {
             opacity: 0.9;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .highlight-box .resource-links {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .highlight-box .resource-btn {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
         }
 
         /* Games Section */
@@ -1918,14 +1953,14 @@
         <div class="ai-grid">
             <div class="ai-card">
                 <div class="ai-card-icon">🎮</div>
-                <h3>Educational Games</h3>
-                <p>Interactive literature games. Step into Of Mice and Men as George Milton — make choices, manage resources, and experience Steinbeck's world.</p>
+                <h3>Educational Games <span style="background: var(--accent-rust); color: white; padding: 0.2rem 0.5rem; border-radius: 50px; font-size: 0.7rem; margin-left: 0.5rem;">23 Games</span></h3>
+                <p>Interactive literature games. Step into classic novels as the protagonist — make choices, manage resources, and experience the story. From <em>Of Mice and Men</em> to <em>The Jungle Book</em>.</p>
                 <a href="/all-games/" style="display: inline-block; margin-top: 15px; color: var(--earth-gold); font-weight: 500;">View All Games →</a>
             </div>
             <div class="ai-card" style="border: 2px solid var(--earth-gold); background: linear-gradient(135deg, var(--earth-light), var(--earth-cream));">
                 <div class="ai-card-icon">📚</div>
-                <h3>EAL Literature Sets <span style="background: var(--accent-rust); color: white; padding: 0.2rem 0.5rem; border-radius: 50px; font-size: 0.7rem; margin-left: 0.5rem;">New</span></h3>
-                <p>8 complete book sets for Grade 6 EAL learners. 12-lesson readers with vocab, activities, and teacher answer keys. Free downloads.</p>
+                <h3>EAL Literature Sets <span style="background: var(--accent-rust); color: white; padding: 0.2rem 0.5rem; border-radius: 50px; font-size: 0.7rem; margin-left: 0.5rem;">8 Books</span></h3>
+                <p>Complete book sets for Grade 6 EAL learners. 12-lesson readers with vocab, activities, and teacher answer keys. Each book has a matching browser game. Free downloads.</p>
                 <a href="/ai-for-school/#literature" style="display: inline-block; margin-top: 15px; color: var(--earth-gold); font-weight: 500;">Download Books →</a>
             </div>
             <div class="ai-card">
@@ -1936,10 +1971,11 @@
             </div>
         </div>
         <div class="highlight-box">
-            <div class="icon">📊</div>
+            <div class="icon">🎯</div>
             <div>
-                <h3>AI in the Classroom: 2-Hour PD Workshop</h3>
-                <p>A comprehensive professional development workshop for teachers. From AI fundamentals to practical lesson planning, with 6 ready-to-use tools, handouts, and downloadable materials for your own sessions.</p>
+                <span class="hook-badge">Free PD Ready to Use</span>
+                <h3>Your Teachers Are Overwhelmed by AI. This Fixes It in 2 Hours.</h3>
+                <p>A complete professional development workshop — from AI basics to hands-on lesson planning. Includes 6 ready-to-use tools, printable handouts, and full PowerPoint so you can run it yourself or hand it to your PD coordinator.</p>
                 <div class="resource-links">
                     <a href="ai-classroom-workshop/" class="resource-btn primary">Start Workshop →</a>
                     <a href="ai-classroom-workshop/materials/AI-Classroom-Workshop.pptx" class="resource-btn secondary" download>📥 Download PPT</a>

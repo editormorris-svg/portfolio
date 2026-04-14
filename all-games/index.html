@@ -103,7 +103,7 @@
 
         <div class="stats-bar">
             <div class="stat-item">
-                <div class="stat-number">23</div>
+                <div class="stat-number">22</div>
                 <div class="stat-label">Total Games</div>
             </div>
             <div class="stat-item">
@@ -316,31 +316,49 @@
             </div>
         </div>
 
-        <!-- Kimi Collection -->
+        <!-- Design Your Own -->
         <div class="collection-section">
-            <div class="collection-header kimi">
-                <h2>🌙 Kimi Game Collection</h2>
-                <p>Interactive experiences crafted with Kimi 2.5</p>
+            <div class="collection-header" style="border-left-color: #10b981;">
+                <h2>🛠️ How These Games Are Made</h2>
+                <p>Every game on this page pairs with an EAL Literature Set — same characters, same themes, different medium</p>
             </div>
-            <div class="games-grid">
-                <div class="game-card kimi-card">
-                    <div class="game-icon">🎯</div>
-                    <h3 class="game-title">Story Engine</h3>
-                    <p class="game-desc">A flexible framework for creating branching narratives. Coming soon!</p>
-                    <span style="color: #666; font-size: 0.9em;">In Development</span>
-                </div>
-                <div class="game-card kimi-card">
-                    <div class="game-icon">🧩</div>
-                    <h3 class="game-title">Logic Puzzles</h3>
-                    <p class="game-desc">Brain-teasing puzzles for critical thinking. Coming soon!</p>
-                    <span style="color: #666; font-size: 0.9em;">In Development</span>
-                </div>
-                <div class="game-card kimi-card">
-                    <div class="game-icon">🌍</div>
-                    <h3 class="game-title">Cultural Explorer</h3>
-                    <p class="game-desc">Journey through cultures and history. Coming soon!</p>
-                    <span style="color: #666; font-size: 0.9em;">In Development</span>
-                </div>
+            <div style="background: rgba(255,255,255,0.03); border-radius: 15px; padding: 25px 30px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 30px;">
+                <p style="color: #ccc; line-height: 1.7; margin-bottom: 15px;">
+                    These aren't generic quizzes. Each game is built from the same source material as its <a href="/ai-for-school/#literature" style="color: #e94560;">EAL Literature Set</a> — same plot, same characters, same vocabulary targets. Students read the 12-lesson adapted reader, then step into the story as the protagonist. The result is full immersion: they make choices, manage resources, and experience the narrative firsthand.
+                </p>
+                <p style="color: #aaa; font-size: 0.95em;">
+                    Want to create your own? Use the prompt structure below. It works with any AI that can generate HTML — MiniMax, Kimi, Claude, Gemini, whatever you have access to.
+                </p>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.2); border-radius: 15px; padding: 25px 30px; border-left: 4px solid #10b981;">
+                <h3 style="color: #fff; margin-bottom: 15px; font-size: 1.2em;">📋 The Prompt Template</h3>
+                <pre style="background: #0f0f1a; padding: 20px; border-radius: 10px; overflow-x: auto; color: #a8a8b3; font-size: 0.9em; line-height: 1.6; white-space: pre-wrap;">I want to design a simple interactive game for students to play in a browser. It is based on the novel "[BOOK TITLE]". Total game time should be 30 mins — 1 hour.
+
+The game should include all or most major characters, the core theme and plot, plus notable quotes and events. Use simple English appropriate for Grade 6 EAL learners. Include fun elements and free choice options for players.
+
+Game mechanics:
+- Character creation: player enters an English name and chooses an icon/token from 12 options resembling characters from the story.
+- Five attributes (customize to fit the story): e.g. Power, Speed, Health, Intelligence, Beauty — or alternatives like Luck, Empathy, Courage, Wisdom, Charms.
+- Players get 5 attribute points to allocate. Each point gives +1 to a base attribute score of 5.
+- Dice-roll (d6) + attribute modifier vs Challenge Rating (CR) determines outcomes. Example: Power 7 + dice roll vs CR 8.
+- A visual map with key locations from the novel. Each location has a mini-game (trivia, memory, rhythm, maze, etc.) tied to the story.
+- Players can visit 5 locations per day (game time), each only once per day.
+- Earn money/tokens from mini-games. Buy items that affect story outcomes.
+- Goal: alter the plot or fate of characters through choices.
+- Include Act/Scene references where iconic.
+- Multiple endings based on player decisions.
+- Single HTML file output. Mobile-friendly if possible.</pre>
+
+                <h3 style="color: #fff; margin: 25px 0 15px; font-size: 1.2em;">💡 Tips for Better Games</h3>
+                <ul style="color: #aaa; line-height: 1.8; padding-left: 20px;">
+                    <li><strong>Match the attribute names to the story.</strong> For <em>Beauty and the Beast</em>, use Kindness and Empathy. For <em>The Black Arrow</em>, use Swordsmanship and Archery.</li>
+                    <li><strong>Mini-games should feel like the book.</strong> A memory puzzle for enchanted objects in <em>Beauty and the Beast</em>. A stealth game for avoiding Shere Khan in <em>The Jungle Book</em>.</li>
+                    <li><strong>Let players change the ending.</strong> The most engaging mechanic is agency — can they save a character? Prevent a tragedy? Find a hidden path?</li>
+                    <li><strong>Keep vocabulary aligned.</strong> Reuse the 60 target words from the literature set inside dialogue and item descriptions.</li>
+                    <li><strong>One HTML file = zero deployment headache.</strong> Every game here is a single file. Host on GitHub Pages, MiniMax server, or any static host.</li>
+                    <li><strong>Test playtime honestly.</strong> A 30-minute target usually means 3–5 in-game "days," each with 5 mini-games. Don't overstuff.</li>
+                </ul>
             </div>
         </div>
 

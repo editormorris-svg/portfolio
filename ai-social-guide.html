@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Creator Guide | 0604.ai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --earth-dark: #2C1810;
+            --earth-brown: #4A2C17;
+            --earth-warm: #6B4423;
+            --earth-gold: #B8860B;
+            --earth-sand: #D4A574;
+            --earth-cream: #F5E6D3;
+            --earth-light: #FAF6F0;
+            --accent-rust: #C75B39;
+            --accent-sage: #6B8E6B;
+            --accent-teal: #2D5A5A;
+            --text-dark: #2C1810;
+            --text-light: #F5E6D3;
+            --shadow: rgba(44, 24, 16, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--earth-light);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(44, 24, 16, 0.95), rgba(44, 24, 16, 0.85));
+            backdrop-filter: blur(10px);
+            padding: 0.8rem 2rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--earth-cream);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--earth-sand);
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--earth-cream);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--earth-dark) 0%, var(--earth-brown) 50%, var(--accent-teal) 100%);
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            color: var(--earth-cream);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: var(--accent-rust);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--earth-dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--earth-gold);
+        }
+
+        .scenario-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px var(--shadow);
+            border-left: 4px solid var(--earth-gold);
+        }
+
+        .scenario-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .scenario-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--earth-gold), var(--accent-rust));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .scenario-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--earth-dark);
+        }
+
+        .scenario-tag {
+            display: inline-block;
+            background: var(--earth-light);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            color: var(--earth-warm);
+            margin-left: auto;
+        }
+
+        .scenario-card h4 {
+            color: var(--earth-dark);
+            margin: 1.5rem 0 0.8rem;
+            font-size: 1.1rem;
+        }
+
+        .scenario-card p {
+            color: var(--earth-warm);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .tool-card {
+            background: var(--earth-light);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--earth-sand);
+        }
+
+        .tool-card h5 {
+            color: var(--earth-dark);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tool-card p {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-tag {
+            display: inline-block;
+            background: var(--accent-sage);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+        }
+
+        .tool-tag.paid {
+            background: var(--accent-rust);
+        }
+
+        .tool-tag.free {
+            background: var(--accent-sage);
+        }
+
+        .tool-tag.freemium {
+            background: var(--earth-gold);
+            color: var(--earth-dark);
+        }
+
+        /* Case Study Section */
+        .case-study {
+            background: linear-gradient(135deg, var(--earth-dark), var(--earth-brown));
+            color: var(--earth-cream);
+            padding: 3rem;
+            border-radius: 20px;
+            margin: 4rem 0;
+        }
+
+        .case-study-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .case-study-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--earth-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .case-study h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+        }
+
+        .case-study h3 {
+            color: var(--earth-gold);
+            margin: 1.5rem 0 1rem;
+            font-size: 1.2rem;
+        }
+
+        .case-study p {
+            opacity: 0.9;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .timeline {
+            margin: 2rem 0;
+            padding-left: 1.5rem;
+            border-left: 2px solid var(--earth-gold);
+        }
+
+        .timeline-item {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.8rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--earth-gold);
+            border-radius: 50%;
+        }
+
+        .timeline-date {
+            color: var(--earth-gold);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Quick Start Guide */
+        .quick-start {
+            background: var(--earth-cream);
+            padding: 3rem;
+            border-radius: 20px;
+            margin: 4rem 0;
+        }
+
+        .quick-start h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--earth-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .step-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .step-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px var(--shadow);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--earth-gold);
+            color: var(--earth-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+        }
+
+        .step-card h4 {
+            color: var(--earth-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-card p {
+            font-size: 0.9rem;
+            color: var(--earth-warm);
+        }
+
+        /* Resources Section */
+        .resources {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            margin: 4rem 0;
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .resources h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--earth-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .resource-list {
+            list-style: none;
+        }
+
+        .resource-list li {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--earth-sand);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .resource-list li:last-child {
+            border-bottom: none;
+        }
+
+        .resource-icon {
+            font-size: 1.5rem;
+        }
+
+        .resource-content h4 {
+            color: var(--earth-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .resource-content p {
+            font-size: 0.9rem;
+            color: var(--earth-warm);
+        }
+
+        .resource-link {
+            margin-left: auto;
+            color: var(--earth-gold);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--earth-dark);
+            color: var(--earth-cream);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-quote {
+            font-style: italic;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--earth-sand);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--earth-cream);
+        }
+
+        .version-note {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            .case-study,
+            .quick-start,
+            .resources {
+                padding: 2rem;
+            }
+
+            .scenario-header {
+                flex-wrap: wrap;
+            }
+
+            .scenario-tag {
+                margin-left: 0;
+                margin-top: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">0604.ai</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#youtube">YouTube</a></li>
+                <li><a href="index.html#ai">AI for School</a></li>
+                <li><a href="ai-social-guide.html">Creator Guide</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">Version 1.0</div>
+        <h1>The AI Creator's Playbook</h1>
+        <p class="hero-subtitle">
+            A practical guide to building your AI-powered social presence — from first post to full automation. 
+            Based on real research, real tools, and my own journey launching 0604.ai.
+        </p>
+        <div class="version-badge">📅 Last Updated: April 16, 2026 | 🔄 Follow Our Journey</div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+
+        <!-- Introduction -->
+        <section class="section">
+            <h2 class="section-title">Who This Guide Is For</h2>
+            <p style="color: var(--earth-warm); line-height: 1.8; margin-bottom: 1.5rem;">
+                This isn't theory. It's a living document of what actually works in 2026 — tools I've tested, workflows I've built, and mistakes I've made so you don't have to. Whether you're starting from zero or scaling an existing presence, there's something here for you.
+            </p>
+            <p style="color: var(--earth-warm); line-height: 1.8;">
+                <strong>How to use this guide:</strong> Skip to the scenario that matches where you are right now. Each section includes specific tools, realistic timelines, and budget considerations. The case study at the end shows how these pieces fit together in practice.
+            </p>
+        </section>
+
+        <!-- Scenario 1: The Absolute Beginner -->
+        <div class="scenario-card">
+            <div class="scenario-header">
+                <div class="scenario-icon">🌱</div>
+                <div>
+                    <h3 class="scenario-title">Scenario 1: Starting From Zero</h3>
+                    <p style="color: var(--earth-warm); font-size: 0.9rem;">You have ideas but no content, no following, and no idea where to start</p>
+                </div>
+                <span class="scenario-tag">Budget: $0-50/month</span>
+            </div>
+
+            <h4>Your First 30 Days</h4>
+            <p>Don't build a brand yet. Build a habit. The goal is one piece of content per day — any format, any quality. You're learning what feels sustainable.</p>
+
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <h5>📝 ChatGPT / Claude</h5>
+                    <p>Ideation, scripting, and caption writing. Treat it as a brainstorming partner, not a ghostwriter.</p>
+                    <span class="tool-tag freemium">Freemium</span>
+                </div>
+                <div class="tool-card">
+                    <h5>🎨 Canva</h5>
+                    <p>Graphics, thumbnails, and basic video editing. The free tier is generous for beginners.</p>
+                    <span class="tool-tag free">Free</span>
+                </div>
+                <div class="tool-card">
+                    <h5>📱 CapCut</h5>
+                    <p>Mobile video editing with AI features. Perfect for TikTok/Reels/Shorts.</p>
+                    <span class="tool-tag free">Free</span>
+                </div>
+                <div class="tool-card">
+                    <h5>📊 Notion</h5>
+                    <p>Content calendar, idea bank, and progress tracking. Start organized.</p>
+                    <span class="tool-tag free">Free</span>
+                </div>
+            </div>
+
+            <h4>Specific Use Case: The "Vlog in a Day" Workflow</h4>
+            <p>
+                <strong>Morning (30 min):</strong> Record 3-5 short clips on your phone — morning routine, a thought, something you made/eat/saw.<br><br>
+                <strong>Midday (20 min):</strong> Use CapCut's AI to auto-generate captions and suggest cuts. Don't over-edit.<br><br>
+                <strong>Evening (15 min):</strong> Write a caption in your voice (use AI to polish, not replace). Post and engage for 10 minutes.<br><br>
+                <strong>Weekend (1 hour):</strong> Review what performed best. Double down on that format next week.
+            </p>
+        </div>
+
+        <!-- Scenario 2: The Consistent Creator -->
+        <div class="scenario-card">
+            <div class="scenario-header">
+                <div class="scenario-icon">📈</div>
+                <div>
+                    <h3 class="scenario-title">Scenario 2: Ready to Scale</h3>
+                    <p style="color: var(--earth-warm); font-size: 0.9rem;">You're posting regularly but growth has plateaued. Time to work smarter.</p>
+                </div>
+                <span class="scenario-tag">Budget: $50-200/month</span>
+            </div>
+
+            <h4>The Scaling Stack</h4>
+            <p>At this stage, your time is more valuable than saving $20. Invest in tools that automate the repetitive work so you can focus on what only you can do — your unique perspective and voice.</p>
+
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <h5>🎙️ ElevenLabs</h5>
+                    <p>AI voice cloning for consistent audio. Great for voiceovers without recording setup.</p>
+                    <span class="tool-tag paid">$5-22/month</span>
+                </div>
+                <div class="tool-card">
+                    <h5>🖼️ Midjourney / Flux</h5>
+                    <p>Custom visuals, thumbnails, and brand assets that don't look stock.</p>
+                    <span class="tool-tag paid">$10-30/month</span>
+                </div>
+                <div class="tool-card">
+                    <h5>📅 Buffer / Later</h5>
+                    <p>Cross-platform scheduling with optimal timing suggestions.</p>
+                    <span class="tool-tag freemium">$15-25/month</span>
+                </div>
+                <div class="tool-card">
+                    <h5>📈 VidIQ / TubeBuddy</h5>
+                    <p>YouTube SEO, trend alerts, and competitor analysis.</p>
+                    <span class="tool-tag freemium">$7.50-49/month</span>
+                </div>
+            </div>
+
+            <h4>Specific Use Case: The Content Multiplier</h4>
+            <p>
+                <strong>Start with one long-form piece</strong> (YouTube video, podcast, blog post).<br><br>
+                <strong>AI extraction:</strong> Use ChatGPT/Claude to pull 5-10 key quotes/insights.<br><br>
+                <strong>Format conversion:</strong> Transform each into: Short vertical clip, carousel graphic, text post, quote image.<br><br>
+                <strong>Scheduling:</strong> Space these across the week using Buffer. Your one hour of creation becomes a week of content.<br><br>
+                <strong>Voice consistency:</strong> If using AI voice for some content, record a "signature" intro/outro in your real voice to maintain authenticity.
+            </p>
+        </div>
+
+        <!-- Scenario 3: The Multi-Platform Operator -->
+        <div class="scenario-card">
+            <div class="scenario-header">
+                <div class="scenario-icon">🚀</div>
+                <div>
+                    <h3 class="scenario-title">Scenario 3: Managing Multiple Platforms</h3>
+                    <p style="color: var(--earth-warm); font-size: 0.9rem;">You're on 3+ platforms and drowning in the complexity. Time to systematize.</p>
+                </div>
+                <span class="scenario-tag">Budget: $200-500/month</span>
+            </div>
+
+            <h4>The Automation Layer</h4>
+            <p>You need systems, not just tools. The goal is to reduce decision fatigue and maintain quality across every touchpoint.</p>
+
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <h5>⚡ Make / Zapier</h5>
+                    <p>Workflow automation. Auto-post from RSS, cross-post between platforms, trigger actions.</p>
+                    <span class="tool-tag freemium">$9-19/month</span>
+                </div>
+                <div class="tool-card">
+                    <h5>🤖 OpenClaw / n8n</h5>
+                    <p>Self-hosted AI agents for complex automation. Requires technical setup but unlimited potential.</p>
+                    <span class="tool-tag free">Free (self-hosted)</span>
+                </div>
+                <div class="tool-card">
+                    <h5>🎬 Descript</h5>
+                    <p>Edit video by editing text. Auto-remove filler words. AI voices for corrections.</p>
+                    <span class="tool-tag paid">$12-24/month</span>
+                </div>
+                <div class="tool-card">
+                    <h5>📊 Metricool</h5>
+                    <p>Unified analytics across all platforms. Best-in-class reporting.</p>
+                    <span class="tool-tag freemium">$22/month</span>
+                </div>
+            </div>
+
+            <h4>Specific Use Case: The Autopilot System</h4>
+            <p>
+                <strong>Content Repository:</strong> Everything lives in Notion/Airtable with status tags (Idea → Draft → Scheduled → Published).<br><br>
+                <strong>Creation Sprints:</strong> Batch-create 2 weeks of content in one focused session.<br><br>
+                <strong>Automated Distribution:</strong> New YouTube video → auto-generate clips with Opus/Descript → auto-post to Shorts/Reels/TikTok via Make/Zapier.<br><br>
+                <strong>Engagement Windows:</strong> Schedule 30-minute blocks for genuine interaction. Don't try to be "always on."<br><br>
+                <strong>Analytics Review:</strong> Weekly automated report showing what's working. Adjust next batch accordingly.
+            </p>
+        </div>
+
+        <!-- Scenario 4: The Team Builder -->
+        <div class="scenario-card">
+            <div class="scenario-header">
+                <div class="scenario-icon">👥</div>
+                <div>
+                    <h3 class="scenario-title">Scenario 4: Building a Team</h3>
+                    <p style="color: var(--earth-warm); font-size: 0.9rem;">You're hiring editors, VAs, or co-creators. Time to build SOPs.</p>
+                </div>
+                <span class="scenario-tag">Budget: $500+/month</span>
+            </div>
+
+            <h4>The Human + AI Hybrid</h4>
+            <p>At this level, AI becomes the coordination layer between human team members. The goal is clarity, not replacement.</p>
+
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <h5>📋 Notion / ClickUp</h5>
+                    <p>Team workspace with AI features for drafting SOPs and project management.</p>
+                    <span class="tool-tag freemium">$8-19/user/month</span>
+                </div>
+                <div class="tool-card">
+                    <h5>🎥 Frame.io</h5>
+                    <p>Video collaboration with AI transcription and version control.</p>
+                    <span class="tool-tag paid">$15-50/month</span>
+                </div>
+                <div class="tool-card">
+                    <h5>📝 Grammarly Business</h5>
+                    <p>Brand voice consistency across all written content.</p>
+                    <span class="tool-tag paid">$15/user/month</span>
+                </div>
+                <div class="tool-card">
+                    <h5>🤝 Slack + AI Summaries</h5>
+                    <p>Team communication with AI-generated recaps of missed conversations.</p>
+                    <span class="tool-tag paid">$7.25/user/month</span>
+                </div>
+            </div>
+
+            <h4>Specific Use Case: The Production Pipeline</h4>
+            <p>
+                <strong>Ideation (You):</strong> Record voice memo or rough outline.<br><br>
+                <strong>Research (VA + AI):</strong> VA uses AI tools to gather data, examples, and competitor content.<br><br>
+                <strong>Script (You + AI):</strong> You dictate key points; AI drafts full script; you refine.<br><br>
+                <strong>Production (Editor):</strong> Editor uses AI-assisted tools (Descript, Runway) for efficient editing.<br><br>
+                <strong>Distribution (VA):</strong> VA schedules across platforms using your templates.<br><br>
+                <strong>Analytics (AI):</strong> Weekly AI-generated performance report with recommendations.
+            </p>
+        </div>
+
+        <!-- Case Study: My Journey -->
+        <section class="case-study">
+            <div class="case-study-header">
+                <div class="case-study-icon">🎯</div>
+                <h2>Case Study: The 0604.ai Launch</h2>
+            </div>
+
+            <p>
+                This section documents my actual journey — what's worked, what hasn't, and where I'm headed. Consider it a real-time case study you can follow along with.
+            </p>
+
+            <h3>The Starting Point (March 2026)</h3>
+            <p>
+                After 25 years as an international teacher across Myanmar, Thailand, Hong Kong, China, and the UK, I decided to build something of my own. Not just a YouTube channel — a platform. The 0604.ai identity represents everything I am: teacher, son, father, friend, creator, AI enthusiast, musician, gamer, traveler, cook, film buff. The algorithm hates multifaceted creators, but I refuse to be boxed in.
+            </p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">March 27, 2026 — Day 0</div>
+                    <p>Registered 0604.ai domain. Recorded "Birth of the Channel" video — the moment of taking the leap. Uploaded first two videos to YouTube. Zero subscribers, zero expectations.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Week 1-2 — Foundation</div>
+                    <p>Set up basic website on GitHub Pages. Created consistent visual identity (earth tones, Playfair Display + Inter fonts). Established posting schedule: 2 videos per week minimum. Focus on authentic documentation over polished production.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Week 3-4 — Systems</div>
+                    <p>Built content calendar in Notion. Set up CapCut templates for consistent thumbnails. Started using AI for: title brainstorming, description writing, and identifying content gaps. Realized my edge is the intersection of teacher wisdom + tech knowledge + personal transformation.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Month 2 — Expansion</div>
+                    <p>Launched merchandise (philosophy-themed tees). Integrated shop into website. Created educational resources section (AI for School) to give back to the teaching community. Started email list for direct connection outside algorithms.</p>
+                </div>
+            </div>
+
+            <h3>Current Stack & Costs</h3>
+            <p>
+                <strong>Video:</strong> Sony ZV-E10 + A6700 (owned), CapCut (free), DaVinci Resolve (free)<br>
+                <strong>Audio:</strong> DJI Mic 3 (owned), Audacity (free)<br>
+                <strong>Graphics:</strong> Canva Pro ($12.99/month), Midjourney ($10/month)<br>
+                <strong>Website:</strong> GitHub Pages (free), domain ($12/year)<br>
+                <strong>AI Assistants:</strong> Kimi Claw subscription ($20/month), ChatGPT Plus ($20/month)<br>
+                <strong>Scheduling:</strong> Manual posting (will upgrade to Buffer when volume justifies)<br>
+                <strong>Analytics:</strong> YouTube Studio (free), VidIQ free tier<br><br>
+                <strong>Total Monthly:</strong> ~$63
+            </p>
+
+            <h3>What's Next (Version 2.0 Preview)</h3>
+            <p>
+                • Automation layer: n8n for cross-platform distribution<br>
+                • Newsletter: Weekly deep-dives via Substack<br>
+                • Courses: Structured AI-for-teachers content<br>
+                • Community: Discord for direct creator connections<br>
+                • Monetization: Beyond merch — consulting for schools on AI integration
+            </p>
+
+            <p style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.2);">
+                <em>Follow this journey at 0604.ai or subscribe to the YouTube channel. I'll update this case study monthly with real numbers, real failures, and real wins.</em>
+            </p>
+        </section>
+
+        <!-- Quick Start -->
+        <section class="quick-start">
+            <h2>🚀 Quick Start: Your First Week</h2>
+            <p>Don't wait until you have the perfect plan. Start messy, start now. Here's your literal first week:</p>
+
+            <div class="step-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h4>Day 1: Choose Your Platform</h4>
+                    <p>Where does your audience hang out? YouTube for long-form, TikTok for discovery, LinkedIn for professional, Instagram for visual.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h4>Day 2: Set Up Your Stack</h4>
+                    <p>Free tier of Canva + ChatGPT. That's literally it. Don't overthink tools.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h4>Day 3: Create Your First Piece</h4>
+                    <p>Bad content posted beats perfect content in your drafts. Ship something.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h4>Days 4-7: Build the Habit</h4>
+                    <p>One piece per day. Any format. Quality comes from quantity.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources -->
+        <section class="resources">
+            <h2>📚 Extended Resources</h2>
+            <p style="color: var(--earth-warm); margin-bottom: 2rem;">Tools, templates, and further reading organized by category.</p>
+
+            <ul class="resource-list">
+                <li>
+                    <span class="resource-icon">🎓</span>
+                    <div class="resource-content">
+                        <h4>AI for School</h4>
+                        <p>Educational games, literature sets, and teaching resources I create</p>
+                    </div>
+                    <a href="/ai-for-school/" class="resource-link">Visit →</a>
+                </li>
+                <li>
+                    <span class="resource-icon">🎬</span>
+                    <div class="resource-content">
+                        <h4>Video Production Gear</h4>
+                        <p>My actual equipment list with budget alternatives</p>
+                    </div>
+                    <a href="/videos.html" class="resource-link">See Gear →</a>
+                </li>
+                <li>
+                    <span class="resource-icon">🛒</span>
+                    <div class="resource-content">
+                        <h4>0604 Shop</h4>
+                        <p>Merchandise that funds this journey</p>
+                    </div>
+                    <a href="index.html#shop" class="resource-link">Shop →</a>
+                </li>
+                <li>
+                    <span class="resource-icon">📧</span>
+                    <div class="resource-content">
+                        <h4>Get Updates</h4>
+                        <p>Email me directly for questions or collaboration</p>
+                    </div>
+                    <a href="mailto:1@0604.ai" class="resource-link">Contact →</a>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Version Note -->
+        <section style="background: var(--earth-cream); padding: 2rem; border-radius: 15px; text-align: center; margin: 4rem 0;">
+            <h3 style="font-family: 'Playfair Display', serif; color: var(--earth-dark); margin-bottom: 1rem;">About This Guide</h3>
+            <p style="color: var(--earth-warm); line-height: 1.8; max-width: 700px; margin: 0 auto;">
+                Version 1.0 — April 16, 2026. This is a living document. As tools evolve and my journey progresses, 
+                I'll update this guide. Check back monthly for new scenarios, updated pricing, and lessons learned. 
+                Follow our journey at <a href="https://0604.ai" style="color: var(--earth-gold);">0604.ai</a>.
+            </p>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">0604.ai</div>
+            <p class="footer-quote">"What's in a name?"</p>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#youtube">YouTube</a>
+                <a href="index.html#ai">AI for School</a>
+                <a href="index.html#shop">Shop</a>
+                <a href="index.html#orphanage">Orphanage Project</a>
+            </div>
+            <div class="version-note">
+                AI Creator Guide v1.0 | April 16, 2026 | Created with 🤖 + ❤️ by William Morris
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

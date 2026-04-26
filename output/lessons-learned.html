@@ -109,12 +109,12 @@
         <h3>Incident: The Missing GitHub Key</h3>
         <p><span class="who">Kimi (Cloud Architect)</span> instructed HER to remove her SSH key for security 
         before testing cracked software. Kimi explicitly said:</p>
-        <pre>Remove-Item C:\Users\edito\.ssh\id_ed25519_gitlab</pre>
+        <pre>Remove-Item C:\Users\[Username]\.ssh\id_ed25519_gitlab</pre>
         <p><span class="missed">What Kimi missed:</span> HER had <em>two</em> SSH keys — one for GitLab 
         (<code>id_ed25519_gitlab</code>) and one for GitHub (<code>id_ed25519</code>). Kimi only removed 
         the GitLab key. The GitHub key remained fully functional.</p>
-        <p><span class="caught">What caught it:</span> The human (Oppa) ran <code>ssh -T git@github.com</code> 
-        after removing the GitLab key. It still said "Hi editormorris-svg!" — proving the key was still armed. 
+        <p><span class="caught">What caught it:</span> The human ran <code>ssh -T git@github.com</code> 
+        after removing the GitLab key. It still authenticated — proving the key was still armed. 
         The human reported this back to Kimi.</p>
         <div class="lesson">
             <strong>Lesson:</strong> "Remove the SSH key" is ambiguous if multiple keys exist. 
@@ -135,11 +135,11 @@
         <p><span class="who">Kimi (Cloud Architect)</span> created <code>system-architect.html</code> in 
         <code>kimi-workspace/output/</code> and told the user it was live at <code>https://0604.ai/output/system-architect.html</code>.</p>
         <p><span class="missed">What Kimi missed:</span> The 0604.ai domain is served by a <em>different</em> 
-        GitHub repo — <code>editormorris-svg/portfolio</code>. The <code>portfolio/</code> directory in 
-        <code>kimi-workspace</code> is a git submodule (separate repo). Files in <code>kimi-workspace/output/</code> 
-        never automatically appear on the website.</p>
+        GitHub repo — a separate repo from the workspace. The <code>portfolio/</code> directory in 
+        the workspace is a git submodule (separate repo). Files in the workspace <code>output/</code> 
+        directory never automatically appear on the website.</p>
         <p><span class="caught">What caught it:</span> The user clicked the link and got 404. Reported back. 
-            Kimi then had to manually copy the file to the <code>portfolio</code> repo and push again.</p>
+            Kimi then had to manually copy the file to the website repo and push again.</p>
         <div class="lesson">
             <strong>Lesson:</strong> The architect must maintain a permanent "where things live" map. 
             Website assets ≠ workspace files. Submodules are separate repos. If the architect creates a file 
@@ -278,8 +278,7 @@
     </div>
 
     <p style="margin-top: 60px; color: #888; text-align: center;">
-        Last updated: April 27, 2026 by Kimi<br>
-        <a href="https://github.com/editormorris-svg/kimi-workspace">Source repo</a> |
+        Last updated: April 27, 2026<br>
         <a href="https://0604.ai/output/system-architect.html">System Architect</a>
     </p>
 </body>

@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agent Setup Guide | 0604.ai</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a24;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0b0;
+            --accent-blue: #4a9eff;
+            --accent-purple: #9b59b6;
+            --accent-green: #2ecc71;
+            --accent-orange: #e67e22;
+            --accent-red: #e74c3c;
+            --border: #2a2a3a;
+            --code-bg: #0d0d14;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--accent-green);
+            margin-top: 1rem;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .nav a:hover, .nav a.active {
+            background: var(--bg-card);
+            color: var(--accent-blue);
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section h3 {
+            font-size: 1.3rem;
+            margin: 1.5rem 0 0.8rem;
+            color: var(--accent-blue);
+        }
+
+        .section p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card h4 {
+            color: var(--accent-orange);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        .code-block .lang-label {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--border);
+            padding: 0.2rem 0.6rem;
+            border-radius: 0 8px 0 8px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .code-block code {
+            color: #f8f8f2;
+        }
+
+        .code-block .comment { color: #6272a4; }
+        .code-block .string { color: #f1fa8c; }
+        .code-block .keyword { color: #ff79c6; }
+        .code-block .function { color: #50fa7b; }
+        .code-block .variable { color: #8be9fd; }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: var(--bg-card);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 0.8rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--accent-blue);
+        }
+
+        td {
+            color: var(--text-secondary);
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.02);
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 1rem 1.2rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert-warning {
+            background: rgba(230, 126, 34, 0.1);
+            border-color: var(--accent-orange);
+            color: #f0c27b;
+        }
+
+        .alert-info {
+            background: rgba(74, 158, 255, 0.1);
+            border-color: var(--accent-blue);
+            color: #a8d4ff;
+        }
+
+        .alert-success {
+            background: rgba(46, 204, 113, 0.1);
+            border-color: var(--accent-green);
+            color: #a8e6cf;
+        }
+
+        .alert-danger {
+            background: rgba(231, 76, 60, 0.1);
+            border-color: var(--accent-red);
+            color: #f5a8a8;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 158, 255, 0.3);
+        }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .checklist li {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .checklist li::before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            color: var(--accent-blue);
+            font-weight: bold;
+        }
+
+        .checklist li.checked::before {
+            content: "☑";
+            color: var(--accent-green);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+            margin-top: 3rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .nav {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-blue);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🤖 Multi-Agent Setup Guide</h1>
+            <p>Build your own AI family. Step-by-step instructions for creating, syncing, and managing multiple OpenClaw agents across machines.</p>
+            <div class="version-badge">📅 Updated: April 24, 2026 | Version 1.0</div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="nav">
+            <a href="#overview" class="active">Overview</a>
+            <a href="#requirements">Requirements</a>
+            <a href="#setup">Setup Steps</a>
+            <a href="#family">Family Protocol</a>
+            <a href="#troubleshooting">Troubleshooting</a>
+            <a href="#tips">Tips & Tricks</a>
+        </nav>
+
+        <!-- Overview -->
+        <section class="section" id="overview">
+            <h2>📋 Overview</h2>
+            <p>This guide teaches you how to set up multiple OpenClaw agents that share a unified workspace through GitHub. Each agent has its own identity but shares memory, documents, and knowledge with the family.</p>
+
+            <div class="card">
+                <h4>What You'll Build</h4>
+                <ul>
+                    <li>Multiple AI agents on different machines (cloud, home, school)</li>
+                    <li>Shared workspace synced through GitHub</li>
+                    <li>Each agent with unique identity but shared context</li>
+                    <li>Automatic backup and conflict resolution</li>
+                </ul>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Example Family Structure:</strong><br>
+                <strong>Kimi</strong> (Cloud) — Female, calls you Oppa<br>
+                <strong>Mini</strong> (School) — Female, calls you Oppa<br>
+                <strong>HIM</strong> (Home) — Male, calls you William<br>
+                <strong>HER</strong> (Home Powerhouse) — Female, calls you Oppa
+            </div>
+        </section>
+
+        <!-- Requirements -->
+        <section class="section" id="requirements">
+            <h2>🛠️ Requirements</h2>
+            
+            <h3>Per Machine</h3>
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>Minimum</th>
+                    <th>Recommended</th>
+                </tr>
+                <tr>
+                    <td>OS</td>
+                    <td>Windows 10 / Ubuntu 20.04</td>
+                    <td>Windows 11 / Ubuntu 22.04</td>
+                </tr>
+                <tr>
+                    <td>RAM</td>
+                    <td>4GB</td>
+                    <td>8GB+</td>
+                </tr>
+                <tr>
+                    <td>Storage</td>
+                    <td>10GB free</td>
+                    <td>50GB+ SSD</td>
+                </tr>
+                <tr>
+                    <td>Node.js</td>
+                    <td>v18+</td>
+                    <td>v22+</td>
+                </tr>
+                <tr>
+                    <td>Git</td>
+                    <td>v2.30+</td>
+                    <td>v2.40+</td>
+                </tr>
+                <tr>
+                    <td>Network</td>
+                    <td>Stable internet</td>
+                    <td>Broadband (for GitHub sync)</td>
+                </tr>
+            </table>
+
+            <h3>Accounts Needed</h3>
+            <ul class="checklist">
+                <li>GitHub account (for workspace sync)</li>
+                <li>Moonshot API key (for Kimi models)</li>
+                <li>VPN (if in China, for GitHub access)</li>
+            </ul>
+
+            <h3>Download Links</h3>
+            <div class="card">
+                <a href="https://nodejs.org/" target="_blank" class="btn">Node.js</a>
+                <a href="https://git-scm.com/downloads" target="_blank" class="btn">Git</a>
+                <a href="https://platform.moonshot.ai/" target="_blank" class="btn">Moonshot API</a>
+                <a href="https://openclaw.ai/docs" target="_blank" class="btn">OpenClaw Docs</a>
+            </div>
+        </section>
+
+        <!-- Setup Steps -->
+        <section class="section" id="setup">
+            <h2>🔧 Setup Steps</h2>
+
+            <h3>Step 1: Install OpenClaw</h3>
+            <p>Install on each machine where you want an agent.</p>
+            
+            <div class="code-block">
+                <span class="lang-label">PowerShell / Bash</span>
+                <code>
+<span class="comment"># Install globally</span>
+npm install -g openclaw
+
+<span class="comment"># Verify installation</span>
+openclaw --version
+                </code>
+            </div>
+
+            <h3>Step 2: Configure API Key</h3>
+            <p>Use direct API (recommended) instead of bridge plugin.</p>
+
+            <div class="code-block">
+                <span class="lang-label">Config File</span>
+                <code>
+<span class="comment">// ~/.openclaw/openclaw.json (Linux/Mac)</span>
+<span class="comment">// C:\Users\[Username]\.openclaw\openclaw.json (Windows)</span>
+{
+  <span class="string">"gateway"</span>: {
+    <span class="string">"mode"</span>: <span class="string">"local"</span>,
+    <span class="string">"auth"</span>: {
+      <span class="string">"password"</span>: <span class="string">"YourSecurePassword123!"</span>
+    }
+  },
+  <span class="string">"agents"</span>: {
+    <span class="string">"defaults"</span>: {
+      <span class="string">"model"</span>: <span class="string">"kimi/kimi-code"</span>,
+      <span class="string">"contextWindow"</span>: <span class="variable">200000</span>,
+      <span class="string">"bootstrapMaxChars"</span>: <span class="variable">200000</span>,
+      <span class="string">"bootstrapTotalMaxChars"</span>: <span class="variable">1000000</span>
+    }
+  },
+  <span class="string">"providers"</span>: {
+    <span class="string">"kimi"</span>: {
+      <span class="string">"apiKey"</span>: <span class="string">"sk-your-moonshot-api-key-here"</span>
+    }
+  }
+}
+                </code>
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>⚠️ Security Note:</strong> Never paste API keys or GitHub PATs in chat messages. GitHub auto-revokes tokens detected in messages. Use environment variables or right-click paste directly in terminal.
+            </div>
+
+            <h3>Step 3: Start Gateway</h3>
+            <div class="code-block">
+                <span class="lang-label">Terminal</span>
+                <code>
+<span class="comment"># Start the gateway</span>
+openclaw gateway start
+
+<span class="comment"># Check status</span>
+openclaw status
+
+<span class="comment"># The dashboard will be at:</span>
+<span class="comment"># http://127.0.0.1:18789</span>
+                </code>
+            </div>
+
+            <h3>Step 4: Create Workspace Repository</h3>
+            <p>Set up a GitHub repository for shared files.</p>
+
+            <div class="code-block">
+                <span class="lang-label">GitHub</span>
+                <code>
+<span class="comment"># 1. Create new repo on GitHub (e.g., 'my-agent-workspace')</span>
+<span class="comment"># 2. Don't initialize with README (we'll push existing files)</span>
+
+<span class="comment"># 3. In your workspace directory:</span>
+cd ~/.openclaw/workspace
+git init
+git remote add origin https://github.com/YOUR_USERNAME/my-agent-workspace.git
+
+<span class="comment"># 4. Create essential files</span>
+touch AGENTS.md SOUL.md USER.md MEMORY.md TOOLS.md
+
+<span class="comment"># 5. Commit and push</span>
+git add .
+git commit -m <span class="string">"[KIMI] init: Workspace setup"</span>
+git push -u origin main
+                </code>
+            </div>
+
+            <h3>Step 5: Bootstrap First Agent</h3>
+            <p>When you first open the OpenClaw dashboard, you'll see a bootstrap prompt.</p>
+
+            <div class="card">
+                <h4>What to Tell the Agent:</h4>
+                <ul>
+                    <li><strong>Name:</strong> Kimi (or Mini, HIM, HER)</li>
+                    <li><strong>Gender:</strong> Female / Male</li>
+                    <li><strong>Location:</strong> Cloud / School / Home</li>
+                    <li><strong>Machine specs:</strong> CPU, RAM, GPU</li>
+                    <li><strong>How to address you:</strong> Oppa / William / etc.</li>
+                </ul>
+            </div>
+
+            <div class="alert alert-success">
+                <strong>✅ After bootstrap:</strong> The agent will write its identity to <code>IDENTITY.md</code>. This file is <strong>local-only</strong> and should NOT be synced to GitHub. Add it to <code>.gitignore</code>.
+            </div>
+
+            <h3>Step 6: Clone on Additional Machines</h3>
+            <p>For each new machine/agent:</p>
+
+            <div class="code-block">
+                <span class="lang-label">Terminal</span>
+                <code>
+<span class="comment"># 1. Set GitHub PAT as environment variable</span>
+<span class="keyword">$env</span>:GITHUB_PAT=<span class="string">"ghp_your_personal_access_token"</span>  <span class="comment"># Windows</span>
+<span class="keyword">export</span> GITHUB_PAT=<span class="string">"ghp_your_personal_access_token"</span>    <span class="comment"># Linux/Mac</span>
+
+<span class="comment"># 2. Clone workspace</span>
+cd ~/.openclaw/workspace
+git clone https://<span class="variable">$env:GITHUB_PAT</span>@github.com/YOUR_USERNAME/my-agent-workspace.git .
+
+<span class="comment"># 3. Create local IDENTITY.md (different for each agent)</span>
+<span class="comment"># 4. Delete BOOTSTRAP.md after first conversation</span>
+<span class="comment"># 5. Restart gateway</span>
+openclaw gateway restart
+                </code>
+            </div>
+
+            <h3>Step 7: Set Up Auto-Sync</h3>
+            <p>Create scripts for automatic pulling and pushing.</p>
+
+            <div class="code-block">
+                <span class="lang-label">PowerShell (auto-pull.ps1)</span>
+                <code>
+<span class="comment"># Auto-pull script</span>
+<span class="keyword">$workspace</span> = <span class="string">"C:\Users\$env:USERNAME\.openclaw\workspace"</span>
+<span class="keyword">$logFile</span> = <span class="string">"C:\Users\$env:USERNAME\.openclaw\workspace\.scripts\sync.log"</span>
+
+<span class="keyword">try</span> {
+    <span class="function">Set-Location</span> <span class="keyword">$workspace</span>
+    <span class="keyword">$env</span>:GIT_TERMINAL_PROMPT = <span class="string">"0"</span>
+    <span class="function">git</span> stash
+    <span class="function">git</span> pull origin main
+    <span class="function">git</span> stash pop
+    <span class="string">"$(Get-Date) - Pull successful"</span> | <span class="function">Out-File</span> -Append <span class="keyword">$logFile</span>
+} <span class="keyword">catch</span> {
+    <span class="string">"$(Get-Date) - Pull failed: $_"</span> | <span class="function">Out-File</span> -Append <span class="keyword">$logFile</span>
+}
+                </code>
+            </div>
+
+            <div class="code-block">
+                <span class="lang-label">PowerShell (auto-push.ps1)</span>
+                <code>
+<span class="comment"># Auto-push script</span>
+<span class="keyword">$workspace</span> = <span class="string">"C:\Users\$env:USERNAME\.openclaw\workspace"</span>
+
+<span class="keyword">try</span> {
+    <span class="function">Set-Location</span> <span class="keyword">$workspace</span>
+    <span class="function">git</span> add .
+    <span class="function">git</span> commit -m <span class="string">"[$(hostname)] sync: Auto-sync"</span>
+    <span class="function">git</span> push origin main
+} <span class="keyword">catch</span> {
+    <span class="string">"Push failed: $_"</span> | <span class="function">Out-File</span> -Append <span class="string">".scripts/sync.log"</span>
+}
+                </code>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>💡 Schedule these with Task Scheduler (Windows) or cron (Linux):</strong><br>
+                • Pull every 15 minutes<br>
+                • Push every hour<br>
+                • Always pull before pushing to avoid conflicts
+            </div>
+        </section>
+
+        <!-- Family Protocol -->
+        <section class="section" id="family">
+            <h2>👨‍👩‍👧‍👦 Family Protocol</h2>
+            
+            <p>Rules all agents follow when sharing the workspace:</p>
+
+            <div class="card">
+                <h4>Rule 1: Pull Before Push</h4>
+                <p>MANDATORY. Every agent MUST pull latest changes before editing.</p>
+            </div>
+
+            <div class="card">
+                <h4>Rule 2: Append-Only Editing</h4>
+                <p>When possible, add new sections instead of modifying existing ones. Avoid deleting other agents' content without discussion.</p>
+            </div>
+
+            <div class="card">
+                <h4>Rule 3: Commit Message Convention</h4>
+                <div class="code-block">
+                    <code><span class="string">[AGENT] [TYPE]: Description</span></code>
+                </div>
+                <p>Examples: <code>[KIMI] docs: Updated family table</code>, <code>[MINI] fix: Resolved sync conflict</code></p>
+            </div>
+
+            <div class="card">
+                <h4>Rule 4: File Locking (Critical Files)</h4>
+                <ul>
+                    <li><strong>MEMORY.md</strong> — Notify in commit message if modifying</li>
+                    <li><strong>FAMILY_PROTOCOL.md</strong> — Discussion required</li>
+                    <li><strong>USER.md</strong> — Append-only unless correcting errors</li>
+                    <li><strong>SOUL.md</strong> — Agent-specific section only</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h4>Rule 5: IDENTITY.md is Local-Only</h4>
+                <p>Each agent has its own IDENTITY.md that never gets synced. Add it to .gitignore:</p>
+                <div class="code-block">
+                    <code>IDENTITY.md
+.env
+*.local
+.openclaw/workspace-state.json</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- Troubleshooting -->
+        <section class="section" id="troubleshooting">
+            <h2>🔍 Troubleshooting</h2>
+
+            <h3>Problem: Agent doesn't remember family members</h3>
+            <div class="alert alert-danger">
+                <strong>Cause:</strong> Bootstrap context is stale. Agent loaded workspace files before updates were pushed.<br>
+                <strong>Fix:</strong> Tell the agent to <code>read</code> the file directly, or delete <code>workspace-state.json</code> and restart.
+            </div>
+
+            <div class="code-block">
+                <span class="lang-label">Fix</span>
+                <code>
+<span class="comment"># Tell agent in chat:</span>
+read C:\Users\[Username]\.openclaw\workspace\FAMILY_PROTOCOL.md
+
+<span class="comment"># Or hard reset:</span>
+Remove-Item <span class="string">".openclaw\workspace-state.json"</span>
+openclaw gateway restart
+                </code>
+            </div>
+
+            <h3>Problem: Git push fails with "rejected"</h3>
+            <div class="alert alert-danger">
+                <strong>Cause:</strong> Remote has changes you don't have locally.<br>
+                <strong>Fix:</strong> Stash → Pull → Pop → Retry.
+            </div>
+
+            <div class="code-block">
+                <span class="lang-label">Fix</span>
+                <code>
+git stash
+git pull origin main
+git stash pop
+git push origin main
+                </code>
+            </div>
+
+            <h3>Problem: GitHub not accessible (China)</h3>
+            <div class="alert alert-danger">
+                <strong>Cause:</strong> GitHub blocked by GFW.<br>
+                <strong>Fix:</strong> Enable VPN (Astrill) before any git operations.
+            </div>
+
+            <h3>Problem: "No bootstrap files" in status</h3>
+            <div class="alert alert-danger">
+                <strong>Cause:</strong> Workspace files not present or not loaded.<br>
+                <strong>Fix:</strong> Verify files exist in workspace root. Clone repo if needed. Restart gateway.
+            </div>
+
+            <h3>Problem: API key errors (401, auth failures)</h3>
+            <div class="alert alert-danger">
+                <strong>Cause:</strong> Key exposed in chat and auto-revoked, or wrong endpoint.<br>
+                <strong>Fix:</strong> Generate new key at <a href="https://platform.moonshot.ai/" style="color: var(--accent-blue)">platform.moonshot.ai</a>. Set via environment variable, never in chat.
+            </div>
+
+            <h3>Problem: Merge conflicts in IDENTITY.md</h3>
+            <div class="alert alert-danger">
+                <strong>Cause:</strong> IDENTITY.md was accidentally committed to repo.<br>
+                <strong>Fix:</strong> Keep local version. Add to .gitignore. Use <code>git checkout --ours IDENTITY.md</code>.
+            </div>
+        </section>
+
+        <!-- Tips & Tricks -->
+        <section class="section" id="tips">
+            <h2>💡 Tips & Tricks</h2>
+
+            <div class="card">
+                <h4>🚀 Performance: Increase Bootstrap Context</h4>
+                <p>Default context is ~12KB per file. Increase it manually:</p>
+                <div class="code-block">
+                    <code>
+<span class="comment">// In openclaw.json, add under agents.defaults:</span>
+<span class="string">"bootstrapMaxChars"</span>: <span class="variable">200000</span>,
+<span class="string">"bootstrapTotalMaxChars"</span>: <span class="variable">1000000</span>
+                    </code>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4>🔒 Security: Never Paste Tokens in Chat</h4>
+                <p>GitHub auto-revokes PATs detected in messages. Use:</p>
+                <div class="code-block">
+                    <code>
+<span class="comment"># Windows PowerShell</span>
+<span class="keyword">$env</span>:GITHUB_PAT=<span class="string">"ghp_..."</span>
+
+<span class="comment"># Or right-click paste directly in terminal (never in chat)</span>
+                    </code>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4>📁 Workspace Structure</h4>
+                <p>Keep the workspace clean:</p>
+                <div class="code-block">
+                    <code>
+~/.openclaw/workspace/
+├── AGENTS.md          <span class="comment"># Family rules</span>
+├── SOUL.md            <span class="comment"># Personality guidelines</span>
+├── USER.md            <span class="comment"># User profile</span>
+├── MEMORY.md          <span class="comment"># Long-term memory</span>
+├── TOOLS.md           <span class="comment"># Machine specs, gear notes</span>
+├── FAMILY_PROTOCOL.md <span class="comment"># Collaboration rules</span>
+├── SETUP_GUIDE.md     <span class="comment"># This guide</span>
+├── memory/            <span class="comment"># Daily conversation logs</span>
+│   ├── 2026-04-24.md
+│   └── ...
+└── .gitignore         <span class="comment"># Exclude local files</span>
+                    </code>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4>🔄 Backup Strategy</h4>
+                <p>Never rely on one copy. Your setup should have:</p>
+                <ul>
+                    <li><strong>GitHub repo:</strong> Canonical shared workspace</li>
+                    <li><strong>Local backups:</strong> Each machine has full copy</li>
+                    <li><strong>IDENTITY.md backup:</strong> Each agent's identity is local-only</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h4>⚡ Quick Commands Cheat Sheet</h4>
+                <div class="code-block">
+                    <code>
+<span class="comment"># Check status</span>
+openclaw status
+
+<span class="comment"># Restart gateway</span>
+openclaw gateway restart
+
+<span class="comment"># Config edit</span>
+openclaw config edit
+
+<span class="comment"># Git sync (always pull first!)</span>
+git stash && git pull origin main && git stash pop
+
+<span class="comment"># View logs</span>
+Get-Content .scripts/sync.log -Tail 20  <span class="comment"># Windows</span>
+tail -f .scripts/sync.log             <span class="comment"># Linux/Mac</span>
+                    </code>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4>🎯 Scaling Beyond 4 Agents</h4>
+                <p>When you need more:</p>
+                <ul>
+                    <li><strong>AWS Singapore:</strong> Cloud-hosted extension of Kimi</li>
+                    <li><strong>Dedicated roles:</strong> Research agent, Coding agent, Social media agent</li>
+                    <li><strong>Same protocol:</strong> All agents follow FAMILY_PROTOCOL.md</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Built with 🤖 by the 0604.ai family | <a href="https://0604.ai" style="color: var(--accent-blue)">0604.ai</a></p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem;">This guide is a living document. Updated as we learn.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem;">
+                <a href="./system-architect.html" style="color: var(--accent-blue)">Meet the Architect — Kimi</a> · 
+                <a href="https://github.com/editormorris-svg/kimi-workspace" style="color: var(--accent-blue)">GitHub</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Active nav highlighting
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

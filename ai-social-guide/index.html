@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Social Presence Guide — 0604.ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --bg-secondary: #111111;
+            --text-primary: #f5f5f5;
+            --text-secondary: #888888;
+            --text-muted: #666666;
+            --accent-rust: #c45c3e;
+            --accent-gold: #d4a853;
+            --accent-purple: #9b7edc;
+            --border-color: #333333;
+            --card-bg: #141414;
+            --success: #4ade80;
+            --warning: #fbbf24;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: var(--accent-rust);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            font-family: 'Crimson Text', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header .date {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 15px;
+        }
+
+        /* Navigation */
+        .nav {
+            background: var(--bg-secondary);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Intro */
+        .intro {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .intro h2 {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--accent-gold);
+        }
+
+        .intro p {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        /* Journey Tracker */
+        .journey-tracker {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid var(--accent-purple);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 40px;
+        }
+
+        .journey-tracker h3 {
+            font-family: 'Crimson Text', serif;
+            color: var(--accent-purple);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .journey-tracker h3::before {
+            content: "🚀";
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent-purple);
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+
+        .timeline-dot.completed {
+            background: var(--success);
+        }
+
+        .timeline-dot.current {
+            background: var(--accent-gold);
+            box-shadow: 0 0 10px var(--accent-gold);
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-content .date {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .timeline-content .title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 3px 0;
+        }
+
+        .timeline-content .desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Personas */
+        .section-title {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.8rem;
+            margin: 50px 0 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--accent-rust);
+        }
+
+        .persona {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .persona-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .persona-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .persona.beginner .persona-icon { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        .persona.growth .persona-icon { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .persona.scale .persona-icon { background: linear-gradient(135deg, #a855f7, #7c3aed); }
+
+        .persona-title {
+            flex: 1;
+        }
+
+        .persona-title h3 {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+
+        .persona-title .tagline {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Scenario Box */
+        .scenario {
+            background: rgba(255,255,255,0.03);
+            border-left: 4px solid var(--accent-gold);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .scenario-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .scenario h4 {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .scenario p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Tool Grid */
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .tool-card {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-gold);
+        }
+
+        .tool-card h5 {
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+
+        .tool-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .tool-card .tool-tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tool-tag.free { background: rgba(74, 222, 128, 0.2); color: #4ade80; }
+        .tool-tag.paid { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+        .tool-tag.freemium { background: rgba(155, 126, 220, 0.2); color: #9b7edc; }
+
+        /* Action Steps */
+        .action-steps {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .action-steps h4 {
+            font-family: 'Crimson Text', serif;
+            margin-bottom: 15px;
+            color: var(--accent-gold);
+        }
+
+        .action-steps ol {
+            list-style: none;
+            counter-reset: step;
+        }
+
+        .action-steps li {
+            counter-increment: step;
+            padding-left: 35px;
+            position: relative;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+        }
+
+        .action-steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            width: 24px;
+            height: 24px;
+            background: var(--accent-rust);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* My Journey Section */
+        .my-journey {
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f0f 100%);
+            border: 2px solid var(--accent-rust);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 50px 0;
+        }
+
+        .my-journey h2 {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .my-journey h2::before {
+            content: "👤";
+        }
+
+        .journey-intro {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .strategy-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .strategy-card h4 {
+            font-family: 'Crimson Text', serif;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .strategy-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .strategy-card li {
+            padding: 5px 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .strategy-card li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent-rust);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 30px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: var(--accent-gold);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .persona-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .tool-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .strategy-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="version-badge">Version 1.0</div>
+        <h1>The AI Social Presence Playbook</h1>
+        <p class="subtitle">A practical guide to building your AI-powered content presence — from first post to full automation</p>
+        <p class="date">Published April 15, 2026 | Last Updated April 15, 2026</p>
+    </header>
+
+    <nav class="nav">
+        <a href="/">← Back to 0604.ai</a>
+        <a href="#personas">Choose Your Path</a>
+        <a href="#journey">My Journey</a>
+        <a href="#updates">Future Updates</a>
+    </nav>
+
+    <div class="container">
+        <!-- Introduction -->
+        <div class="intro">
+            <h2>Why This Guide Exists</h2>
+            <p>I spent months researching AI tools for content creation — avatar generators, voice synthesizers, automation platforms, analytics tools. The landscape is overwhelming, and most guides are either too basic ("use ChatGPT") or too technical (deep ML papers).</p>
+            <p>This guide bridges that gap. It's organized around <strong>where you are</strong>, not what the tools do. Each section includes a concrete use scenario, recommended tools, and actionable steps. Plus, I'm documenting my own implementation so you can follow along and learn from my mistakes.</p>
+            <p><strong>Version 1.0</strong> covers the foundation. As I implement more tools and strategies, I'll update this page with new versions — creating a living document of the AI content creation journey.</p>
+        </div>
+
+        <!-- Journey Tracker -->
+        <div class="journey-tracker">
+            <h3>Follow Our Progress</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot completed"></div>
+                    <div class="timeline-content">
+                        <div class="date">March 2026</div>
+                        <div class="title">Research & Foundation</div>
+                        <div class="desc">Deep dive into AI content tools, avatar tech, voice synthesis, automation platforms</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot completed"></div>
+                    <div class="timeline-content">
+                        <div class="date">March 27, 2026</div>
+                        <div class="title">Launch — 0604.ai Goes Live</div>
+                        <div class="desc">Domain registered, first videos recorded, brand identity established</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot completed"></div>
+                    <div class="timeline-content">
+                        <div class="date">April 2026</div>
+                        <div class="title">Content Foundation</div>
+                        <div class="desc">First uploads, establishing posting rhythm, building initial audience</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot current"></div>
+                    <div class="timeline-content">
+                        <div class="date">May 2026</div>
+                        <div class="title">AI Avatar Experimentation</div>
+                        <div class="desc">Testing avatar platforms for 24/7 content generation — results coming in v1.1</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="date">Q3 2026</div>
+                        <div class="title">Automation & Scale</div>
+                        <div class="desc">Full automation pipeline: content generation → scheduling → analytics → optimization</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Personas Section -->
+        <h2 class="section-title" id="personas">Choose Your Starting Point</h2>
+
+        <!-- Persona 1: Beginner -->
+        <div class="persona beginner">
+            <div class="persona-header">
+                <div class="persona-icon">🌱</div>
+                <div class="persona-title">
+                    <h3>The Curious Beginner</h3>
+                    <p class="tagline">"I want to start creating content but don't know where to begin"</p>
+                </div>
+            </div>
+
+            <div class="scenario">
+                <div class="scenario-label">Real-World Scenario</div>
+                <h4>Sarah, 28, Marketing Assistant</h4>
+                <p>Sarah has ideas for a lifestyle blog but feels overwhelmed by video editing and writing. She has 2-3 hours on weekends to create content. She wants to test if she enjoys this before investing heavily.</p>
+            </div>
+
+            <h4>Recommended AI Tools (Free/Freemium)</h4>
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <h5>Canva AI</h5>
+                    <p>Generate graphics, remove backgrounds, write captions</p>
+                    <span class="tool-tag freemium">Freemium</span>
+                </div>
+                <div class="tool-card">
+                    <h5>CapCut</h5>
+                    <p>Auto-captions, AI effects, easy video editing</p>
+                    <span class="tool-tag free">Free</span>
+                </div>
+                <div class="tool-card">
+                    <h5>ChatGPT / Claude</h5>
+                    <p>Script writing, idea generation, caption optimization</p>
+                    <span class="tool-tag freemium">Freemium</span>
+                </div>
+                <div class="tool-card">
+                    <h5>Notion AI</h5>
+                    <p>Content calendar, brainstorming, drafting</p>
+                    <span class="tool-tag paid">Paid</span>
+                </div>
+            </div>
+
+            <div class="action-steps">
+                <h4>Your First 30 Days</h4>
+                <ol>
+                    <li>Set up one platform (Instagram, TikTok, or YouTube Shorts)</li>
+                    <li>Create a simple content calendar using Notion or Google Sheets</li>
+                    <li>Use ChatGPT to brainstorm 20 content ideas in your niche</li>
+                    <li>Batch-create 5 pieces of content using Canva + CapCut</li>
+                    <li>Post consistently (3x per week minimum)</li>
+                    <li>Review analytics after 2 weeks, double down on what works</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Persona 2: Growth -->
+        <div class="persona growth">
+            <div class="persona-header">
+                <div class="persona-icon">📈</div>
+                <div class="persona-title">
+                    <h3>The Growing Creator</h3>
+                    <p class="tagline">"I have an audience but want to scale without burning out"</p>
+                </div>
+            </div>
+
+            <div class="scenario">
+                <div class="scenario-label">Real-World Scenario</div>
+                <h4>Marcus, 35, Fitness Coach</h4>
+                <p>Marcus has 15K Instagram followers. He spends 20+ hours/week on content and it's unsustainable. He wants to maintain quality while producing more, and explore YouTube long-form.</p>
+            </div>
+
+            <h4>Recommended AI Tools (Growth Stage)</h4>
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <h5>Descript</h5>
+                    <p>Edit video by editing text, AI voice cloning, studio sound</p>
+                    <span class="tool-tag paid">Paid</span>
+                </div>
+                <div class="tool-card">
+                    <h5>ElevenLabs</h5>
+                    <p>Professional voice synthesis, voice cloning for narration</p>
+                    <span class="tool-tag freemium">Freemium</span>
+                </div>
+                <div class="tool-card">
+                    <h5>OpusClip</h5>
+                    <p>Auto-edit long videos into viral shorts with AI</p>
+                    <span class="tool-tag freemium">Freemium</span>
+                </div>
+                <div class="tool-card">
+                    <h5>Metricool</h5>
+                    <p>Cross-platform scheduling, analytics, best time posting</p>
+                    <span class="tool-tag paid">Paid</span>
+                </div>
+                <div class="tool-card">
+                    <h5>Midjourney / DALL-E 3</h5>
+                    <p>Custom thumbnails, social graphics, brand visuals</p>
+                    <span class="tool-tag paid">Paid</span>
+                </div>
+                <div class="tool-card">
+                    <h5>TubeBuddy / VidIQ</h5>
+                    <p>YouTube SEO, keyword research, competitor analysis</p>
+                    <span class="tool-tag freemium">Freemium</span>
+                </div>
+            </div>
+
+            <div class="action-steps">
+                <h4>Scale-Up Strategy</h4>
+                <ol>
+                    <li>Audit your top-performing content — identify patterns</li>
+                    <li>Implement content repurposing: 1 long video → 5+ shorts/posts</li>
+                    <li>Set up batch recording sessions (4-6 videos in one day)</li>
+                    <li>Use scheduling tools to maintain presence during off-hours</li>
+                    <li>Build an email list (ConvertKit, Beehiiv) for direct audience connection</li>
+                    <li>Test one new platform per quarter based on audience research</li>
+                    <li>Track ROI: time spent vs. growth metrics, adjust accordingly</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Persona 3: Scale -->
+        <div class="persona scale">
+            <div class="persona-header">
+                <div class="persona-icon">🚀</div>
+                <div class="persona-title">
+                    <h3>The System Builder</h3>
+                    <p class="tagline">"I want to build an automated content machine that runs itself"</p>
+                </div>
+            </div>
+
+            <div class="scenario">
+                <div class="scenario-label">Real-World Scenario</div>
+                <h4>Alex, 42, Tech Entrepreneur</h4>
+                <p>Alex runs a SaaS company and wants to establish thought leadership without being the content bottleneck. Goal: 24/7 content presence across 5+ platforms with minimal daily involvement.</p>
+            </div>
+
+            <h4>Recommended AI Tools (Enterprise/Scale)</h4>
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <h5>HeyGen / Synthesia</h5>
+                    <p>AI avatar videos, multilingual content, custom avatars</p>
+                    <span class="tool-tag paid">Paid</span>
+                </div>
+                <div class="tool-card">
+                    <h5>Hedra / Viggle</h5>
+                    <p>Character animation, avatar generation, motion capture</p>
+                    <span class="tool-tag freemium">Freemium</span>
+                </div>
+                <div class="tool-card">
+                    <h5>Make / Zapier</h5>
+                    <p>Workflow automation, cross-platform publishing pipelines</p>
+                    <span class="tool-tag freemium">Freemium</span>
+                </div>
+                <div class="tool-card">
+                    <h5>Airtable + AI</h5>
+                    <p>Content database, automated status tracking, team collaboration</p>
+                    <span class="tool-tag paid">Paid</span>
+                </div>
+                <div class="tool-card">
+                    <h5>Brand24 / Sprout Social</h5>
+                    <p>Brand monitoring, sentiment analysis, competitor tracking</p>
+                    <span class="tool-tag paid">Paid</span>
+                </div>
+                <div class="tool-card">
+                    <h5>Custom GPTs / OpenAI API</h5>
+                    <p>Branded content generation, style-consistent outputs</p>
+                    <span class="tool-tag paid">Paid</span>
+                </div>
+            </div>
+
+            <div class="action-steps">
+                <h4>Building the Machine</h4>
+                <ol>
+                    <li>Document your brand voice, visual style, and content pillars</li>
+                    <li>Create a custom GPT trained on your best-performing content</li>
+                    <li>Build content pipelines: idea → draft → review → schedule → publish</li>
+                    <li>Implement AI avatar for evergreen/evergreen-adjacent content</li>
+                    <li>Set up Make/Zapier automations for cross-platform distribution</li>
+                    <li>Build analytics dashboard tracking content → business outcomes</li>
+                    <li>Establish SOPs and consider hiring a content manager for oversight</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- My Journey Section -->
+        <div class="my-journey" id="journey">
+            <h2>My Implementation: The 0604.ai Journey</h2>
+            <p class="journey-intro">"I'm building this in public. Here's my actual plan, my real constraints, and what I'm testing. Follow along, learn from my wins and failures."</p>
+
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">I'm a 48-year-old teacher building a YouTube presence while working full-time. I don't have 40 hours a week for content. Here's how I'm using AI to punch above my weight:</p>
+
+            <div class="strategy-grid">
+                <div class="strategy-card">
+                    <h4>🎥 Content Strategy</h4>
+                    <ul>
+                        <li>Multi-niche approach (teacher, traveler, tech, health)</li>
+                        <li>Batch record on weekends (school PC, 7800X3D)</li>
+                        <li>AI-assisted editing with Premiere + Descript</li>
+                        <li>Repurpose long-form into 5+ short clips</li>
+                    </ul>
+                </div>
+                <div class="strategy-card">
+                    <h4>🤖 AI Tools Testing</h4>
+                    <ul>
+                        <li>LTX Studio for AI-generated B-roll</li>
+                        <li>ElevenLabs for voiceover variations</li>
+                        <li>HeyGen for avatar experiments</li>
+                        <li>MiniMax for content ideation</li>
+                    </ul>
+                </div>
+                <div class="strategy-card">
+                    <h4>⚡ Automation Plans</h4>
+                    <ul>
+                        <li>Cross-platform scheduling (YouTube → Shorts → Instagram)</li>
+                        <li>Analytics tracking in Airtable</li>
+                        <li>Email newsletter automation</li>
+                        <li>Community management workflows</li>
+                    </ul>
+                </div>
+                <div class="strategy-card">
+                    <h4>📊 Success Metrics</h4>
+                    <ul>
+                        <li>10K subscribers by end of 2026</li>
+                        <li>Reduce editing time by 50% with AI</li>
+                        <li>Maintain 2 uploads/week consistently</li>
+                        <li>Build engaged community, not just views</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="margin-top: 25px; padding: 20px; background: rgba(196, 92, 62, 0.1); border-radius: 8px; border-left: 4px solid var(--accent-rust);">
+                <p style="color: var(--text-secondary); font-size: 0.95rem; margin: 0;"><strong>Current Status (April 2026):</strong> Channel launched March 27. First two videos recorded. Building posting rhythm. Next experiment: AI avatar for "explainer" style content while keeping vlogs personal. Results will be shared in v1.1 of this guide.</p>
+            </div>
+        </div>
+
+        <!-- Future Updates -->
+        <div class="intro" id="updates">
+            <h2>What's Coming in Future Versions</h2>
+            <p><strong>Version 1.1 (May 2026):</strong> AI avatar deep-dive — testing HeyGen, Synthesia, Hedra, and custom avatar creation. Real results from my experiments.</p>
+            <p><strong>Version 1.2 (June 2026):</strong> Full automation pipeline — how to set up Make/Zapier workflows, cross-platform scheduling, and analytics dashboards.</p>
+            <p><strong>Version 2.0 (Q3 2026):</strong> Advanced strategies — AI-generated podcasting, multilingual content at scale, building AI-powered community management.</p>
+        </div>
+
+        <!-- Call to Action -->
+        <div style="text-align: center; padding: 40px 0;">
+            <h3 style="font-family: 'Crimson Text', serif; margin-bottom: 15px;">Start Your AI Content Journey</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 25px;">Pick your persona above. Take the first step today. Iterate. Build.</p>
+            <a href="/" style="display: inline-block; background: var(--accent-rust); color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">← Back to 0604.ai</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Created by <a href="/">0604.ai</a> — Documenting the AI content creation journey in public</p>
+        <p style="margin-top: 10px; font-size: 0.8rem;">Version 1.0 | April 15, 2026</p>
+    </footer>
+</body>
+</html>

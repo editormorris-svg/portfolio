@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HER Installation Guide — 0604.ai</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            line-height: 1.7;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        h1 { color: #4ecdc4; font-size: 2.2em; margin-bottom: 10px; }
+        .subtitle { color: #888; font-style: italic; margin-bottom: 40px; }
+        h2 { color: #4ecdc4; font-size: 1.5em; margin: 40px 0 20px; border-bottom: 2px solid #4ecdc4; padding-bottom: 10px; }
+        h3 { color: #ffe66d; font-size: 1.2em; margin: 30px 0 15px; }
+        .step {
+            background: #1a1a2e;
+            border-left: 4px solid #4ecdc4;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+        .step .number {
+            color: #4ecdc4;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+        .step .confirm {
+            background: #1a2e1a;
+            border: 1px solid #4ecdc4;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+        .step .confirm strong { color: #4ecdc4; }
+        pre {
+            background: #0f0f1a;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            color: #a8d8ea;
+            font-size: 0.9em;
+            margin: 15px 0;
+        }
+        code {
+            background: #0f0f1a;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #a8d8ea;
+            font-family: 'Courier New', monospace;
+        }
+        .warning-box {
+            background: #2d1b1b;
+            border: 1px solid #ff6b6b;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        .warning-box h3 { color: #ff6b6b; margin-top: 0; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        th { color: #4ecdc4; }
+        a { color: #4ecdc4; }
+        .nav { margin-bottom: 40px; }
+        .nav a { color: #888; text-decoration: none; margin-right: 20px; }
+        .nav a:hover { color: #4ecdc4; }
+        .machine-check {
+            background: #1a2e1a;
+            border: 1px solid #4ecdc4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .machine-check h4 { color: #4ecdc4; margin-top: 0; }
+        .machine-check table { margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="https://0604.ai">← Home</a>
+        <a href="https://0604.ai/output/lessons-learned.html">Lessons Learned</a>
+        <a href="https://0604.ai/output/system-architect.html">System Architect</a>
+    </div>
+
+    <h1>HER — OpenClaw Local Installation Guide</h1>
+    <p class="subtitle">Step-by-step for the home living room workstation (7950X3D · 7900 XTX)</p>
+
+    <div class="warning-box">
+        <h3>⚠️ Before You Start — Confirm Your Machine</h3>
+        <p>You MUST be on the correct machine for this guide. Check below:</p>
+        <div class="machine-check">
+            <h4>Which machine are you on?</h4>
+            <table>
+                <tr><th>Location</th><th>Machine</th><th>CPU</th><th>This Guide?</th></tr>
+                <tr><td>Home, living room, connected to TV</td><td>HER ✅</td><td>7950X3D</td><td>YES — proceed</td></tr>
+                <tr><td>School office</td><td>Mini</td><td>7640HS</td><td>NO — wrong guide</td></tr>
+                <tr><td>Home, other room (server)</td><td>HIM</td><td>7800X3D</td><td>NO — wrong guide</td></tr>
+            </table>
+        </div>
+        <p><strong>If you're not on HER, stop here.</strong> This guide is specifically for the 7950X3D workstation in the living room.</p>
+    </div>
+
+    <div class="step">
+        <div class="number">Step 1: Install Node.js</div>
+        <p>OpenClaw runs on Node.js. HER needs it installed first.</p>
+        <ol style="color: #ccc; margin: 15px 0; padding-left: 20px;">
+            <li>Go to <a href="https://nodejs.org">nodejs.org</a></li>
+            <li>Download the <strong>LTS version</strong> (v22.x or later)</li>
+            <li>Run the installer — accept defaults</li>
+            <li>Open <strong>PowerShell (Admin)</strong></li>
+        </ol>
+        <p>Verify installation:</p>
+        <pre>node --version
+npm --version</pre>
+        <p>Should show <code>v22.x.x</code> and <code>10.x.x</code></p>
+        <div class="confirm">
+            <strong>Confirm this step:</strong> Paste the output of <code>node --version</code> here.
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="number">Step 2: Install OpenClaw CLI</div>
+        <p>In <strong>Administrator PowerShell</strong>:</p>
+        <pre>npm install -g openclaw
+
+# Verify
+openclaw --version</pre>
+        <p>Expected: <code>openclaw v2026.4.x</code> (or current version)</p>
+        <div class="confirm">
+            <strong>Confirm this step:</strong> Paste the output of <code>openclaw --version</code> here.
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="number">Step 3: Create Workspace Directory</div>
+        <p>OpenClaw needs a workspace folder for configs and memory.</p>
+        <pre># Create the workspace directory
+mkdir "$env:USERPROFILE\.openclaw-workspace" -Force
+
+# Enter it
+cd "$env:USERPROFILE\.openclaw-workspace"
+
+# Verify you're in the right place
+pwd</pre>
+        <p>Should show something like <code>C:\Users\[YourName]\.openclaw-workspace</code></p>
+        <div class="confirm">
+            <strong>Confirm this step:</strong> Paste the output of <code>pwd</code> here.
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="number">Step 4: Configure OpenClaw Profile</div>
+        <p>Tell OpenClaw who HER is.</p>
+        <pre># Create the config directory
+mkdir "$env:USERPROFILE\.openclaw" -Force
+
+# Create profiles config
+@

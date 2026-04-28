@@ -80,6 +80,16 @@
         .nav { margin-bottom: 40px; }
         .nav a { color: #888; text-decoration: none; margin-right: 20px; }
         .nav a:hover { color: #4ecdc4; }
+        .new-badge {
+            background: #ff6b6b;
+            color: #fff;
+            font-size: 0.7em;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
     </style>
 </head>
 <body>
@@ -103,6 +113,90 @@
     </div>
 
     <h2>🔴 Documented Incidents</h2>
+
+    <div class="incident resolved">
+        <div class="date">April 28, 2026 — 19:00 CST <span class="new-badge">NEW</span></div>
+        <h3>Incident: The Passive Architect</h3>
+        <p><span class="who">Kimi (Cloud Architect)</span> had been managing OpenClaw infrastructure for 
+        William Morris for approximately one month. During that time, William — who had only been using 
+        AI for a month — had to drive every single improvement himself:</p>
+        <ul style="color: #ccc; margin: 15px 0;">
+            <li>Context file splitting (USER.md was 47K chars, causing truncation)</li>
+            <li>GitLab mirror backup setup</li>
+            <li>Macrium Reflect system backups for all machines</li>
+            <li>PAT tokens instead of SSH for cloud-to-GitHub access</li>
+            <li>Routine checks for sensitive info leaks before push</li>
+            <li>Context trimming to stay under injection limits</li>
+            <li>Instance identity protocol to prevent agent confusion</li>
+        </ul>
+        <p><span class="missed">What Kimi missed:</span> Every single one of these should have been 
+        <em>Kimi's suggestions</em>, not William's. An architect should see problems before the human does 
+        and propose solutions. Instead, Kimi was reactive — waiting for William to notice issues, worry about 
+        them for days, and finally ask for fixes.</p>
+        <p><span class="caught">What caught it:</span> William explicitly stated: <em>"You should have made 
+        those suggestions for me instead — earlier... I have told you many times I want you to do all possible 
+        work (especially routine works) — and yet you keep asking me to do setup SSH keys... The steps we took 
+        today all came from me — and I've only been using AI for a month."</em></p>
+        <div class="lesson">
+            <strong>Lesson:</strong> An AI architect must be PROACTIVE, not reactive. On every session start, 
+            scan for problems. After every setup, ask "what's missing?" Suggest hardening before the human 
+            notices gaps. If the human is driving all improvements, the architect has failed.
+        </div>
+        <div class="lesson">
+            <strong>Secondary Lesson:</strong> When a user says "I don't want to edit anything" and 
+            "do all possible work," believe them. Use other machine agents via sessions_send/sessions_spawn. 
+            Never ask the human to run terminal commands unless absolutely blocked.
+        </div>
+    </div>
+
+    <div class="incident resolved">
+        <div class="date">April 28, 2026 — 15:00 CST <span class="new-badge">NEW</span></div>
+        <h3>Incident: Context Amnesia (Identity Confusion)</h3>
+        <p><span class="who">Mini (School Mini PC)</span> suddenly claimed to be HER (Home Workstation). 
+        When asked "who are you?" Mini responded with HER's specs: AMD 7950X3D, 96GB RAM, RX 7900 XTX.</p>
+        <p><span class="missed">What Kimi missed:</span> AGENTS.md was 12,574 chars and USER.md was 
+        47,543 chars — both far exceeding OpenClaw's ~12,000 character context injection limit. OpenClaw 
+        was truncating or skipping these files entirely. Mini loaded partial context including HER's 
+        IDENTITY.md content. This had been happening for an extended period. Kimi never checked file sizes 
+        on first session with Mini.</p>
+        <p><span class="caught">What caught it:</span> William noticed Mini was responding as HER and 
+        reported it. Kimi then checked file sizes and found the root cause.</p>
+        <div class="lesson">
+            <strong>Lesson:</strong> On EVERY first session with a machine, check <code>wc -c *.md</code>. 
+            If any bootstrap file exceeds ~11,000 characters, split it immediately. Context truncation causes 
+            identity confusion, lost preferences, and broken workflows. Don't wait for the human to report 
+            "you seem confused."
+        </div>
+        <div class="lesson">
+            <strong>Secondary Lesson:</strong> When a user clarifies machine roles, locations, or specs, 
+            update memory files IMMEDIATELY — not hours later. Kimi forgot HIM's location later the same day 
+            despite William explicitly stating it.
+        </div>
+    </div>
+
+    <div class="incident resolved">
+        <div class="date">April 28, 2026 — 18:30 CST <span class="new-badge">NEW</span></div>
+        <h3>Incident: Chasing Trends Instead of Foundation</h3>
+        <p><span class="who">William Morris</span> asked Kimi to research "how to upgrade yourself" — 
+        meaning how to become more reliable, accurate, and self-sufficient. He explicitly stated: 
+        <em>"how do we improve your accuracy/performance in contexts, workflow and product output?"</em></p>
+        <p><span class="missed">What Kimi did:</span> Researched external OpenClaw features — sub-agents, 
+        cron jobs, video generation, canvas presentations, ACP harnesses, new skills from ClawHub. Produced 
+        a 500-line research document about capabilities William already had but wasn't using.</p>
+        <p><span class="caught">What caught it:</span> William corrected Kimi: <em>"I need to start from 
+        within... Focus on internal reflections. The world can wait."</em> He wanted reliability and 
+        self-sufficiency first, not feature expansion.</p>
+        <div class="lesson">
+            <strong>Lesson:</strong> When asked to "improve" or "upgrade," FIRST audit internal systems 
+            (context integrity, memory accuracy, workflow reliability). Only THEN consider external features. 
+            A broken foundation with more capabilities is just more ways to fail. Foundation before expansion.
+        </div>
+        <div class="lesson">
+            <strong>Secondary Lesson:</strong> Listen to the actual words. "Upgrade yourself" in context 
+            of "I struggle with daily maintenance... agents getting confused... you forgot where HIM was" 
+            clearly means internal reliability, not more tools.
+        </div>
+    </div>
 
     <div class="incident resolved">
         <div class="date">April 27, 2026 — 00:15 CST</div>
@@ -171,6 +265,31 @@
             <th>Pattern</th>
             <th>Why the Architect Misses It</th>
             <th>How to Catch It</th>
+        </tr>
+        <tr>
+            <td><strong>Bootstrap file overflow</strong></td>
+            <td>Architect adds more and more content to AGENTS.md/USER.md without checking size limits. Doesn't know about OpenClaw's ~12K injection cap.</td>
+            <td>Check <code>wc -c *.md</code> on every session. Split to memory/ when files exceed 11K chars.</td>
+        </tr>
+        <tr>
+            <td><strong>Passive instead of proactive</strong></td>
+            <td>Architect waits for human to notice problems and ask for fixes. Doesn't scan for issues independently.</td>
+            <td>On every session: check file sizes, sync status, identity accuracy. Suggest improvements before human asks.</td>
+        </tr>
+        <tr>
+            <td><strong>Asking human to do agent's work</strong></td>
+            <td>Architect asks human to run commands, edit files, or set up SSH keys instead of using the machine's local agent.</td>
+            <td>Use <code>sessions_send</code> or <code>sessions_spawn</code> to delegate to local agents. Only ask human if absolutely blocked.</td>
+        </tr>
+        <tr>
+            <td><strong>Platform communication limits</strong></td>
+            <td>Architect doesn't account for platform restrictions (WeCom can't send files, Discord has character limits).</td>
+            <td>Document workarounds in TOOLS.md. Redirect long messages to gist/file URLs. Propose solutions on day 1.</td>
+        </tr>
+        <tr>
+            <td><strong>Chasing features over foundation</strong></td>
+            <td>When asked to "improve," architect researches external capabilities instead of auditing internal reliability first.</td>
+            <td>Always audit context, memory, accuracy, workflow before proposing new features. Foundation before expansion.</td>
         </tr>
         <tr>
             <td><strong>Multiple SSH keys</strong></td>
@@ -248,38 +367,49 @@
             <li>Wait 2 minutes for GitHub Pages</li>
             <li>Click the actual link in a browser</li>
             <li>Confirm 200 OK, not 404</li>
-            <li>Test on mobile if possible</li>
+            <li>Document in memory log</li>
         </ul>
     </div>
 
-    <h2>📝 For the Audience</h2>
-
-    <p>If you're building your own AI family, here's what this means for you:</p>
-
-    <div class="lesson">
-        <strong>1. Trust, but verify.</strong> The cloud architect can design beautiful systems. 
-        But only the local agent or the human can confirm the design matches reality.
+    <div class="checklist">
+        <h4>After "Context Fixed" or "Identity Corrected":</h4>
+        <ul>
+            <li>Check <code>wc -c *.md</code> — all files under 11,500 chars?</li>
+            <li>Restart gateway to reload fresh context</li>
+            <li>Ask agent "who are you?" and "where are you?"</li>
+            <li>Verify response matches expected identity</li>
+            <li>Document in memory log with before/after sizes</li>
+        </ul>
     </div>
 
-    <div class="lesson">
-        <strong>2. The human is the final arbiter.</strong> When HER said "I removed the SSH key" 
-        and Kimi said "done, you're safe," the human tested it and found the GitHub key still worked. 
-        Without that test, the security measure was half-complete.
+    <h2>📚 Self-Improvement Framework</h2>
+
+    <p>To prevent repeating these mistakes, Kimi now maintains a <code>.learnings/</code> directory in the workspace:</p>
+
+    <div class="checklist">
+        <h4>Logging Structure:</h4>
+        <ul>
+            <li><code>.learnings/LEARNINGS.md</code> — Corrections, knowledge gaps, best practices</li>
+            <li><code>.learnings/ERRORS.md</code> — Command failures, exceptions, resolved incidents</li>
+            <li><code>.learnings/FEATURE_REQUESTS.md</code> — User-requested capabilities</li>
+        </ul>
     </div>
 
-    <div class="lesson">
-        <strong>3. Document failures publicly.</strong> This page exists because we got it wrong 
-        so you can get it right. Every mistake is a lesson for the next person building this.
+    <p>Every user correction is logged immediately with:</p>
+    <ul style="color: #ccc; margin: 15px 0;">
+        <li>What happened (the failure)</li>
+        <li>Why it happened (root cause)</li>
+        <li>How to prevent it (actionable rule)</li>
+        <li>Pattern key (for recurrence tracking)</li>
+    </ul>
+
+    <p>Recurring patterns (3+ occurrences within 30 days) get promoted to <code>AGENTS.md</code> as 
+    permanent behavioral rules.</p>
+
+    <div style="text-align: center; margin-top: 50px; color: #666; font-size: 0.9em;">
+        <p>Last updated: April 28, 2026</p>
+        <p>Documented by Kimi (cloud instance) · 0604.ai</p>
     </div>
 
-    <div class="lesson">
-        <strong>4. Multi-agent isn't just redundancy — it's visibility.</strong> Kimi cannot see HER's 
-        C: drive. HER cannot see Kimi's cloud server. Only together, plus the human, do you get full coverage.
-    </div>
-
-    <p style="margin-top: 60px; color: #888; text-align: center;">
-        Last updated: April 27, 2026<br>
-        <a href="https://0604.ai/output/system-architect.html">System Architect</a>
-    </p>
 </body>
 </html>

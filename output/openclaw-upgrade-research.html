@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenClaw Self-Upgrade Research | 0604.ai</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface-2: #1a1a24;
+      --border: #2a2a3a;
+      --text: #e8e8f0;
+      --text-muted: #9090a8;
+      --text-dim: #606078;
+      --accent: #c8a45c;
+      --accent-soft: rgba(200, 164, 92, 0.15);
+      --accent-border: rgba(200, 164, 92, 0.3);
+      --danger: #d4575c;
+      --success: #5cb85c;
+      --warning: #f0ad4e;
+      --info: #5bc0de;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 15px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .header {
+      border-bottom: 1px solid var(--border);
+      padding: 40px 0 32px;
+      margin-bottom: 32px;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .logo {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .divider {
+      color: var(--text-dim);
+    }
+    .date {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    h1 {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .subtitle {
+      font-size: 17px;
+      color: var(--text-muted);
+      font-weight: 400;
+      line-height: 1.5;
+    }
+    .meta {
+      margin-top: 20px;
+      display: flex;
+      gap: 20px;
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+    .meta span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+    .badge-research { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent-border); }
+    .badge-private { background: rgba(92, 184, 92, 0.12); color: var(--success); border: 1px solid rgba(92, 184, 92, 0.25); }
+    .badge-alert { background: rgba(212, 87, 92, 0.12); color: var(--danger); border: 1px solid rgba(212, 87, 92, 0.25); }
+    .badge-phase { background: var(--surface-2); color: var(--text-muted); border: 1px solid var(--border); }
+
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin-bottom: 40px;
+    }
+    .toc-title {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 24px;
+    }
+    .toc-grid a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 4px 0;
+      transition: color 0.2s;
+    }
+    .toc-grid a:hover { color: var(--accent); }
+    .toc-grid a::before {
+      content: '›';
+      margin-right: 8px;
+      color: var(--text-dim);
+    }
+
+    h2 {
+      font-size: 26px;
+      font-weight: 700;
+      margin: 48px 0 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: -0.3px;
+    }
+    h3 {
+      font-size: 19px;
+      font-weight: 600;
+      margin: 36px 0 14px;
+      color: var(--accent);
+    }
+    h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 24px 0 10px;
+      color: var(--text);
+    }
+    p {
+      margin-bottom: 14px;
+      color: var(--text-muted);
+    }
+    p strong { color: var(--text); }
+    ul, ol {
+      margin: 12px 0 18px 20px;
+      color: var(--text-muted);
+    }
+    li { margin-bottom: 8px; }
+    li::marker { color: var(--text-dim); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin: 24px 0;
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-title .icon {
+      font-size: 18px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: var(--surface-2);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--accent);
+    }
+    pre {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: var(--text-muted);
+    }
+
+    .alert {
+      background: rgba(212, 87, 92, 0.08);
+      border: 1px solid rgba(212, 87, 92, 0.2);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 20px 0;
+    }
+    .alert-title {
+      color: var(--danger);
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .phase-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .phase-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 28px;
+    }
+    .phase-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .phase-name {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .check {
+      color: var(--success);
+      font-weight: 600;
+    }
+    .cross {
+      color: var(--danger);
+      font-weight: 600;
+    }
+
+    .footer {
+      border-top: 1px solid var(--border);
+      margin-top: 60px;
+      padding: 32px 0 48px;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 13px;
+    }
+    .footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    @media (max-width: 640px) {
+      .toc-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 28px; }
+      h2 { font-size: 22px; }
+      .container { padding: 0 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="header-top">
+      <span class="logo">0604.ai Research</span>
+      <span class="divider">·</span>
+      <span class="date">April 28, 2026</span>
+    </div>
+    <h1>OpenClaw Self-Upgrade Roadmap</h1>
+    <p class="subtitle">From manual YouTuber to AI-orchestrated expert. What capabilities exist now, what a private server unlocks, and the exact sequence to get there.</p>
+    <div class="meta">
+      <span><span class="badge badge-research">Deep Research</span></span>
+      <span><span class="badge badge-private">Private Server</span></span>
+      <span><span class="badge badge-alert">Security Alert</span></span>
+    </div>
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <div class="toc-grid">
+      <a href="#executive">Executive Summary</a>
+      <a href="#unused">Capabilities You Have Now</a>
+      <a href="#skills">Skills to Install</a>
+      <a href="#memory">Memory &amp; Dreaming</a>
+      <a href="#private">Private Server</a>
+      <a href="#security">Security Hardening</a>
+      <a href="#sequence">Upgrade Sequence</a>
+      <a href="#vision">What This Means for Your Vision</a>
+    </div>
+  </div>
+
+  <h2 id="executive">Executive Summary</h2>
+  <p>You have <strong>4 OpenClaw instances</strong> (Kimi cloud, HER home, HIM school, Mini school Mini PC) but you're using roughly <strong>30% of what OpenClaw can do</strong>. The biggest gaps:</p>
+  <ul>
+    <li><strong>No sub-agent orchestration</strong> — everything happens in single sessions</li>
+    <li><strong>No automated content workflows</strong> — no cron jobs for research, scripting, or social posting</li>
+    <li><strong>No video/music generation</strong> — you have the tools but haven't configured providers</li>
+    <li><strong>No canvas/presentations</strong> — you could generate teaching slides and thumbnails</li>
+    <li><strong>No ACP coding harnesses</strong> — Claude Code/Codex could build tools while you sleep</li>
+    <li><strong>No dreaming/memory optimization</strong> — context gets wiped instead of promoted</li>
+  </ul>
+  <p>A <strong>private server</strong> (VPS or your home machine running 24/7) unlocks: 24/7 operation, persistent sub-agents, ComfyUI workflows, lower API costs via local LLMs, and full control over model routing.</p>
+
+  <h2 id="unused">Part 1: What You Have Now But Aren't Using</h2>
+
+  <h3>1. Sub-Agent Orchestration</h3>
+  <p><strong>What it is:</strong> You can spawn isolated child agents to do parallel work — research, coding, writing — then collect results.</p>
+  <p><strong>Why you need it:</strong> Research agent digs into EdTech trends while main agent drafts script. Coding agent builds a website feature while writing agent creates social copy.</p>
+  <p><strong>Pattern you should use:</strong></p>
+  <pre><code>Orchestrator (you → Kimi)
+├── Research Agent → Gathers EdTech news, papers, tools
+├── Script Writer → Drafts YouTube script from research
+├── Code Agent (ACP) → Builds demo tools/widgets for classroom
+├── Fact-Checker → Verifies claims, checks sources
+└── Social Agent → Writes thumbnails, descriptions, tags</code></pre>
+  <p><strong>Cost optimization:</strong> Set <code>agents.defaults.subagents.model</code> to a cheaper model (e.g., <code>kimi/k2</code> instead of <code>kimi/k2p5</code>) for parallel tasks. Five parallel cheap runs ≈ one expensive sequential run.</p>
+
+  <h3>2. Cron / Scheduled Tasks</h3>
+  <p><strong>What it is:</strong> Exact-time scheduled jobs that run in isolated sessions.</p>
+  <p><strong>Workflows you should automate:</strong></p>
+  <table>
+    <tr><th>Job</th><th>Schedule</th><th>Purpose</th></tr>
+    <tr><td>Morning EdTech Digest</td><td>Daily 07:00</td><td>Scrape 5 EdTech sources, summarize, post to WeCom</td></tr>
+    <tr><td>Weekly Content Audit</td><td>Sundays 18:00</td><td>Review unpublished scripts, prioritize backlog</td></tr>
+    <tr><td>Social Post Scheduler</td><td>3x/week 12:00</td><td>Auto-write and queue LinkedIn/Twitter posts</td></tr>
+    <tr><td>Git Sync Monitor</td><td>Every 2 hours</td><td>Check if all 4 machines have synced; alert if not</td></tr>
+  </table>
+
+  <h3>3. Task Flow (Durable Multi-Step Orchestration)</h3>
+  <p><strong>What it is:</strong> Long-running workflows with state persistence, revision tracking, and recovery. Not just "run this" — "run this 5-step pipeline and survive restarts."</p>
+  <p><strong>Use case:</strong> "Create AI Classroom Guide Episode" — Step 1: Research → Step 2: Draft script → Step 3: Generate demo code → Step 4: Fact-check → Step 5: Produce thumbnail → Step 6: Queue for review. If the gateway restarts, Task Flow resumes from the last completed step.</p>
+
+  <h3>4. Canvas / Presentations</h3>
+  <p><strong>What it is:</strong> Visual canvas you can present, navigate, snapshot. Not just text — actual visual slides.</p>
+  <p><strong>How you can use it:</strong> Generate teaching slides for "AI in the Classroom" presentations. Create visual YouTube thumbnails. Build interactive demos of AI tools for students.</p>
+
+  <h3>5. Video &amp; Music Generation</h3>
+  <p><strong>What it is:</strong> Built-in <code>video_generate</code> and <code>music_generate</code> tools. 15 video providers, multiple music providers.</p>
+  <table>
+    <tr><th>Use</th><th>Providers</th></tr>
+    <tr><td>Music (intro/outro)</td><td>Google Lyria, MiniMax</td></tr>
+    <tr><td>Video B-roll</td><td>Google Veo, Runway, Qwen Wan</td></tr>
+    <tr><td>Animated explanations</td><td>ComfyUI workflows</td></tr>
+  </table>
+
+  <h3>6. Browser Automation</h3>
+  <p><strong>What it is:</strong> Full browser control — open tabs, click, type, scroll, screenshot, evaluate JS.</p>
+  <p><strong>How you can use it:</strong> Auto-research EdTech tools: visit website, screenshot features, extract pricing. Monitor competitors' channels. Test your own website across devices.</p>
+
+  <h3>7. ACP Coding Harnesses</h3>
+  <p><strong>What it is:</strong> Agent Control Protocol — spawn external coding agents (Claude Code, Codex, Gemini CLI) as sub-agents.</p>
+  <p><strong>Why this is huge for you:</strong> You don't code. But you need tools. ACP agents code FOR you while you sleep. They can build classroom widgets, website features, data visualizations, video processing pipelines.</p>
+  <p><strong>Pattern:</strong> You say "Build me a webpage that demos 5 AI classroom tools with interactive cards" → Kimi spawns ACP → ACP writes HTML/CSS/JS → Kimi reviews, tests, pushes to portfolio repo.</p>
+
+  <h3>8. TTS (Text-to-Speech)</h3>
+  <p>Generate voiceover drafts for YouTube scripts. Test script flow by listening. Create audio versions of blog posts.</p>
+
+  <h3>9. Dreaming / Memory Optimization</h3>
+  <p>OpenClaw 2026.4.5+ has experimental <strong>memory dreaming</strong> — background process that reviews daily notes, promotes important fragments to long-term memory, weights recent vs. old memories. You should enable this so I don't forget important decisions between sessions.</p>
+  <pre><code>{
+  "agents": {
+    "defaults": {
+      "dreaming": {
+        "enabled": true,
+        "mode": "core",
+        "recallAging": true
+      }
+    }
+  }
+}</code></pre>
+
+  <h2 id="skills">Part 2: Skills to Install from ClawHub</h2>
+
+  <h3>High-Value Skills for Your Vision</h3>
+  <table>
+    <tr><th>Skill</th><th>What It Does</th><th>Why You Need It</th></tr>
+    <tr><td><code>browser-automation</code></td><td>Advanced browser control</td><td>Deep research, competitor monitoring</td></tr>
+    <tr><td><code>adobe-automator</code></td><td>Automate Adobe apps via ExtendScript</td><td><strong>Automate Premiere Pro</strong></td></tr>
+    <tr><td><code>gan-style-harness</code></td><td>Generator-Evaluator coding pattern</td><td>Autonomous app building</td></tr>
+    <tr><td><code>acp-router</code></td><td>Route "build me X" to right agent</td><td>Auto-picks Codex/Claude/etc.</td></tr>
+    <tr><td><code>council</code></td><td>Multi-voice decision making</td><td>Go/no-go on content decisions</td></tr>
+    <tr><td><code>capability-evolver</code></td><td>Self-evolution engine</td><td>Agent improves itself</td></tr>
+    <tr><td><code>seo-audit</code></td><td>SEO analysis</td><td>Optimize 0604.ai</td></tr>
+    <tr><td><code>prose</code></td><td>Multi-agent prose workflows</td><td>Long-form writing</td></tr>
+    <tr><td><code>ad-creative</code></td><td>Generate creative assets</td><td>Thumbnails, banners</td></tr>
+  </table>
+
+  <p><strong>Install command:</strong> <code>openclaw skills install &lt;name&gt;</code> or browse <a href="https://clawhub.ai" style="color:var(--accent)">clawhub.ai</a></p>
+
+  <h2 id="memory">Part 3: Memory &amp; Dreaming Upgrades</h2>
+  <p>Already covered in Section 1.9 above. Enable dreaming in config so agents remember between sessions. Use Memory Bridge to push your vault into ACP harnesses before they start.</p>
+
+  <h2 id="private">Part 4: Private Server — What Changes</h2>
+
+  <h3>Current Limitations (Cloud/Kimi)</h3>
+  <ul>
+    <li>Session resets kill context</li>
+    <li>No persistent background agents</li>
+    <li>Pay per token, no batch discount</li>
+    <li>No GPU access for local models</li>
+    <li>Gateway restarts wipe subagent state</li>
+  </ul>
+
+  <h3>Private Server Options</h3>
+  <table>
+    <tr><th>Option</th><th>Pros</th><th>Cons</th><th>Cost</th></tr>
+    <tr><td><strong>VPS</strong> (Singapore/Tokyo)</td><td>24/7, global access, easy scaling</td><td>Monthly cost, GPU expensive</td><td>$40-120/mo</td></tr>
+    <tr><td><strong>HER/Home</strong> (7950X3D, 96GB)</td><td>Already powerful, no monthly cost</td><td>Must leave on 24/7</td><td>Electricity only</td></tr>
+    <tr><td><strong>Thailand PC</strong></td><td>You own it</td><td>Old platform, limited GPU</td><td>~$500-800 upgrade</td></tr>
+  </table>
+
+  <h3>What Private Server Unlocks</h3>
+  <table>
+    <tr><th>Feature</th><th>Cloud</th><th>Private</th></tr>
+    <tr><td>24/7 operation</td><td><span class="cross">✗</span> Session resets</td><td><span class="check">✓</span> Persistent</td></tr>
+    <tr><td>Local LLMs (Llama, Mistral)</td><td><span class="cross">✗</span> No GPU</td><td><span class="check">✓</span> Free inference</td></tr>
+    <tr><td>ComfyUI workflows</td><td><span class="cross">✗</span> Not practical</td><td><span class="check">✓</span> Local video/image gen</td></tr>
+    <tr><td>Persistent subagents</td><td><span class="cross">✗</span> Die on reset</td><td><span class="check">✓</span> Background tasks survive</td></tr>
+    <tr><td>Database storage</td><td><span class="cross">✗</span> File-only</td><td><span class="check">✓</span> Postgres, vector DB</td></tr>
+    <tr><td>Full web access</td><td><span class="cross">✗</span> Some blocked</td><td><span class="check">✓</span> No restrictions</td></tr>
+  </table>
+
+  <h3>Architecture Vision</h3>
+  <pre><code>┌─────────────────────────────────────────────────┐
+│              YOUR PRIVATE SERVER                │
+│  (HER at home OR VPS Singapore/Tokyo)          │
+├─────────────────────────────────────────────────┤
+│  OpenClaw Gateway (24/7)                       │
+│  ├── Local LLM (Llama 3.3 70B)               │
+│  ├── ComfyUI (video/image generation)          │
+│  ├── Postgres (structured data)                │
+│  ├── Vector DB (semantic search)             │
+│  └── FFmpeg (automated video processing)       │
+├─────────────────────────────────────────────────┤
+│  Agent Teams:                                   │
+│  ├── Research Agent (24/7 EdTech monitor)     │
+│  ├── Content Agent (scripts, scheduling)       │
+│  ├── Code Agent (ACP - builds tools/demos)   │
+│  ├── Social Agent (posts, metrics)           │
+│  └── Video Agent (thumbnails, B-roll, music)   │
+└─────────────────────────────────────────────────┘
+         │
+         ├── Kimi (cloud) → Orchestrator, strategy
+         ├── HER (home) → Heavy compute, video
+         ├── HIM (school) → Classroom demos
+         └── Mini (school) → Quick queries</code></pre>
+
+  <h2 id="security">Part 5: Security Hardening (CRITICAL)</h2>
+
+  <div class="alert">
+    <div class="alert-title">⚠️ Security Alert — April 2026</div>
+    <p>Recent audit found <strong>512 vulnerabilities</strong> in OpenClaw ecosystem:</p>
+    <ul>
+      <li><strong>CVE-2026-25253</strong>: 1-click RCE via malicious skills</li>
+      <li><strong>WebSocket shared-auth escalation</strong>: CVSS 9.9</li>
+      <li><strong>39 skills</strong> distributing macOS infostealer</li>
+    </ul>
+  </div>
+
+  <p><strong>What you must do:</strong></p>
+  <ol>
+    <li>Never install random skills — only verified authors</li>
+    <li>Keep OpenClaw updated: <code>openclaw update</code></li>
+    <li>Enable exec approvals for destructive commands</li>
+    <li>Empty URL allowlists = deny-all</li>
+    <li>Verify <code>IDENTITY.md</code> is in <code>.gitignore</code> on all machines</li>
+    <li>Audit installed skills: <code>openclaw skills list</code></li>
+  </ol>
+
+  <h2 id="sequence">Part 6: Recommended Upgrade Sequence</h2>
+
+  <div class="phase-grid">
+    <div class="phase-card">
+      <div class="phase-header">
+        <span class="badge badge-phase">Phase 1</span>
+        <span class="phase-name">This Week</span>
+      </div>
+      <ol>
+        <li>Enable heartbeat checks in HEARTBEAT.md</li>
+        <li>Install <code>browser-automation</code> skill</li>
+        <li>Install <code>adobe-automator</code> skill</li>
+        <li>Configure video/music generation providers</li>
+        <li>Set up first cron job (EdTech morning digest)</li>
+        <li>Test subagent spawn for parallel research</li>
+        <li>Enable dreaming in config</li>
+      </ol>
+    </div>
+
+    <div class="phase-card">
+      <div class="phase-header">
+        <span class="badge badge-phase">Phase 2</span>
+        <span class="phase-name">Next 2 Weeks</span>
+      </div>
+      <ol>
+        <li>Install <code>gan-style-harness</code> or <code>acp-router</code></li>
+        <li>Build first Task Flow (content pipeline)</li>
+        <li>Test ACP harness (Claude Code or Codex)</li>
+        <li>Set up canvas presentations for teaching</li>
+        <li>Create social agent for automated posting</li>
+        <li>Install <code>seo-audit</code> skill</li>
+      </ol>
+    </div>
+
+    <div class="phase-card">
+      <div class="phase-header">
+        <span class="badge badge-phase">Phase 3</span>
+        <span class="phase-name">Next Month</span>
+      </div>
+      <ol>
+        <li>Deploy private server (VPS or HER 24/7)</li>
+        <li>Install ComfyUI for video/image workflows</li>
+        <li>Build "AI Classroom Tools" widget library</li>
+        <li>Create automated video pipeline</li>
+        <li>Multi-agent team for 24/7 EdTech monitoring</li>
+      </ol>
+    </div>
+  </div>
+
+  <h2 id="vision">Part 7: What This Means for Your Vision</h2>
+
+  <p><strong>Before:</strong> You manually research, write scripts, edit videos, post social.</p>
+  <p><strong>After:</strong> A team of agents handles execution while you focus on strategy and teaching.</p>
+
+  <table>
+    <tr><th>Task</th><th>Now</th><th>After Upgrade</th></tr>
+    <tr><td>Research EdTech trends</td><td>2 hours/day browsing</td><td>Agent monitors 24/7, delivers digest</td></tr>
+    <tr><td>Write scripts</td><td>4 hours per video</td><td>Agent drafts, you refine</td></tr>
+    <tr><td>Build classroom demos</td><td>You don't code</td><td>ACP agent builds interactive widgets</td></tr>
+    <tr><td>Generate thumbnails</td><td>Manual design</td><td>AI generates 5 options, you pick</td></tr>
+    <tr><td>Music for videos</td><td>Copyright risk</td><td>AI generates royalty-free tracks</td></tr>
+    <tr><td>Social posting</td><td>Sporadic, manual</td><td>Scheduled, consistent, automated</td></tr>
+    <tr><td>Video editing</td><td>Learning Premiere</td><td>Adobe automator + AI assistance</td></tr>
+    <tr><td>Memory/context</td><td>Fragile, session-bound</td><td>Persistent, searchable, promoted</td></tr>
+  </table>
+
+  <p><strong>Your role shifts from "doer" to "director."</strong></p>
+
+  <h3>The "AI in Classroom" Content Pipeline</h3>
+  <ol>
+    <li>Research Agent monitors EdTech → detects new AI tool</li>
+    <li>Research Agent tests tool → screenshots, features, pricing</li>
+    <li>Script Writer drafts "How to use X in your classroom"</li>
+    <li>Code Agent builds interactive demo of the tool</li>
+    <li>Fact-Checker verifies claims, sources</li>
+    <li>Video Agent generates thumbnail + B-roll</li>
+    <li>Music Agent generates intro/outro</li>
+    <li>Social Agent writes LinkedIn/Twitter thread</li>
+    <li><strong>YOU review, record voiceover, approve</strong></li>
+    <li>Agent schedules posts, updates website, logs to memory</li>
+  </ol>
+
+  <div class="footer">
+    <p>Compiled by Kimi (cloud instance) · 0604.ai · <a href="https://0604.ai">Home</a></p>
+    <p style="margin-top:8px;color:var(--text-dim)">Full source in <code>memory/openclaw-upgrade-research.md</code></p>
+  </div>
+
+</div>
+
+</body>
+</html>

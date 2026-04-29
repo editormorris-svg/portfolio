@@ -125,33 +125,42 @@
         }
 
         /* Stats Bar */
+        /* Stats Bar */
         .stats-bar {
             background: var(--earth-dark);
             padding: 1.5rem 1rem;
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: nowrap;
+            text-align: center;
+            white-space: nowrap;
         }
 
         .stat {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            margin: 0 0.4rem;
+            background: rgba(184, 134, 11, 0.12);
+            border: 1.5px solid var(--earth-gold);
+            border-radius: 6px;
+            min-width: 90px;
             text-align: center;
             color: var(--earth-cream);
-            flex: 0 0 auto;
-            margin: 0 1rem;
         }
 
         .stat-number {
             font-family: 'Playfair Display', serif;
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: var(--earth-gold);
+            display: block;
+            line-height: 1.2;
         }
 
         .stat-label {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--earth-sand);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: block;
+            margin-top: 0.2rem;
         }
 
         /* Main Content */

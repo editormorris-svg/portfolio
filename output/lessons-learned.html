@@ -256,6 +256,49 @@
         </div>
     </div>
 
+    <div class="incident resolved">
+        <div class="date">April 28, 2026 — 23:00 CST <span class="new-badge">NEW</span></div>
+        <h3>Incident: The Multi-Agent Fix (Local > Cloud)</h3>
+        <p><span class="who">HER (Home Workstation)</span> fixed what the cloud agent couldn't. After 
+        hours of failed attempts by Kimi to stop OpenClaw log spam and duplicate responses, HER 
+        diagnosed and fixed the root cause in minutes.</p>
+        
+        <p><span class="missed">What Kimi did (4 failures):</span></p>
+        <ul style="color: #ccc; margin: 15px 0;">
+            <li>Guessed <code>mdns: false</code> — didn't work (OpenClaw ignores this key)</li>
+            <li>Guessed <code>bonjour: false</code> — didn't work (key doesn't exist)</li>
+            <li>Firewall rules for UDP 5353/1900 — didn't work (mDNS operates before firewall)</li>
+            <li>PowerShell JSON manipulation — wrong path (created object in wrong place)</li>
+        </ul>
+        
+        <p><span class="missed">Time wasted:</span> 50+ minutes. <span class="missed">Success rate:</span> 0%.</p>
+        
+        <p><span class="caught">What HER did:</span> Read actual <code>openclaw.json</code> on disk. 
+        Saw no <code>logging</code> section existed. Added proper block with exact keys OpenClaw expects: 
+        <code>level: error</code>, <code>consoleLevel: error</code>, <code>consoleStyle: compact</code>. 
+        Terminal went silent in 2 minutes.</p>
+        
+        <p><span class="caught">Then HER found the real bug:</span> Duplicate responses were caused by 
+        <strong>session timeout during context injection</strong>. USER.md was still 46.6KB on HER's 
+        machine — we had trimmed AGENTS.md but never touched USER.md. Every session hung for 3 minutes 
+        trying to inject 46K chars. OpenClaw retried, causing duplicate delivery.</p>
+        
+        <p><span class="caught">HER's fix:</span> USER.md 46.6K → 1KB. AGENTS.md 12.5K → 1.7KB. 
+        Restart. Duplicates stopped immediately.</p>
+        
+        <div class="lesson">
+            <strong>Lesson:</strong> Local agents have ground truth. They read actual files, see real logs, 
+            know exact config structure. Cloud agents guess. When a fix requires local state, delegate 
+            immediately to the local agent.
+        </div>
+        
+        <div class="lesson">
+            <strong>Secondary Lesson:</strong> Fixing symptoms while ignoring root cause wastes hours. 
+            We trimmed AGENTS.md (12K→9K) but USER.md stayed at 46K and choked every session. Always 
+            check ALL bootstrap files, not just the obvious one.
+        </div>
+    </div>
+
     <h2>🟡 Common Oversight Patterns</h2>
 
     <p>Based on the incidents above, here are patterns that cloud-based AI architects consistently miss:</p>

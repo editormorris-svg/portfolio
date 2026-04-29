@@ -127,17 +127,19 @@
         /* Stats Bar */
         .stats-bar {
             background: var(--earth-dark);
-            padding: 1.5rem 2rem;
+            padding: 1.5rem 1rem;
             display: flex;
+            flex-direction: row;
             justify-content: center;
             align-items: center;
-            gap: 2rem;
             flex-wrap: nowrap;
         }
 
         .stat {
             text-align: center;
             color: var(--earth-cream);
+            flex: 0 0 auto;
+            margin: 0 1rem;
         }
 
         .stat-number {

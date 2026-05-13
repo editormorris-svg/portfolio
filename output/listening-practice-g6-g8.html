@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G6-G8 Listening Practice | 0604.ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #7c3aed;
+            --g6: #10b981;
+            --g7: #f59e0b;
+            --g8: #ef4444;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .nav-back {
+            position: absolute;
+            top: 1rem;
+            left: 1.5rem;
+        }
+        
+        .nav-back a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
+        
+        .nav-back a:hover {
+            opacity: 1;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+        
+        .grade-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .grade-tab {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--border);
+            background: var(--card);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .grade-tab:hover {
+            border-color: var(--primary);
+        }
+        
+        .grade-tab.active {
+            color: white;
+            border-color: transparent;
+        }
+        
+        .grade-tab.g6.active { background: var(--g6); }
+        .grade-tab.g7.active { background: var(--g7); }
+        .grade-tab.g8.active { background: var(--g8); }
+        
+        .exam-section {
+            display: none;
+        }
+        
+        .exam-section.active {
+            display: block;
+        }
+        
+        .exam-type {
+            margin-bottom: 3rem;
+        }
+        
+        .exam-type h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .exam-type.mock h2 { color: var(--primary); }
+        .exam-type.final h2 { color: var(--secondary); }
+        
+        .audio-card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+        }
+        
+        .audio-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        
+        .audio-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text);
+        }
+        
+        .audio-meta {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+        
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge.female { background: #fce7f3; color: #be185d; }
+        .badge.male { background: #dbeafe; color: #1e40af; }
+        
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .play-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        
+        .play-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+        
+        .play-btn.playing {
+            background: #ef4444;
+        }
+        
+        .progress-container {
+            flex: 1;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+        
+        .time-display {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            min-width: 100px;
+            text-align: right;
+        }
+        
+        .script-box {
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .script-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        
+        .script-content {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .script-content.expanded {
+            max-height: 1000px;
+        }
+        
+        .toggle-icon {
+            transition: transform 0.2s;
+        }
+        
+        .toggle-icon.rotated {
+            transform: rotate(180deg);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-light);
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 640px) {
+            .header h1 { font-size: 1.75rem; }
+            .audio-header { flex-direction: column; align-items: flex-start; }
+            .player-controls { flex-wrap: wrap; }
+            .time-display { text-align: left; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-back">
+        <a href="/">← Back to Home</a>
+    </div>
+    
+    <header class="header">
+        <h1>Listening Practice</h1>
+        <p>G6-G8 Mock & Final Exam Audio Resources — British English, clear pronunciation</p>
+    </header>
+    
+    <div class="container">
+        <div class="grade-tabs">
+            <button class="grade-tab g6 active" onclick="showGrade('g6')">Grade 6</button>
+            <button class="grade-tab g7" onclick="showGrade('g7')">Grade 7</button>
+            <button class="grade-tab g8" onclick="showGrade('g8')">Grade 8</button>
+        </div>
+        
+        <!-- Grade 6 -->
+        <div id="g6" class="exam-section active">
+            <div class="exam-type mock">
+                <h2>📝 Mock Exam</h2>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L1 — School Talent Show</span>
+                        <div class="audio-meta">
+                            <span class="badge female">Female</span>
+                            <span class="badge">G6 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g6m1')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g6m1')">
+                            <div class="progress-bar" id="progress-g6m1"></div>
+                        </div>
+                        <span class="time-display" id="time-g6m1">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last Friday, our school held a big talent show. The host was a funny teacher named Mr. Lee. He welcomed twelve contestants to the stage and explained the rules. Each round had a different challenge, and the contestant with the lowest score would be eliminated. Everyone in the audience cheered loudly for their favorite performers.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L2 — Fitness Challenge</span>
+                        <div class="audio-meta">
+                            <span class="badge male">Male</span>
+                            <span class="badge">G6 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g6m2')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g6m2')">
+                            <div class="progress-bar" id="progress-g6m2"></div>
+                        </div>
+                        <span class="time-display" id="time-g6m2">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last month, a new fitness challenge show called Super Speed started on TV. The host was a famous athlete who welcomed eight contestants to the gym. She explained the rules: each round had a different challenge, and the contestant with the lowest score would be eliminated. In the first round, the contestants had to run as fast as possible to increase their speed. The winner received a fantastic prize — a new bicycle! The successful contestant trained every day and used his brain to plan his strategy. In the final round, he had to reach the top of a climbing wall faster than everyone else. He used all his speed and became the winner. Everyone cheered for the lucky contestant.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L3 — Survival Game Show</span>
+                        <div class="audio-meta">
+                            <span class="badge female">Female</span>
+                            <span class="badge">G6 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g6m3')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g6m3')">
+                            <div class="progress-bar" id="progress-g6m3"></div>
+                        </div>
+                        <span class="time-display" id="time-g6m3">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last week, I watched a survival game show called Wild Brain. The host was a funny explorer who welcomed ten contestants to the jungle. He explained the rules: the contestants would work in teams of five. Each round had a different challenge, and the team with the lowest score would be eliminated. In the first round, the contestants had to answer questions before the timer stopped. The winning team received a bonus prize of a camping trip. At the end of the show, the host put toy handcuffs on the winning contestants as a joke and said, "You're under arrest for being too lucky!" The lucky contestant guessed the final answer correctly and won the competition.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L4 — TV Quiz Show</span>
+                        <div class="audio-meta">
+                            <span class="badge male">Male</span>
+                            <span class="badge">G6 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g6m4')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g6m4')">
+                            <div class="progress-bar" id="progress-g6m4"></div>
+                        </div>
+                        <span class="time-display" id="time-g6m4">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last night, I watched a famous TV quiz show called Millionaire Mind. The host was a serious man with glasses who explained the rules to ten contestants. Each contestant had to press the buzzer quickly to answer questions before the timer stopped. If a contestant gave an incorrect answer, they were eliminated immediately. The audience cheered loudly for their favorite players. In the final round, the winner was a young waiter named Sam. He used his brain to answer all the questions correctly. At the end, Sam told the audience, "I wish I could be a soldier when I grow up!" The host laughed and gave Sam his big prize — a trip around the world. Everyone agreed it was the best show ever.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exam-type final">
+                <h2>🎯 Final Exam</h2>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L1 — Millionaire Game Show</span>
+                        <div class="audio-meta">
+                            <span class="badge female">Female</span>
+                            <span class="badge">G6 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g6f1')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g6f1')">
+                            <div class="progress-bar" id="progress-g6f1"></div>
+                        </div>
+                        <span class="time-display" id="time-g6f1">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last Saturday, I watched a series on TV about a famous millionaire who loved helping people. One day, he decided to reach out to a local school and give the students a special gift. At the school, the teachers noticed a big smile on every child's face when they saw the surprise. The millionaire organized a fun quiz for the whole audience of students and parents. During the show, a little girl started to cough because she drank her juice too fast, but her friend quickly helped her. The millionaire told everyone that being kind has nothing to do with having money — it has nothing to do with being rich or poor. At the end of the day, the whole army of happy children thanked him with a big song. Everyone agreed it was the best Saturday ever!
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L2 — Silly Soldier</span>
+                        <div class="audio-meta">
+                            <span class="badge male">Male</span>
+                            <span class="badge">G6 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g6f2')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g6f2')">
+                            <div class="progress-bar" id="progress-g6f2"></div>
+                        </div>
+                        <span class="time-display" id="time-g6f2">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last month, I watched a fun series about a silly soldier who worked in a big army base. One day, his captain gave him a quiz to test his knowledge, but the soldier was too busy playing games to study. He tried to reach a high point on the climbing wall, but he fell down and made everyone laugh. The captain started to cough because he laughed too hard! The soldier explained that his bad grade had nothing to do with being lazy — it had nothing to do with his effort at all, he said. In the end, a kind millionaire visited the base and gave the silly soldier a second chance to try the quiz again. This time, the soldier studied hard and passed with a big smile!
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L3 — Running Race</span>
+                        <div class="audio-meta">
+                            <span class="badge female">Female</span>
+                            <span class="badge">G6 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g6f3')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g6f3')">
+                            <div class="progress-bar" id="progress-g6f3"></div>
+                        </div>
+                        <span class="time-display" id="time-g6f3">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last week, there was a big running race in our city. My friend Tom was very lucky because he found a golden ticket that gave him a free place in the race. Tom wanted to be successful, so he trained every day to increase his speed. He told me, "I wish I had a better brain for remembering the race route!" On the day of the race, Tom ran so fast that he finished in first place. The police officer gave him a prize, but it was a joke — he put toy handcuffs on Tom's wrists and said, "You're under arrest for being too fast!" Everyone laughed, and Tom felt like the luckiest boy in the world.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L4 — Waiter Game Show</span>
+                        <div class="audio-meta">
+                            <span class="badge male">Male</span>
+                            <span class="badge">G6 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g6f4')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g6f4')">
+                            <div class="progress-bar" id="progress-g6f4"></div>
+                        </div>
+                        <span class="time-display" id="time-g6f4">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last night, I watched a famous TV game show. The host was a funny man with a big smile. He welcomed three contestants to the stage and explained the rules. Each contestant had to press the buzzer quickly to answer questions. The first contestant was a young waiter from a local restaurant. He answered many questions correctly and got a very high score. In the end, the waiter became the winner and received a fantastic prize — a new bicycle! The other contestants clapped and said they would try again next week. The host asked the winner how he felt, and the waiter said he was very happy and surprised. The winner gave a small gift to the other contestants to thank them for being friendly. Everyone in the audience cheered loudly for the kind waiter.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Grade 7 -->
+        <div id="g7" class="exam-section">
+            <div class="exam-type mock">
+                <h2>📝 Mock Exam</h2>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L1 — Online Shopping Advert</span>
+                        <div class="audio-meta">
+                            <span class="badge female">Female</span>
+                            <span class="badge">G7 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g7m1')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g7m1')">
+                            <div class="progress-bar" id="progress-g7m1"></div>
+                        </div>
+                        <span class="time-display" id="time-g7m1">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last week, I saw an advert on social media for a new shopping website. The advertisers said their clothes were stylish and easy-to-use. I ordered a blue-eyed doll for my sister, but when the item arrived, it was broken. I wrote a poor review and said the company was unreliable.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L2 — Restaurant Campaign</span>
+                        <div class="audio-meta">
+                            <span class="badge male">Male</span>
+                            <span class="badge">G7 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g7m2')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g7m2')">
+                            <div class="progress-bar" id="progress-g7m2"></div>
+                        </div>
+                        <span class="time-display" id="time-g7m2">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last month, a new Italian restaurant opened in the town centre. The owner, a passionate middle-aged chef, started an outstanding advertising campaign. The slogan was "Taste Italy at home!" and the adverts showed well-dressed customers enjoying hand-made pasta. The restaurant tried to influence people by offering a special twenty percent reduction for families. However, a famous food critic wrote a poor product review. He said the food was disappointing and old-fashioned. The manager did not close down. Instead, he encouraged the chef to focus on new recipes. He also gave every customer a free loaf of bread to say sorry. The restaurant succeeded and became very popular.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L3 — Fashion Brand</span>
+                        <div class="audio-meta">
+                            <span class="badge female">Female</span>
+                            <span class="badge">G7 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g7m3')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g7m3')">
+                            <div class="progress-bar" id="progress-g7m3"></div>
+                        </div>
+                        <span class="time-display" id="time-g7m3">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last week, a famous fashion brand started a new publicity campaign for their summer clothes. They used a well-dressed model in their TV advert. The special offer was a thirty percent reduction on all limited items. The brown-haired designer worked hard and created a record-breaking campaign — over two million people watched the online video! The shop never had to close down because all products were always in stock. However, the company did not focus on safety and protection. Instead, they focused on style and taste. The campaign was so powerful that the clothes sold out in one day.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L4 — Technology Company</span>
+                        <div class="audio-meta">
+                            <span class="badge male">Male</span>
+                            <span class="badge">G7 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g7m4')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g7m4')">
+                            <div class="progress-bar" id="progress-g7m4"></div>
+                        </div>
+                        <span class="time-display" id="time-g7m4">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last month, a technology company developed a new laptop. The advertisers said it was long-lasting and easy-to-use. A team of left-handed engineers designed it to be comfortable for everyone. The slogan was "Work smarter, not harder!" and the product was on display in every store. However, one product review said the laptop was disappointing because the battery was poor quality. A middle-aged customer complained, but the company gave her a stylish free laptop bag as a gift. To create a buzz, the company used a powerful flash mob in the city centre. The campaign was so successful that they opened ten new shops.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exam-type final">
+                <h2>🎯 Final Exam</h2>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L1 — New Shop Opening</span>
+                        <div class="audio-meta">
+                            <span class="badge female">Female</span>
+                            <span class="badge">G7 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g7f1')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g7f1')">
+                            <div class="progress-bar" id="progress-g7f1"></div>
+                        </div>
+                        <span class="time-display" id="time-g7f1">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last Saturday, a new shop opened in our town. The shop sells many different items including clothes, toys, and food. The manager said they have a special offer this week — everything is fifty percent off! All the new products are on display in the front window. My mother bought a stylish dress that was very fashionable. The shop also sells hand-made bread that tastes amazing. Everyone agreed the new shop was outstanding.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L2 — Camera Review</span>
+                        <div class="audio-meta">
+                            <span class="badge male">Male</span>
+                            <span class="badge">G7 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g7f2')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g7f2')">
+                            <div class="progress-bar" id="progress-g7f2"></div>
+                        </div>
+                        <span class="time-display" id="time-g7f2">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last week, a famous blogger wrote a product review about a new easy-to-use camera. He bought the camera because the advertisers said it was long-lasting and powerful. The advertising campaign used a well-known slogan: "Capture every moment!" However, the camera was very disappointing. After three days, the battery died and the pictures were poor quality. The blogger wrote that the product was unreliable and the advertising was misleading. He encouraged his followers to read product reviews before buying anything. The company saw the review and tried to focus on improving their product. They gave the blogger a full refund and said they would develop a better camera next year.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L3 — Running Shoes Campaign</span>
+                        <div class="audio-meta">
+                            <span class="badge female">Female</span>
+                            <span class="badge">G7 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g7f3')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g7f3')">
+                            <div class="progress-bar" id="progress-g7f3"></div>
+                        </div>
+                        <span class="time-display" id="time-g7f3">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last month, a sports company started a new publicity campaign for their running shoes. They used a flash mob in the city centre to create a buzz. The advertising campaign focused on safety and protection for runners. The company had a special offer — a twenty percent reduction on all items. However, the offer was limited and only available while stocks lasted. The shoes were very popular and sold out quickly. The company did not have to close down; instead, they succeeded and opened ten new stores. The well-known athlete who promoted the campaign made it very powerful and passionate.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L4 — Blender Advert</span>
+                        <div class="audio-meta">
+                            <span class="badge male">Male</span>
+                            <span class="badge">G7 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g7f4')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g7f4')">
+                            <div class="progress-bar" id="progress-g7f4"></div>
+                        </div>
+                        <span class="time-display" id="time-g7f4">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last week, I watched a new advertising campaign for a kitchen product on TV. The advertisers developed a clever campaign for an easy-to-use blender. Their slogan was "Easy-to-use for everyone!" and they showed a middle-aged woman using it in the kitchen. The product review online said the blender was unreliable because it broke after one week. However, a well-dressed man in the advert said the product was outstanding. The company used a record-breaking publicity campaign with ads on every street. They tried to influence people's buying decisions by offering a special fifty percent reduction. The campaign was so powerful that the product sold out in every store.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Grade 8 -->
+        <div id="g8" class="exam-section">
+            <div class="exam-type mock">
+                <h2>📝 Mock Exam</h2>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L1 — Young Entrepreneur</span>
+                        <div class="audio-meta">
+                            <span class="badge male">Male</span>
+                            <span class="badge">G8 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g8m1')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g8m1')">
+                            <div class="progress-bar" id="progress-g8m1"></div>
+                        </div>
+                        <span class="time-display" id="time-g8m1">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last year, a young entrepreneur named Mia decided to start her own company. She loved making bracelets and necklaces from colourful beads. Mia bought her materials from a local shop and began to design her products online. Her business became incredibly successful!
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L2 — Crowdsourcing Shoes</span>
+                        <div class="audio-meta">
+                            <span class="badge female">Female</span>
+                            <span class="badge">G8 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g8m2')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g8m2')">
+                            <div class="progress-bar" id="progress-g8m2"></div>
+                        </div>
+                        <span class="time-display" id="time-g8m2">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last month, a shoe company wanted to design a new product for young consumers. Instead of hiring one designer, they used crowdsourcing. They asked people from the community to submit their own shoe designs online. Over one thousand people sent their ideas! Then, the company let consumers vote for their favourite design. The winning design was a bracelet that could also be worn as a shoe accessory — it was incredibly creative! The outcome was amazing: the company sold out in one week and their revenue increased by forty percent. The marketing team said crowdsourcing was the best investment they ever made.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L3 — Silk Road</span>
+                        <div class="audio-meta">
+                            <span class="badge male">Male</span>
+                            <span class="badge">G8 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g8m3')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g8m3')">
+                            <div class="progress-bar" id="progress-g8m3"></div>
+                        </div>
+                        <span class="time-display" id="time-g8m3">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            The Silk Road was an ancient trade route that connected many civilizations. It was established during the Han Dynasty in China. Traders used the route to export silk, jewellery, and other valuable items to Europe and Asia. The Silk Road had a huge impact on cultural exchange — people shared ideas, languages, and inventions. Transporting goods along the route was incredibly dangerous because of bandits and harsh weather. However, the profit was worth the risk. The Silk Road trade helped establish new companies and trading posts in many countries. Even today, historians study this route to understand how ancient economies worked.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L4 — Marketing Plan</span>
+                        <div class="audio-meta">
+                            <span class="badge female">Female</span>
+                            <span class="badge">G8 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g8m4')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g8m4')">
+                            <div class="progress-bar" id="progress-g8m4"></div>
+                        </div>
+                        <span class="time-display" id="time-g8m4">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Yesterday, I attended a meeting in a big boardroom where an entrepreneur presented her new marketing plan. She wanted to launch a line of accessories — earrings, necklaces, and bracelets made from recycled materials. First, she explained that her team needed to check the supply and demand before production. They shopped around for the best material prices and used crowdsourcing to ask consumers about their favourite colours. The community voted online, and the winning colours were blue and green. The entrepreneur expected a fifty percent revenue increase and a solid profit within six months. Finally, her designer submitted a beautiful bracelet design to the boardroom for approval. Everyone agreed it was an incredibly smart plan.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exam-type final">
+                <h2>🎯 Final Exam</h2>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L1 — Designer Jewellery</span>
+                        <div class="audio-meta">
+                            <span class="badge male">Male</span>
+                            <span class="badge">G8 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g8f1')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g8f1')">
+                            <div class="progress-bar" id="progress-g8f1"></div>
+                        </div>
+                        <span class="time-display" id="time-g8f1">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last month, a famous designer launched a new line of necklaces and bracelets. The products were made from expensive materials including gold and silver. The company held a meeting in a large boardroom to discuss their expected profit. Everyone agreed the designs were incredibly beautiful.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L2 — Investment Budget</span>
+                        <div class="audio-meta">
+                            <span class="badge female">Female</span>
+                            <span class="badge">G8 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g8f2')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g8f2')">
+                            <div class="progress-bar" id="progress-g8f2"></div>
+                        </div>
+                        <span class="time-display" id="time-g8f2">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last week, a young entrepreneur wanted to invest in a new accessories business. She needed to check supply and demand before spending money on materials. Her marketing team planned to increase revenue by selling products online to reach more consumers. The budget meeting was held in a small boardroom with five investors. The outcome was positive — they agreed to give her ten thousand dollars to start. The consumers who tested her sample products said the brand was incredibly stylish and the prices were fair.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L3 — Ancient Trade</span>
+                        <div class="audio-meta">
+                            <span class="badge male">Male</span>
+                            <span class="badge">G8 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g8f3')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g8f3')">
+                            <div class="progress-bar" id="progress-g8f3"></div>
+                        </div>
+                        <span class="time-display" id="time-g8f3">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            The Silk Road was not used by the Roman Dynasty — it was established during the Han Dynasty in China. Traders transported goods by land and sea along ancient trade routes, carrying silk, spices, and jewellery between civilizations. Ancient trading practices had a huge impact on modern business — many of today's companies still use similar transport and exchange methods. The profit from silk trade was incredibly high for successful traders, though many faced dangers on the road. Merchants established trading companies and communities along the main routes, creating a network that lasted for centuries.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="audio-card">
+                    <div class="audio-header">
+                        <span class="audio-title">L4 — Community Project</span>
+                        <div class="audio-meta">
+                            <span class="badge female">Female</span>
+                            <span class="badge">G8 Speed</span>
+                        </div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="play-btn" onclick="togglePlay(this, 'g8f4')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <div class="progress-container" onclick="seek(event, 'g8f4')">
+                            <div class="progress-bar" id="progress-g8f4"></div>
+                        </div>
+                        <span class="time-display" id="time-g8f4">0:00 / 0:00</span>
+                    </div>
+                    <div class="script-box">
+                        <div class="script-label" onclick="toggleScript(this)">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            Show Script
+                        </div>
+                        <div class="script-content">
+                            Last year, a group of young entrepreneurs organized a community business project in a small town. They taught local people how to make bead earrings and recycled accessories from old materials. The community used crowdsourcing online to vote on new designs every month. The expected outcome was to increase local profit and revenue so that families could earn extra income. At the final meeting, the designer submitted a new product design for approval — a bracelet made from recycled glass beads. The project was incredibly successful and now exports to three nearby cities.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>Generated by AI for NAS Jiaxing English Department</p>
+        <p style="margin-top: 0.5rem; font-size: 0.875rem;">British English • Clear pronunciation • Grade-appropriate pacing</p>
+    </footer>
+    
+    <script>
+        // Tab switching
+        function showGrade(grade) {
+            document.querySelectorAll('.grade-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.exam-section').forEach(section => section.classList.remove('active'));
+            document.querySelector('.grade-tab.' + grade).classList.add('active');
+            document.getElementById(grade).classList.add('active');
+        }
+        
+        // Script toggle
+        function toggleScript(label) {
+            const content = label.nextElementSibling;
+            const icon = label.querySelector('.toggle-icon');
+            content.classList.toggle('expanded');
+            icon.classList.toggle('rotated');
+            label.querySelector('span')?.remove();
+            if (content.classList.contains('expanded')) {
+                label.innerHTML = icon.outerHTML + ' Hide Script';
+            } else {
+                label.innerHTML = icon.outerHTML + ' Show Script';
+            }
+        }
+        
+        // Audio player state
+        const players = {};
+        
+        function togglePlay(btn, id) {
+            // Placeholder for actual audio playback
+            // In production, this would play the actual TTS audio files
+            alert('Audio playback: ' + id + '\n\nIn production, this would play the generated TTS audio file.');
+        }
+        
+        function seek(event, id) {
+            // Placeholder for seeking functionality
+            const rect = event.currentTarget.getBoundingClientRect();
+            const percent = (event.clientX - rect.left) / rect.width;
+            document.getElementById('progress-' + id).style.width = (percent * 100) + '%';
+        }
+    </script>
+</body>
+</html>

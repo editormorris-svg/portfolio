@@ -1040,20 +1040,129 @@
             }
         }
         
+        // GitHub Release audio URLs
+        // Create release at: https://github.com/editormorris-svg/portfolio/releases
+        // Tag: listening-practice-v1
+        // Upload 24 MP3s matching the keys below
+        const AUDIO_BASE_URL = 'https://github.com/editormorris-svg/portfolio/releases/download/listening-practice-v1';
+        
+        const audioFiles = {
+            'g6m1': 'g6m1.mp3', 'g6m2': 'g6m2.mp3', 'g6m3': 'g6m3.mp3', 'g6m4': 'g6m4.mp3',
+            'g6f1': 'g6f1.mp3', 'g6f2': 'g6f2.mp3', 'g6f3': 'g6f3.mp3', 'g6f4': 'g6f4.mp3',
+            'g7m1': 'g7m1.mp3', 'g7m2': 'g7m2.mp3', 'g7m3': 'g7m3.mp3', 'g7m4': 'g7m4.mp3',
+            'g7f1': 'g7f1.mp3', 'g7f2': 'g7f2.mp3', 'g7f3': 'g7f3.mp3', 'g7f4': 'g7f4.mp3',
+            'g8m1': 'g8m1.mp3', 'g8m2': 'g8m2.mp3', 'g8m3': 'g8m3.mp3', 'g8m4': 'g8m4.mp3',
+            'g8f1': 'g8f1.mp3', 'g8f2': 'g8f2.mp3', 'g8f3': 'g8f3.mp3', 'g8f4': 'g8f4.mp3'
+        };
+        
         // Audio player state
         const players = {};
+        let currentlyPlaying = null;
+        
+        function getAudio(id) {
+            if (!players[id]) {
+                const src = `${AUDIO_BASE_URL}/${audioFiles[id]}`;
+                const audio = new Audio(src);
+                audio.preload = 'none';
+                
+                audio.addEventListener('loadedmetadata', () => {
+                    updateTime(id, 0, audio.duration);
+                });
+                
+                audio.addEventListener('timeupdate', () => {
+                    updateProgress(id, audio.currentTime, audio.duration);
+                });
+                
+                audio.addEventListener('ended', () => {
+                    resetPlayer(id);
+                });
+                
+                audio.addEventListener('error', () => {
+                    console.error('Audio error for', id);
+                    document.getElementById('time-' + id).textContent = 'Audio unavailable';
+                });
+                
+                players[id] = { audio, playing: false };
+            }
+            return players[id];
+        }
+        
+        function formatTime(seconds) {
+            if (!isFinite(seconds) || isNaN(seconds)) return '0:00';
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m}:${s.toString().padStart(2, '0')}`;
+        }
+        
+        function updateTime(id, current, duration) {
+            const el = document.getElementById('time-' + id);
+            if (el) el.textContent = `${formatTime(current)} / ${formatTime(duration)}`;
+        }
+        
+        function updateProgress(id, current, duration) {
+            if (!duration) return;
+            const pct = (current / duration) * 100;
+            const bar = document.getElementById('progress-' + id);
+            if (bar) bar.style.width = pct + '%';
+            updateTime(id, current, duration);
+        }
+        
+        function resetPlayer(id) {
+            const player = players[id];
+            if (!player) return;
+            player.playing = false;
+            player.audio.currentTime = 0;
+            const btn = document.querySelector(`button[onclick*="'${id}'"]`);
+            if (btn) {
+                btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+            }
+            document.getElementById('progress-' + id).style.width = '0%';
+            updateTime(id, 0, player.audio.duration || 0);
+            if (currentlyPlaying === id) currentlyPlaying = null;
+        }
         
         function togglePlay(btn, id) {
-            // Placeholder for actual audio playback
-            // In production, this would play the actual TTS audio files
-            alert('Audio playback: ' + id + '\n\nIn production, this would play the generated TTS audio file.');
+            const player = getAudio(id);
+            
+            // Pause any currently playing audio
+            if (currentlyPlaying && currentlyPlaying !== id) {
+                const other = players[currentlyPlaying];
+                if (other) {
+                    other.audio.pause();
+                    other.playing = false;
+                    const otherBtn = document.querySelector(`button[onclick*="'${currentlyPlaying}'"]`);
+                    if (otherBtn) {
+                        otherBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+                    }
+                }
+            }
+            
+            if (player.playing) {
+                player.audio.pause();
+                player.playing = false;
+                btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+                currentlyPlaying = null;
+            } else {
+                player.audio.play().then(() => {
+                    player.playing = true;
+                    btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+                    currentlyPlaying = id;
+                }).catch(err => {
+                    console.error('Play failed:', err);
+                    document.getElementById('time-' + id).textContent = 'Click to load audio';
+                });
+            }
         }
         
         function seek(event, id) {
-            // Placeholder for seeking functionality
+            const player = getAudio(id);
             const rect = event.currentTarget.getBoundingClientRect();
             const percent = (event.clientX - rect.left) / rect.width;
-            document.getElementById('progress-' + id).style.width = (percent * 100) + '%';
+            const duration = player.audio.duration;
+            if (duration && isFinite(duration)) {
+                player.audio.currentTime = percent * duration;
+                updateProgress(id, player.audio.currentTime, duration);
+            }
         }
     </script>
 </body>

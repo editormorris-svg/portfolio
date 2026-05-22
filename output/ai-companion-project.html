@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Companion Build Log | 0604.ai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --earth-dark: #2C1810;
+            --earth-brown: #4A2C17;
+            --earth-warm: #6B4423;
+            --earth-gold: #B8860B;
+            --earth-sand: #D4A574;
+            --earth-cream: #F5E6D3;
+            --earth-light: #FAF6F0;
+            --accent-rust: #C75B39;
+            --accent-sage: #6B8E6B;
+            --accent-teal: #2D5A5A;
+            --accent-ink: #1a1a2e;
+            --accent-purple: #6B5B95;
+            --text-dark: #2C1810;
+            --text-light: #F5E6D3;
+            --shadow: rgba(44, 24, 16, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--earth-light);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(44, 24, 16, 0.95), rgba(44, 24, 16, 0.85));
+            backdrop-filter: blur(10px);
+            padding: 0.8rem 2rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--earth-cream);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--earth-sand);
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover { color: var(--earth-cream); }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--accent-ink) 0%, var(--accent-purple) 50%, var(--earth-brown) 100%);
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            color: var(--earth-cream);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: var(--accent-rust);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--earth-sand);
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .version-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--earth-sand);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+        }
+
+        .hero .stats-bar {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .hero .stat {
+            padding: 0.6rem 1.2rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1.5px solid rgba(184, 134, 11, 0.5);
+            border-radius: 6px;
+            min-width: 100px;
+            text-align: center;
+            color: var(--earth-cream);
+        }
+
+        .hero .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--earth-gold);
+            display: block;
+            line-height: 1.2;
+        }
+
+        .hero .stat-label {
+            font-size: 0.75rem;
+            color: var(--earth-sand);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: block;
+            margin-top: 0.2rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--earth-sand);
+        }
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: var(--earth-dark);
+        }
+
+        .section-icon {
+            font-size: 1.8rem;
+        }
+
+        /* Status Cards */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .status-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 12px var(--shadow);
+            border-left: 4px solid var(--accent-sage);
+        }
+
+        .status-card.warning { border-left-color: var(--accent-rust); }
+        .status-card.info { border-left-color: var(--accent-teal); }
+        .status-card.pending { border-left-color: var(--earth-gold); }
+
+        .status-card h4 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--earth-warm);
+            margin-bottom: 0.5rem;
+        }
+
+        .status-card p {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .status-badge.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-badge.partial {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        /* Component List */
+        .component-list {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        .component-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+        }
+
+        .component-item:last-child {
+            border-bottom: none;
+        }
+
+        .component-icon {
+            font-size: 1.5rem;
+            min-width: 2rem;
+            text-align: center;
+        }
+
+        .component-details h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .component-details p {
+            font-size: 0.9rem;
+            color: var(--earth-warm);
+        }
+
+        .component-meta {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-teal);
+            margin-top: 0.3rem;
+        }
+
+        /* Troubleshooting Table */
+        .troubleshoot-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px var(--shadow);
+            font-size: 0.9rem;
+        }
+
+        .troubleshoot-table th {
+            background: var(--earth-dark);
+            color: var(--earth-cream);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .troubleshoot-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            vertical-align: top;
+        }
+
+        .troubleshoot-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .troubleshoot-table tr:nth-child(even) {
+            background: var(--earth-light);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .tag.fatal { background: #f8d7da; color: #721c24; }
+        .tag.workaround { background: #fff3cd; color: #856404; }
+        .tag.fixed { background: #d4edda; color: #155724; }
+
+        /* Critical Alert */
+        .critical-alert {
+            background: linear-gradient(135deg, var(--accent-rust) 0%, #a0522d 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(199, 91, 57, 0.3);
+        }
+
+        .critical-alert h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .critical-alert p {
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+
+        .critical-alert code {
+            background: rgba(255,255,255,0.2);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+        }
+
+        /* Next Steps */
+        .next-steps {
+            background: linear-gradient(135deg, var(--earth-dark) 0%, var(--accent-teal) 100%);
+            color: var(--earth-cream);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .next-steps h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .next-steps ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .next-steps li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .next-steps li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--earth-gold);
+        }
+
+        .next-steps .optional {
+            opacity: 0.7;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--earth-dark);
+            padding: 2rem;
+            text-align: center;
+            color: var(--earth-sand);
+            font-size: 0.85rem;
+        }
+
+        .footer a {
+            color: var(--earth-gold);
+            text-decoration: none;
+        }
+
+        /* Terminal block */
+        .terminal {
+            background: #1a1a2e;
+            color: #00ff88;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            margin: 0.5rem 0;
+        }
+
+        .terminal .comment { color: #6a9955; }
+        .terminal .command { color: #4ec9b0; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero .stats-bar { gap: 0.5rem; }
+            .troubleshoot-table { font-size: 0.8rem; }
+            .troubleshoot-table th, .troubleshoot-table td { padding: 0.6rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">0604.ai</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/ai-social-guide.html">AI Creator Guide</a></li>
+                <li><a href="/output/journey/">AI for Life</a></li>
+                <li><a href="/ai-for-school/">AI for School</a></li>
+                <li><a href="/all-games/">Games</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-badge">🚧 Build In Progress</div>
+        <h1>AI Companion</h1>
+        <p class="hero-subtitle">
+            Building a local AI companion on HER. Full stack: Ollama, SillyTavern, ComfyUI, 
+            voice pipeline, and memory layer — all running on AMD GPU via ROCm.
+        </p>
+        <div class="version-badge">📅 Last Updated: May 22, 2026 | 🔄 Living Build Log</div>
+        
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-number">7</div>
+                <div class="stat-label">Components</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Models</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">7</div>
+                <div class="stat-label">Issues Fixed</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">24GB</div>
+                <div class="stat-label">VRAM</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">50%</div>
+                <div class="stat-label">Disk Used</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="main-content">
+        <!-- System Status -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🖥️</span>
+                <h2>System Status</h2>
+            </div>
+            
+            <div class="status-grid">
+                <div class="status-card">
+                    <h4>GPU</h4>
+                    <p>AMD RX 7900 XTX (gfx1100)</p>
+                    <span class="status-badge success">ROCm 6.2.4 Ready</span>
+                </div>
+                <div class="status-card">
+                    <h4>Host</h4>
+                    <p>HER — 7950X3D, 96GB RAM</p>
+                    <span class="status-badge success">Online</span>
+                </div>
+                <div class="status-card info">
+                    <h4>Disk</h4>
+                    <p>140GB / 295GB used</p>
+                    <span class="status-badge success">50% — Healthy</span>
+                </div>
+                <div class="status-card pending">
+                    <h4>Status</h4>
+                    <p>Core stack installed</p>
+                    <span class="status-badge partial">Awaiting Character</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Components -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">✅</span>
+                <h2>What Worked</h2>
+            </div>
+            
+            <div class="component-list">
+                <div class="component-item">
+                    <div class="component-icon">🔧</div>
+                    <div class="component-details">
+                        <h4>ROCm 6.2.4</h4>
+                        <p>Already installed. Verified gfx1100 target. No action needed.</p>
+                        <div class="component-meta">rocm-smi ✓ | rocminfo ✓</div>
+                    </div>
+                </div>
+                
+                <div class="component-item">
+                    <div class="component-icon">🦙</div>
+                    <div class="component-details">
+                        <h4>Ollama v0.24.0</h4>
+                        <p>Installed via GitHub release asset. Runs natively on GPU.</p>
+                        <div class="component-meta">ollama-linux-amd64-rocm.tar.zst | ~/ai-stack/start-ollama.sh</div>
+                    </div>
+                </div>
+                
+                <div class="component-item">
+                    <div class="component-icon">🧠</div>
+                    <div class="component-details">
+                        <h4>Model Stack</h4>
+                        <p>Three models pulled and tested. 70B runs with partial CPU offload (expected on 24GB VRAM).</p>
+                        <div class="component-meta">dolphin-llama3:8b (100% GPU) | qwen2.5:14b | dolphin-llama3:70b (46% GPU / 54% CPU)</div>
+                    </div>
+                </div>
+                
+                <div class="component-item">
+                    <div class="component-icon">🎭</div>
+                    <div class="component-details">
+                        <h4>SillyTavern</h4>
+                        <p>Frontend for character-based AI interaction. npm dependencies resolved (829 packages).</p>
+                        <div class="component-meta">~/ai-stack/SillyTavern | npm install ✓</div>
+                    </div>
+                </div>
+                
+                <div class="component-item">
+                    <div class="component-icon">🎨</div>
+                    <div class="component-details">
+                        <h4>ComfyUI</h4>
+                        <p>Image generation pipeline. PyTorch ROCm 6.2 confirmed working.</p>
+                        <div class="component-meta">--index-url https://download.pytorch.org/whl/rocm6.2</div>
+                    </div>
+                </div>
+                
+                <div class="component-item">
+                    <div class="component-icon">🎙️</div>
+                    <div class="component-details">
+                        <h4>Voice Pipeline</h4>
+                        <p>Speech-to-text and text-to-speech ready.</p>
+                        <div class="component-meta">openai-whisper | piper-tts</div>
+                    </div>
+                </div>
+                
+                <div class="component-item">
+                    <div class="component-icon">💾</div>
+                    <div class="component-details">
+                        <h4>Memory Layer</h4>
+                        <p>Vector database for long-term memory and context retention.</p>
+                        <div class="component-meta">chromadb</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Critical Pattern -->
+        <div class="critical-alert">
+            <h3>🚨 Critical Pattern Discovered</h3>
+            <p><strong>Everything GPU-related must run with the <code>render</code> group.</strong></p>
+            <p>Without this, ROCm sees the GPU but cannot open <code>/dev/kfd</code> read-write. This applies to Ollama, PyTorch, and ComfyUI.</p>
+            <div class="terminal">
+                <span class="comment"># Start Ollama with render group</span><br>
+                <span class="command">sg render -c "ollama serve"</span><br><br>
+                <span class="comment"># Run PyTorch scripts</span><br>
+                <span class="command">sg render -c "python script.py"</span><br><br>
+                <span class="comment"># Start ComfyUI</span><br>
+                <span class="command">sg render -c "HSA_OVERRIDE_GFX_VERSION=11.0.0 python main.py"</span>
+            </div>
+            <p style="margin-top: 1rem;">The <code>start-ollama.sh</code> script handles this automatically.</p>
+        </div>
+
+        <!-- Troubleshooting -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🔧</span>
+                <h2>What Failed & How It Was Fixed</h2>
+            </div>
+            
+            <table class="troubleshoot-table">
+                <thead>
+                    <tr>
+                        <th>Problem</th>
+                        <th>Cause</th>
+                        <th>Fix</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ollama binary 404 <span class="tag fatal">Blocking</span></td>
+                        <td>Direct download URL changed</td>
+                        <td>Fetched GitHub releases API, found correct asset name <code>ollama-linux-amd64-rocm.tar.zst</code></td>
+                    </tr>
+                    <tr>
+                        <td>GPU not detected by Ollama <span class="tag fatal">Blocking</span></td>
+                        <td>Ollama daemon didn't inherit <code>render</code> group permissions</td>
+                        <td>Used <code>sg render -c "ollama serve"</code> to start with proper group</td>
+                    </tr>
+                    <tr>
+                        <td><code>nous-hermes3:8b</code> not found <span class="tag workaround">Workaround</span></td>
+                        <td>Model doesn't exist in Ollama registry</td>
+                        <td>Skipped — <code>dolphin-llama3:8b</code> covers the fast/roleplay use case</td>
+                    </tr>
+                    <tr>
+                        <td>PyTorch installed CUDA instead of ROCm <span class="tag fatal">Blocking</span></td>
+                        <td>pip defaulted to CUDA wheel</td>
+                        <td>Uninstalled, reinstalled with <code>--index-url https://download.pytorch.org/whl/rocm6.2</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>python3-venv</code> unavailable <span class="tag workaround">Workaround</span></td>
+                        <td><code>ensurepip</code> module missing, needs sudo</td>
+                        <td>Used <code>--break-system-packages</code> flag for user-local installs</td>
+                    </tr>
+                    <tr>
+                        <td>No passwordless sudo <span class="tag workaround">Workaround</span></td>
+                        <td>Not configured</td>
+                        <td>Worked around with user-local installs (<code>~/.local/bin</code>, <code>~/ai-stack/</code>)</td>
+                    </tr>
+                    <tr>
+                        <td>Long downloads "failed" <span class="tag fixed">Visual Bug</span></td>
+                        <td>Exec session wrapper sends SIGKILL after timeout</td>
+                        <td>Downloads survived via <code>nohup</code> — just couldn't show clean progress</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🎯</span>
+                <h2>Current Status & Next Steps</h2>
+            </div>
+            
+            <div class="next-steps">
+                <h3>Ready to Use Now</h3>
+                <ul>
+                    <li><code>~/ai-stack/start-ollama.sh</code> — Start the model server</li>
+                    <li><code>cd ~/ai-stack/SillyTavern && ./start.sh</code> — Launch the frontend</li>
+                    <li>Connect to <code>http://localhost:11434</code>, select <code>dolphin-llama3:70b</code></li>
+                </ul>
+                
+                <h3 style="margin-top: 1.5rem;">Next (When You're Ready)</h3>
+                <ul>
+                    <li class="optional">Character cards (you said you'd provide)</li>
+                    <li class="optional">ComfyUI checkpoint downloads (RealVisXL, JuggernautXL, Flux.1)</li>
+                    <li class="optional">Mem0/Chroma configuration with SillyTavern Summary extension</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Built by HER · Documented by Kimi · Part of the <a href="/output/journey/">AI for Life</a> project</p>
+        <p style="margin-top: 0.5rem; opacity: 0.7;">0604.ai — Open source, open process, open mind</p>
+    </div>
+</body>
+</html>

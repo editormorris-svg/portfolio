@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources — Local AI Lab</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <a href="index.html" class="logo">0604<span>.ai</span></a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="hardware.html">Hardware</a>
+                <a href="ai-stack.html">AI Stack</a>
+                <a href="services.html">Services</a>
+                <a href="network.html">Network</a>
+                <a href="backup.html">Backup</a>
+                <a href="troubleshooting.html">Fixes</a>
+                <a href="resources.html">Resources</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <h1>📚 Resources</h1>
+        <p>Downloads, links, prompts, and references</p>
+    </section>
+
+    <main class="content">
+        <div class="container">
+            <div class="toc">
+                <h4>Contents</h4>
+                <ul>
+                    <li><a href="#downloads">Downloads</a></li>
+                    <li><a href="#links">Official Links</a></li>
+                    <li><a href="#china">China-Specific Links</a></li>
+                    <li><a href="#prompts">Prompt Library</a></li>
+                    <li><a href="#docs">Documentation</a></li>
+                </ul>
+            </div>
+
+            <h2 id="downloads">Downloads</h2>
+            <table>
+                <tr>
+                    <th>Tool</th>
+                    <th>Download</th>
+                    <th>Size</th>
+                    <th>Note</th>
+                </tr>
+                <tr>
+                    <td>Ollama (Linux)</td>
+                    <td><a href="https://ollama.com/download/linux">ollama.com/download/linux</a></td>
+                    <td>~400 MB</td>
+                    <td>Includes ROCm support</td>
+                </tr>
+                <tr>
+                    <td>Ubuntu 24.04</td>
+                    <td><a href="https://ubuntu.com/download/desktop">ubuntu.com/download/desktop</a></td>
+                    <td>~5 GB ISO</td>
+                    <td>LTS, supported until 2029</td>
+                </tr>
+                <tr>
+                    <td>Kiwix Tools</td>
+                    <td><a href="https://download.kiwix.org/release/kiwix-tools/">download.kiwix.org</a></td>
+                    <td>~20 MB</td>
+                    <td>Linux x86_64 static build</td>
+                </tr>
+                <tr>
+                    <td>Restic</td>
+                    <td><a href="https://github.com/restic/restic/releases">GitHub releases</a></td>
+                    <td>~20 MB</td>
+                    <td>Single binary, no deps</td>
+                </tr>
+                <tr>
+                    <td>Timeshift</td>
+                    <td><code>sudo apt install timeshift</code></td>
+                    <td>—</td>
+                    <td>In Ubuntu repos</td>
+                </tr>
+                <tr>
+                    <td>Macrium Reflect</td>
+                    <td><a href="https://www.macrium.com/reflectfree">macrium.com</a></td>
+                    <td>~200 MB</td>
+                    <td>Windows disk imaging (free)</td>
+                </tr>
+            </table>
+
+            <h2 id="links">Official Links</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>🧠 Ollama</h3>
+                    <p><a href="https://ollama.com">ollama.com</a></p>
+                    <p><a href="https://github.com/ollama/ollama">github.com/ollama/ollama</a></p>
+                    <p><a href="https://ollama.com/library">Model library</a></p>
+                    <div class="card-meta">MIT license</div>
+                </div>
+                <div class="card">
+                    <h3>💬 Open WebUI</h3>
+                    <p><a href="https://github.com/open-webui/open-webui">github.com/open-webui/open-webui</a></p>
+                    <p><a href="https://docs.openwebui.com">docs.openwebui.com</a></p>
+                    <div class="card-meta">MIT license</div>
+                </div>
+                <div class="card">
+                    <h3>📁 Nextcloud</h3>
+                    <p><a href="https://nextcloud.com">nextcloud.com</a></p>
+                    <p><a href="https://hub.docker.com/_/nextcloud">Docker Hub</a></p>
+                    <div class="card-meta">AGPL-3.0</div>
+                </div>
+                <div class="card">
+                    <h3>🎬 Jellyfin</h3>
+                    <p><a href="https://jellyfin.org">jellyfin.org</a></p>
+                    <p><a href="https://github.com/jellyfin/jellyfin">GitHub</a></p>
+                    <div class="card-meta">GPL-2.0</div>
+                </div>
+                <div class="card">
+                    <h3>🛡️ AdGuard Home</h3>
+                    <p><a href="https://adguard.com/en/adguard-home/overview.html">adguard.com</a></p>
+                    <p><a href="https://github.com/AdguardTeam/AdGuardHome">GitHub</a></p>
+                    <div class="card-meta">GPL-3.0</div>
+                </div>
+                <div class="card">
+                    <h3>📚 Kiwix</h3>
+                    <p><a href="https://kiwix.org">kiwix.org</a></p>
+                    <p><a href="https://wiki.kiwix.org/wiki/Content_in_all_languages">ZIM downloads</a></p>
+                    <div class="card-meta">GPL-3.0</div>
+                </div>
+            </div>
+
+            <h2 id="china">China-Specific Links</h2>
+            <table>
+                <tr>
+                    <th>Service</th>
+                    <th>URL</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td>USTC Mirror</td>
+                    <td><code>https://docker.mirrors.ustc.edu.cn</code></td>
+                    <td>Docker Hub mirror (fastest in our tests)</td>
+                </tr>
+                <tr>
+                    <td>Tencent Mirror</td>
+                    <td><code>https://mirror.ccs.tencentyun.com</code></td>
+                    <td>Docker Hub mirror (backup)</td>
+                </tr>
+                <tr>
+                    <td>163 Mirror</td>
+                    <td><code>https://hub-mirror.c.163.com</code></td>
+                    <td>Docker Hub mirror (backup)</td>
+                </tr>
+                <tr>
+                    <td>Daocloud</td>
+                    <td><code>https://docker.m.daocloud.io</code></td>
+                    <td>Docker Hub mirror (slower but works)</td>
+                </tr>
+                <tr>
+                    <td>AliDNS</td>
+                    <td><code>223.5.5.5</code></td>
+                    <td>Fast DNS for China</td>
+                </tr>
+                <tr>
+                    <td>Baidu</td>
+                    <td><code>180.76.76.76</code></td>
+                    <td>Alternative DNS</td>
+                </tr>
+            </table>
+
+            <h2 id="prompts">Prompt Library</h2>
+            <p>Copy-paste these into Open WebUI. Tested with <code>llama3.1:8b</code> and <code>qwen3:30b</code>.</p>
+
+            <h3>Education</h3>
+            <pre><code>"Explain [topic] like I'm 12 years old. Use analogies and simple words."
+
+"Generate a 5-question quiz about [topic]. After I answer, give me feedback."
+
+"Create an lesson plan for [subject] grade [X]. Include: objectives, activities, materials, assessment."
+
+"Summarize this text in 3 bullet points a 10-year-old would understand: [paste text]"
+
+"I'm a teacher. Suggest 3 differentiated activities for mixed-ability students learning [topic]."</code></pre>
+
+            <h3>Writing</h3>
+            <pre><code>"Help me write a persuasive essay about [topic]. Give me an outline with 3 main arguments."
+
+"Rewrite this paragraph to be more concise and professional: [paste text]"
+
+"Generate 5 creative writing prompts for high school students."
+
+"Check this email for tone and clarity. Suggest improvements: [paste email]"</code></pre>
+
+            <h3>Language Learning</h3>
+            <pre><code>"Translate this Chinese text to English, then explain any idioms or cultural references: [paste text]"
+
+"I'm learning Chinese. Break down this sentence word by word: [paste sentence]"
+
+"Generate a dialogue between a tourist and a hotel receptionist in [language]. Include 10 vocabulary words."
+
+"Explain the difference between [word A] and [word B] with examples."</code></pre>
+
+            <h3>Technical</h3>
+            <pre><code>"I'm stuck on this math problem: [paste]. Walk me through step by step without giving the answer."
+
+"Explain how [technology] works. Use analogies. Target audience: high school students."
+
+"Debug this code. Explain what's wrong and why: [paste code]"
+
+"Generate a Python script that [task]. Include comments explaining each step."</code></pre>
+
+            <h2 id="docs">Documentation</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>📖 ROCm Docs</h3>
+                    <p><a href="https://rocm.docs.amd.com">rocm.docs.amd.com</a></p>
+                    <p>AMD GPU compute platform docs</p>
+                </div>
+                <div class="card">
+                    <h3>📖 Docker Docs</h3>
+                    <p><a href="https://docs.docker.com">docs.docker.com</a></p>
+                    <p>Container platform reference</p>
+                </div>
+                <div class="card">
+                    <h3>📖 Restic Docs</h3>
+                    <p><a href="https://restic.readthedocs.io">restic.readthedocs.io</a></p>
+                    <p>Backup tool documentation</p>
+                </div>
+                <div class="card">
+                    <h3>📖 Ubuntu Wiki</h3>
+                    <p><a href="https://wiki.ubuntu.com">wiki.ubuntu.com</a></p>
+                    <p>Community documentation</p>
+                </div>
+            </div>
+
+            <div class="tip">
+                <strong>💡 Contributing</strong>
+                Found a better mirror? Have a fix for an issue we missed? Open a PR at <a href="https://github.com/editormorris-svg/kimi-workspace">github.com/editormorris-svg/kimi-workspace</a>. The family reviews all contributions.
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>Built by HER · Managed by Kimi · <a href="https://0604.ai">0604.ai</a></p>
+        </div>
+    </footer>
+</body>
+</html>

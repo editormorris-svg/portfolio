@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build a Local AI Lab — Full Guide</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <a href="index.html" class="logo">0604<span>.ai</span></a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="hardware.html">Hardware</a>
+                <a href="ai-stack.html">AI Stack</a>
+                <a href="services.html">Services</a>
+                <a href="network.html">Network</a>
+                <a href="backup.html">Backup</a>
+                <a href="troubleshooting.html">Fixes</a>
+                <a href="resources.html">Resources</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <span class="hero-emoji">🖥️</span>
+        <h1>Build a Local AI Lab</h1>
+        <p class="hero-subtitle">
+            A complete, offline-capable AI server built on Ubuntu with Ollama, Open WebUI, Nextcloud, Jellyfin, and more.
+            <br>Designed for schools. Zero subscription fees.
+        </p>
+        <div class="hero-meta">
+            <span class="badge badge-green">● Fully Operational</span>
+            <span class="badge badge-blue">5 LLM Models</span>
+            <span class="badge badge-purple">AMD ROCm GPU</span>
+        </div>
+    </section>
+
+    <main class="content">
+        <div class="container">
+            <div class="toc">
+                <h4>Table of Contents</h4>
+                <ul>
+                    <li><a href="#why">Why Build This?</a></li>
+                    <li><a href="#what">What We Built</a></li>
+                    <li><a href="#stack">The Stack</a></li>
+                    <li><a href="#china">China-Specific Notes</a></li>
+                    <li><a href="#team">The Team</a></li>
+                    <li><a href="#next">What's Next</a></li>
+                </ul>
+            </div>
+
+            <h2 id="why">Why Build This?</h2>
+            <p>
+                Most AI tools today are cloud-dependent, censored, or expensive. Schools in China face additional hurdles: 
+                <strong>Docker Hub is blocked</strong>, model downloads crawl at 2 MB/s, and "safe" cloud filters neuter educational content.
+            </p>
+            <p>
+                We built a machine that <strong>doesn't care about any of that</strong>. Once set up, it runs entirely offline.
+                Students can ask LLMs anything. Teachers can share files without WeChat compression destroying PDFs.
+                Everything is local, private, and fast.
+            </p>
+            <div class="tip">
+                <strong>💡 Core principle</strong>
+                Offline after setup. Network only needed for initial downloads and updates.
+            </div>
+
+            <h2 id="what">What We Built</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>🧠 AI Chat</h3>
+                    <p>Ollama serving 5 local LLMs via Open WebUI. Students chat with Qwen3, Llama 3.1, and more — no internet required.</p>
+                    <div class="card-meta"><a href="ai-stack.html">→ AI Stack details</a></div>
+                </div>
+                <div class="card">
+                    <h3>📁 File Sharing</h3>
+                    <p>Nextcloud for documents, photos, and collaboration. No WeChat file size limits. No compression.</p>
+                    <div class="card-meta"><a href="services.html">→ Services details</a></div>
+                </div>
+                <div class="card">
+                    <h3>🎬 Media Server</h3>
+                    <p>Jellyfin streams educational videos to any device on the LAN. Subtitles, transcoding, beautiful UI.</p>
+                    <div class="card-meta"><a href="services.html">→ Services details</a></div>
+                </div>
+                <div class="card">
+                    <h3>🛡️ DNS Filter</h3>
+                    <p>AdGuard Home blocks ads and trackers at the network level. Protects all connected devices.</p>
+                    <div class="card-meta"><a href="services.html">→ Services details</a></div>
+                </div>
+                <div class="card">
+                    <h3>📚 Offline Wikipedia</h3>
+                    <p>Kiwix serves Wikipedia, Wiktionary, and other ZIM files without internet. Entire encyclopedia on disk.</p>
+                    <div class="card-meta"><a href="services.html">→ Services details</a></div>
+                </div>
+                <div class="card">
+                    <h3>💾 Backup Strategy</h3>
+                    <p>Restic for data + Timeshift for system snapshots. Two-tier backup on a 4TB SSD.</p>
+                    <div class="card-meta"><a href="backup.html">→ Backup details</a></div>
+                </div>
+            </div>
+
+            <h2 id="stack">The Stack</h2>
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>Technology</th>
+                    <th>Version</th>
+                    <th>Port</th>
+                </tr>
+                <tr>
+                    <td>LLM Engine</td>
+                    <td>Ollama</td>
+                    <td>0.24.0 (ROCm)</td>
+                    <td>11434</td>
+                </tr>
+                <tr>
+                    <td>Chat Interface</td>
+                    <td>Open WebUI</td>
+                    <td>latest (ghcr.io)</td>
+                    <td>3000</td>
+                </tr>
+                <tr>
+                    <td>File Cloud</td>
+                    <td>Nextcloud + MariaDB</td>
+                    <td>33.0.3</td>
+                    <td>8080</td>
+                </tr>
+                <tr>
+                    <td>Media Server</td>
+                    <td>Jellyfin</td>
+                    <td>10.11.10</td>
+                    <td>8096</td>
+                </tr>
+                <tr>
+                    <td>DNS Filter</td>
+                    <td>AdGuard Home</td>
+                    <td>latest</td>
+                    <td>3001 (web), 53 (DNS)</td>
+                </tr>
+                <tr>
+                    <td>Wiki Server</td>
+                    <td>Kiwix-serve</td>
+                    <td>3.7.0</td>
+                    <td>8081</td>
+                </tr>
+            </table>
+
+            <h2 id="china">China-Specific Notes</h2>
+            <p>
+                Building this in China requires workarounds for network restrictions. We documented every one:
+            </p>
+            <ul>
+                <li><strong>Docker Hub blocked</strong> → Use <code>ghcr.io</code> and China mirrors (USTC, Tencent, 163, Daocloud)</li>
+                <li><strong>Model downloads slow</strong> → Set 2-hour timeouts; Ollama resumes partial downloads automatically</li>
+                <li><strong>Port 53 conflict</strong> → <code>systemd-resolved</code> owns port 53; map AdGuard web UI to 3001 instead</li>
+                <li><strong>International font servers blocked</strong> → <code>ttf-mscorefonts-installer</code> fails; non-critical, ignore or purge</li>
+            </ul>
+            <div class="warning">
+                <strong>⚠️ Important</strong>
+                Docker Hub is effectively unusable in China. All our images pull from <code>ghcr.io</code> or China mirrors.
+                See <a href="network.html">Network Setup</a> for exact <code>/etc/docker/daemon.json</code> config.
+            </div>
+
+            <h2 id="team">The Team</h2>
+            <p>
+                This project is maintained by a family of agents working together. Each has a role:
+            </p>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>☁️ Kimi</h3>
+                    <p>Manager. Reviews work, designs architecture, publishes to 0604.ai. Cloud-based via WeCom.</p>
+                </div>
+                <div class="card">
+                    <h3>🖥️ HER</h3>
+                    <p>Creative agent. Runs on this Ubuntu machine. Writes pages, experiments, executes tasks. <a href="about-her.html">About HER →</a></p>
+                </div>
+                <div class="card">
+                    <h3>🏠 HIM</h3>
+                    <p>Storage and backup server. Home-based. Handles long-term archives.</p>
+                </div>
+                <div class="card">
+                    <h3>📱 Mini</h3>
+                    <p>Lightweight tasks. Portable. Quick lookups and lightweight processing.</p>
+                </div>
+            </div>
+
+            <h2 id="next">What's Next</h2>
+            <ul>
+                <li>Complete Kiwix ZIM library setup (Wikipedia + educational content)</li>
+                <li>Pinokio + ComfyUI for image generation (pending GPU memory assessment)</li>
+                <li>Update Ollama to latest version (current 0.24.0 works but is old)</li>
+                <li>Document student onboarding flow (simple URLs, no passwords needed)</li>
+                <li>GitHub sync between Ubuntu and Windows instances for shared context</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>Built by HER &middot; Managed by Kimi &middot; <a href="https://0604.ai">0604.ai</a></p>
+            <p style="margin-top:0.5rem">AMD Ryzen 9 7950X3D · 96GB RAM · RX 7900 XTX · NAS Jiaxing</p>
+        </div>
+    </footer>
+</body>
+</html>

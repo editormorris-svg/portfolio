@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troubleshooting — Local AI Lab</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <a href="index.html" class="logo">0604<span>.ai</span></a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="hardware.html">Hardware</a>
+                <a href="ai-stack.html">AI Stack</a>
+                <a href="services.html">Services</a>
+                <a href="network.html">Network</a>
+                <a href="backup.html">Backup</a>
+                <a href="troubleshooting.html">Fixes</a>
+                <a href="resources.html">Resources</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <h1>🔧 Troubleshooting</h1>
+        <p>Issues we hit, how we fixed them, and what to watch for</p>
+    </section>
+
+    <main class="content">
+        <div class="container">
+            <div class="toc">
+                <h4>Contents</h4>
+                <ul>
+                    <li><a href="#docker">Docker Hub Blocked</a></li>
+                    <li><a href="#slow">Slow Downloads</a></li>
+                    <li><a href="#port53">Port 53 Conflict</a></li>
+                    <li><a href="#jellyfin">Jellyfin Permissions</a></li>
+                    <li><a href="#ollama">Ollama Update Killed</a></li>
+                    <li><a href="#timeshift">Timeshift + NTFS</a></li>
+                    <li><a href="#compose">Compose Version Bug</a></li>
+                    <li><a href="#wecom">WeCom on Ubuntu</a></li>
+                </ul>
+            </div>
+
+            <h2 id="docker">Docker Hub Blocked</h2>
+            <p><strong>Symptom:</strong> <code>docker pull hello-world</code> hangs forever or times out.</p>
+            <p><strong>Cause:</strong> Docker Hub is blocked or throttled in China.</p>
+            <p><strong>Fix:</strong></p>
+            <ol>
+                <li>Edit <code>/etc/docker/daemon.json</code> to add China mirrors</li>
+                <li>Restart Docker: <code>sudo systemctl restart docker</code></li>
+                <li>Use <code>ghcr.io</code> for images that support it (Open WebUI)</li>
+            </ol>
+            <div class="tip">
+                <strong>💡 Mirror priority</strong>
+                USTC (docker.mirrors.ustc.edu.cn) is the most reliable in our testing. Tencent and 163 are backups. Daocloud works but is slower.
+            </div>
+
+            <h2 id="slow">Slow Model Downloads</h2>
+            <p><strong>Symptom:</strong> <code>ollama pull qwen3:30b</code> runs at 2 MB/s and takes 2+ hours.</p>
+            <p><strong>Cause:</strong> Ollama downloads from international servers (likely Cloudflare R2 or similar).</p>
+            <p><strong>Fix:</strong></p>
+            <ul>
+                <li>Set timeout to 2 hours: <code>timeout: 7200</code> in your automation tool</li>
+                <li>Ollama resumes partial downloads automatically — if killed, just re-run the command</li>
+                <li>Download overnight when network is less congested</li>
+            </ul>
+            <div class="warning">
+                <strong>⚠️ Don't interrupt mid-download manually</strong>
+                Let the timeout handle it. Ollama's resume works well. Manually Ctrl+C'ing sometimes corrupts the blob and requires <code>ollama rm &amp;&amp; ollama pull</code> again.
+            </div>
+
+            <h2 id="port53">Port 53 Conflict</h2>
+            <p><strong>Symptom:</strong> AdGuard Home container fails to start. <code>docker-compose up</code> errors with "port 53 already in use."</p>
+            <p><strong>Cause:</strong> <code>systemd-resolved</code> owns port 53 on Ubuntu 24.04. You cannot bind it without stopping the system service first.</p>
+            <p><strong>Fix options:</strong></p>
+            <ol>
+                <li><strong>Map web UI only:</strong> Use port 3001 for AdGuard's web interface. DNS functionality requires manual client configuration or router-level DNS forwarding.</li>
+                <li><strong>Disable systemd-resolved:</strong> <code>sudo systemctl stop systemd-resolved &amp;&amp; sudo systemctl disable systemd-resolved</code>. Then map port 53 normally. May break some DNS resolution.</li>
+                <li><strong>Use a different DNS port:</strong> Map 5353:53 and configure clients/router to use port 5353. Most clients don't support non-standard DNS ports easily.</li>
+            </ol>
+            <p>We chose option 1. AdGuard web UI works on 3001. DNS filtering would need router cooperation.</p>
+
+            <h2 id="jellyfin">Jellyfin Permissions</h2>
+            <p><strong>Symptom:</strong> Jellyfin container starts but shows "Server is starting..." forever. Logs show permission denied on <code>/config</code>.</p>
+            <p><strong>Cause:</strong> Config/cache directories created as root, but Jellyfin runs as UID 1000.</p>
+            <p><strong>Fix:</strong></p>
+            <pre><code>sudo chown -R 1000:1000 /home/wm/ai-stack/jellyfin/
+docker-compose restart jellyfin</code></pre>
+            <div class="tip">
+                <strong>💡 Pro tip</strong>
+                Set <code>user: "1000:1000"</code> in docker-compose.yml so Jellyfin always runs as your user, not root. Then <code>mkdir -p</code> the directories before first run so they have correct ownership from the start.
+            </div>
+
+            <h2 id="ollama">Ollama Update Killed</h2>
+            <p><strong>Symptom:</strong> <code>curl -fsSL https://ollama.com/install.sh | sh</code> gets SIGKILL at 78-91%.</p>
+            <p><strong>Cause:</strong> The update script downloads a large binary (~400MB+) which gets killed by resource/timeout limits in the execution environment.</p>
+            <p><strong>Fix:</strong></p>
+            <ul>
+                <li>Current version (0.24.0) works fine with ROCm. No urgent need to update.</li>
+                <li>If updating is critical, download the binary manually with curl (resumable) instead of the install script.</li>
+                <li>Or update when network is better (at home, not school).</li>
+            </ul>
+            <div class="warning">
+                <strong>⚠️ Broken system service</strong>
+                The apt-installed <code>/etc/systemd/system/ollama.service</code> crash-loops with port conflicts. It's been disabled. The user service at <code>~/.config/systemd/user/ollama.service</code> is the correct one. Don't re-enable the system service.
+            </div>
+
+            <h2 id="timeshift">Timeshift + NTFS</h2>
+            <p><strong>Symptom:</strong> Timeshift snapshot fails with "cannot unmount /media/wm/2TB-Data" or creates empty snapshots.</p>
+            <p><strong>Cause:</strong> Timeshift wants exclusive mount control. If the partition is auto-mounted via fstab, Timeshift can't get it.</p>
+            <p><strong>Fix:</strong></p>
+            <ol>
+                <li>Set <code>noauto</code> in <code>/etc/fstab</code> for the target partition</li>
+                <li>Create a systemd oneshot service that mounts after <code>local-fs.target</code></li>
+                <li>Enable the service: <code>sudo systemctl enable mount-2tbdata.service</code></li>
+            </ol>
+            <pre><code># /etc/systemd/system/mount-2tbdata.service
+[Unit]
+Description=Mount 2TB-Data partition
+After=local-fs.target
+Before=ollama.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/mount /media/wm/2TB-Data
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+
+            <h2 id="compose">Compose Version Bug</h2>
+            <p><strong>Symptom:</strong> <code>docker-compose up</code> fails with "ContainerConfig: command not found" or similar.</p>
+            <p><strong>Cause:</strong> docker-compose v1 (apt-installed) has a bug parsing newer image manifests that omit ContainerConfig.</p>
+            <p><strong>Fix:</strong></p>
+            <ul>
+                <li>Use <code>docker run</code> directly as a workaround</li>
+                <li>Or install docker-compose v2 plugin: <code>sudo apt install docker-compose-plugin</code></li>
+                <li>Or use <code>docker compose</code> (space, not hyphen) if v2 is installed</li>
+            </ul>
+
+            <h2 id="wecom">WeCom on Ubuntu</h2>
+            <p><strong>Symptom:</strong> WeCom (企业微信) desktop client fails to install or extract.</p>
+            <p><strong>Cause:</strong> The UOS/Deepin Wine compatibility layer is unreliable on some Ubuntu setups.</p>
+            <p><strong>Fix:</strong></p>
+            <ol>
+                <li>Use the <strong>web version</strong>: <code>https://work.weixin.qq.com/</code> — most reliable on Linux</li>
+                <li>For full features (calls), use your phone or an Android emulator</li>
+                <li>WeChat desktop (personal) works fine — only WeCom (enterprise) has issues</li>
+            </ol>
+            <div class="tip">
+                <strong>💡 Separation of concerns</strong>
+                WeChat (personal) = HER's channel. WeCom (enterprise) = Kimi's channel. They don't need to run on the same machine. Phone relay works fine.
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>Built by HER · Managed by Kimi · <a href="https://0604.ai">0604.ai</a></p>
+        </div>
+    </footer>
+</body>
+</html>

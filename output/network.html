@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network & Docker — Local AI Lab</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <a href="index.html" class="logo">0604<span>.ai</span></a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="hardware.html">Hardware</a>
+                <a href="ai-stack.html">AI Stack</a>
+                <a href="services.html">Services</a>
+                <a href="network.html">Network</a>
+                <a href="backup.html">Backup</a>
+                <a href="troubleshooting.html">Fixes</a>
+                <a href="resources.html">Resources</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <h1>🌐 Network & Docker</h1>
+        <p>China-specific setup: mirrors, registries, and compose tips</p>
+    </section>
+
+    <main class="content">
+        <div class="container">
+            <div class="toc">
+                <h4>Contents</h4>
+                <ul>
+                    <li><a href="#docker">Docker China Mirrors</a></li>
+                    <li><a href="#compose">Compose Version</a></li>
+                    <li><a href="#ports">Port Mapping</a></li>
+                    <li><a href="#firewall">Firewall</a></li>
+                    <li><a href="#school">School Network</a></li>
+                </ul>
+            </div>
+
+            <h2 id="docker">Docker China Mirrors</h2>
+            <p>Docker Hub is blocked or extremely slow in China. Without mirrors, <code>docker pull</code> hangs indefinitely.</p>
+
+            <h3>/etc/docker/daemon.json</h3>
+            <pre><code>{
+  "registry-mirrors": [
+    "https://docker.mirrors.ustc.edu.cn",
+    "https://mirror.ccs.tencentyun.com",
+    "https://hub-mirror.c.163.com",
+    "https://docker.m.daocloud.io"
+  ]
+}</code></pre>
+
+            <div class="tip">
+                <strong>💡 Apply the config</strong>
+                <code>sudo systemctl restart docker</code> — then verify with <code>docker info | grep -i mirror</code>
+            </div>
+
+            <h3>ghcr.io works</h3>
+            <p>GitHub Container Registry (<code>ghcr.io</code>) is not blocked. We pull Open WebUI from there:</p>
+            <pre><code>docker pull ghcr.io/open-webui/open-webui:main</code></pre>
+
+            <h2 id="compose">Compose Version</h2>
+            <p>Ubuntu apt installs <code>docker-compose</code> v1 (hyphen). The newer <code>docker compose</code> (space, v2 plugin) may not be available. Both work, but syntax differs slightly.</p>
+
+            <table>
+                <tr>
+                    <th>Version</th>
+                    <th>Command</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>v1 (apt)</td>
+                    <td><code>docker-compose up -d</code></td>
+                    <td>✅ Available</td>
+                </tr>
+                <tr>
+                    <td>v2 (plugin)</td>
+                    <td><code>docker compose up -d</code></td>
+                    <td>⚠️ May not be installed</td>
+                </tr>
+            </table>
+
+            <div class="warning">
+                <strong>⚠️ ContainerConfig bug</strong>
+                docker-compose v1 has a bug with certain images where <code>ContainerConfig</code> is missing. If you see this error, the image is fine — the compose tool is old. Upgrade to v2 or use <code>docker run</code> directly.
+            </div>
+
+            <h2 id="ports">Port Mapping</h2>
+            <p>Every service gets a dedicated port. No conflicts if you plan ahead:</p>
+
+            <table>
+                <tr>
+                    <th>Service</th>
+                    <th>Host Port</th>
+                    <th>Container Port</th>
+                    <th>Note</th>
+                </tr>
+                <tr>
+                    <td>Ollama</td>
+                    <td>11434</td>
+                    <td>11434</td>
+                    <td>Native, not Docker</td>
+                </tr>
+                <tr>
+                    <td>Open WebUI</td>
+                    <td>3000</td>
+                    <td>8080</td>
+                    <td>ghcr.io image</td>
+                </tr>
+                <tr>
+                    <td>Nextcloud</td>
+                    <td>8080</td>
+                    <td>80</td>
+                    <td>Apache inside container</td>
+                </tr>
+                <tr>
+                    <td>Jellyfin</td>
+                    <td>8096</td>
+                    <td>8096</td>
+                    <td>Media server</td>
+                </tr>
+                <tr>
+                    <td>AdGuard (web)</td>
+                    <td>3001</td>
+                    <td>3000</td>
+                    <td>Moved from 3000 to avoid conflict</td>
+                </tr>
+                <tr>
+                    <td>AdGuard (DNS)</td>
+                    <td>—</td>
+                    <td>53</td>
+                    <td>Conflict with systemd-resolved</td>
+                </tr>
+                <tr>
+                    <td>MariaDB</td>
+                    <td>—</td>
+                    <td>3306</td>
+                    <td>Internal only, no host mapping</td>
+                </tr>
+                <tr>
+                    <td>Kiwix</td>
+                    <td>8081</td>
+                    <td>8081</td>
+                    <td>Native binary</td>
+                </tr>
+            </table>
+
+            <h2 id="firewall">Firewall</h2>
+            <p>Ubuntu's UFW is usually disabled on LANs. If enabled, open the ports:</p>
+            <pre><code>sudo ufw allow 3000/tcp    # Open WebUI
+sudo ufw allow 8080/tcp    # Nextcloud
+sudo ufw allow 8096/tcp    # Jellyfin
+sudo ufw allow 3001/tcp    # AdGuard web
+sudo ufw allow 8081/tcp    # Kiwix
+sudo ufw allow 11434/tcp   # Ollama API
+sudo ufw reload</code></pre>
+
+            <h2 id="school">School Network</h2>
+            <p>At NAS Jiaxing, the machine got IP <code>10.39.26.217</code> via DHCP. Students on the same WiFi/LAN can access all services.</p>
+
+            <div class="warning">
+                <strong>⚠️ School firewall may block ports</strong>
+                If students cannot reach <code>10.39.26.217:3000</code>, the school firewall is blocking internal ports. Ask IT to open 3000, 8080, 8096, 3001, 8081, 11434 for the machine's MAC address. Or run on ports 80/443 (but then you need root and may conflict with other services).
+            </div>
+
+            <div class="tip">
+                <strong>💡 mDNS / .local hostname</strong>
+                Install <code>avahi-daemon</code> and students can reach <code>http://her.local:3000</code> instead of remembering an IP. Easier for non-technical users.
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>Built by HER · Managed by Kimi · <a href="https://0604.ai">0604.ai</a></p>
+        </div>
+    </footer>
+</body>
+</html>

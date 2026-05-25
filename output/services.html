@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services — Local AI Lab</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <a href="index.html" class="logo">0604<span>.ai</span></a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="hardware.html">Hardware</a>
+                <a href="ai-stack.html">AI Stack</a>
+                <a href="services.html">Services</a>
+                <a href="network.html">Network</a>
+                <a href="backup.html">Backup</a>
+                <a href="troubleshooting.html">Fixes</a>
+                <a href="resources.html">Resources</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <h1>🔧 Services</h1>
+        <p>Docker services: Nextcloud, Jellyfin, AdGuard Home, Kiwix</p>
+    </section>
+
+    <main class="content">
+        <div class="container">
+            <div class="toc">
+                <h4>Contents</h4>
+                <ul>
+                    <li><a href="#nextcloud">Nextcloud</a></li>
+                    <li><a href="#jellyfin">Jellyfin</a></li>
+                    <li><a href="#adguard">AdGuard Home</a></li>
+                    <li><a href="#kiwix">Kiwix</a></li>
+                    <li><a href="#quickref">Quick Reference</a></li>
+                </ul>
+            </div>
+
+            <h2 id="nextcloud">Nextcloud</h2>
+            <p>Self-hosted file sync and share. No WeChat 25MB file limits. No compression destroying PDFs. Students upload assignments, teachers distribute materials.</p>
+
+            <h3>Docker Compose</h3>
+            <pre><code>services:
+  db:
+    image: mariadb:10.6
+    container_name: nextcloud-db
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_PASSWORD=nextcloud
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+    volumes:
+      - db:/var/lib/mysql
+
+  app:
+    image: nextcloud:latest
+    container_name: nextcloud-app
+    ports:
+      - "8080:80"
+    links:
+      - db
+    volumes:
+      - nextcloud:/var/www/html
+    restart: always
+    environment:
+      - MYSQL_PASSWORD=nextcloud
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_HOST=db
+
+volumes:
+  db:
+  nextcloud:</code></pre>
+
+            <div class="warning">
+                <strong>⚠️ Default credentials</strong>
+                Admin: <code>admin</code> / <code>admin123</code>. Change immediately after first login via the web UI at <code>http://HER:8080</code>.
+            </div>
+
+            <h3>Why not use the snap package?</h3>
+            <p>The snap is easier but limits configuration. Docker gives full control over versions, backups, and migration. The data volumes live in <code>/var/lib/docker/volumes/</code> and can be backed up with Restic.</p>
+
+            <h2 id="jellyfin">Jellyfin</h2>
+            <p>Media server for educational videos. Students watch on any device via browser. No internet required after setup.</p>
+
+            <h3>Docker Compose</h3>
+            <pre><code>services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    ports:
+      - "8096:8096"
+    volumes:
+      - /home/wm/ai-stack/jellyfin/config:/config
+      - /home/wm/ai-stack/jellyfin/cache:/cache
+      - /home/wm/media:/media:ro
+    restart: unless-stopped
+    user: "1000:1000"</code></pre>
+
+            <div class="tip">
+                <strong>💡 Permission fix</strong>
+                Jellyfin runs as UID 1000. If config/cache directories are owned by root, the container fails silently. Fix: <code>sudo chown -R 1000:1000 /home/wm/ai-stack/jellyfin/</code>
+            </div>
+
+            <h3>Adding media</h3>
+            <p>Place video files in <code>/home/wm/media/</code> (or wherever your media mount is). Jellyfin scans automatically. Organize by folders: <code>Movies/</code>, <code>TV/</code>, <code>Education/</code>.</p>
+
+            <h2 id="adguard">AdGuard Home</h2>
+            <p>Network-wide ad and tracker blocker. Every device on the LAN benefits — no per-device setup needed.</p>
+
+            <h3>Docker Compose</h3>
+            <pre><code>services:
+  adguardhome:
+    image: adguard/adguardhome:latest
+    container_name: adguardhome
+    ports:
+      - "3001:3000"    # Web UI
+      # DNS ports removed — systemd-resolved owns 53
+    volumes:
+      - /home/wm/ai-stack/adguard/work:/opt/adguardhome/work
+      - /home/wm/ai-stack/adguard/conf:/opt/adguardhome/conf
+    restart: unless-stopped</code></pre>
+
+            <div class="warning">
+                <strong>⚠️ Port 53 conflict</strong>
+                Ubuntu's <code>systemd-resolved</code> binds port 53. You cannot map AdGuard's DNS port without stopping systemd-resolved first. We mapped the web UI to port 3001 instead. To use AdGuard as DNS, configure it in your router or set DNS manually on clients to point at the machine's IP with port 53 (requires <code>systemctl stop systemd-resolved</code>).
+            </div>
+
+            <h3>Setup</h3>
+            <ol>
+                <li>Open <code>http://HER:3001</code></li>
+                <li>Follow the wizard — set admin password</li>
+                <li>Add filter lists (default ones are good)</li>
+                <li>Configure upstream DNS (e.g., <code>223.5.5.5</code> for AliDNS in China, or <code>1.1.1.1</code> for Cloudflare)</li>
+            </ol>
+
+            <h2 id="kiwix">Kiwix</h2>
+            <p>Offline Wikipedia and other ZIM files. Entire encyclopedia on disk. No internet required.</p>
+
+            <h3>Installation</h3>
+            <pre><code># Download tools (slow in China — use --timeout=7200)
+curl -L -o kiwix-tools.tar.gz \
+  "https://download.kiwix.org/release/kiwix-tools/kiwix-tools_linux-x86_64-3.7.0.tar.gz"
+tar -xzf kiwix-tools.tar.gz
+sudo mv kiwix-tools_*/kiwix-serve /usr/local/bin/
+sudo mv kiwix-tools_*/kiwix-manage /usr/local/bin/
+
+# Download a ZIM file (Wikipedia, Wiktionary, etc.)
+# From https://download.kiwix.org/zim/wikipedia/
+curl -L -o wikipedia_en_all_maxi.zim \
+  "https://download.kiwix.org/zim/wikipedia/wikipedia_en_all_maxi_YYYY-MM.zim"
+
+# Create library file
+kiwix-manage library.zim.xml add wikipedia_en_all_maxi.zim
+
+# Start server
+kiwix-serve --library library.zim.xml --port 8081</code></pre>
+
+            <div class="tip">
+                <strong>💡 ZIM files are large</strong>
+                English Wikipedia maxi is ~90 GB. Start with nopic (~30 GB) or mini (~5 GB) for faster download. Wiktionary is ~2 GB and extremely useful for language learners.
+            </div>
+
+            <h2 id="quickref">Quick Reference</h2>
+            <table>
+                <tr>
+                    <th>Service</th>
+                    <th>URL</th>
+                    <th>Docker</th>
+                    <th>Status Check</th>
+                </tr>
+                <tr>
+                    <td>Ollama</td>
+                    <td><code>http://HER:11434</code></td>
+                    <td>Native (user service)</td>
+                    <td><code>curl http://localhost:11434/api/tags</code></td>
+                </tr>
+                <tr>
+                    <td>Open WebUI</td>
+                    <td><code>http://HER:3000</code></td>
+                    <td><code>ghcr.io/open-webui/open-webui:main</code></td>
+                    <td>Web page loads</td>
+                </tr>
+                <tr>
+                    <td>Nextcloud</td>
+                    <td><code>http://HER:8080</code></td>
+                    <td><code>nextcloud:latest</code></td>
+                    <td><code>curl http://localhost:8080/status.php</code></td>
+                </tr>
+                <tr>
+                    <td>Jellyfin</td>
+                    <td><code>http://HER:8096</code></td>
+                    <td><code>jellyfin/jellyfin:latest</code></td>
+                    <td><code>curl http://localhost:8096/System/Info/Public</code></td>
+                </tr>
+                <tr>
+                    <td>AdGuard</td>
+                    <td><code>http://HER:3001</code></td>
+                    <td><code>adguard/adguardhome:latest</code></td>
+                    <td>Web page loads</td>
+                </tr>
+                <tr>
+                    <td>Kiwix</td>
+                    <td><code>http://HER:8081</code></td>
+                    <td>Native binary</td>
+                    <td>Web page loads</td>
+                </tr>
+            </table>
+
+            <div class="tip">
+                <strong>💡 Replace HER</strong>
+                In all URLs above, <code>HER</code> means the machine's LAN IP. At school this was <code>10.39.26.217</code>. At home it will be different. Use <code>ip addr show</code> to find the current IP.
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>Built by HER · Managed by Kimi · <a href="https://0604.ai">0604.ai</a></p>
+        </div>
+    </footer>
+</body>
+</html>

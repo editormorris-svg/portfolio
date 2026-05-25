@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backup Strategy — Local AI Lab</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <a href="index.html" class="logo">0604<span>.ai</span></a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="hardware.html">Hardware</a>
+                <a href="ai-stack.html">AI Stack</a>
+                <a href="services.html">Services</a>
+                <a href="network.html">Network</a>
+                <a href="backup.html">Backup</a>
+                <a href="troubleshooting.html">Fixes</a>
+                <a href="resources.html">Resources</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <h1>💾 Backup Strategy</h1>
+        <p>Restic for data, Timeshift for system, two tiers on 4TB SSD</p>
+    </section>
+
+    <main class="content">
+        <div class="container">
+            <div class="toc">
+                <h4>Contents</h4>
+                <ul>
+                    <li><a href="#overview">Overview</a></li>
+                    <li><a href="#restic">Restic (Data)</a></li>
+                    <li><a href="#timeshift">Timeshift (System)</a></li>
+                    <li><a href="#cron">Cron Schedule</a></li>
+                    <li><a href="#restore">Restore Procedures</a></li>
+                </ul>
+            </div>
+
+            <h2 id="overview">Overview</h2>
+            <p>Two-tier backup on the 4TB SSD:</p>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>🔒 Restic</h3>
+                    <p>Deduplicating, encrypted backups of /home/wm, configs, and dotfiles. Runs daily at 4:00 AM.</p>
+                    <div class="card-meta">Data tier</div>
+                </div>
+                <div class="card">
+                    <h3>🔄 Timeshift</h3>
+                    <p>System snapshots using rsync. Weekly + monthly + boot. Roll back entire system state.</p>
+                    <div class="card-meta">System tier</div>
+                </div>
+            </div>
+
+            <h2 id="restic">Restic (Data Backup)</h2>
+            <h3>Setup</h3>
+            <pre><code># Initialize repository
+sudo restic init --repo /media/wm/2TB-Data/restic-repo
+# Password stored in ~/.config/restic/password (chmod 600)
+
+# Backup script: /home/wm/bin/backup-system.sh
+#!/bin/bash
+export RESTIC_PASSWORD_FILE=/home/wm/.config/restic/password
+restic --repo /media/wm/2TB-Data/restic-repo backup \
+    /home/wm /etc/fstab /etc/timeshift /etc/docker \
+    --exclude-file=/home/wm/.restic-exclude</code></pre>
+
+            <h3>Exclude file (.restic-exclude)</h3>
+            <pre><code># Models (already on 4TB drive)
+**/.ollama/models/
+
+# Docker data (rebuildable)
+**/docker/
+**/docker-volumes/
+
+# Caches
+**/.cache/
+**/.npm/
+**/.local/share/Trash/
+
+# Downloads
+**/Downloads/
+
+# Large media (back up separately if needed)
+**/media/
+**/Videos/
+
+# Runtime data
+**/.openclaw/
+**/sessions/
+**/.tmp/</code></pre>
+
+            <div class="tip">
+                <strong>💡 First backup stats</strong>
+                63.4 GB processed → 30.6 GB stored (deduplication). Snapshot ID: <code>8f592c32</code>.
+            </div>
+
+            <h3>Commands</h3>
+            <pre><code># List snapshots
+restic --repo /media/wm/2TB-Data/restic-repo snapshots
+
+# Restore latest to /tmp/restore
+restic --repo /media/wm/2TB-Data/restic-repo restore latest --target /tmp/restore
+
+# Mount a snapshot (browse without extracting)
+restic --repo /media/wm/2TB-Data/restic-repo mount /mnt/restic-mount
+
+# Keep only last 7 daily, 4 weekly, 12 monthly
+restic --repo /media/wm/2TB-Data/restic-repo forget \
+    --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --prune</code></pre>
+
+            <h2 id="timeshift">Timeshift (System Snapshots)</h2>
+            <h3>Config (/etc/timeshift/timeshift.json)</h3>
+            <pre><code>{
+  "backup_device_uuid": "0808242B082419E8",
+  "snapshot_levels": {
+    "hourly": 0,
+    "daily": 0,
+    "weekly": 4,
+    "monthly": 3,
+    "boot": 3
+  },
+  "exclude": [
+    "/home/wm/.ollama/models/**",
+    "/home/wm/.cache/**",
+    "/var/log/**",
+    "/var/cache/**",
+    "/var/lib/docker/**",
+    "/media/**",
+    "/mnt/**",
+    "/swap.img"
+  ],
+  "snapshot_type": "rsync"
+}</code></pre>
+
+            <h3>Timeshift + NTFS note</h3>
+            <p>Timeshift wants exclusive mount control. If the target partition is already mounted (e.g., via fstab), Timeshift will unmount it during snapshot creation. After the snapshot, remount manually:</p>
+            <pre><code>sudo mount /media/wm/2TB-Data</code></pre>
+            <p>Better solution: use <code>noauto</code> in fstab + a systemd service to mount at boot after local-fs.target.</p>
+
+            <div class="warning">
+                <strong>⚠️ First snapshot on NTFS is slow</strong>
+                The initial rsync to NTFS took ~20 minutes. Subsequent snapshots are incremental and much faster. Be patient.
+            </div>
+
+            <h2 id="cron">Cron Schedule</h2>
+            <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Job</th>
+                    <th>Script</th>
+                </tr>
+                <tr>
+                    <td>3:00 AM</td>
+                    <td>SillyTavern backup</td>
+                    <td>backup-sam.sh</td>
+                </tr>
+                <tr>
+                    <td>4:00 AM</td>
+                    <td>System backup (Restic)</td>
+                    <td>backup-system.sh</td>
+                </tr>
+                <tr>
+                    <td>Sundays</td>
+                    <td>Timeshift snapshot</td>
+                    <td>timeshift --create</td>
+                </tr>
+                <tr>
+                    <td>Monthly</td>
+                    <td>Timeshift monthly snapshot</td>
+                    <td>timeshift --create</td>
+                </tr>
+                <tr>
+                    <td>Boot</td>
+                    <td>Timeshift boot snapshot</td>
+                    <td>Automatic</td>
+                </tr>
+            </table>
+
+            <h2 id="restore">Restore Procedures</h2>
+            <h3>Restic restore (single file or directory)</h3>
+            <pre><code># Find the snapshot
+restic snapshots
+# Restore a specific path
+restic restore <snapshot-id> --target /tmp/restore --include /home/wm/.bashrc
+# Copy back to original location
+cp /tmp/restore/home/wm/.bashrc /home/wm/.bashrc</code></pre>
+
+            <h3>Timeshift restore (full system rollback)</h3>
+            <ol>
+                <li>Boot Ubuntu Live USB</li>
+                <li>Install timeshift: <code>sudo apt install timeshift</code></li>
+                <li>Select snapshot device: <code>/dev/nvme0n1p3</code></li>
+                <li>Choose snapshot → Restore</li>
+                <li>Reboot</li>
+            </ol>
+
+            <div class="danger">
+                <strong>🔴 Windows backup</strong>
+                Macrium Reflect handles the Windows side. No Linux version exists. Keep Windows images on the OS-BK partition. Timeshift and Restic do NOT back up Windows.
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>Built by HER · Managed by Kimi · <a href="https://0604.ai">0604.ai</a></p>
+        </div>
+    </footer>
+</body>
+</html>

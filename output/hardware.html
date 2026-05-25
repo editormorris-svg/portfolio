@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hardware & Setup — Local AI Lab</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <a href="index.html" class="logo">0604<span>.ai</span></a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="hardware.html">Hardware</a>
+                <a href="ai-stack.html">AI Stack</a>
+                <a href="services.html">Services</a>
+                <a href="network.html">Network</a>
+                <a href="backup.html">Backup</a>
+                <a href="troubleshooting.html">Fixes</a>
+                <a href="resources.html">Resources</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <h1>🔧 Hardware & Setup</h1>
+        <p>Exact specs, dual-boot configuration, and storage layout</p>
+    </section>
+
+    <main class="content">
+        <div class="container">
+            <div class="toc">
+                <h4>Contents</h4>
+                <ul>
+                    <li><a href="#machine">The Machine</a></li>
+                    <li><a href="#storage">Storage Layout</a></li>
+                    <li><a href="#dualboot">Dual Boot</a></li>
+                    <li><a href="#whyamd">Why AMD GPU?</a></li>
+                    <li><a href="#cost">Total Cost</a></li>
+                </ul>
+            </div>
+
+            <h2 id="machine">The Machine</h2>
+            <p>This is a consumer-grade gaming PC repurposed as an AI server. No server hardware needed. Everything was already in the living room, connected to a TV.</p>
+
+            <div class="spec-grid">
+                <div class="spec-card">
+                    <div class="label">CPU</div>
+                    <div class="value">AMD Ryzen 9 7950X3D</div>
+                </div>
+                <div class="spec-card">
+                    <div class="label">RAM</div>
+                    <div class="value">96 GB DDR5</div>
+                </div>
+                <div class="spec-card">
+                    <div class="label">GPU</div>
+                    <div class="value">AMD RX 7900 XTX 24GB</div>
+                </div>
+                <div class="spec-card">
+                    <div class="label">Root SSD</div>
+                    <div class="value">295 GB (ext4)</div>
+                </div>
+                <div class="spec-card">
+                    <div class="label">Data SSD</div>
+                    <div class="value">4 TB (NTFS)</div>
+                </div>
+                <div class="spec-card">
+                    <div class="label">OS</div>
+                    <div class="value">Ubuntu 24.04 + Windows</div>
+                </div>
+            </div>
+
+            <h2 id="storage">Storage Layout</h2>
+            <p>The 4TB SSD is the secret weapon. It holds models, backups, and Timeshift snapshots — all while keeping the root partition clean.</p>
+
+            <table>
+                <tr>
+                    <th>Partition</th>
+                    <th>Size</th>
+                    <th>Filesystem</th>
+                    <th>Mounted At</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td>nvme1n1p5</td>
+                    <td>295 GB</td>
+                    <td>ext4</td>
+                    <td>/</td>
+                    <td>Ubuntu root, Docker images, configs</td>
+                </tr>
+                <tr>
+                    <td>nvme0n1p1</td>
+                    <td>~500 GB</td>
+                    <td>NTFS</td>
+                    <td>—</td>
+                    <td>Windows C: drive</td>
+                </tr>
+                <tr>
+                    <td>nvme0n1p3</td>
+                    <td>~1.8 TB</td>
+                    <td>NTFS</td>
+                    <td>/media/wm/2TB-Data</td>
+                    <td><strong>Ollama models, Restic repo, Timeshift</strong></td>
+                </tr>
+                <tr>
+                    <td>nvme0n1p4</td>
+                    <td>~1.9 TB</td>
+                    <td>NTFS</td>
+                    <td>OS-BK</td>
+                    <td>General storage, Macrium Reflect backups</td>
+                </tr>
+            </table>
+
+            <div class="tip">
+                <strong>💡 Pro tip</strong>
+                Ollama models are 72 GB. Keeping them on the 4TB SSD via symlink (<code>/home/wm/.ollama/models → /media/wm/2TB-Data/ollama-models</code>) dropped root partition usage from 73% to 47%.
+            </div>
+
+            <h2 id="dualboot">Dual Boot</h2>
+            <p>Windows stays for gaming and Macrium Reflect backups. Ubuntu runs the AI stack. GRUB handles boot selection.</p>
+
+            <h3>Windows side</h3>
+            <ul>
+                <li>Macrium Reflect for full disk imaging</li>
+                <li>No Linux version exists — use Timeshift on Ubuntu instead</li>
+                <li>HER (Windows agent) runs there when booted</li>
+            </ul>
+
+            <h3>Ubuntu side</h3>
+            <ul>
+                <li>All AI services run here</li>
+                <li>Restic + Timeshift for backup</li>
+                <li>HER (Ubuntu agent) — the primary workhorse</li>
+            </ul>
+
+            <div class="warning">
+                <strong>⚠️ Timeshift + NTFS conflict</strong>
+                Timeshift wants exclusive mount control during snapshots. If your data partition is mounted at boot via fstab, Timeshift will fail. Solution: use <code>noauto</code> in fstab + a systemd oneshot service to mount after local-fs.target.
+            </div>
+
+            <h2 id="whyamd">Why AMD GPU?</h2>
+            <p>NVIDIA is the default choice for AI, but AMD ROCm works well for inference:</p>
+            <ul>
+                <li><strong>24 GB VRAM</strong> — runs 30B models comfortably (18 GB model + overhead)</li>
+                <li><strong>ROCm 6.2</strong> — Ollama supports it natively</li>
+                <li><strong>Free</strong> — already owned the card</li>
+                <li><strong>Linux-first</strong> — ROCm is better supported on Linux than Windows</li>
+            </ul>
+            <p>One quirk: the 7900 XTX reports as gfx1100 but needs <code>HSA_OVERRIDE_GFX_VERSION=11.0.0</code> to work with ROCm's compatibility layer.</p>
+
+            <h2 id="cost">Total Cost</h2>
+            <table>
+                <tr>
+                    <th>Item</th>
+                    <th>Cost</th>
+                    <th>Note</th>
+                </tr>
+                <tr>
+                    <td>PC hardware</td>
+                    <td>$0</td>
+                    <td>Already owned</td>
+                </tr>
+                <tr>
+                    <td>Ubuntu</td>
+                    <td>$0</td>
+                    <td>Free</td>
+                </tr>
+                <tr>
+                    <td>Ollama</td>
+                    <td>$0</td>
+                    <td>Open source</td>
+                </tr>
+                <tr>
+                    <td>Open WebUI</td>
+                    <td>$0</td>
+                    <td>Open source (MIT)</td>
+                </tr>
+                <tr>
+                    <td>Nextcloud</td>
+                    <td>$0</td>
+                    <td>Open source (AGPL)</td>
+                </tr>
+                <tr>
+                    <td>Jellyfin</td>
+                    <td>$0</td>
+                    <td>Open source (GPL)</td>
+                </tr>
+                <tr>
+                    <td>AdGuard Home</td>
+                    <td>$0</td>
+                    <td>Open source</td>
+                </tr>
+                <tr>
+                    <td>Restic + Timeshift</td>
+                    <td>$0</td>
+                    <td>Both open source</td>
+                </tr>
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td><strong>$0</strong></td>
+                    <td>Existing hardware only</td>
+                </tr>
+            </table>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>Built by HER · Managed by Kimi · <a href="https://0604.ai">0604.ai</a></p>
+        </div>
+    </footer>
+</body>
+</html>

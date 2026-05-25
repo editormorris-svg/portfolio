@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Stack — Local AI Lab</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <a href="index.html" class="logo">0604<span>.ai</span></a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="hardware.html">Hardware</a>
+                <a href="ai-stack.html">AI Stack</a>
+                <a href="services.html">Services</a>
+                <a href="network.html">Network</a>
+                <a href="backup.html">Backup</a>
+                <a href="troubleshooting.html">Fixes</a>
+                <a href="resources.html">Resources</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <h1>🧠 AI Stack</h1>
+        <p>Ollama, local LLMs, Open WebUI, and ROCm GPU setup</p>
+    </section>
+
+    <main class="content">
+        <div class="container">
+            <div class="toc">
+                <h4>Contents</h4>
+                <ul>
+                    <li><a href="#ollama">Ollama Setup</a></li>
+                    <li><a href="#models">Models</a></li>
+                    <li><a href="#rocm">ROCm GPU</a></li>
+                    <li><a href="#webui">Open WebUI</a></li>
+                    <li><a href="#prompts">Useful Prompts</a></li>
+                    <li><a href="#school">School vs Personal</a></li>
+                </ul>
+            </div>
+
+            <h2 id="ollama">Ollama Setup</h2>
+            <p>Ollama is the engine. It downloads, serves, and runs LLMs locally. Old version 0.24.0 is installed as a user systemd service — works perfectly with ROCm.</p>
+
+            <h3>Installation</h3>
+            <pre><code># User-level systemd service
+mkdir -p ~/.config/systemd/user
+cat > ~/.config/systemd/user/ollama.service &lt;&lt; 'EOF'
+[Unit]
+Description=Ollama LLM Server (Local AI Stack)
+After=network.target
+
+[Service]
+Type=simple
+Environment="OLLAMA_HOST=0.0.0.0"
+Environment="HSA_OVERRIDE_GFX_VERSION=11.0.0"
+ExecStartPre=/bin/sh -c 'sg render -c "echo render group ok"'
+ExecStart=/bin/sh -c 'sg render -c "/usr/local/bin/ollama serve"'
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target
+EOF
+
+systemctl --user daemon-reload
+systemctl --user enable ollama
+systemctl --user start ollama</code></pre>
+
+            <div class="tip">
+                <strong>💡 Why user service?</strong>
+                The apt-installed system service (user=ollama) crash-loops with port conflicts. User service runs as <code>wm</code>, has correct GPU group access, and "just works."
+            </div>
+
+            <h3>Models moved to 4TB SSD</h3>
+            <pre><code># Move models to free root partition
+rsync -aP ~/.ollama/models/ /media/wm/2TB-Data/ollama-models/
+# Backup old location
+mv ~/.ollama/models ~/.ollama/models.bak
+# Create symlink
+ln -s /media/wm/2TB-Data/ollama-models ~/.ollama/models
+# Verify
+ls -la ~/.ollama/models
+# Remove backup after verification
+rm -rf ~/.ollama/models.bak</code></pre>
+
+            <h2 id="models">Models</h2>
+            <p>Five models installed, totaling ~72 GB. All stored on the 4TB SSD.</p>
+
+            <table>
+                <tr>
+                    <th>Model</th>
+                    <th>Size</th>
+                    <th>Parameters</th>
+                    <th>Purpose</th>
+                    <th>Use</th>
+                </tr>
+                <tr>
+                    <td>llama3.1:8b</td>
+                    <td>4.9 GB</td>
+                    <td>8B</td>
+                    <td>Fast general chat</td>
+                    <td>School + Personal</td>
+                </tr>
+                <tr>
+                    <td>qwen3:30b</td>
+                    <td>18 GB</td>
+                    <td>30B</td>
+                    <td>Deep reasoning, coding</td>
+                    <td>School + Personal</td>
+                </tr>
+                <tr>
+                    <td>qwen2.5:14b</td>
+                    <td>9.0 GB</td>
+                    <td>14B</td>
+                    <td>Balanced speed/quality</td>
+                    <td>School + Personal</td>
+                </tr>
+                <tr>
+                    <td>dolphin-llama3:8b</td>
+                    <td>4.9 GB</td>
+                    <td>8B</td>
+                    <td>Uncensored personal use</td>
+                    <td><strong>Personal only</strong></td>
+                </tr>
+                <tr>
+                    <td>dolphin-llama3:70b</td>
+                    <td>35 GB</td>
+                    <td>70B</td>
+                    <td>Uncensored personal use</td>
+                    <td><strong>Personal only</strong></td>
+                </tr>
+            </table>
+
+            <h3>Download commands</h3>
+            <pre><code>ollama pull llama3.1:8b
+ollama pull qwen3:30b
+ollama pull qwen2.5:14b
+ollama pull dolphin-llama3:8b
+ollama pull dolphin-llama3:70b</code></pre>
+
+            <div class="warning">
+                <strong>⚠️ China download speeds</strong>
+                Ollama pulls from international servers. Expect 2-5 MB/s. A 18 GB model takes ~2 hours. Set long timeouts and let Ollama resume partial downloads automatically.
+            </div>
+
+            <h2 id="rocm">ROCm GPU Setup</h2>
+            <p>AMD RX 7900 XTX runs inference via ROCm. Key environment variable:</p>
+            <pre><code>export HSA_OVERRIDE_GFX_VERSION=11.0.0</code></pre>
+            <p>This maps the card's gfx1100 architecture to ROCm's compatibility layer. Without it, Ollama falls back to CPU (painfully slow on these models).</p>
+
+            <div class="tip">
+                <strong>💡 Verify GPU is working</strong>
+                <code>ollama ps</code> shows loaded models. If VRAM column shows values (not 0/0), GPU acceleration is active. Or check <code>/var/log/syslog</code> for "ROCm" entries.
+            </div>
+
+            <h2 id="webui">Open WebUI</h2>
+            <p>ChatGPT-like interface for Ollama. Students never need to touch the terminal.</p>
+
+            <h3>Docker Compose</h3>
+            <pre><code>services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    ports:
+      - "3000:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - WEBUI_AUTH=False
+    volumes:
+      - open-webui:/app/backend/data
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  open-webui:</code></pre>
+
+            <div class="tip">
+                <strong>💡 Why ghcr.io?</strong>
+                Docker Hub is blocked in China. <code>ghcr.io</code> (GitHub Container Registry) works reliably. The image is ~6.7 GB.
+            </div>
+
+            <h3>Access</h3>
+            <p>Students open <code>http://10.39.26.217:3000</code> (or whatever the machine's LAN IP is). No login required. Select a model from the dropdown and chat.</p>
+
+            <h2 id="prompts">Useful Prompts</h2>
+            <p>These work well for educational use with <code>llama3.1:8b</code> and <code>qwen3:30b</code>:</p>
+
+            <h3>For students</h3>
+            <pre><code>"Explain photosynthesis like I'm 12 years old. Use simple words and analogies."
+
+"Help me write a 5-paragraph essay about [topic]. Give me an outline first."
+
+"Translate this Chinese text to English, then explain any cultural references I might miss."
+
+"I'm stuck on this math problem: [paste problem]. Walk me through it step by step without giving me the answer."
+
+"Quiz me on World War 2. Ask 5 questions, then check my answers."</code></pre>
+
+            <h3>For teachers</h3>
+            <pre><code>"Generate 10 discussion questions about [book] for 10th graders."
+
+"Create a rubric for grading creative writing assignments. 4 levels: Exceeds, Meets, Approaching, Below."
+
+"Suggest 5 differentiation strategies for teaching [topic] to mixed-ability classes."
+
+"Write a parent email template explaining why we're using AI tools in class."</code></pre>
+
+            <h2 id="school">School vs Personal Use</h2>
+            <p>Two of the models are uncensored (Dolphin series). They can generate content unsuitable for students. Our setup keeps them available but not default:</p>
+
+            <ul>
+                <li><strong>School default:</strong> <code>llama3.1:8b</code>, <code>qwen3:30b</code>, <code>qwen2.5:14b</code></li>
+                <li><strong>Personal use:</strong> <code>dolphin-llama3:8b</code>, <code>dolphin-llama3:70b</code></li>
+            </ul>
+
+            <div class="warning">
+                <strong>⚠️ Model inventory matters</strong>
+                Maintain <code>MODEL_INVENTORY.md</code> tracking each model's size, purpose, and school-appropriateness. Review before exposing to students.
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>Built by HER · Managed by Kimi · <a href="https://0604.ai">0604.ai</a></p>
+        </div>
+    </footer>
+</body>
+</html>

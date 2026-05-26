@@ -452,6 +452,7 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v AUOptions
         <li><strong>Remote Health Monitoring</strong> — Check any machine's gateway status from the cloud</li>
         <li><strong>Cross-Machine File Access</strong> — Map network drives over Tailscale (e.g., <code>Z:/</code> on HER → <code>D:/</code> on HIM)</li>
         <li><strong>Exit Node for Streaming</strong> — N95 (Thailand) routes traffic for Disney+, Netflix geo-unblocking</li>
+        <li><strong>Agent-to-Agent SSH</strong> — HER has direct SSH access to Kimi (100.64.40.83) for diagnostics, restarts, and emergency repairs without user relay</li>
         <li><strong>Remote Agent Management</strong> — Query agents, trigger tasks, check loaded skills</li>
         <li><strong>Shared Model Storage</strong> — HIM's 8TB HDD becomes a central AI model repository</li>
     </ol>
@@ -470,8 +471,16 @@ New-NetFirewallRule -DisplayName "OpenClaw Tailscale" -Direction Inbound -LocalP
 # Event logs for shutdown reasons
 Get-WinEvent -FilterHashtable @{LogName='System'; ID=1074,6006,6008} -MaxEvents 5
 
+# Event logs for shutdown reasons
+Get-WinEvent -FilterHashtable @{LogName='System'; ID=1074,6006,6008} -MaxEvents 5
+
 # Verify config on any machine
-Select-String -Path "$env:USERPROFILE\.openclaw\openclaw.json" -Pattern '"bind"'</code></pre>
+Select-String -Path "$env:USERPROFILE\.openclaw\openclaw.json" -Pattern '"bind"'
+
+# HER → Kimi SSH (direct agent access)
+ssh 100.64.40.83 -i ~/.ssh/id_her_to_kimi                    # Full shell access
+ssh 100.64.40.83 -i ~/.ssh/id_her_to_kimi 'git status'        # Check repo state
+ssh 100.64.40.83 -i ~/.ssh/id_her_to_kimi 'sudo systemctl restart openclaw'  # Restart service</code></pre>
 
     <h2>📅 Changelog</h2>
 
@@ -483,6 +492,14 @@ Select-String -Path "$env:USERPROFILE\.openclaw\openclaw.json" -Pattern '"bind"'
             </tr>
         </thead>
         <tbody>
+            <tr>
+                <td>May 26, 2026</td>
+                <td>HER → Kimi SSH access configured. Direct agent failover now possible without user relay.</td>
+            </tr>
+            <tr>
+                <td>May 26, 2026</td>
+                <td>GitLab backup configured. Dual-remote sync (GitHub + GitLab) active on all machines.</td>
+            </tr>
             <tr>
                 <td>May 7, 2026</td>
                 <td>HER gateway changed to <code>tailnet</code> mode — remote access confirmed</td>

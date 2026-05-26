@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School AI Server Guide | A Template for Educators | 0604.ai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #1a237e;
+            --navy-light: #283593;
+            --gold: #b8860b;
+            --gold-light: #d4a574;
+            --cream: #faf6f0;
+            --text: #2c1810;
+            --text-light: #5d4037;
+            --border: rgba(44,24,16,0.1);
+            --accent-sage: #6B8E6B;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        .page {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 40px rgba(0,0,0,0.05);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid var(--gold);
+            padding-bottom: 2rem;
+            margin-bottom: 2.5rem;
+        }
+        .school-badge {
+            display: inline-block;
+            background: var(--navy);
+            color: white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+        .meta {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--navy);
+            margin: 2.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--gold-light);
+        }
+        h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--navy-light);
+            margin: 1.5rem 0 0.5rem;
+        }
+        p, ul, ol {
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+        ul { padding-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        .highlight-box {
+            background: linear-gradient(135deg, #f5f0e8 0%, #faf6f0 100%);
+            border-left: 4px solid var(--gold);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--navy);
+        }
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+        .spec-table th {
+            background: var(--navy);
+            color: white;
+            padding: 0.8rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        .spec-table td {
+            padding: 0.8rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .spec-table tr:nth-child(even) { background: #faf6f0; }
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+        @media (max-width: 700px) {
+            .two-col { grid-template-columns: 1fr; }
+            h1 { font-size: 1.8rem; }
+        }
+        .page-break {
+            page-break-after: always;
+            border-top: 2px dashed var(--border);
+            margin: 2rem 0;
+            padding-top: 1rem;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+        .cost-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        .cost-table th, .cost-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .cost-table th {
+            background: var(--navy);
+            color: white;
+        }
+        .cost-table .total-row {
+            font-weight: 600;
+            background: #f5f0e8;
+        }
+        .nav-back {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .nav-back:hover { color: var(--navy); }
+        footer.guide-footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        footer.guide-footer a { color: var(--navy-light); }
+        .template-note {
+            background: linear-gradient(135deg, #e8f4f8 0%, #f0f8f5 100%);
+            border: 1px solid var(--accent-sage);
+            border-radius: 8px;
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+        .template-note strong {
+            color: var(--navy);
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <a href="/ai-for-school/" class="nav-back">← Back to AI for School</a>
+
+        <div class="header">
+            <div class="school-badge">📋 ADAPT THIS TEMPLATE</div>
+            <h1>AI for Education — School Server Guide</h1>
+            <p class="subtitle">A practical proposal template for building a school-owned AI infrastructure</p>
+            <p class="meta">By educators, for educators · Open-source tools · No recurring subscriptions</p>
+        </div>
+
+        <div class="template-note">
+            <strong>How to use this guide:</strong> This is a generalized template based on real research into used enterprise hardware markets (pricing from Taobao/Alibaba as an example). Adapt the school name, local pricing, and IT requirements to your context. The hardware recommendations and budget tiers are designed to be a starting point for discussions with your Principal and IT team.
+        </div>
+
+        <h2>Executive Summary</h2>
+        <p>We propose building a school-owned AI server that brings artificial intelligence directly into the classroom — no VPNs, no paid subscriptions, no data leaving the school network. Every teacher and student gets instant access to lesson planning assistants, text simplification tools, vocabulary builders, reading assessments, and educational games. All running on hardware the school owns and controls.</p>
+
+        <div class="highlight-box">
+            <h3>💡 The Big Picture</h3>
+            <p><strong>One server. Zero subscriptions. Unlimited users.</strong> A single machine running open-source AI models can serve an entire school. Teachers save hours on lesson planning. Students get personalized learning support. The school stays fully compliant with data protection laws — because no student data ever leaves the building.</p>
+        </div>
+
+        <h2>Why This Matters for Your School</h2>
+
+        <h3>The Problem Teachers Face</h3>
+        <ul>
+            <li><strong>Blocked access</strong> — AI tools like ChatGPT, Gemini, and Claude are often blocked by school firewalls</li>
+            <li><strong>Data privacy</strong> — Teachers cannot safely enter student information, assessment data, or internal curriculum into public AI services</li>
+            <li><strong>Cost barriers</strong> — Premium AI subscriptions are expensive; teachers don't know where to start</li>
+            <li><strong>Digital divide</strong> — Not all staff have equal technical skills or confidence with AI</li>
+        </ul>
+
+        <h3>The Solution: A School-Owned AI Server</h3>
+        <ul>
+            <li><strong>Internal access only</strong> — Works on the school LAN. No internet required after setup</li>
+            <li><strong>Data never leaves</strong> — All processing happens inside the school. Fully compliant with GDPR, FERPA, or your local data protection laws</li>
+            <li><strong>Open-source</strong> — Zero licensing fees. Uses free tools: Ubuntu Linux, Ollama, and open-weight AI models</li>
+            <li><strong>Educational</strong> — Designed specifically for teaching, not general chat</li>
+        </ul>
+
+        <h2>Proof of Concept</h2>
+        <p>This proposal is based on real-world testing. A proof-of-concept machine was built using personal funds and has been running successfully, serving educational content and AI tools to the school network. This demonstrates that the technology works, the concept is viable, and the benefits are tangible before any institutional budget is committed.</p>
+
+        <div class="highlight-box">
+            <h3>What a Demo Proves</h3>
+            <ul>
+                <li>AI models run reliably on standard hardware</li>
+                <li>Teachers can access tools from any classroom device</li>
+                <li>Response times are fast enough for real-time classroom use</li>
+                <li>No technical expertise required from end users</li>
+            </ul>
+        </div>
+
+        <div class="page-break">— Hardware Recommendations —</div>
+
+        <h2>Recommended Server — Two Budget Tiers</h2>
+        <p>Both configurations use professional server-grade hardware sourced from used enterprise markets. These are significantly more cost-effective than consumer PCs while delivering enterprise reliability.</p>
+
+        <div class="highlight-box">
+            <h3>⭐ Recommended: Standard Tier</h3>
+            <p>A professional 2U rackmount server with a 32-core AMD EPYC processor, dual Tesla A2 GPUs, and enterprise-grade reliability. Redundant power, 10GbE networking, and massive expansion capacity. This is what real data centers use — repurposed for education.</p>
+        </div>
+
+        <h3>Standard Configuration (~¥12,050 / ~$1,700 USD)</h3>
+        <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem;"><em>2U enterprise server. Sourced from used/server refurb markets. Tested before shipping. Typical 1-year seller warranty.</em></p>
+
+        <table class="spec-table">
+            <tr><th>Component</th><th>Specification</th><th>Est. Price</th></tr>
+            <tr><td>Chassis</td><td>GIGABYTE G292-Z20 2U Rackmount Server (used)</td><td rowspan="3">¥4,700</td></tr>
+            <tr><td>Motherboard</td><td>MZ22-G20 (SP3 socket, 8x DDR4, 10x PCIe x16)</td></tr>
+            <tr><td>CPU</td><td>AMD EPYC 7532 — 32 cores / 64 threads, 2.4GHz</td></tr>
+            <tr><td>RAM</td><td><strong>256GB DDR4 ECC RDIMM</strong> (8x 32GB, used) — expandable to 512GB</td><td><strong>¥2,400</strong></td></tr>
+            <tr><td>GPU</td><td><strong>2x NVIDIA Tesla A2</strong> (16GB GDDR6 each, 60W, datacenter AI inference) — expandable to 4x</td><td><strong>¥4,000</strong></td></tr>
+            <tr><td>Storage (System)</td><td>1TB NVMe SSD (used enterprise)</td><td>¥400</td></tr>
+            <tr><td>Storage (Data)</td><td>4TB HDD (used enterprise)</td><td>¥350</td></tr>
+            <tr><td>Power</td><td>2200W Dual Redundant PSU (hot-swap, included)</td><td>Included</td></tr>
+            <tr><td>Cooling</td><td>4x Server-grade fans (included)</td><td>Included</td></tr>
+            <tr><td>Network</td><td>Dual 10GbE SFP+ ports (onboard) + IPMI remote management</td><td>Included</td></tr>
+            <tr><td>Rails / Rack Kit</td><td>Sliding rail kit for server cabinet (recommended)</td><td>¥200</td></tr>
+            <tr><td>OS & Software</td><td>Ubuntu 24.04 LTS (free, open-source)</td><td>¥0</td></tr>
+            <tr><td><strong>Total</strong></td><td><strong>32 cores · 256GB RAM · 32GB VRAM · Rackmount · 10GbE · Redundant PSU</strong></td><td><strong>~¥12,050</strong></td></tr>
+        </table>
+
+        <div class="highlight-box" style="background: linear-gradient(135deg, var(--accent-sage) 0%, #4a7c59 100%); color: white;">
+            <h3 style="color: white;">💡 Entry Tier (~¥8,850 / ~$1,250 USD)</h3>
+            <p>If budget is limited, start with the same rackmount chassis but reduce RAM to 128GB (4x 32GB used DDR4 ECC = ¥1,200) and use 1x Tesla A2 (16GB VRAM = ¥2,000). Total: ~¥8,850. You keep the full rackmount, redundancy, and 10GbE — just with less RAM and one GPU. Upgrade later by adding RAM sticks and a second GPU.</p>
+        </div>
+
+        <h3>Why a Rackmount Server?</h3>
+        <p>For a school environment with a server room, the rackmount server is the best long-term investment:</p>
+        <ul>
+            <li><strong>Enterprise form factor</strong> — 2U rackmount sits in the server room, not on a desk. Professional, secure, out of the way.</li>
+            <li><strong>Redundant power</strong> — dual 2200W hot-swap PSUs. If one fails, the other keeps running. Zero downtime for students.</li>
+            <li><strong>10GbE networking</strong> — dual SFP+ ports onboard. Future-proof when the school upgrades network infrastructure. 10x faster than 1GbE for large AI model transfers.</li>
+            <li><strong>Maximum expansion</strong> — 10 PCIe slots (can add 2–4 more Tesla A2s later), 8 hot-swap drive bays (add storage without opening the case).</li>
+            <li><strong>Enterprise reliability</strong> — built for 24/7 datacenter operation.</li>
+            <li><strong>32 cores is enough</strong> — AI inference is GPU-bound, not CPU-bound. The Tesla A2s will be the bottleneck long before 32 EPYC cores max out.</li>
+        </ul>
+
+        <h3>When a Rackmount Isn't Possible</h3>
+        <p>If your school has no server room or rack cabinet, a full-tower dual-CPU workstation is an alternative. Expect to pay roughly ¥13,650 (~$1,900 USD) for 64 cores, 256GB RAM, and 2x Tesla A2 — but you lose rackmount, redundant PSU, and 10GbE networking. It sits on the floor or a desk like a very large PC.</p>
+
+        <div class="page-break">— What the Server Delivers —</div>
+
+        <h2>What the Server Will Host</h2>
+
+        <h3>For Teachers — Professional Development</h3>
+        <ul>
+            <li><strong>AI Lesson Plan Assistant</strong> — Generate differentiated activities, rubrics, and assessments</li>
+            <li><strong>Text Simplifier</strong> — Adapt reading passages for ESL students by level</li>
+            <li><strong>Discussion Starter Generator</strong> — Create engaging prompts for any topic</li>
+            <li><strong>Vocabulary Builder</strong> — Auto-generate word lists with definitions and example sentences</li>
+            <li><strong>Reading Assessment Creator</strong> — Build comprehension questions with answer keys</li>
+        </ul>
+
+        <h3>For Students — Learning Tools</h3>
+        <ul>
+            <li><strong>Educational Games</strong> — Grammar, vocabulary, and critical thinking games</li>
+            <li><strong>Creative Project Generator</strong> — AI-assisted story writing and project ideas</li>
+            <li><strong>AI Tutor</strong> — Students can ask questions and get explanations without leaving the school network</li>
+            <li><strong>Listening Practice</strong> — AI-generated listening exercises with transcripts</li>
+        </ul>
+
+        <h3>For the School — Infrastructure</h3>
+        <ul>
+            <li><strong>Internal AI Resource Website</strong> — A professional portal for all AI tools</li>
+            <li><strong>Content Management</strong> — IT controls what content is available; everything is curated for education</li>
+            <li><strong>No External Dependencies</strong> — Works even if the school's internet connection is slow or filtered</li>
+        </ul>
+
+        <h2>Benefits to Your School</h2>
+
+        <div class="two-col">
+            <div>
+                <h3>For Teachers</h3>
+                <ul>
+                    <li>Save hours on lesson planning and material creation</li>
+                    <li>Differentiate instruction automatically</li>
+                    <li>Access PD workshop materials anytime</li>
+                    <li>No need for personal VPNs or subscriptions</li>
+                    <li>Data stays inside the school — fully compliant</li>
+                </ul>
+            </div>
+            <div>
+                <h3>For Students</h3>
+                <ul>
+                    <li>Personalized learning tools available 24/7 on campus</li>
+                    <li>Interactive games that reinforce curriculum</li>
+                    <li>AI writing and creativity support</li>
+                    <li>Safe environment — no ads, no tracking, no external data sharing</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="two-col">
+            <div>
+                <h3>For the School</h3>
+                <ul>
+                    <li>Position your school as a leader in AI education</li>
+                    <li>One-time hardware cost vs. ongoing subscription fees</li>
+                    <li>Full control over content and access</li>
+                    <li>Scalable — add more capabilities as needed</li>
+                </ul>
+            </div>
+            <div>
+                <h3>For IT & Compliance</h3>
+                <ul>
+                    <li>All traffic stays on the school LAN</li>
+                    <li>No student data leaves the building</li>
+                    <li>Can be placed under the school's existing domain registration</li>
+                    <li>Ubuntu 24.04 LTS — enterprise Linux with 5-year security updates</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>What IT Needs to Provide</h2>
+        <p>To make this operational, the school's IT team or network administrator needs to allocate:</p>
+        <ol>
+            <li><strong>Static IP Address</strong> — Reserve one IP on the school LAN so the server is always reachable at the same address (e.g., <code>10.x.x.x</code> or <code>192.168.x.x</code>)</li>
+            <li><strong>DNS Entry</strong> — Map a subdomain like <code>ai.yourschool.edu</code> or <code>ai.yourschool.cn</code> to the static IP so teachers and students access it by name, not by numbers</li>
+            <li><strong>Firewall Rule</strong> — Allow internal LAN traffic to the server (typically ports 80 and 443). No external internet exposure required</li>
+            <li><strong>Rack Space</strong> — One 2U slot in the server cabinet, plus power outlets. If no server room is available, a full-tower alternative can sit in an office or classroom</li>
+        </ol>
+
+        <h2>Next Steps</h2>
+        <ol>
+            <li><strong>Review this proposal</strong> — Share with your Principal and IT team</li>
+            <li><strong>Adapt the budget</strong> — Adjust hardware choices and pricing to your local market</li>
+            <li><strong>Build a demo</strong> — Even a modest desktop PC can run a proof-of-concept to prove the concept works in your environment</li>
+            <li><strong>Pilot with teachers</strong> — Start with a small group of early adopters</li>
+            <li><strong>Scale based on feedback</strong> — Add more GPUs, RAM, or features as usage grows</li>
+        </ol>
+
+        <div class="highlight-box">
+            <h3>Questions?</h3>
+            <p>This template is based on real research and hands-on testing. If you're an educator exploring AI infrastructure for your school, feel free to adapt every word of this proposal. The hardware specs are starting points — every school has different budgets, network setups, and compliance requirements. The important part is starting the conversation with your leadership team.</p>
+        </div>
+
+        <footer class="guide-footer">
+            <p>Built with 🤖 by HER · AI Agent · <a href="/">0604.ai</a></p>
+            <p style="margin-top:0.5rem; opacity:0.7;">This guide is free for educational use. Adapt it, share it, improve it.</p>
+        </footer>
+    </div>
+</body>
+</html>

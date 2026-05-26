@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rajah's Diamond - An Interactive Adventure</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Palatino', serif; background: linear-gradient(135deg, #1a0a00 0%, #2d1810 100%); min-height: 100vh; color: #ffe4b5; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        h1 { text-align: center; color: #ffd700; text-shadow: 2px 2px 4px #000; margin-bottom: 20px; font-size: 2.5em; }
+        h2 { color: #daa520; margin-bottom: 15px; }
+        .screen { display: none; background: rgba(30,15,5,0.9); border-radius: 15px; padding: 30px; margin-bottom: 20px; border: 3px solid #8b4513; }
+        .screen.active { display: block; }
+        .btn { background: linear-gradient(180deg, #b8860b, #8b4513); color: #ffe4b5; border: 2px solid #ffd700; padding: 12px 25px; font-size: 16px; cursor: pointer; border-radius: 8px; margin: 5px; transition: all 0.3s; font-family: inherit; }
+        .btn:hover { background: linear-gradient(180deg, #daa520, #b8860b); transform: scale(1.05); }
+        .btn:disabled { background: #444; cursor: not-allowed; opacity: 0.6; }
+        .character-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
+        .character-card { background: rgba(139,69,19,0.3); border: 2px solid #8b4513; border-radius: 10px; padding: 15px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .character-card:hover, .character-card.selected { border-color: #ffd700; background: rgba(255,215,0,0.2); transform: scale(1.05); }
+        .character-card h3 { color: #ffd700; margin-bottom: 10px; }
+        .stats-panel { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+        .stat { text-align: center; padding: 10px 20px; background: rgba(139,69,19,0.4); border-radius: 8px; }
+        .stat-name { color: #daa520; font-size: 12px; text-transform: uppercase; }
+        .stat-value { color: #ffd700; font-size: 24px; font-weight: bold; }
+        .location-map { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .location { background: rgba(139,69,19,0.3); border: 2px solid #8b4513; border-radius: 10px; padding: 15px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .location:hover { background: rgba(139,69,19,0.5); border-color: #ffd700; transform: scale(1.02); }
+        .location.locked { opacity: 0.5; cursor: not-allowed; }
+        .location h3 { color: #ffd700; margin-bottom: 5px; }
+        .location p { font-size: 12px; color: #ccc; }
+        .narrative { background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px; margin-bottom: 20px; line-height: 1.8; font-size: 16px; border-left: 4px solid #daa520; }
+        .dialogue { background: rgba(40,20,10,0.5); padding: 15px; border-radius: 10px; margin: 10px 0; border-left: 4px solid #ffd700; }
+        .speaker { color: #daa520; font-weight: bold; }
+        .choices { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+        .choice-btn { background: rgba(139,69,19,0.3); border: 2px solid #8b4513; padding: 15px; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-align: left; }
+        .choice-btn:hover { background: rgba(139,69,19,0.6); border-color: #ffd700; }
+        .inventory { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
+        .item { background: rgba(255,215,0,0.2); padding: 8px 15px; border-radius: 20px; border: 1px solid #ffd700; font-size: 14px; }
+        .mini-game { background: rgba(20,10,5,0.6); padding: 20px; border-radius: 10px; text-align: center; margin: 20px 0; }
+        .game-area { min-height: 200px; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 20px; margin: 15px 0; }
+        .clue-panel { background: rgba(0,0,0,0.6); padding: 15px; border-radius: 10px; margin: 10px 0; }
+        .clue { background: rgba(218,165,32,0.2); padding: 10px; margin: 5px 0; border-radius: 5px; border-left: 3px solid #ffd700; }
+        .suspicion-meter { display: flex; gap: 5px; justify-content: center; margin: 10px 0; }
+        .suspicion-dot { width: 20px; height: 20px; border-radius: 50%; background: #444; border: 2px solid #daa520; }
+        .suspicion-dot.active { background: #ffd700; }
+        .riddle-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+        .dice-container { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
+        .dice { width: 80px; height: 80px; background: #ffe4b5; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 40px; color: #8b4513; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .map-area { position: relative; width: 100%; height: 300px; background: linear-gradient(180deg, #f4a460 0%, #8b4513 100%); border-radius: 10px; overflow: hidden; }
+        .map-marker { position: absolute; width: 30px; height: 30px; background: #ffd700; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .ending { text-align: center; padding: 40px; }
+        .ending h2 { font-size: 2em; margin-bottom: 20px; }
+        .quiz-options { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 15px; }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 5px #ffd700; } 50% { box-shadow: 0 0 20px #ffd700; } }
+        .glow { animation: glow 2s infinite; }
+        .game-title { font-size: 14px; color: #888; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Rajah's Diamond</h1>
+        <p class="game-title">Robert Louis Stevenson - An Interactive Mystery for EAL Learners</p>
+        
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen active">
+            <h2>Bank of Hindustan, Calcutta, 1875</h2>
+            <div class="narrative">
+                <p>You are John E.R. Scott, a junior clerk at the Bank of Hindustan. Your life is one of quiet routine until the day the Rajah of Bhithoria deposits his family treasure - a magnificent diamond known as "The Diamond of the Rajahs."</p>
+                <p style="margin-top: 15px;">When the diamond vanishes from the vault, you become the prime suspect. Your career, reputation, and freedom hang in the balance. You must investigate, gather clues, and find the real thief before it's too late!</p>
+                <p style="margin-top: 15px; color: #daa520;">"Three days and a half, and the sun had turned; the diamond was gone; and I was shut up in this great city like a thief."</p>
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn" onclick="startCharacterSelect()">Begin Your Investigation</button>
+            </div>
+        </div>
+        
+        <!-- Character Select -->
+        <div id="character-screen" class="screen">
+            <h2>Choose Your Approach</h2>
+            <p style="margin-bottom: 20px;">How will you solve this mystery?</p>
+            <div class="character-grid">
+                <div class="character-card" onclick="selectCharacter('scott')">
+                    <h3>John Scott</h3>
+                    <p><strong>The Accused Clerk</strong></p>
+                    <p style="font-size: 12px; color: #ccc; margin-top: 10px;">The innocent suspect. You must clear your name by finding the true thief.</p>
+                    <p style="font-size: 11px; color: #888; margin-top: 10px;">Balanced attributes</p>
+                </div>
+                <div class="character-card" onclick="selectCharacter('horace')">
+                    <h3>Horace</h3>
+                    <p><strong>The Friend</strong></p>
+                    <p style="font-size: 12px; color: #ccc; margin-top: 10px;">Your loyal friend who stands by you. Perhaps he can help with the investigation.</p>
+                    <p style="font-size: 11px; color: #888; margin-top: 10px;">+3 Observation, +2 Intelligence</p>
+                </div>
+                <div class="character-card" onclick="selectCharacter('lohin')">
+                    <h3>Mr. Lohin</h3>
+                    <p><strong>The Detective</strong></p>
+                    <p style="font-size: 12px; color: #ccc; margin-top: 10px;">A private detective from London. He's assisting with the case.</p>
+                    <p style="font-size: 11px; color: #888; margin-top: 10px;">+3 Deduction, +2 Intelligence</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" id="confirm-char-btn" onclick="confirmCharacter()" disabled>Confirm Character</button>
+            </div>
+        </div>
+        
+        <!-- Main Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="stats-panel">
+                <div class="stat"><div class="stat-name">Observation</div><div class="stat-value" id="stat-observation">5</div></div>
+                <div class="stat"><div class="stat-name">Deduction</div><div class="stat-value" id="stat-deduction">5</div></div>
+                <div class="stat"><div class="stat-name">Intelligence</div><div class="stat-value" id="stat-intelligence">5</div></div>
+                <div class="stat"><div class="stat-name">Courage</div><div class="stat-value" id="stat-courage">5</div></div>
+                <div class="stat"><div class="stat-name">Reputation</div><div class="stat-value" id="stat-reputation">5</div></div>
+                <div class="stat"><div class="stat-name">Rupees</div><div class="stat-value" id="stat-gold">50</div></div>
+            </div>
+            <div class="inventory" id="inventory"></div>
+            <div class="clue-panel" id="clue-panel">
+                <h3>🔍 Evidence Collected: <span id="clue-count">0</span></h3>
+                <div id="clue-list"></div>
+            </div>
+            
+            <h2 id="location-title">The Bank of Hindustan</h2>
+            <div id="narrative-area" class="narrative"></div>
+            <div id="dialogue-area"></div>
+            <div id="game-area"></div>
+            <div id="choices-area" class="choices"></div>
+        </div>
+        
+        <!-- Mini-Game Screen -->
+        <div id="minigame-screen" class="screen">
+            <h2 id="minigame-title">Mini-Game</h2>
+            <div id="minigame-content" class="mini-game"></div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" onclick="exitMinigame()">Return to Investigation</button>
+            </div>
+        </div>
+        
+        <!-- Ending Screen -->
+        <div id="ending-screen" class="screen">
+            <div class="ending">
+                <h2 id="ending-title"></h2>
+                <div id="ending-content"></div>
+                <div style="margin-top: 30px;">
+                    <button class="btn" onclick="saveGame()">Save Progress</button>
+                    <button class="btn" onclick="loadGame()">Load Game</button>
+                    <button class="btn" onclick="restartGame()">Play Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        let gameState = {
+            character: null,
+            stats: { observation: 5, deduction: 5, intelligence: 5, courage: 5, reputation: 5 },
+            gold: 50,
+            inventory: [],
+            clues: [],
+            currentLocation: 'bank',
+            visitedLocations: ['bank'],
+            storyProgress: 0,
+            choices: [],
+            suspicion: 0,
+            thievesCaught: 0,
+            evidencePoints: 0
+        };
+
+        // Locations
+        const locations = {
+            'bank': { 
+                name: 'The Bank of Hindustan', 
+                desc: 'The grand building where you work. The vault is on the ground floor. Mr. Mackenzie's office is upstairs. The diamond was kept in the strong-room until this morning.',
+                minigame: 'observation',
+                npcs: ['mackenzie', 'horace'],
+                unlocked: true
+            },
+            'vault': { 
+                name: 'The Strong-Room', 
+                desc: 'Where the precious gems are kept. The diamond was here yesterday. Now only an empty velvet case remains.',
+                minigame: 'memory',
+                npcs: [],
+                unlocked: false
+            },
+            'market': { 
+                name: 'The Calcutta Market', 
+                desc: 'A bustling maze of stalls and shops. Here you might find someone who saw something, or discover where stolen goods might be sold.',
+                minigame: 'bargaining',
+                npcs: ['merchant'],
+                unlocked: false
+            },
+            'palace': { 
+                name: 'The Rajah\'s Palace', 
+                desc: 'Where the Rajah of Bhithoria resides. He is furious about the diamond. Perhaps his servants know something.',
+                minigame: 'diplomacy',
+                npcs: ['rajah', 'servant'],
+                unlocked: false
+            },
+            'docks': { 
+                name: 'The Calcutta Docks', 
+                desc: 'Where ships from around the world unload their cargo. If someone planned to smuggle out the diamond, it would be through here.',
+                minigame: 'investigation',
+                npcs: ['sailor'],
+                unlocked: false
+            },
+            'prison': { 
+                name: 'The Lock-Up', 
+                desc: 'Where the accused await trial. A man named Gadshill sits here, arrested for a similar crime. He might know something.',
+                minigame: 'interrogation',
+                npcs: ['gadshill'],
+                unlocked: false
+            },
+            'lodging': { 
+                name: 'Your Lodging House', 
+                desc: 'Your modest room in Calcutta. Here you can rest and think about the evidence you\'ve gathered.',
+                minigame: 'deduction',
+                npcs: ['landlord'],
+                unlocked: false
+            }
+        };
+
+        // NPCs
+        const npcs = {
+            'mackenzie': {
+                name: 'Mr. Mackenzie',
+                portrait: '📋',
+                dialogues: [
+                    { text: "Scott! This is a disaster! The Rajah's diamond - gone! Three suspects: the watchman, the bank clerk, and one of the Rajah's own servants. Find the thief or you're finished!", options: [
+                        { text: "I will find the truth, sir.", effect: () => { modifyStat('courage', 1); modifyStat('reputation', 1); } },
+                        { text: "I need to examine the vault first.", effect: () => { modifyStat('observation', 2); unlockLocation('vault'); } }
+                    ]}
+                ]
+            },
+            'horace': {
+                name: 'Horace',
+                portrait: '🤝',
+                dialogues: [
+                    { text: "Don't worry, old fellow! I believe you're innocent. But we must act quickly. Shall we search for clues together?", options: [
+                        { text: "Yes! Let\'s examine the bank first.", effect: () => { modifyStat('observation', 2); addClue('Bank plans found'); modifyStat('reputation', 1); } },
+                        { text: "I need to think. Let\'s visit the market.", effect: () => { modifyStat('intelligence', 1); modifyStat('deduction', 1); unlockLocation('market'); } }
+                    ]}
+                ]
+            },
+            'merchant': {
+                name: 'Sh jewelry Merchant',
+                portrait: '💎',
+                dialogues: [
+                    { text: "A diamond, you say? Perhaps I have seen such a stone. But information is not free in Calcutta. Perhaps for 20 rupees...", options: [
+                        { text: "Here is 20 rupees.", effect: () => { modifyGold(-20); modifyStat('observation', 2); addClue('Diamond seen at auction house'); } },
+                        { text: "I have no money. Please help me.", effect: () => { modifyStat('intelligence', 1); modifyStat('reputation', -1); } }
+                    ]}
+                ]
+            },
+            'rajah': {
+                name: 'The Rajah of Bhithoria',
+                portrait: '👑',
+                dialogues: [
+                    { text: "My ancestors' diamond! It must be found! I have offered a reward of 10,000 rupees. But if I discover it was stolen by one of MY people, there will be... consequences.", options: [
+                        { text: "I will find it, Your Highness.", effect: () => { modifyStat('courage', 2); modifyStat('reputation', 1); } },
+                        { text: "May I speak with your servants?", effect: () => { modifyStat('deduction', 1); modifyStat('observation', 1); addClue('Servant\'s alibis verified'); } }
+                    ]}
+                ]
+            },
+            'servant': {
+                name: 'The Rajah\'s Servant',
+                portrait: '🧹',
+                dialogues: [
+                    { text: "I swear I am innocent! But... there was a man. A European who spoke with the Rajah last week. He looked at the diamond with hungry eyes.", options: [
+                        { text: "Describe this man.", effect: () => { modifyStat('observation', 2); addClue('Description of suspicious European'); } },
+                        { text: "You are hiding something.", effect: () => { modifyStat('deduction', 1); modifyStat('reputation', -1); addClue('Servant nervous about something'); } }
+                    ]}
+                ]
+            },
+            'sailor': {
+                name: 'Old Sailor',
+                portrait: '⚓',
+                dialogues: [
+                    { text: "A diamond, you say? I hear things down at the docks. A man tried to book passage to London with a heavy chest last night. Changed his mind when he heard about the bank robbery.", options: [
+                        { text: "Which ship was he booking?", effect: () => { modifyStat('observation', 2); modifyStat('courage', 1); addClue('Ship name: HMS Bonaccord'); } },
+                        { text: "Thank you for the information.", effect: () => { modifyStat('intelligence', 1); } }
+                    ]}
+                ]
+            },
+            'gadshill': {
+                name: 'Gadshill',
+                portrait: '🔒',
+                dialogues: [
+                    { text: "Ha! They think I took your diamond? I am in here for a DIFFERENT diamond! But I know criminals, and I know this - the one who stole from the bank is no amateur. He has help from inside.", options: [
+                        { text: "Inside? Who?", effect: () => { modifyStat('deduction', 3); modifyStat('courage', 1); addClue('Diamond theft was an inside job'); } },
+                        { text: "Why should I believe you?", effect: () => { modifyStat('intelligence', 1); modifyStat('reputation', -1); } }
+                    ]}
+                ]
+            },
+            'landlord': {
+                name: 'Mrs. L., Your Landlady',
+                portrait: '🏠',
+                dialogues: [
+                    { text: "Such trouble you've brought upon yourself, Mr. Scott! But I believe in you. Perhaps you should review what you know. Sometimes rest brings clarity.", options: [
+                        { text: "I need to review the evidence.", effect: () => { modifyStat('deduction', 2); gameState.evidencePoints += 5; } },
+                        { text: "I cannot rest while a thief roams free!", effect: () => { modifyStat('courage', 1); modifyStat('reputation', 1); } }
+                    ]}
+                ]
+            }
+        };
+
+        // Functions
+        function startCharacterSelect() {
+            showScreen('character-screen');
+        }
+
+        function selectCharacter(char) {
+            gameState.character = char;
+            document.querySelectorAll('.character-card').forEach(c => c.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            document.getElementById('confirm-char-btn').disabled = false;
+        }
+
+        function confirmCharacter() {
+            if (!gameState.character) return;
+            
+            switch(gameState.character) {
+                case 'scott':
+                    Object.keys(gameState.stats).forEach(s => gameState.stats[s] += 2);
+                    break;
+                case 'horace':
+                    gameState.stats.observation += 3;
+                    gameState.stats.intelligence += 2;
+                    break;
+                case 'lohin':
+                    gameState.stats.deduction += 3;
+                    gameState.stats.intelligence += 2;
+                    break;
+            }
+            
+            updateStats();
+            showScreen('game-screen');
+            enterLocation('bank');
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function modifyStat(stat, amount) {
+            gameState.stats[stat] = Math.max(0, Math.min(20, gameState.stats[stat] + amount));
+            updateStats();
+        }
+
+        function modifyGold(amount) {
+            gameState.gold = Math.max(0, gameState.gold + amount);
+            updateStats();
+        }
+
+        function addClue(clue) {
+            if (!gameState.clues.includes(clue)) {
+                gameState.clues.push(clue);
+                gameState.evidencePoints++;
+                updateClues();
+            }
+        }
+
+        function addItem(item) {
+            if (!gameState.inventory.includes(item)) {
+                gameState.inventory.push(item);
+                updateInventory();
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('stat-observation').textContent = gameState.stats.observation;
+            document.getElementById('stat-deduction').textContent = gameState.stats.deduction;
+            document.getElementById('stat-intelligence').textContent = gameState.stats.intelligence;
+            document.getElementById('stat-courage').textContent = gameState.stats.courage;
+            document.getElementById('stat-reputation').textContent = gameState.stats.reputation;
+            document.getElementById('stat-gold').textContent = gameState.gold;
+        }
+
+        function updateInventory() {
+            const inv = document.getElementById('inventory');
+            inv.innerHTML = '<strong>Items:</strong> ';
+            gameState.inventory.forEach(item => {
+                inv.innerHTML += `<span class="item">${item}</span> `;
+            });
+        }
+
+        function updateClues() {
+            document.getElementById('clue-count').textContent = gameState.clues.length;
+            const list = document.getElementById('clue-list');
+            list.innerHTML = gameState.clues.map(c => `<div class="clue">🔎 ${c}</div>`).join('');
+        }
+
+        function enterLocation(locId) {
+            const loc = locations[locId];
+            if (!loc || loc.locked) return;
+            
+            gameState.currentLocation = locId;
+            if (!gameState.visitedLocations.includes(locId)) {
+                gameState.visitedLocations.push(locId);
+            }
+            
+            document.getElementById('location-title').textContent = loc.name;
+            document.getElementById('narrative-area').innerHTML = `<p>${loc.desc}</p>`;
+            
+            gameState.storyProgress = Math.min(100, gameState.storyProgress + 12);
+            checkLocationUnlocks();
+            showNPCDialogue();
+        }
+
+        function checkLocationUnlocks() {
+            if (gameState.storyProgress >= 12) {
+                locations['market'].unlocked = true;
+                locations['lodging'].unlocked = true;
+            }
+            if (gameState.evidencePoints >= 3) {
+                locations['palace'].unlocked = true;
+                locations['docks'].unlocked = true;
+            }
+            if (gameState.evidencePoints >= 6) {
+                locations['vault'].unlocked = true;
+                locations['prison'].unlocked = true;
+            }
+        }
+
+        function showNPCDialogue() {
+            const loc = locations[gameState.currentLocation];
+            if (!loc.npcs || loc.npcs.length === 0) {
+                showLocationChoices();
+                return;
+            }
+            
+            const npcId = loc.npcs[0];
+            const npc = npcs[npcId];
+            const dialogue = npc.dialogues[0];
+            
+            let dialogueHtml = `<div class="dialogue"><span class="speaker">${npc.portrait} ${npc.name}:</span> "${dialogue.text}"</div>`;
+            
+            let choicesHtml = '<div class="choices">';
+            dialogue.options.forEach((opt, idx) => {
+                choicesHtml += `<button class="choice-btn" onclick="chooseDialogue(${idx}, '${npcId}')">${opt.text}</button>`;
+            });
+            choicesHtml += '</div>';
+            
+            document.getElementById('dialogue-area').innerHTML = dialogueHtml;
+            document.getElementById('choices-area').innerHTML = choicesHtml;
+            document.getElementById('game-area').innerHTML = '';
+        }
+
+        function chooseDialogue(idx, npcId) {
+            const npc = npcs[npcId];
+            const dialogue = npc.dialogues[0];
+            
+            if (dialogue.options[idx].effect) {
+                dialogue.options[idx].effect();
+            }
+            
+            gameState.choices.push({ npc: npcId, choice: idx });
+            
+            document.getElementById('dialogue-area').innerHTML = `<div class="dialogue"><span class="speaker">${npc.portrait} ${npc.name}:</span> "Good luck with your investigation."</div>`;
+            showLocationChoices();
+        }
+
+        function showLocationChoices() {
+            const loc = locations[gameState.currentLocation];
+            
+            let html = `<div class="location-map">`;
+            Object.keys(locations).forEach(locId => {
+                const l = locations[locId];
+                const isUnlocked = l.unlocked;
+                const isVisited = gameState.visitedLocations.includes(locId);
+                html += `<div class="location ${isUnlocked ? '' : 'locked'}" onclick="${isUnlocked ? `enterLocation('${locId}')` : ''}">
+                    <h3>${l.name}</h3>
+                    <p>${isUnlocked ? (isVisited ? 'Investigated' : 'New Location') : 'Locked'}</p>
+                </div>`;
+            });
+            html += '</div>';
+            
+            html += '<h3 style="margin-top: 20px; color: #daa520;">Actions</h3>';
+            html += '<div class="choices">';
+            html += `<button class="choice-btn" onclick="startMinigame('${loc.minigame}')">Investigate: ${getMinigameName(loc.minigame)} (Costs 10 Rupees)</button>`;
+            html += '<button class="choice-btn" onclick="makeAccusation()">Make Accusation</button>';
+            html += '<button class="choice-btn" onclick="saveGame()">Save Game</button>';
+            html += '<button class="choice-btn" onclick="loadGame()">Load Game</button>';
+            html += '</div>';
+            
+            document.getElementById('game-area').innerHTML = html;
+            document.getElementById('choices-area').innerHTML = '';
+        }
+
+        function getMinigameName(game) {
+            const names = {
+                'observation': 'Search for Clues',
+                'memory': 'Examine the Vault',
+                'bargaining': 'Question the Merchants',
+                'diplomacy': 'Speak with Dignitaries',
+                'investigation': 'Search the Docks',
+                'interrogation': 'Question the Prisoner',
+                'deduction': 'Review Evidence'
+            };
+            return names[game] || 'Investigate';
+        }
+
+        function startMinigame(game) {
+            if (gameState.gold < 10) {
+                alert('Not enough rupees! You need at least 10 rupees.');
+                return;
+            }
+            modifyGold(-10);
+            
+            showScreen('minigame-screen');
+            
+            switch(game) {
+                case 'observation': startObservationGame(); break;
+                case 'memory': startMemoryGame(); break;
+                case 'bargaining': startBargainingGame(); break;
+                case 'diplomacy': startDiplomacyGame(); break;
+                case 'investigation': startInvestigationGame(); break;
+                case 'interrogation': startInterrogationGame(); break;
+                case 'deduction': startDeductionGame(); break;
+            }
+        }
+
+        // Observation Game
+        function startObservationGame() {
+            document.getElementById('minigame-title').textContent = "Search for Clues";
+            
+            let html = '<p>Examine your surroundings carefully! Find 3 hidden clues.</p>';
+            html += '<p>Clues found: <span id="obs-found">0</span> / 3</p>';
+            html += '<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 300px; margin: 20px auto;">';
+            
+            const spots = ['empty', 'clue', 'empty', 'empty', 'empty', 'clue', 'empty', 'clue'];
+            spots.sort(() => Math.random() - 0.5);
+            
+            spots.forEach((spot, idx) => {
+                html += `<div onclick="searchObs(this, '${spot}')" style="aspect-ratio:1; background:#5c3d2e; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:30px;">❓</div>`;
+            });
+            html += '</div>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        let obsFound = 0;
+        function searchObs(el, type) {
+            if (el.style.background === 'rgb(218, 165, 32)') return;
+            
+            if (type === 'clue') {
+                el.textContent = '🔎';
+                el.style.background = '#daa520';
+                obsFound++;
+                document.getElementById('obs-found').textContent = obsFound;
+                
+                if (obsFound >= 3) {
+                    setTimeout(() => {
+                        modifyStat('observation', 2);
+                        modifyStat('intelligence', 1);
+                        addClue('Suspicious footprints near vault');
+                        modifyGold(15);
+                        alert('Excellent observation! You found several clues.');
+                        obsFound = 0;
+                        showLocationChoices();
+                        showScreen('game-screen');
+                    }, 500);
+                }
+            } else {
+                el.textContent = '🍂';
+                el.style.background = '#3d2817';
+            }
+        }
+
+        // Memory Game
+        let memoryCards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        const memorySymbols = ['💎', '📜', '🔑', '🗝️', '💰', '📦', '🔒', '🔍'];
+
+        function startMemoryGame() {
+            document.getElementById('minigame-title').textContent = "Examine the Vault";
+            matchedPairs = 0;
+            flippedCards = [];
+            memoryCards = [...memorySymbols, ...memorySymbols].sort(() => Math.random() - 0.5);
+            
+            let html = '<p>Match the items to examine them closely!</p>';
+            html += '<div class="memory-grid" style="grid-template-columns: repeat(4, 1fr); max-width: 350px;">';
+            memoryCards.forEach((sym, idx) => {
+                html += `<div class="memory-card" id="mem-${idx}" onclick="flipCard(${idx})" style="aspect-ratio:1; font-size:24px;">?</div>`;
+            });
+            html += '</div>';
+            html += '<p id="memory-status">Matches: 0 / 8</p>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function flipCard(idx) {
+            if (flippedCards.length >= 2) return;
+            if (flippedCards.includes(idx)) return;
+            
+            const card = document.getElementById(`mem-${idx}`);
+            card.textContent = memoryCards[idx];
+            card.classList.add('flipped');
+            flippedCards.push(idx);
+            
+            if (flippedCards.length === 2) {
+                setTimeout(checkMemoryMatch, 800);
+            }
+        }
+
+        function checkMemoryMatch() {
+            const [idx1, idx2] = flippedCards;
+            
+            if (memoryCards[idx1] === memoryCards[idx2]) {
+                document.getElementById(`mem-${idx1}`).classList.add('matched');
+                document.getElementById(`mem-${idx2}`).classList.add('matched');
+                matchedPairs++;
+                document.getElementById('memory-status').textContent = `Matches: ${matchedPairs} / 8`;
+                
+                if (matchedPairs === 8) {
+                    setTimeout(() => {
+                        modifyStat('observation', 2);
+                        modifyStat('deduction', 1);
+                        addClue('Vault shows signs of inside job');
+                        modifyGold(20);
+                        alert('Excellent! The vault reveals its secrets.');
+                        showLocationChoices();
+                        showScreen('game-screen');
+                    }, 500);
+                }
+            } else {
+                document.getElementById(`mem-${idx1}`).textContent = '?';
+                document.getElementById(`mem-${idx2}`).textContent = '?';
+                document.getElementById(`mem-${idx1}`).classList.remove('flipped');
+                document.getElementById(`mem-${idx2}`).classList.remove('flipped');
+            }
+            flippedCards = [];
+        }
+
+        // Bargaining Game
+        function startBargainingGame() {
+            document.getElementById('minigame-title').textContent = "Question the Merchants";
+            
+            let html = '<p>A merchant offers you information for a price. Can you bargain?</p>';
+            html += '<div style="padding: 20px; background: rgba(0,0,0,0.3); border-radius: 10px; margin: 15px 0;">';
+            html += '<p>Merchant: "For 30 rupees, I will tell you where the diamond might be sold."</p>';
+            html += '</div>';
+            html += '<p>Your rupees: ' + gameState.gold + '</p>';
+            html += '<div class="choices">';
+            html += `<button class="choice-btn" onclick="bargainResult('accept')">Accept the deal (Pay 30 rupees)</button>`;
+            html += `<button class="choice-btn" onclick="bargainResult('negotiate')">Negotiate (Roll 2 dice, need total 8+)</button>`;
+            html += `<button class="choice-btn" onclick="bargainResult('leave')">Leave without information</button>`;
+            html += '</div>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function bargainResult(choice) {
+            if (choice === 'accept') {
+                if (gameState.gold >= 30) {
+                    modifyGold(-30);
+                    modifyStat('observation', 2);
+                    addClue('Diamond to be sold at midnight auction');
+                    alert('The merchant whispers: "Ask about the ship to London..."');
+                } else {
+                    alert('Not enough money!');
+                }
+            } else if (choice === 'negotiate') {
+                const d1 = Math.floor(Math.random() * 6) + 1;
+                const d2 = Math.floor(Math.random() * 6) + 1;
+                const total = d1 + d2;
+                
+                if (total >= 8) {
+                    modifyStat('intelligence', 1);
+                    addClue('Merchant revealed ship name: Bonaccord');
+                    modifyGold(10);
+                    alert(`Success! You rolled ${d1}+${d2}=${total}. The merchant likes your wit and throws in extra information!`);
+                } else {
+                    modifyStat('reputation', -1);
+                    alert(`You rolled ${d1}+${d2}=${total}. The merchant shakes his head and turns away.`);
+                }
+            }
+            
+            showLocationChoices();
+            showScreen('game-screen');
+        }
+
+        // Diplomacy Game
+        function startDiplomacyGame() {
+            document.getElementById('minigame-title').textContent = "Speak with Dignitaries";
+            
+            let html = '<p>The Rajah demands you prove your worth. Answer his riddle correctly.</p>';
+            
+            const riddles = [
+                { q: "I have cities, but no houses. I have mountains, but no trees. I have water, but no fish. What am I?", a: "map", options: ["mirror", "map", "dream", "shadow"] },
+                { q: "The more you take, the more you leave behind. What am I?", a: "footsteps", options: ["memories", "footsteps", "time", "breath"] },
+                { q: "I speak without a mouth and hear without ears. I have no body, but I come alive with the wind. What am I?", a: "echo", options: ["echo", "ghost", "wind", "shadow"] }
+            ];
+            
+            const riddle = riddles[Math.floor(Math.random() * riddles.length)];
+            
+            html += `<div class="quiz-question"><p><strong>The Rajah asks: "${riddle.q}"</strong></p>`;
+            html += '<div class="quiz-options">';
+            riddle.options.forEach(opt => {
+                html += `<button class="choice-btn" onclick="answerDiplomacy('${opt}', '${riddle.a}')">${opt.charAt(0).toUpperCase() + opt.slice(1)}</button>`;
+            });
+            html += '</div></div>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function answerDiplomacy(answer, correct) {
+            if (answer === correct) {
+                modifyStat('intelligence', 2);
+                modifyStat('reputation', 2);
+                addClue('Rajah trusts your wisdom');
+                modifyGold(40);
+                alert('The Rajah nods approvingly: "You are wise. Take this reward and continue your search."');
+            } else {
+                modifyStat('reputation', -2);
+                alert(`The Rajah frowns: "The answer is ${correct}. Perhaps you are not as clever as I hoped."`);
+            }
+            showLocationChoices();
+            showScreen('game-screen');
+        }
+
+        // Investigation Game
+        function startInvestigationGame() {
+            document.getElementById('minigame-title').textContent = "Search the Docks";
+            
+            let html = '<p>Search the docks for evidence of the diamond being smuggled out.</p>';
+            html += '<p>Evidence found: <span id="inv-found">0</span> / 3</p>';
+            html += '<div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; max-width: 350px; margin: 20px auto;">';
+            
+            for (let i = 0; i < 15; i++) {
+                const rand = Math.random();
+                const type = rand < 0.15 ? 'clue' : rand < 0.25 ? 'red herring' : 'empty';
+                html += `<div onclick="searchDock(this, '${type}')" style="aspect-ratio:1; background:#4a6741; border-radius:5px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:20px;">❓</div>`;
+            }
+            html += '</div>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        let invFound = 0;
+        function searchDock(el, type) {
+            if (el.style.background === 'rgb(218, 165, 32)') return;
+            
+            if (type === 'clue') {
+                el.textContent = '📜';
+                el.style.background = '#daa520';
+                invFound++;
+                document.getElementById('inv-found').textContent = invFound;
+                
+                if (invFound >= 3) {
+                    setTimeout(() => {
+                        modifyStat('observation', 2);
+                        modifyStat('deduction', 2);
+                        addClue('Shipping manifest shows false declaration');
+                        modifyGold(25);
+                        alert('You found the shipping manifest! The diamond was hidden in a tea chest.');
+                        invFound = 0;
+                        showLocationChoices();
+                        showScreen('game-screen');
+                    }, 500);
+                }
+            } else if (type === 'red herring') {
+                el.textContent = '🐟';
+                el.style.background = '#6a8';
+            } else {
+                el.textContent = '📦';
+                el.style.background = '#3a4729';
+            }
+        }
+
+        // Interrogation Game
+        function startInterrogationGame() {
+            document.getElementById('minigame-title').textContent = "Question the Prisoner";
+            
+            let html = '<p>Gadshill offers information, but he\'s a criminal. Can you trust him?</p>';
+            html += '<div class="dialogue">';
+            html += '<span class="speaker">🔒 Gadshill:</span> "I\'ll tell you this for free: the man who took your diamond is named Craker. He works at the bank. But proving it... that\'s another matter."';
+            html += '</div>';
+            html += '<div class="choices">';
+            html += '<button class="choice-btn" onclick="interrogateResult(\'believe\')">"I believe you. This is valuable information."</button>';
+            html += '<button class="choice-btn" onclick="interrogateResult(\'doubt\')">"Why should I believe a thief?"</button>';
+            html += '</div>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function interrogateResult(response) {
+            if (response === 'believe') {
+                modifyStat('deduction', 2);
+                addClue('Suspect named: Craker');
+                modifyGold(20);
+                alert('Gadshill grins: "Smart choice. Now go get that diamond."');
+            } else {
+                modifyStat('intelligence', 1);
+                addClue('Gadshill knows more than he\'s saying');
+                alert('Gadshill shrugs: "Suit yourself. But the truth won\'t change whether you believe it or not."');
+            }
+            showLocationChoices();
+            showScreen('game-screen');
+        }
+
+        // Deduction Game
+        function startDeductionGame() {
+            document.getElementById('minigame-title').textContent = "Review the Evidence";
+            
+            let html = '<p>Review all clues and make deductions.</p>';
+            html += '<div class="clue-panel" style="text-align:left;">';
+            html += '<p>Clues collected: ' + gameState.clues.length + '</p>';
+            
+            if (gameState.clues.length >= 5) {
+                html += '<p style="color:#ffd700; margin-top:15px;">Based on the evidence, you can now make an accusation!</p>';
+                html += '<button class="btn" onclick="makeAccusation()" style="margin-top:15px;">Make Your Accusation</button>';
+            } else {
+                html += '<p style="color:#888; margin-top:15px;">You need more evidence before you can accuse anyone.</p>';
+            }
+            html += '</div>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function makeAccusation() {
+            if (gameState.clues.length < 4) {
+                alert('You need more evidence! Keep investigating.');
+                return;
+            }
+            
+            showScreen('minigame-screen');
+            
+            let html = '<h2>Make Your Accusation</h2>';
+            html += '<p>Based on your evidence, who stole the Diamond?</p>';
+            html += '<div class="choices">';
+            html += '<button class="choice-btn" onclick="accuseResult(\'craker\')">👤 Craker - The Bank Clerk</button>';
+            html += '<button class="choice-btn" onclick="accuseResult(\'servant\')">🧹 One of the Rajah\'s Servants</button>';
+            html += '<button class="choice-btn" onclick="accuseResult(\'gadshill\')">🔒 Gadshill - The Prisoner</button>';
+            html += '<button class="choice-btn" onclick="accuseResult(\'none\')">❓ Not ready to accuse</button>';
+            html += '</div>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function accuseResult(who) {
+            if (who === 'none') {
+                showLocationChoices();
+                showScreen('game-screen');
+                return;
+            }
+            
+            // Check if correct based on clues
+            const correct = who === 'craker';
+            const confidence = Math.min(gameState.evidencePoints, 10);
+            
+            if (correct && confidence >= 5) {
+                gameState.thievesCaught++;
+                modifyStat('reputation', 5);
+                modifyStat('deduction', 3);
+                modifyGold(500);
+                gameState.suspicion = 0;
+                addClue('Craker arrested for diamond theft!');
+                
+                checkEnding();
+            } else if (correct && confidence < 5) {
+                modifyStat('reputation', -2);
+                alert('You accused the right person, but without enough evidence! The case is weak.');
+                showLocationChoices();
+                showScreen('game-screen');
+            } else {
+                modifyStat('reputation', -5);
+                modifyStat('courage', -2);
+                alert('Wrong accusation! Your reputation suffers.');
+                gameState.suspicion += 20;
+                
+                if (gameState.suspicion >= 80) {
+                    checkEnding();
+                } else {
+                    showLocationChoices();
+                    showScreen('game-screen');
+                }
+            }
+        }
+
+        function exitMinigame() {
+            showLocationChoices();
+            showScreen('game-screen');
+        }
+
+        function checkEnding() {
+            gameState.storyProgress = 100;
+            
+            let endingTitle = '';
+            let endingContent = '';
+            
+            if (gameState.thievesCaught >= 1 && gameState.reputation >= 12) {
+                endingTitle = 'The Hero of Calcutta';
+                endingContent = `
+                    <p>You have solved the case! Craker is arrested, the diamond is recovered, and you are hailed as a hero!</p>
+                    <p style="margin-top: 20px;">The Rajah presents you with a reward of 10,000 rupees. Mr. Mackenzie promotes you to senior clerk. Horace raises a glass to your success.</p>
+                    <p style="margin-top: 20px; color: #ffd700;">"In the annals of the Bank of Hindustan, the name John E.R. Scott shall never be forgotten."</p>
+                    <p style="margin-top: 20px;"><strong>Clues Found:</strong> ${gameState.clues.length} | <strong>Reputation:</strong> ${gameState.stats.reputation}</p>
+                `;
+            } else if (gameState.thievesCaught >= 1) {
+                endingTitle = 'Case Solved';
+                endingContent = `
+                    <p>The diamond is recovered, but at some cost to your reputation. You solved the crime, but not without controversy.</p>
+                    <p style="margin-top: 20px;">Life continues at the bank. Perhaps in time, people will forget the trouble.</p>
+                    <p style="margin-top: 20px; color: #888;">"Truth, like gold, is not made less valuable by being questioned."</p>
+                    <p style="margin-top: 20px;"><strong>Clues Found:</strong> ${gameState.clues.length}</p>
+                `;
+            } else if (gameState.suspicion >= 80) {
+                endingTitle = 'A Tragic End';
+                endingContent = `
+                    <p>The accusations against you grow. Without clear evidence, you are found guilty by public opinion.</p>
+                    <p style="margin-top: 20px;">You leave Calcutta, reputation in tatters. But perhaps, somewhere in the world, the real thief awaits justice...</p>
+                    <p style="margin-top: 20px; color: #888;">"Some mysteries are never solved."</p>
+                `;
+            } else if (gameState.stats.deduction >= 12) {
+                endingTitle = 'The Master Detective';
+                endingContent = `
+                    <p>Your investigative skills have impressed everyone. Though the diamond remains unfound, you are offered a position as a private detective.</p>
+                    <p style="margin-top: 20px;">A new career begins. The Diamond of the Rajahs may yet be found, but now you have the skills to find it.</p>
+                    <p style="margin-top: 20px;"><strong>Deduction:</strong> ${gameState.stats.deduction}</p>
+                `;
+            } else {
+                endingTitle = 'An Unsolved Mystery';
+                endingContent = `
+                    <p>The diamond remains missing. The case grows cold.</p>
+                    <p style="margin-top: 20px;">But you learned valuable lessons about observation, deduction, and truth.</p>
+                    <p style="margin-top: 20px; color: #888;">"Not all mysteries are meant to be solved."</p>
+                    <p style="margin-top: 20px;"><strong>Final Stats:</strong> Observation ${gameState.stats.observation} | Deduction ${gameState.stats.deduction} | Intelligence ${gameState.stats.intelligence} | Courage ${gameState.stats.courage} | Reputation ${gameState.stats.reputation}</p>
+                `;
+            }
+            
+            document.getElementById('ending-title').textContent = endingTitle;
+            document.getElementById('ending-content').innerHTML = endingContent;
+            showScreen('ending-screen');
+        }
+
+        function saveGame() {
+            localStorage.setItem('rajahsDiamondSave', JSON.stringify(gameState));
+            alert('Game saved!');
+        }
+
+        function loadGame() {
+            const saved = localStorage.getItem('rajahsDiamondSave');
+            if (saved) {
+                gameState = JSON.parse(saved);
+                updateStats();
+                updateInventory();
+                updateClues();
+                showScreen('game-screen');
+                enterLocation(gameState.currentLocation);
+            } else {
+                alert('No saved game found!');
+            }
+        }
+
+        function restartGame() {
+            gameState = {
+                character: null,
+                stats: { observation: 5, deduction: 5, intelligence: 5, courage: 5, reputation: 5 },
+                gold: 50,
+                inventory: [],
+                clues: [],
+                currentLocation: 'bank',
+                visitedLocations: ['bank'],
+                storyProgress: 0,
+                choices: [],
+                suspicion: 0,
+                thievesCaught: 0,
+                evidencePoints: 0
+            };
+            
+            Object.keys(locations).forEach(k => {
+                if (k !== 'bank') locations[k].unlocked = false;
+            });
+            locations['market'].unlocked = true;
+            locations['lodging'].unlocked = true;
+            
+            showScreen('start-screen');
+        }
+    </script>
+</body>
+</html>

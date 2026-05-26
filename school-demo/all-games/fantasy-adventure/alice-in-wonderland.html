@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alice in Wonderland - Down the Rabbit Hole</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Georgia', serif; background: linear-gradient(135deg, #2d1b4e 0%, #4a2c7a 50%, #1a0f2e 100%); min-height: 100vh; color: #f0e6ff; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; padding: 30px; background: linear-gradient(180deg, rgba(155,89,182,0.8) 0%, rgba(142,68,173,0.9) 100%); border-radius: 15px; margin-bottom: 20px; border: 3px solid #f1c40f; box-shadow: 0 0 30px rgba(241,196,15,0.3); }
+        .header h1 { font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); margin-bottom: 10px; }
+        .header p { font-style: italic; color: #f1c40f; }
+        .screen { display: none; background: rgba(30,15,50,0.95); border-radius: 15px; padding: 30px; border: 2px solid #9b59b6; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .screen.active { display: block; }
+        .btn { background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); color: #f1c40f; padding: 12px 25px; border: 2px solid #f39c12; border-radius: 8px; cursor: pointer; font-size: 1em; margin: 5px; transition: all 0.3s; font-family: inherit; }
+        .btn:hover { background: linear-gradient(135deg, #a569bd 0%, #9b59b6 100%); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(155,89,182,0.4); }
+        .btn:disabled { background: #555; border-color: #666; cursor: not-allowed; opacity: 0.6; }
+        .btn-small { padding: 8px 15px; font-size: 0.9em; }
+        .token-grid, .attr-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 20px 0; }
+        .token-option { background: rgba(155,89,182,0.3); border: 2px solid #8e44ad; border-radius: 10px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .token-option:hover { background: rgba(155,89,182,0.5); border-color: #f1c40f; transform: scale(1.05); }
+        .token-option.selected { border-color: #f1c40f; background: rgba(241,196,15,0.2); box-shadow: 0 0 15px rgba(241,196,15,0.3); }
+        .token-icon { font-size: 2.5em; margin-bottom: 5px; }
+        .attr-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(155,89,182,0.2); border-radius: 8px; margin: 8px 0; }
+        .attr-name { font-weight: bold; width: 120px; }
+        .attr-controls { display: flex; align-items: center; gap: 10px; }
+        .attr-btn { width: 30px; height: 30px; border-radius: 50%; background: #9b59b6; border: 1px solid #f39c12; color: #f1c40f; font-size: 1.2em; cursor: pointer; }
+        .attr-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .attr-value { font-size: 1.3em; font-weight: bold; width: 30px; text-align: center; }
+        .attr-remaining { text-align: center; font-size: 1.2em; margin: 15px 0; color: #f1c40f; }
+        .map-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0; }
+        .location { background: rgba(155,89,182,0.4); border: 2px solid #8e44ad; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .location:hover:not(.locked) { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(155,89,182,0.4); border-color: #f1c40f; }
+        .location.locked { opacity: 0.5; cursor: not-allowed; }
+        .location-icon { font-size: 2em; margin-bottom: 10px; }
+        .location-name { font-weight: bold; margin-bottom: 5px; }
+        .location-cr { font-size: 0.85em; color: #f39c12; }
+        .status-bar { display: flex; flex-wrap: wrap; gap: 15px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; margin-bottom: 20px; }
+        .status-item { display: flex; align-items: center; gap: 8px; }
+        .status-icon { font-size: 1.3em; }
+        .health-bar, .xp-bar { width: 100px; height: 12px; background: #333; border-radius: 6px; overflow: hidden; }
+        .health-fill { height: 100%; background: linear-gradient(90deg, #9b59b6, #e74c3c); transition: width 0.3s; }
+        .xp-fill { height: 100%; background: linear-gradient(90deg, #f1c40f, #f39c12); transition: width 0.3s; }
+        .dialogue-box { background: rgba(155,89,182,0.2); border-left: 4px solid #f39c12; padding: 15px; margin: 15px 0; border-radius: 0 10px 10px 0; }
+        .dialogue-speaker { font-weight: bold; color: #f39c12; margin-bottom: 8px; }
+        .dialogue-text { font-style: italic; line-height: 1.6; }
+        .choice-list { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+        .choice-btn { text-align: left; padding: 15px; background: rgba(142,68,173,0.5); border: 1px solid #9b59b6; border-radius: 8px; cursor: pointer; transition: all 0.3s; color: #f0e6ff; font-family: inherit; font-size: 1em; }
+        .choice-btn:hover { background: rgba(155,89,182,0.6); border-color: #f39c12; }
+        .shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+        .shop-item { background: rgba(155,89,182,0.3); border: 2px solid #8e44ad; border-radius: 10px; padding: 15px; text-align: center; }
+        .shop-item-icon { font-size: 2em; margin-bottom: 10px; }
+        .shop-item-name { font-weight: bold; margin-bottom: 5px; }
+        .shop-item-desc { font-size: 0.85em; color: #f39c12; margin-bottom: 10px; }
+        .shop-item-price { color: #f1c40f; margin-bottom: 10px; }
+        .inventory-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin: 15px 0; }
+        .inv-item { background: rgba(142,68,173,0.4); border-radius: 8px; padding: 10px; display: flex; align-items: center; gap: 10px; }
+        .inv-icon { font-size: 1.5em; }
+        .trivia-question { font-size: 1.2em; margin: 20px 0; line-height: 1.6; }
+        .trivia-options { display: flex; flex-direction: column; gap: 10px; }
+        .dice-result { font-size: 3em; text-align: center; margin: 20px 0; animation: roll 0.5s ease-out; }
+        @keyframes roll { 0% { transform: rotate(0deg) scale(0); } 50% { transform: rotate(180deg) scale(1.2); } 100% { transform: rotate(360deg) scale(1); } }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal.active { display: flex; }
+        .modal-content { background: linear-gradient(135deg, #2d1b4e 0%, #1a0f2e 100%); border: 3px solid #f39c12; border-radius: 15px; padding: 30px; max-width: 500px; width: 90%; text-align: center; }
+        .quote-box { background: rgba(155,89,182,0.2); border-radius: 10px; padding: 20px; margin: 15px 0; font-style: italic; text-align: center; }
+        .quote-text::before { content: '"'; font-size: 2em; color: #f39c12; }
+        .quote-text::after { content: '"'; font-size: 2em; color: #f39c12; }
+        .ending-good { border-color: #f1c40f; background: linear-gradient(135deg, #1a2a1a 0%, #0f1a0f 100%); }
+        .ending-bad { border-color: #e74c3c; background: linear-gradient(135deg, #2a1a1a 0%, #1a0a0a 100%); }
+        .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0; }
+        .memory-card { aspect-ratio: 1; background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); border-radius: 8px; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 2em; transition: all 0.3s; border: 2px solid #f39c12; }
+        .memory-card.flipped { background: rgba(155,89,182,0.5); }
+        .memory-card.matched { background: rgba(46,204,113,0.3); border-color: #2ecc71; }
+        .memory-card.hidden { visibility: hidden; }
+        .game-icon { font-size: 1.5em; margin-right: 5px; }
+        .games-remaining { text-align: center; padding: 10px; background: rgba(241,196,15,0.1); border-radius: 8px; margin-bottom: 15px; }
+        .mini-games-section { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.8em; }
+            .token-grid, .attr-grid { grid-template-columns: repeat(2, 1fr); }
+            .map-grid { grid-template-columns: repeat(2, 1fr); }
+            .mini-games-section { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Alice in Wonderland</h1>
+            <p>Down the Rabbit Hole</p>
+        </div>
+
+        <div id="title-screen" class="screen active">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <div style="font-size: 4em;">🐇🃏👑</div>
+                <p style="font-size: 1.1em; margin-top: 15px;">"We're all mad here. I'm mad. You're mad."</p>
+            </div>
+            <div style="text-align: center;">
+                <button class="btn" onclick="showScreen('new-game')">Fall Down the Hole</button>
+                <button class="btn" onclick="loadGame()">Continue Adventure</button>
+            </div>
+            <div class="quote-box" style="margin-top: 30px;">
+                <p class="quote-text">It's no use going back to yesterday, because I was a different person then.</p>
+                <p style="margin-top: 10px; font-size: 0.9em;">— Lewis Carroll</p>
+            </div>
+        </div>
+
+        <div id="new-game" class="screen">
+            <h2 style="text-align: center; margin-bottom: 20px;">🐇 Begin Your Fall</h2>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 10px; font-size: 1.1em;">Enter Your Name:</label>
+                <input type="text" id="player-name" style="width: 100%; padding: 12px; font-size: 1.1em; border-radius: 8px; border: 2px solid #9b59b6; background: rgba(30,15,50,0.8); color: #f0e6ff;" placeholder="Your name...">
+            </div>
+            <h3 style="margin: 20px 0;">Choose Your Token:</h3>
+            <div class="token-grid" id="token-grid"></div>
+            <h3 style="margin: 20px 0;">Distribute 5 Points:</h3>
+            <div id="attributes"></div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" onclick="startGame()">Begin Adventure</button>
+            </div>
+        </div>
+
+        <div id="main-game" class="screen">
+            <div class="status-bar">
+                <div class="status-item"><span class="status-icon">🏠</span><span id="player-name-display"></span></div>
+                <div class="status-item"><span class="status-icon" id="player-token"></span></div>
+                <div class="status-item"><span class="status-icon">❤️</span><span id="health-display">100</span></div>
+                <div class="status-item"><span class="status-icon">💰</span><span id="gold-display">20</span> Tarts</div>
+                <div class="status-item"><span class="status-icon">📅</span>Day <span id="day-display">1</span></div>
+                <div class="status-item"><span class="status-icon">🎮</span>Games: <span id="games-display">0</span>/5</div>
+            </div>
+            <div class="games-remaining" id="games-remaining">
+                <span id="quest-status">Mini-games available today: 5</span>
+            </div>
+            <div class="map-grid" id="map-grid"></div>
+        </div>
+
+        <div id="location-screen" class="screen">
+            <button class="btn btn-small" onclick="showScreen('main-game')">← Back to Map</button>
+            <h2 style="text-align: center; margin: 20px 0;" id="location-title"></h2>
+            <div id="location-content"></div>
+        </div>
+
+        <div id="trivia-screen" class="screen">
+            <h2 style="text-align: center;">📜 Wonderland Trivia</h2>
+            <div id="trivia-content"></div>
+        </div>
+
+        <div id="challenge-screen" class="screen">
+            <h2 style="text-align: center;">⚔️ Curious Challenge</h2>
+            <div id="challenge-content"></div>
+        </div>
+
+        <div id="dice-screen" class="screen">
+            <h2 style="text-align: center;">🎲 Queen's Game</h2>
+            <div id="dice-content"></div>
+        </div>
+
+        <div id="dialogue-screen" class="screen">
+            <h2 style="text-align: center;">💬 Encounter</h2>
+            <div id="dialogue-content"></div>
+        </div>
+
+        <div id="memory-screen" class="screen">
+            <h2 style="text-align: center;">🧠 Memory Challenge</h2>
+            <p style="text-align: center; margin-bottom: 15px;">Match the curious symbols!</p>
+            <div id="memory-content"></div>
+        </div>
+
+        <div id="shop-screen" class="screen">
+            <h2 style="text-align: center;">🏪 Mad Hatter's Shop</h2>
+            <div id="shop-content"></div>
+        </div>
+
+        <div id="inventory-screen" class="screen">
+            <h2 style="text-align: center;">🎒 Inventory</h2>
+            <div id="inventory-content"></div>
+        </div>
+
+        <div id="ending-screen" class="screen">
+            <h2 style="text-align: center;" id="ending-title"></h2>
+            <div id="ending-content"></div>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content" id="modal-content"></div>
+    </div>
+
+    <script>
+        const tokens = [
+            { icon: '👸', name: 'Alice', desc: 'The Curious Girl' },
+            { icon: '🐇', name: 'White Rabbit', desc: 'Always Late' },
+            { icon: '🃏', name: 'Cheshire Cat', desc: 'Grinning Phantom' },
+            { icon: '🐱', name: 'Cat', desc: 'Grins and Vanishes' },
+            { icon: '👑', name: 'Queen', desc: 'Off With Their Head' },
+            { icon: '🎩', name: 'Mad Hatter', desc: 'Unbirthday Tea' },
+            { icon: '🐛', name: 'Caterpillar', desc: 'Wise Smoke' },
+            { icon: '🦋', name: 'Butterfly', desc: 'Flutter By' },
+            { icon: '🪞', name: 'Mirror', desc: 'Through the Looking-Glass' },
+            { icon: '🃏', name: 'Card Soldier', desc: 'Loyal Guard' },
+            { icon: '🐔', name: 'Mock Turtle', desc: 'Sorrowful Tale' },
+            { icon: '🦊', name: 'Duchess', desc: 'Cheshire Pig-Baby' }
+        ];
+
+        const locations = [
+            { id: 'rabbit-hole', name: "Rabbit Hole", icon: '🕳️', cr: 1, desc: "Where the fall begins", unlocked: true, bg: 'Down, down, down you fall into darkness. Time feels strange here.' },
+            { id: 'hall-doors', name: "Hall of Doors", icon: '🚪', cr: 2, desc: "A key to a tiny door", unlocked: false, bg: 'The door is only 15 inches high. How will you get through?' },
+            { id: 'garden', name: "Wonderland Garden", icon: '🌹', cr: 2, desc: "Talking flowers and paths", unlocked: false, bg: 'The flowers murmur amongst themselves. The Rose Queen glares.' },
+            { id: 'tea-party', name: "Mad Tea Party", icon: '🍵', cr: 3, desc: "The eternal unbirthday", unlocked: false, bg: 'The Hatter, Hare, and Dormouse sit at an endless tea table.' },
+            { id: 'crocus', name: "Crocus Garden", icon: '🏃', cr: 3, desc: "The Queen's Croquet Ground", unlocked: false, bg: 'Flamingos are mallets and hedgehogs are balls. Chaos reigns.' },
+            { id: 'forest', name: "Knights' Forest", icon: '🌳', cr: 4, desc: "Where the Cheshire Cat dwells", unlocked: false, bg: 'The Cheshire Cat grins from every branch. Which way to go?' },
+            { id: 'turtle', name: "Mock Turtle's Cave", icon: '🐢', cr: 4, desc: "Lessons in sorrow", unlocked: false, bg: 'The Mock Turtle sighs endlessly. His story is almost true.' },
+            { id: 'court', name: "Queen's Court", icon: '👑', cr: 5, desc: "The final trial awaits", unlocked: false, bg: 'The Queen screams "Off with their head!" Time to be brave.' }
+        ];
+
+        const dialogues = {
+            'rabbit-hole': [
+                { speaker: 'Alice', text: "Oh! Oh my! Down, down, down I go! How curious this feels... Where am I falling to?", choices: [
+                    { text: "I should find a way down.", next: 1 },
+                    { text: "Is anyone there?", next: 2 },
+                    { text: "This is quite peculiar.", next: -1 }
+                ]},
+                { speaker: 'Alice', text: "A jar labeled 'Orange Marmalade' - but it's empty! I wish it weren't...", choices: [
+                    { text: "Keep falling, keep falling...", next: -1 }
+                ]},
+                { speaker: 'Alice', text: "Distant laughter echoes. Wonderland awaits below.", choices: [
+                    { text: "I'm ready for anything!", next: -1 }
+                ]}
+            ],
+            'hall-doors': [
+                { speaker: 'White Rabbit', text: "Oh dear! Oh dear! I shall be too late!", choices: [
+                    { text: "Can I help you?", next: 1 },
+                    { text: "Where are you rushing to?", next: 2 }
+                ]},
+                { speaker: 'White Rabbit', text: "The Duchess! She needs my gloves! But the key... the key is somewhere...", choices: [
+                    { text: "I might know where the key is!", next: -1 }
+                ]},
+                { speaker: 'White Rabbit', text: "To the Queen's croquet game! But I lost her door key!", choices: [
+                    { text: "Perhaps I can find it for you.", next: -1 }
+                ]}
+            ],
+            'garden': [
+                { speaker: 'Rose', text: "We are roses, painted white! Do stop staring.", choices: [
+                    { text: "I'm sorry! You're very lovely.", next: 1 },
+                    { text: "Why are you painted white?", next: 2 }
+                ]},
+                { speaker: 'Tiger Lily', text: "You're kind. Unlike those gardeners who painted us.", choices: [
+                    { text: "Gardeners painted roses?", next: -1 }
+                ]},
+                { speaker: 'Daisy', text: "Shouldn't you be on your way? The Queen doesn't like lingerers.", choices: [
+                    { text: "Thank you for the warning.", next: -1 }
+                ]}
+            ],
+            'tea-party': [
+                { speaker: 'Mad Hatter', text: "Unbirthday? Unbirthday! What a splendid concept! When is YOUR unbirthday?", choices: [
+                    { text: "Every day except my birthday!", next: 1 },
+                    { text: "I don't understand...", next: 2 }
+                ]},
+                { speaker: 'Mad Hatter', text: "HA! Every day is an unbirthday for most people! Drink tea!", choices: [
+                    { text: "Very well then, I shall!", next: -1 }
+                ]},
+                { speaker: 'March Hare', text: "Is THIS the raven like a writing desk?", choices: [
+                    { text: "Those aren't the same thing at all!", next: -1 }
+                ]}
+            ],
+            'crocus': [
+                { speaker: 'Queen of Hearts', text: "OFF WITH THEIR HEAD!", choices: [
+                    { text: "But your Majesty, I haven't done anything!", next: 1 },
+{ text: "Your Majesty, please!", next: 2 }
+                ]},
+                { speaker: 'King', text: "My dear, perhaps not THIS one...", choices: [
+                    { text: "Thank you, Your Majesty.", next: -1 }
+                ]},
+                { speaker: 'Queen', text: "Perhaps not. Now play croquet!", choices: [
+                    { text: "I accept the challenge!", next: -1 }
+                ]}
+            ],
+            'forest': [
+                { speaker: 'Cheshire Cat', text: "Well, would you like to know which way to go?", choices: [
+                    { text: "Yes, please help me!", next: 1 },
+                    { text: "I can figure it out myself.", next: 2 }
+                ]},
+                { speaker: 'Cheshire Cat', text: "That depends a good deal on where you want to get to.", choices: [
+                    { text: "I want to leave Wonderland.", next: -1 }
+                ]},
+                { speaker: 'Cheshire Cat', text: "Then it doesn't matter which way you go.", choices: [
+                    { text: "How peculiar!", next: -1 }
+                ]}
+            ],
+            'turtle': [
+                { speaker: 'Mock Turtle', text: "We used to be real turtles, you know. In the sea. Now we are... sadder.", choices: [
+                    { text: "Tell me about your schooling.", next: 1 },
+                    { text: "That sounds lonely.", next: 2 }
+                ]},
+                { speaker: 'Mock Turtle', text: "Reeling and Writhing, of course, to begin with. Then the different branches of Arithmetic.", choices: [
+                    { text: "Ambition, Distraction, Uglification, and Derision!", next: -1 }
+                ]},
+                { speaker: 'Mock Turtle', text: "And then thegry and hatter... er, the Drawling and the Stretching.", choices: [
+                    { text: "This is all very confusing.", next: -1 }
+                ]}
+            ],
+            'court': [
+                { speaker: 'King', text: "The trial must begin! Who is the witness?", choices: [
+                    { text: "I volunteer!", next: 1 },
+                    { text: "Let me think about this...", next: 2 }
+                ]},
+                { speaker: 'Queen', text: "BOILED! BOILED!", choices: [
+                    { text: "I have evidence to present!", next: -1 }
+                ]},
+                { speaker: 'Hatter', text: "Give your evidence or be executed!", choices: [
+                    { text: "I demand a fair trial!", next: -1 }
+                ]}
+            ]
+        };
+
+        const triviaQuestions = [
+            { q: "What is the name of Alice's cat?", opts: ["Dinah", "Whiskers", "Grumpy", "Snowball"], ans: 0 },
+            { q: "What does the Caterpillar smoke?", opts: ["Pipe", "Hookah", "Cigarette", "Nothing"], ans: 1 },
+            { q: "What card is always painting roses?", opts: ["2 of Spades", "5 of Hearts", "7 of Diamonds", "Ace of Clubs"], ans: 0 },
+            { q: "What is the Hatter's tea party's rule?", opts: ["Never sit", "Always move", "No talking", "No leaving"], ans: 1 },
+            { q: "What makes Alice grow tall?", opts: ["Cake", "Potion", "Mushroom", "Water"], ans: 2 },
+            { q: "Who is the Duchess's baby?", opts: ["A pig", "A cat", "A frog", "A duck"], ans: 0 },
+            { q: "What animal is the 'best reader'?", opts: ["Owl", "Eagle", "Lory", "Parrot"], ans: 2 },
+            { q: "What is in the little bottle?", opts: ["Water", 'Wine', "Sleeping potion", "Poison"], ans: 2 },
+            { q: "How many feet does the Flamingo have?", opts: ["One", "Two", "Three", "Four"], ans: 0 },
+            { q: "What can the Cheshire Cat do?", opts: ["Fly", "Disappear", "Talk to animals", "Grant wishes"], ans: 1 }
+        ];
+
+        const shopItems = [
+            { id: 'cake', name: 'Eat Me Cake', icon: '🍰', price: 15, desc: 'Grow or shrink unpredictably', effect: 'Cunning +1' },
+            { id: 'potion', name: 'Drink Me Potion', icon: '🧪', price: 12, desc: 'Shrink to tiny size', effect: 'Wisdom +1' },
+            { id: 'key', name: 'Magic Key', icon: '🗝️', price: 20, desc: 'Opens tiny doors', effect: 'Cunning +2' },
+            { id: 'fan', name: 'Fan', icon: '🪭', price: 10, desc: 'Cool yourself down', effect: 'Vitality +1' },
+            { id: 'tart', name: 'Queen\'s Tarts', icon: '🥧', price: 8, desc: 'Delicious but dangerous', effect: 'Charm +1' },
+            { id: 'watch', name: 'Hatter\'s Watch', icon: '⏰', price: 25, desc: 'Time is always wrong', effect: 'Might +1' }
+        ];
+
+        let gameState = {
+            player: { name: '', token: null, faction: null, attributes: { Might: 5, Cunning: 5, Vitality: 5, Wisdom: 5, Charm: 5 }, gold: 20, health: 100, items: {} },
+            day: 1, gamesPlayed: 0, gamesPerDay: 5, currentLocation: '',
+            completedMiniGames: [], locationsVisited: [], totalGoldEarned: 0,
+            challengesWon: 0, challengesLost: 0, triviaCorrect: 0, triviaTotal: 0,
+            memoryHighScore: 0
+        };
+
+        function initTokenGrid() {
+            const grid = document.getElementById('token-grid');
+            grid.innerHTML = tokens.map((t, i) => `
+                <div class="token-option" onclick="selectToken(${i})">
+                    <div class="token-icon">${t.icon}</div>
+                    <div>${t.name}</div>
+                    <div style="font-size:0.8em;color:#f39c12">${t.desc}</div>
+                </div>
+            `).join('');
+        }
+
+        function initAttributes() {
+            const attrs = ['Might', 'Cunning', 'Vitality', 'Wisdom', 'Charm'];
+            const attrIcons = { Might: '💪', Cunning: '🧠', Vitality: '❤️', Wisdom: '📚', Charm: '✨' };
+            const container = document.getElementById('attributes');
+            container.innerHTML = `<div class="attr-remaining">Points remaining: <span id="points-left">5</span></div>`;
+            container.innerHTML += attrs.map(a => `
+                <div class="attr-row">
+                    <div class="attr-name">${attrIcons[a]} ${a}</div>
+                    <div class="attr-controls">
+                        <button class="attr-btn" onclick="adjustAttr('${a}', -1)">−</button>
+                        <span class="attr-value" id="attr-${a}">5</span>
+                        <button class="attr-btn" onclick="adjustAttr('${a}', 1)">+</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        let pointsRemaining = 5;
+        function adjustAttr(attr, delta) {
+            const current = gameState.player.attributes[attr];
+            if (delta > 0 && pointsRemaining > 0) {
+                gameState.player.attributes[attr]++;
+                pointsRemaining--;
+            } else if (delta < 0 && current > 5) {
+                gameState.player.attributes[attr]--;
+                pointsRemaining++;
+            }
+            document.getElementById('attr-' + attr).textContent = gameState.player.attributes[attr];
+            document.getElementById('points-left').textContent = pointsRemaining;
+        }
+
+        function selectToken(index) {
+            document.querySelectorAll('.token-option').forEach((el, i) => {
+                el.classList.toggle('selected', i === index);
+            });
+            gameState.player.token = index;
+        }
+
+        function startGame() {
+            const name = document.getElementById('player-name').value.trim();
+            if (!name) { alert('Please enter your name!'); return; }
+            if (gameState.player.token === null) { alert('Please choose a token!'); return; }
+            if (pointsRemaining > 0) { alert('Please distribute all points!'); return; }
+            gameState.player.name = name;
+            saveGame();
+            showScreen('main-game');
+            updateMainGame();
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            if (screenId === 'main-game') updateMainGame();
+        }
+
+        function updateMainGame() {
+            document.getElementById('player-name-display').textContent = gameState.player.name;
+            document.getElementById('player-token').textContent = tokens[gameState.player.token].icon;
+            document.getElementById('health-display').textContent = gameState.player.health;
+            document.getElementById('gold-display').textContent = gameState.player.gold;
+            document.getElementById('day-display').textContent = gameState.day;
+            document.getElementById('games-display').textContent = gameState.gamesPlayed;
+            const remaining = Math.max(0, gameState.gamesPerDay - gameState.gamesPlayed);
+            document.getElementById('quest-status').textContent = `Mini-games available today: ${remaining}`;
+
+            const mapGrid = document.getElementById('map-grid');
+            mapGrid.innerHTML = locations.map(loc => {
+                const isLocked = !loc.unlocked && loc.id !== 'rabbit-hole';
+                return `
+                    <div class="location ${isLocked ? 'locked' : ''}" onclick="${isLocked ? '' : `visitLocation('${loc.id}')`}">
+                        <div class="location-icon">${loc.icon}</div>
+                        <div class="location-name">${loc.name}</div>
+                        <div class="location-cr">CR: ${loc.cr}</div>
+                        <div style="font-size:0.8em;margin-top:5px">${loc.desc}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function visitLocation(locId) {
+            gameState.currentLocation = locId;
+            const loc = locations.find(l => l.id === locId);
+            if (!gameState.locationsVisited.includes(locId)) {
+                gameState.locationsVisited.push(locId);
+                unlockNextLocation(locId);
+            }
+            saveGame();
+
+            document.getElementById('location-title').textContent = loc.icon + ' ' + loc.name;
+            const content = document.getElementById('location-content');
+            content.innerHTML = `
+                <div class="dialogue-box" style="margin-bottom:20px;">
+                    <div class="dialogue-speaker">Atmosphere</div>
+                    <div class="dialogue-text">${loc.bg}</div>
+                </div>
+                <div class="quote-box">"The hurrier I go, the behinder I get."</div>
+                <div class="mini-games-section">
+                    <button class="btn" onclick="startTrivia()"><span class="game-icon">📜</span>Trivia</button>
+                    <button class="btn" onclick="startChallenge()"><span class="game-icon">⚔️</span>Challenge</button>
+                    <button class="btn" onclick="startDice()"><span class="game-icon">🎲</span>Dice Game</button>
+                    <button class="btn" onclick="startDialogue()"><span class="game-icon">💬</span>Dialogue</button>
+                    <button class="btn" onclick="startMemory()"><span class="game-icon">🧠</span>Memory</button>
+                </div>
+                <div style="text-align:center;margin-top:20px;">
+                    <button class="btn" onclick="openShop()">🏪 Shop</button>
+                    <button class="btn" onclick="openInventory()">🎒 Inventory</button>
+                    ${gameState.locationsVisited.length >= 5 ? '<button class="btn" onclick="attemptEnding()" style="background:linear-gradient(135deg,#f1c40f,#ff8c00);">👑 Seek the Ending</button>' : ''}
+                </div>
+            `;
+            showScreen('location-screen');
+        }
+
+        function unlockNextLocation(locId) {
+            const locOrder = ['rabbit-hole', 'hall-doors', 'garden', 'tea-party', 'crocus', 'forest', 'turtle', 'court'];
+            const idx = locOrder.indexOf(locId);
+            if (idx < locOrder.length - 1) {
+                const nextLoc = locations.find(l => l.id === locOrder[idx + 1]);
+                if (nextLoc) nextLoc.unlocked = true;
+            }
+        }
+
+        function startTrivia() {
+            if (gameState.gamesPlayed >= gameState.gamesPerDay) { showModal('No Games Left', 'You have played all mini-games today. Return tomorrow!'); return; }
+            const q = triviaQuestions[Math.floor(Math.random() * triviaQuestions.length)];
+            const content = document.getElementById('trivia-content');
+            content.innerHTML = `
+                <div class="trivia-question">${q.q}</div>
+                <div class="trivia-options">
+                    ${q.opts.map((o, i) => `<button class="choice-btn" onclick="answerTrivia(${i}, ${q.ans})">${o}</button>`).join('')}
+                </div>
+            `;
+            showScreen('trivia-screen');
+        }
+
+        function answerTrivia(selected, correct) {
+            gameState.gamesPlayed++;
+            gameState.triviaTotal++;
+            if (selected === correct) {
+                gameState.triviaCorrect++;
+                gameState.player.gold += 5;
+                gameState.totalGoldEarned += 5;
+                showModal('Correct!', `Curiouser and curiouser! +5 Tarts`);
+            } else {
+                showModal('Incorrect', `The answer was: Option ${correct + 1}`);
+            }
+            saveGame();
+            setTimeout(() => { showScreen('location-screen'); updateMainGame(); }, 1500);
+        }
+
+        function startChallenge() {
+            if (gameState.gamesPlayed >= gameState.gamesPerDay) { showModal('No Games Left', 'You have played all mini-games today.'); return; }
+            const loc = locations.find(l => l.id === gameState.currentLocation);
+            const challengeContent = document.getElementById('challenge-content');
+            challengeContent.innerHTML = `
+                <p style="text-align:center;margin-bottom:20px;">Curiosity Rating: ${loc.cr}</p>
+                <p style="text-align:center;margin-bottom:20px;">Choose your attribute for this challenge:</p>
+                <div class="choice-list">
+                    ${['Might', 'Cunning', 'Vitality', 'Wisdom', 'Charm'].map(attr => `
+                        <button class="choice-btn" onclick="attemptChallenge('${attr}', ${loc.cr})">
+                            ${attr} (Modifier: ${getMod(attr)})
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+            showScreen('challenge-screen');
+        }
+
+        function attemptChallenge(attr, cr) {
+            gameState.gamesPlayed++;
+            const roll = rollD6();
+            const mod = getMod(attr);
+            const total = roll + mod;
+            const success = total >= cr;
+
+            if (success) {
+                gameState.challengesWon++;
+                const reward = cr * 3;
+                gameState.player.gold += reward;
+                gameState.totalGoldEarned += reward;
+                showModal('Victory!', `🎲 ${roll} + ${mod} = ${total}\n\nvs CR ${cr}\n\nCurious! +${reward} Tarts!`);
+            } else {
+                gameState.challengesLost++;
+                gameState.player.health -= 10;
+                showModal('Defeat', `🎲 ${roll} + ${mod} = ${total}\n\nvs CR ${cr}\n\nHow curious... -10 Health`);
+            }
+            if (gameState.player.health <= 0) gameState.player.health = 100;
+            saveGame();
+            setTimeout(() => { showScreen('location-screen'); updateMainGame(); },2000);
+        }
+
+        function startDice() {
+            if (gameState.gamesPlayed >= gameState.gamesPerDay) { showModal('No Games Left', 'You have played all mini-games today.'); return; }
+            const content = document.getElementById('dice-content');
+            content.innerHTML = `
+                <p style="text-align:center;margin-bottom:20px;">Roll against the Queen's luck! Beat 6 to win!</p>
+                <div style="text-align:center;">
+                    <button class="btn" onclick="rollDice()">🎲 Roll the Dice!</button>
+                </div>
+            `;
+            showScreen('dice-screen');
+        }
+
+        function rollDice() {
+            gameState.gamesPlayed++;
+            const playerRoll = Math.floor(Math.random() * 10) + 1;
+            const target = 6;
+            const content = document.getElementById('dice-content');
+            content.innerHTML = `
+                <div style="text-align:center;margin:30px 0;">
+                    <div class="dice-result">${playerRoll}</div>
+                    <p>You rolled ${playerRoll} - needed ${target}!</p>
+                </div>
+                <div style="text-align:center;font-size:1.3em;">
+                    ${playerRoll >= target ? '🎉 Victory! +5 Tarts' : '💔 Not quite! -5 Gold'}
+                </div>
+            `;
+            if (playerRoll >= target) {
+                gameState.player.gold += 5;
+                gameState.totalGoldEarned += 5;
+            } else {
+                gameState.player.gold = Math.max(0, gameState.player.gold - 5);
+            }
+            saveGame();
+            setTimeout(() => { showScreen('location-screen'); updateMainGame(); }, 2500);
+        }
+
+        function startDialogue() {
+            if (gameState.gamesPlayed >= gameState.gamesPerDay) { showModal('No Games Left', 'You have played all mini-games today.'); return; }
+            const locDialogues = dialogues[gameState.currentLocation] || dialogues['rabbit-hole'];
+            showDialogueNode(0, locDialogues);
+        }
+
+        function showDialogueNode(nodeIndex, dialogueTree) {
+            gameState.gamesPlayed++;
+            const node = dialogueTree[nodeIndex];
+            const content = document.getElementById('dialogue-content');
+            content.innerHTML = `
+                <div class="dialogue-box">
+                    <div class="dialogue-speaker">${node.speaker}</div>
+                    <div class="dialogue-text">${node.text}</div>
+                </div>
+                <div class="choice-list">
+                    ${node.choices.map(c => `
+                        <button class="choice-btn" onclick="${c.next === -1 ? 'endDialogue()' : `showDialogueNode(${c.next}, dialogueTree)`}">
+                            ${c.text}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+            showScreen('dialogue-screen');
+        }
+
+        function endDialogue() {
+            gameState.player.gold += 3;
+            gameState.totalGoldEarned += 3;
+            showModal('Curious Conversation', 'What a curious exchange! +3 Tarts');
+            saveGame();
+            setTimeout(() => { showScreen('location-screen'); updateMainGame(); }, 1500);
+        }
+
+        let memoryCards = [], flippedCards = [], matchedPairs = 0, memoryMoves = 0;
+        const memorySymbols = ['🐇', '🃏', '👑', '🎩', '🐛', '🍰', '🪭', '🌹'];
+
+        function startMemory() {
+            if (gameState.gamesPlayed >= gameState.gamesPerDay) { showModal('No Games Left', 'You have played all mini-games today.'); return; }
+            memoryCards = [...memorySymbols, ...memorySymbols].sort(() => Math.random() - 0.5);
+            flippedCards = [];
+            matchedPairs = 0;
+            memoryMoves = 0;
+
+            const content = document.getElementById('memory-content');
+            content.innerHTML = `
+                <p style="text-align:center;">Moves: <span id="memory-moves">0</span> | Pairs: <span id="memory-pairs">0</span>/8</p>
+                <div class="memory-grid">
+                    ${memoryCards.map((s, i) => `<div class="memory-card" id="mem-${i}" onclick="flipCard(${i})">❓</div>`).join('')}
+                </div>
+                <button class="btn" onclick="startDialogue()" style="margin-top:15px;">Skip Memory Game</button>
+            `;
+            showScreen('memory-screen');
+        }
+
+        function flipCard(index) {
+            if (flippedCards.length >= 2 || flippedCards.includes(index)) return;
+            const card = document.getElementById(`mem-${index}`);
+            card.textContent = memoryCards[index];
+            card.classList.add('flipped');
+            flippedCards.push(index);
+
+            if (flippedCards.length === 2) {
+                memoryMoves++;
+                document.getElementById('memory-moves').textContent = memoryMoves;
+                setTimeout(checkMemoryMatch, 800);
+            }
+        }
+
+        function checkMemoryMatch() {
+            const [i1, i2] = flippedCards;
+            if (memoryCards[i1] === memoryCards[i2]) {
+                document.getElementById(`mem-${i1}`).classList.add('matched');
+                document.getElementById(`mem-${i2}`).classList.add('matched');
+                matchedPairs++;
+                document.getElementById('memory-pairs').textContent = matchedPairs;
+                flippedCards = [];
+
+                if (matchedPairs === 8) {
+                    gameState.memoryHighScore = Math.max(gameState.memoryHighScore, memoryMoves);
+                    const reward = Math.max(1, 10 - memoryMoves) * 2;
+                    gameState.player.gold += reward;
+                    gameState.totalGoldEarned += reward;
+                    showModal('Memory Complete!', `Curious! Found all pairs in ${memoryMoves} moves! +${reward} Tarts`);
+                    saveGame();
+                    setTimeout(() => { showScreen('location-screen'); updateMainGame(); }, 2000);
+                }
+            } else {
+                document.getElementById(`mem-${i1}`).textContent = '❓';
+                document.getElementById(`mem-${i1}`).classList.remove('flipped');
+                document.getElementById(`mem-${i2}`).textContent = '❓';
+                document.getElementById(`mem-${i2}`).classList.remove('flipped');
+                flippedCards = [];
+            }
+        }
+
+        function openShop() {
+            const content = document.getElementById('shop-content');
+            content.innerHTML = `
+                <p style="text-align:center;margin-bottom:15px;">Your Tarts: ${gameState.player.gold}</p>
+                <div class="shop-grid">
+                    ${shopItems.map(item => `
+                        <div class="shop-item">
+                            <div class="shop-item-icon">${item.icon}</div>
+                            <div class="shop-item-name">${item.name}</div>
+                            <div class="shop-item-desc">${item.desc}</div>
+                            <div class="shop-item-price">${item.price} Tarts</div>
+                            <button class="btn btn-small" onclick="buyItem('${item.id}')" ${gameState.player.gold < item.price ? 'disabled' : ''}>
+                                Buy
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            showScreen('shop-screen');
+        }
+
+        function buyItem(itemId) {
+            const item = shopItems.find(i => i.id === itemId);
+            if (gameState.player.gold >= item.price) {
+                gameState.player.gold -= item.price;
+                gameState.player.items[itemId] = (gameState.player.items[itemId] || 0) + 1;
+
+                if (item.effect.includes('Might')) gameState.player.attributes.Might += 1;
+                if (item.effect.includes('Cunning')) gameState.player.attributes.Cunning += item.effect.includes('2') ? 2 : 1;
+                if (item.effect.includes('Wisdom')) gameState.player.attributes.Wisdom += 1;
+                if (item.effect.includes('Charm')) gameState.player.attributes.Charm += 1;
+                if (item.effect.includes('Vitality')) gameState.player.attributes.Vitality += 1;
+
+                showModal('Purchased!', `${item.icon} ${item.name} acquired!`);
+                saveGame();
+                openShop();
+            }
+        }
+
+        function openInventory() {
+            const items = Object.entries(gameState.player.items).filter(([_, qty]) => qty > 0);
+            const content = document.getElementById('inventory-content');
+            content.innerHTML = `
+                <p style="text-align:center;margin-bottom:15px;">Stats: ${Object.entries(gameState.player.attributes).map(([k, v]) => `${k}: ${v}`).join(' | ')}</p>
+                <div class="inventory-list">
+                    ${items.length ? items.map(([id, qty]) => {
+                        const item = shopItems.find(i => i.id === id);
+                        return `<div class="inv-item"><span class="inv-icon">${item.icon}</span>${item.name} x${qty}</div>`;
+                    }).join('') : '<p>No items yet!</p>'}
+                </div>
+                <div style="text-align:center;margin-top:20px;">
+                    <button class="btn" onclick="newDay()">📅 Wake Up New</button>
+                </div>
+            `;
+            showScreen('inventory-screen');
+        }
+
+        function newDay() {
+            gameState.day++;
+            gameState.gamesPlayed = 0;
+            gameState.player.health = 100;
+            showModal('New Day', `Day ${gameState.day} begins! A curious new day awaits.`);
+            saveGame();
+            showScreen('main-game');
+        }
+
+        function attemptEnding() {
+            const totalScore = calculateScore();
+            const content = document.getElementById('ending-content');
+            const title = document.getElementById('ending-title');
+
+            let ending, endingClass;
+            if (totalScore >= 80) {
+                ending = {
+                    title: 'Awakening Hero',
+                    text: `Through all the curious challenges and strange encounters, you found your way back home! Alice awakens from her dream, but the lessons remain: be curious, be brave, and always believe in the impossible. The White Rabbit's pocket watch ticks normally once more.`,
+                    class: 'ending-good'
+                };
+            } else if (totalScore >= 50) {
+                ending = {
+                    title: 'Wonderland Resident',
+                    text: `You've grown comfortable in Wonderland's strangeness. The Cheshire Cat grins as you realize you may never leave - but perhaps that's alright. Wonderland has become home, with its tea parties and croquet games and peculiar friends.`,
+                    class: 'ending-good'
+                };
+            } else {
+                ending = {
+                    title: 'Lost in Dreams',
+                    text: `The Queen has sentenced you to stay forever in Wonderland. As a card soldier, you march eternally in her croquet ground. Sometimes you wonder if this is real, or if you simply fell asleep by the river and never woke up.`,
+                    class: 'ending-bad'
+                };
+            }
+
+            title.textContent = '🐇 ' + ending.title;
+            content.innerHTML = `
+                <div class="dialogue-box" style="border-color:${ending.class === 'ending-good' ? '#f1c40f' : '#e74c3c'}">
+                    <p>${ending.text}</p>
+                </div>
+                <div style="margin-top:20px;text-align:center;">
+                    <h3>Final Statistics</h3>
+                    <p>Days: ${gameState.day}</p>
+                    <p>Tarts Earned: ${gameState.totalGoldEarned}</p>
+                    <p>Challenges Won: ${gameState.challengesWon}/${gameState.challengesWon + gameState.challengesLost}</p>
+                    <p>Trivia Correct: ${gameState.triviaCorrect}/${gameState.triviaTotal}</p>
+                    <p>Locations Visited: ${gameState.locationsVisited.length}/8</p>
+                    <p>Total Score: ${totalScore}/100</p>
+                </div>
+                <div style="text-align:center;margin-top:20px;">
+                    <button class="btn" onclick="resetGame()">Wake Up New</button>
+                </div>
+            `;
+            document.getElementById('ending-screen').className = 'screen ' + ending.class;
+            showScreen('ending-screen');
+        }
+
+        function calculateScore() {
+            let score = 0;
+            score += (gameState.challengesWon * 5);
+            score += (gameState.triviaCorrect * 3);
+            score += (gameState.locationsVisited.length * 5);
+            score += (gameState.totalGoldEarned / 5);
+            score += (Object.values(gameState.player.items).reduce((a, b) => a + b, 0) * 2);
+            score = Math.min(100, score);
+            return Math.floor(score);
+        }
+
+        function rollD6() { return Math.floor(Math.random() * 6) + 1; }
+        function getMod(attr) { return gameState.player.attributes[attr] - 5; }
+
+        function showModal(title, text) {
+            document.getElementById('modal-content').innerHTML = `
+                <h3 style="margin-bottom:15px;">${title}</h3>
+                <p>${text}</p>
+                <button class="btn" onclick="closeModal()" style="margin-top:15px;">OK</button>
+            `;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() { document.getElementById('modal').classList.remove('active'); }
+
+        function saveGame() { localStorage.setItem('alice-wonderland-game', JSON.stringify(gameState)); }
+        function loadGame() {
+            const saved = localStorage.getItem('alice-wonderland-game');
+            if (saved) {
+                gameState = JSON.parse(saved);
+                showScreen('main-game');
+            } else {
+                showModal('No Save Found', 'Begin a new adventure!');
+            }
+        }
+
+        function resetGame() {
+            localStorage.removeItem('alice-wonderland-game');
+            location.reload();
+        }
+
+        initTokenGrid();
+        initAttributes();
+    </script>
+</body>
+</html>

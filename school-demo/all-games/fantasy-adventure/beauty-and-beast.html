@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beauty and the Beast - Interactive Adventure</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Georgia', serif; background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 50%, #1a0a2e 100%); min-height: 100vh; color: #f4e4c1; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        h1 { text-align: center; color: #ffd700; text-shadow: 2px 2px 4px #000; margin-bottom: 20px; font-size: 2em; }
+        h2 { color: #ffd700; margin: 15px 0; }
+        .panel { background: rgba(45, 27, 78, 0.9); border: 3px solid #ffd700; border-radius: 15px; padding: 20px; margin: 15px 0; box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+        .btn { background: linear-gradient(180deg, #8b4513, #654321); color: #ffd700; border: 2px solid #ffd700; padding: 12px 24px; font-size: 16px; cursor: pointer; border-radius: 8px; margin: 5px; transition: all 0.3s; font-family: inherit; }
+        .btn:hover { background: linear-gradient(180deg, #a0522d, #8b4513); transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin: 10px 0; }
+        .stat { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; text-align: center; }
+        .stat-name { color: #ffd700; font-size: 12px; }
+        .stat-value { font-size: 24px; font-weight: bold; color: #fff; }
+        .inventory { display: flex; flex-wrap: wrap; gap: 8px; min-height: 40px; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 8px; }
+        .item { background: #654321; padding: 5px 10px; border-radius: 5px; font-size: 12px; color: #ffd700; border: 1px solid #8b4513; }
+        .map { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 15px 0; }
+        .location { background: rgba(139, 69, 19, 0.8); padding: 15px; border-radius: 10px; text-align: center; cursor: pointer; border: 2px solid #8b4513; transition: all 0.3s; }
+        .location:hover { border-color: #ffd700; transform: scale(1.02); }
+        .location.unlocked { background: rgba(0, 100, 0, 0.6); border-color: #00ff00; }
+        .location.current { border-color: #ffd700; box-shadow: 0 0 15px #ffd700; }
+        .dialogue { background: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 10px; margin: 15px 0; font-style: italic; border-left: 4px solid #ffd700; }
+        .character-portrait { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ffd700; margin: 10px; }
+        .game-screen { display: none; }
+        .game-screen.active { display: block; }
+        .dice-container { text-align: center; padding: 20px; }
+        .dice { width: 80px; height: 80px; background: #fff; color: #000; font-size: 48px; display: inline-flex; align-items: center; justify-content: center; border-radius: 15px; border: 4px solid #ffd700; margin: 10px; animation: roll 0.5s ease-out; }
+        @keyframes roll { 0% { transform: rotate(0deg); } 100% { transform: rotate(720deg); } }
+        .minigame-area { min-height: 200px; background: rgba(0,0,0,0.5); border-radius: 10px; padding: 20px; margin: 15px 0; }
+        .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; }
+        .memory-card { width: 80px; height: 80px; background: #654321; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 32px; border: 2px solid #8b4513; transition: all 0.3s; }
+        .memory-card:hover { transform: scale(1.05); }
+        .memory-card.flipped { background: #ffd700; }
+        .memory-card.matched { background: #006400; pointer-events: none; }
+        .rhythm-game { position: relative; height: 200px; background: rgba(0,0,0,0.5); border-radius: 10px; overflow: hidden; }
+        .rhythm-target { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 60px; height: 60px; border: 3px dashed #ffd700; border-radius: 50%; }
+        .rhythm-note { position: absolute; width: 40px; height: 40px; background: #ffd700; border-radius: 50%; animation: fall 2s linear forwards; }
+        @keyframes fall { 0% { top: -40px; } 100% { top: 200px; } }
+        .maze-game { display: grid; grid-template-columns: repeat(11, 1fr); gap: 2px; max-width: 400px; margin: 0 auto; }
+        .maze-cell { width: 30px; height: 30px; background: #2d1b4e; }
+        .maze-cell.wall { background: #000; }
+        .maze-cell.player { background: #ffd700; border-radius: 50%; }
+        .maze-cell.exit { background: #00ff00; }
+        .score-display { font-size: 18px; color: #ffd700; text-align: center; margin: 10px 0; }
+        .gold-display { font-size: 20px; color: #ffd700; }
+        .ending { text-align: center; padding: 40px; }
+        .ending h2 { font-size: 2em; margin-bottom: 20px; }
+        .ending.good h2 { color: #00ff00; }
+        .ending.bad h2 { color: #ff0000; }
+        .ending.neutral h2 { color: #ffd700; }
+        .progress-bar { height: 20px; background: rgba(0,0,0,0.5); border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #ffd700, #ff8c00); transition: width 0.5s; }
+        .coins { color: #ffd700; font-weight: bold; }
+        .hidden { display: none; }
+        @media (max-width: 600px) { .map { grid-template-columns: repeat(2, 1fr); } .memory-grid { grid-template-columns: repeat(3, 1fr); } }
+</style>
+</head>
+<body>
+    <div class="container">
+        <!-- TITLE SCREEN -->
+        <div id="title-screen" class="game-screen active">
+            <h1>Beauty and the Beast</h1>
+            <div class="panel" style="text-align: center;">
+                <p style="font-size: 18px; margin-bottom: 20px; font-style: italic;">
+                    "It is a curse to see beauty within a beast, when all the world sees only the beast without."
+                </p>
+                <p style="margin-bottom: 20px;">A tale of love, redemption, and looking beyond appearances.</p>
+                <button class="btn" onclick="startGame()">Begin Your Journey</button>
+                <button class="btn" onclick="loadGame()" id="load-btn">Continue Adventure</button>
+            </div>
+        </div>
+
+        <!-- CHARACTER CREATION -->
+        <div id="create-screen" class="game-screen">
+            <h1>Create Your Character</h1>
+            <div class="panel">
+                <h2>Choose Your Role</h2>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                    <button class="btn" onclick="chooseCharacter('belle')">Belle</button>
+                    <button class="btn" onclick="chooseCharacter('gaston')">Gaston</button>
+                    <button class="btn" onclick="chooseCharacter('maurice')">Maurice</button>
+                </div>
+                <div id="character-preview" class="hidden" style="text-align: center; margin-top: 20px;">
+                    <h2 id="char-name"></h2>
+                    <p id="char-desc"></p>
+                    <h3 style="color: #ffd700; margin-top: 15px;">Your Attributes</h3>
+                    <div class="stats">
+                        <div class="stat"><div class="stat-name">Intelligence</div><div class="stat-value" id="attr-int">10</div></div>
+                        <div class="stat"><div class="stat-name">Empathy</div><div class="stat-value" id="attr-emp">10</div></div>
+                        <div class="stat"><div class="stat-name">Courage</div><div class="stat-value" id="attr-cou">10</div></div>
+                        <div class="stat"><div class="stat-name">Kindness</div><div class="stat-value" id="attr-kin">10</div></div>
+                        <div class="stat"><div class="stat-name">Charms</div><div class="stat-value" id="attr-cha">10</div></div>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" id="attr-total" style="width: 50%;"></div></div>
+                    <p style="color: #888;">Distribute remaining 10 points (click attributes to add)</p>
+                    <button class="btn" onclick="confirmCharacter()">Confirm Character</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN GAME SCREEN -->
+        <div id="game-screen" class="game-screen">
+            <h1 id="game-title">Beauty and the Beast</h1>
+            
+            <!-- Stats Panel -->
+            <div class="panel">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2 id="current-location">The Village</h2>
+                    <div class="gold-display">Gold: <span id="gold">50</span> <span style="margin-left: 20px;">Charm Points: <span id="charm-points">0</span></span></div>
+                </div>
+                <div class="stats">
+                    <div class="stat"><div class="stat-name">Intelligence</div><div class="stat-value" id="stat-int">10</div></div>
+                    <div class="stat"><div class="stat-name">Empathy</div><div class="stat-value" id="stat-emp">10</div></div>
+                    <div class="stat"><div class="stat-name">Courage</div><div class="stat-value" id="stat-cou">10</div></div>
+                    <div class="stat"><div class="stat-name">Kindness</div><div class="stat-value" id="stat-kin">10</div></div>
+                </div>
+                <div class="inventory">
+                    <strong style="color: #888; margin-right: 10px;">Inventory:</strong>
+                    <span id="inventory-list">Empty</span>
+                </div>
+            </div>
+
+            <!-- Dialogue Box -->
+            <div class="panel" id="dialogue-panel">
+                <div id="dialogue-text" class="dialogue">
+                    Welcome to the enchanted castle. Your choices will determine the fate of all who dwell here.
+                </div>
+                <div id="choices" style="margin-top: 15px;"></div>
+            </div>
+
+            <!-- Mini-game Area -->
+            <div class="panel hidden" id="minigame-panel">
+                <h2 id="minigame-title">Mini-Game</h2>
+                <div id="minigame-content"></div>
+                <button class="btn" onclick="exitMinigame()">Return to Adventure</button>
+            </div>
+
+            <!-- Map -->
+            <div class="panel">
+                <h2>The Castle & Surroundings</h2>
+                <div class="map" id="location-map"></div>
+            </div>
+        </div>
+
+        <!-- ENDING SCREEN -->
+        <div id="ending-screen" class="game-screen">
+            <div class="ending" id="ending-content">
+                <h2>Your Story Ends...</h2>
+                <p id="ending-text"></p>
+                <button class="btn" onclick="location.reload()">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // GAME STATE
+        let gameState = {
+            character: null,
+            attributes: { intelligence: 10, empathy: 10, courage: 10, kindness: 10 },
+            gold: 50,
+            charmPoints: 0,
+            inventory: [],
+            currentLocation: 'village',
+            locations: {
+                village: { name: 'The Village', unlocked: true, visited: false },
+                castle_gate: { name: 'Castle Gate', unlocked: false, visited: false },
+                west_wing: { name: 'West Wing', unlocked: false, visited: false },
+                east_wing: { name: 'East Wing', unlocked: false, visited: false },
+                library: { name: 'The Library', unlocked: false, visited: false },
+                ballroom: { name: 'The Ballroom', unlocked: false, visited: false },
+                garden: { name: 'Enchanted Garden', unlocked: false, visited: false }
+            },
+            quests: [],
+            npcRelationships: {
+                beast: 0, belle: 0, gaston: 0, lumine: 0, cogsworth: 0, mrs_potts: 0
+            },
+            endings: { roseProgress: 0, curseProgress: 0 }
+        };
+
+        // CHARACTER DATA
+        const characters = {
+            belle: {
+                name: 'Belle',
+                desc: 'A book-loving young woman with her nose always in a book. You see the beauty in everything and everyone.',
+                strengths: { empathy: 3, kindness: 3 },
+                quote: '"I want much more than this provincial life."'
+            },
+            gaston: {
+                name: 'Gaston',
+                desc: 'The handsomest man in town, but his pride may be his undoing. A hunter of great skill.',
+                strengths: { courage: 3, intelligence: 3 },
+                quote: '"No one\'s as handy as a Gaston!"'
+            },
+            maurice: {
+                name: 'Maurice',
+                desc: 'A brilliant but absent-minded inventor. Your father, always tinkering with strange contraptions.',
+                strengths: { intelligence: 3, kindness: 3 },
+                quote: '"I\'ve had my share of adventures."'
+            }
+        };
+
+        // LOCATION DESCRIPTIONS
+        const locationData = {
+            village: {
+                name: 'The Village',
+                desc: 'A charming French village. The morning market is bustling with activity. You notice a notice board with quests.',
+                npcs: ['gaston'],
+                minigames: ['dice'],
+                items: ['Magic Mirror'],
+                connections: ['castle_gate']
+            },
+            castle_gate: {
+                name: 'Castle Gate',
+                desc: 'Massive iron gates stand before the dark castle. An enchanted rose floats in a crystal case above.',
+                npcs: ['cogsworth'],
+                minigames: ['memory'],
+                items: ['Castle Key'],
+                connections: ['village', 'ballroom', 'library', 'west_wing', 'east_wing', 'garden']
+            },
+            west_wing: {
+                name: 'West Wing',
+                desc: 'A forbidden tower. The Beast lurks here, consumed by anger and despair.',
+                npcs: ['beast'],
+                minigames: ['riddle'],
+                items: ['Enchanted Rose'],
+                connections: ['castle_gate']
+            },
+            east_wing: {
+                name: 'East Wing',
+                desc: 'Where Lumière and Cogsworth keep watch. The enchanted servants are preparing for a grand ball.',
+                npcs: ['lumine', 'cogsworth'],
+                minigames: ['dice'],
+                items: ['Candle Lighter'],
+                connections: ['castle_gate']
+            },
+            library: {
+                name: 'The Library',
+                desc: 'An endless library stretching into the sky. Knowledge of all ages fills these shelves.',
+                npcs: ['beast'],
+                minigames: ['riddle'],
+                items: ['Ancient Tome'],
+                connections: ['castle_gate']
+            },
+            ballroom: {
+                name: 'The Ballroom',
+                desc: 'A magnificent golden ballroom. Magic fills the air as enchanted objects dance.',
+                npcs: ['belle', 'lumine'],
+                minigames: ['rhythm'],
+                items: ['Dance Invitation'],
+                connections: ['castle_gate', 'garden']
+            },
+            garden: {
+                name: 'Enchanted Garden',
+                desc: 'A magical garden where flowers sing and statues come alive. Peace reigns here.',
+                npcs: ['belle'],
+                minigames: ['maze'],
+                items: ['Magic Petal'],
+                connections: ['ballroom', 'west_wing']
+            }
+        };
+
+        // NPC DIALOGUE
+        const npcDialogues = {
+            beast: {
+                greeting: '"Who dares enter my domain?"',
+                friendly: '"Perhaps... perhaps you see something in me others do not."',
+                kind: '"Your kindness... it reminds me of who I once was."',
+                love: '"I shall let you go, if that is truly what you wish."'
+            },
+            lumine: {
+                greeting: '"Ah, a visitor! How delightful! Welcome to our humble castle."',
+                friendly: '"The master is not so fearsome once you get to know him, mon ami."',
+                hint: '"The rose petal falls with each passing hour. True love must bloom before the last petal falls!"'
+            },
+            cogsworth: {
+                greeting: '"Oh dear, oh dear. This is most irregular!"',
+                friendly: '"Between you and me, the master needs someone to see past his... exterior."',
+                hint: '"Do try the library. Our Beast quite enjoys a good riddle."'
+            },
+            gaston: {
+                greeting: '"Belle! Why must you read those foolish books?"',
+                friendly: '"Come, marry me! I am the best catch in all the land!"',
+                hostile: '"That beast must be destroyed! No man with a beast\'s face can live!"'
+            },
+            mrs_potts: {
+                greeting: '"Oh, hello dear! Would you like some tea?"',
+                friendly: '"Such a dear heart you have. You will find a way to break the curse, I\'m sure."'
+            },
+            belle: {
+                greeting: '"Hello there! Have you seen my father? He went looking for me at the castle."',
+                friendly: '"Thank you for helping me. Together we might save them all!"'
+            }
+        };
+
+        // GAME FUNCTIONS
+        function showScreen(screenId) {
+            document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function startGame() {
+            showScreen('create-screen');
+        }
+
+        function loadGame() {
+            const saved = localStorage.getItem('beautyBeastSave');
+            if (saved) {
+                gameState = JSON.parse(saved);
+                applyStatsToUI();
+                showScreen('game-screen');
+                renderMap();
+                showLocationDialogue();
+            } else {
+                alert('No saved game found!');
+            }
+        }
+
+        function chooseCharacter(charId) {
+            gameState.character = charId;
+            const char = characters[charId];
+            document.getElementById('char-name').textContent = char.name;
+            document.getElementById('char-desc').textContent = char.desc;
+            document.getElementById('character-preview').classList.remove('hidden');
+            
+            // Apply character bonuses
+            gameState.attributes.empathy += char.strengths.empathy || 0;
+            gameState.attributes.kindness += char.strengths.kindness || 0;
+            updateAttributeDisplay();
+        }
+
+        function updateAttributeDisplay() {
+            const attrs = gameState.attributes;
+            document.getElementById('attr-int').textContent = attrs.intelligence;
+            document.getElementById('attr-emp').textContent = attrs.empathy;
+            document.getElementById('attr-cou').textContent = attrs.courage;
+            document.getElementById('attr-kin').textContent = attrs.kindness;
+        }
+
+        function confirmCharacter() {
+            saveGame();
+            showScreen('game-screen');
+            renderMap();
+            showLocationDialogue();
+        }
+
+        function renderMap() {
+            const mapEl = document.getElementById('location-map');
+            mapEl.innerHTML = '';
+            Object.entries(gameState.locations).forEach(([id, loc]) => {
+                const div = document.createElement('div');
+                div.className = 'location' + (loc.unlocked ? ' unlocked' : '') + (id === gameState.currentLocation ? ' current' : '');
+                div.innerHTML = `<strong>${loc.name}</strong><br><small>${loc.unlocked ? 'Available' : 'Locked'}</small>`;
+                if (loc.unlocked) {
+                    div.onclick = () => travelTo(id);
+                }
+                mapEl.appendChild(div);
+            });
+        }
+
+        function travelTo(locationId) {
+            if (!gameState.locations[locationId].unlocked) {
+                showMessage('This location is locked! You need to unlock it first.');
+                return;
+            }
+            gameState.currentLocation = locationId;
+            gameState.locations[locationId].visited = true;
+            renderMap();
+            showLocationDialogue();
+            saveGame();
+        }
+
+        function showLocationDialogue() {
+            const loc = locationData[gameState.currentLocation];
+            document.getElementById('current-location').textContent = loc.name;
+            
+            let text = `<em>"${loc.desc}"</em><br><br>`;
+            
+            // Add NPC greetings
+            loc.npcs.forEach(npc => {
+                if (npcDialogues[npc]) {
+                    text += `<strong>${npc.charAt(0).toUpperCase() + npc.slice(1).replace('_', ' ')}:</strong> ${npcDialogues[npc].greeting}<br>`;
+                }
+            });
+            
+            // Add available actions
+            text += '<br><div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">';
+            text += `<button class="btn" onclick="searchLocation()">Search Area</button>`;
+            text += `<button class="btn" onclick="talkToNPC()">Talk</button>`;
+            text += `<button class="btn" onclick="playMinigame('${loc.minigames[0]}')">Mini-Game</button>`;
+            text += `<button class="btn" onclick="useItem()">Use Item</button>`;
+            text += '</div>';
+            
+            document.getElementById('dialogue-text').innerHTML = text;
+            
+            // Check for story progression
+            checkStoryProgress();
+        }
+
+        function searchLocation() {
+            const loc = locationData[gameState.currentLocation];
+            let found = [];
+            
+            // Random item discovery
+            if (loc.items && loc.items.length > 0 && Math.random() > 0.5) {
+                const item = loc.items[Math.floor(Math.random() * loc.items.length)];
+                if (!gameState.inventory.includes(item)) {
+                    gameState.inventory.push(item);
+                    found.push(`You found: <strong>${item}</strong>!`);
+                }
+            }
+            
+            // Gold discovery
+            if (Math.random() > 0.7) {
+                const goldFound = Math.floor(Math.random() * 20) + 5;
+                gameState.gold += goldFound;
+                found.push(`You found <strong>${goldFound} gold</strong>!`);
+            }
+            
+            if (found.length > 0) {
+                showMessage(found.join('<br>'));
+            } else {
+                showMessage('You searched thoroughly but found nothing.');
+            }
+            
+            updateUI();
+        }
+
+        function talkToNPC() {
+            const loc = locationData[gameState.currentLocation];
+            if (loc.npcs.length === 0) {
+                showMessage('There is no one here to talk to.');
+                return;
+            }
+            
+            const npc = loc.npcs[Math.floor(Math.random() * loc.npcs.length)];
+            const dialogue = npcDialogues[npc];
+            
+            // Update relationship based on attributes
+            if (npc === 'beast' && gameState.attributes.kindness > 15) {
+                gameState.npcRelationships.beast += 2;
+                gameState.endings.roseProgress += 1;
+                showMessage(`${dialogue.friendly}<br><br>Your kindness has touched the Beast's heart. (+2 Relationship, +1 Rose Progress)`);
+            } else if (npc === 'gaston' && gameState.character === 'belle') {
+                gameState.npcRelationships.gaston -= 1;
+                showMessage(`${dialogue.hostile}<br><br>Gaston's anger grows. (-1 Relationship with Gaston)`);
+            } else if (dialogue.hint) {
+                showMessage(`${dialogue.greeting}<br><br><em>Hint: ${dialogue.hint}</em>`);
+            } else {
+                showMessage(dialogue.greeting);
+            }
+            
+            saveGame();
+        }
+
+        function playMinigame(type) {
+            document.getElementById('minigame-panel').classList.remove('hidden');
+            const content = document.getElementById('minigame-content');
+            
+            switch(type) {
+                case 'dice':
+                    playDiceGame(content);
+                    break;
+                case 'memory':
+                    playMemoryGame(content);
+                    break;
+                case 'riddle':
+                    playRiddleGame(content);
+                    break;
+                case 'rhythm':
+                    playRhythmGame(content);
+                    break;
+                case 'maze':
+                    playMazeGame(content);
+                    break;
+            }
+        }
+
+        function playDiceGame(container) {
+            container.innerHTML = `
+                <p style="text-align: center; margin-bottom: 15px;">Roll the dice to test your luck and earn gold!</p>
+                <div class="dice-container">
+                    <div class="dice" id="dice1">?</div>
+                    <div class="dice" id="dice2">?</div>
+                </div>
+                <p class="score-display">Roll result: <span id="dice-total">-</span></p>
+                <div style="text-align: center;">
+                    <button class="btn" onclick="rollDice()">Roll Dice (5 gold)</button>
+                </div>
+                <p style="text-align: center; color: #888; margin-top: 10px;">Win 3+ = Win 15 gold | Lose = Lose 5 gold</p>
+            `;
+        }
+
+        function rollDice() {
+            if (gameState.gold < 5) {
+                showMessage('Not enough gold!');
+                return;
+            }
+            gameState.gold -= 5;
+            
+            const d1 = Math.floor(Math.random() * 6) + 1;
+            const d2 = Math.floor(Math.random() * 6) + 1;
+            const total = d1 + d2;
+            
+            document.getElementById('dice1').textContent = d1;
+            document.getElementById('dice2').textContent = d2;
+            document.getElementById('dice-total').textContent = total;
+            
+            setTimeout(() => {
+                if (total >= 3) {
+                    gameState.gold += 15;
+                    gameState.charmPoints += total;
+                    showMessage(`You rolled ${total}! Victory! (+15 gold, +${total} charm points)`);
+                } else {
+                    showMessage(`You rolled ${total}. Better luck next time!`);
+                }
+                updateUI();
+                saveGame();
+            }, 1000);
+        }
+
+        let memoryCards = [];
+        let memoryFlipped = [];
+        let memoryMatches = 0;
+
+        function playMemoryGame(container) {
+            const symbols = ['🌹', '🔑', '🕯️', '📖', '💃', '🌸'];
+            memoryCards = [...symbols, ...symbols].sort(() => Math.random() - 0.5);
+            memoryFlipped = [];
+            memoryMatches = 0;
+            
+            container.innerHTML = `
+                <p style="text-align: center; margin-bottom: 15px;">Match the enchanted objects! Complete all matches to win.</p>
+                <div class="memory-grid" id="memory-grid"></div>
+                <p class="score-display">Matches: <span id="memory-matches">0</span>/${symbols.length}</p>
+            `;
+            
+            const grid = document.getElementById('memory-grid');
+            memoryCards.forEach((symbol, i) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.textContent = '?';
+                card.dataset.index = i;
+                card.dataset.symbol = symbol;
+                card.onclick = () => flipCard(card);
+                grid.appendChild(card);
+            });
+        }
+
+        function flipCard(card) {
+            if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+            if (memoryFlipped.length >= 2) return;
+            
+            card.classList.add('flipped');
+            card.textContent = card.dataset.symbol;
+            memoryFlipped.push(card);
+            
+            if (memoryFlipped.length === 2) {
+                setTimeout(checkMemoryMatch, 500);
+            }
+        }
+
+        function checkMemoryMatch() {
+            const [card1, card2] = memoryFlipped;
+            if (card1.dataset.symbol === card2.dataset.symbol) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                memoryMatches++;
+                document.getElementById('memory-matches').textContent = memoryMatches;
+                
+                if (memoryMatches === 6) {
+                    gameState.gold += 25;
+                    gameState.charmPoints += 10;
+                    showMessage('All matches found! You earned 25 gold and 10 charm points!');
+                    updateUI();
+                    saveGame();
+                }
+            } else {
+                card1.classList.remove('flipped');
+                card2.classList.remove('flipped');
+                card1.textContent = '?';
+                card2.textContent = '?';
+            }
+            memoryFlipped = [];
+        }
+
+        function playRiddleGame(container) {
+            const riddles = [
+                { q: '"I have hands but cannot clap. I have a face but cannot smile. What am I?"', a: 'clock' },
+                { q: '"The more you take, the more you leave behind. What am I?"', a: 'footsteps' },
+                { q: '"I can be cracked, made, told, and played. What am I?"', a: 'joke' },
+                { q: '"I have cities but no houses, forests but no trees, and water but no fish. What am I?"', a: 'map' }
+            ];
+            const riddle = riddles[Math.floor(Math.random() * riddles.length)];
+            
+            container.innerHTML = `
+                <p style="text-align: center; margin-bottom: 15px;">The Beast poses a riddle...</p>
+                <div class="dialogue" style="text-align: center;">
+                    <strong style="color: #ffd700;">Riddle:</strong><br><em>"${riddle.q}"</em>
+                </div>
+                <div style="text-align: center; margin: 15px 0;">
+                    <input type="text" id="riddle-answer" placeholder="Your answer..." style="padding: 10px; font-size: 16px; border-radius: 5px; border: 2px solid #ffd700; background: rgba(0,0,0,0.5); color: #fff; width: 200px;">
+                </div>
+                <div style="text-align: center;">
+                    <button class="btn" onclick="checkRiddle('${riddle.a}')">Submit Answer</button>
+                </div>
+            `;
+        }
+
+        function checkRiddle(correct) {
+            const answer = document.getElementById('riddle-answer').value.toLowerCase().trim();
+            if (answer.includes(correct)) {
+                gameState.charmPoints += 15;
+                gameState.endings.roseProgress += 1;
+                showMessage(`Correct! The Beast nods approvingly. (+15 charm points, +1 Rose Progress)`);
+                updateUI();
+                saveGame();
+                exitMinigame();
+            } else {
+                showMessage('The Beast growls: "Think harder..."');
+            }
+        }
+
+        function playRhythmGame(container) {
+            container.innerHTML = `
+                <p style="text-align: center; margin-bottom: 15px;">Dance with the Beast! Press SPACE when the note reaches the target.</p>
+                <div class="rhythm-game" id="rhythm-game">
+                    <div class="rhythm-target"></div>
+                </div>
+                <p class="score-display">Score: <span id="rhythm-score">0</span> | Perfect hits: <span id="rhythm-perfect">0</span>/10</p>
+                <div style="text-align: center;">
+                    <button class="btn" onclick="startRhythm()">Start Dance</button>
+                    <button class="btn" onclick="stopRhythm()">Stop</button>
+                </div>
+            `;
+        }
+
+        let rhythmScore = 0;
+        let rhythmPerfect = 0;
+        let rhythmInterval = null;
+
+        function startRhythm() {
+            const game = document.getElementById('rhythm-game');
+            rhythmInterval = setInterval(() => {
+                const note = document.createElement('div');
+                note.className = 'rhythm-note';
+                note.style.left = (Math.random() * 80 + 10) + '%';
+                note.onclick = () => checkRhythmHit(note);
+                game.appendChild(note);
+                setTimeout(() => note.remove(), 2000);
+            }, 800);
+        }
+
+        function stopRhythm() {
+            clearInterval(rhythmInterval);
+            if (rhythmPerfect >= 5) {
+                gameState.gold += 20;
+                gameState.charmPoints += rhythmPerfect * 2;
+                gameState.endings.roseProgress += 1;
+                showMessage(`A magnificent dance! You earned ${rhythmPerfect * 2} charm points and 20 gold! (+1 Rose Progress)`);
+                updateUI();
+                saveGame();
+            }
+        }
+
+        function checkRhythmHit(note) {
+            rhythmScore += 10;
+            rhythmPerfect++;
+            note.style.background = '#00ff00';
+            document.getElementById('rhythm-score').textContent = rhythmScore;
+            document.getElementById('rhythm-perfect').textContent = rhythmPerfect;
+            
+            if (rhythmPerfect >= 10) {
+                stopRhythm();
+            }
+        }
+
+        function playMazeGame(container) {
+            const maze = [
+                [1,1,1,1,1,1,1,1,1,1,1],
+                [1,0,0,0,1,0,0,0,0,0,1],
+                [1,0,1,0,1,0,1,1,1,0,1],
+                [1,0,1,0,0,0,0,0,1,0,1],
+                [1,0,1,1,1,1,1,0,1,0,1],
+                [1,0,0,0,0,0,1,0,0,0,1],
+                [1,1,1,1,1,0,1,1,1,0,1],
+                [1,0,0,0,0,0,0,0,0,0,1],
+                [1,0,1,1,1,1,1,1,1,0,1],
+                [1,0,0,0,0,0,0,0,0,0,3],
+                [1,1,1,1,1,1,1,1,1,1,1]
+            ];
+            
+            let playerPos = { x: 1, y: 1 };
+            
+            container.innerHTML = `
+                <p style="text-align: center; margin-bottom: 15px;">Navigate the enchanted garden maze! Use arrow keys.</p>
+                <div class="maze-game" id="maze-grid"></div>
+                <p class="score-display">Find the exit (green)!</p>
+            `;
+            
+            renderMaze(maze, playerPos);
+            
+            document.onkeydown = (e) => {
+                const newPos = { ...playerPos };
+                if (e.key === 'ArrowUp') newPos.y--;
+                if (e.key === 'ArrowDown') newPos.y++;
+                if (e.key === 'ArrowLeft') newPos.x--;
+                if (e.key === 'ArrowRight') newPos.x++;
+                
+                if (maze[newPos.y][newPos.x] !== 1) {
+                    playerPos = newPos;
+                    renderMaze(maze, playerPos);
+                    
+                    if (maze[newPos.y][newPos.x] === 3) {
+                        gameState.gold += 15;
+                        gameState.charmPoints += 8;
+                        gameState.endings.roseProgress += 1;
+                        showMessage('You found the secret garden! (+15 gold, +8 charm points, +1 Rose Progress)');
+                        updateUI();
+                        saveGame();
+                        exitMinigame();
+                    }
+                }
+            };
+        }
+
+        function renderMaze(maze, player) {
+            const grid = document.getElementById('maze-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            maze.forEach((row, y) => {
+                row.forEach((cell, x) => {
+                    const div = document.createElement('div');
+                    div.className = 'maze-cell';
+                    if (cell === 1) div.classList.add('wall');
+                    if (cell === 3) div.classList.add('exit');
+                    if (x === player.x && y === player.y) div.classList.add('player');
+                    grid.appendChild(div);
+                });
+            });
+        }
+
+        function exitMinigame() {
+            document.getElementById('minigame-panel').classList.add('hidden');
+            document.onkeydown = null;
+        }
+
+        function useItem() {
+            if (gameState.inventory.length === 0) {
+                showMessage('You have no items to use!');
+                return;
+            }
+            showMessage('Select an item from your inventory to use, or continue collecting items first.');
+        }
+
+        function checkStoryProgress() {
+            // Progress the curse based on actions
+            gameState.endings.curseProgress += 0.1;
+            
+            // Check for endings
+            if (gameState.endings.roseProgress >= 5 && gameState.npcRelationships.beast >= 5) {
+                triggerEnding('good');
+            } else if (gameState.endings.curseProgress >= 10 || gameState.npcRelationships.gaston <= -3) {
+                triggerEnding('bad');
+            }
+        }
+
+        function triggerEnding(type) {
+            showScreen('ending-screen');
+            const content = document.getElementById('ending-content');
+            
+            if (type === 'good') {
+                content.className = 'ending good';
+                content.innerHTML = `
+                    <h2>True Love's Kiss</h2>
+                    <p style="font-size: 18px; margin: 20px 0;">
+                        The final petal fell, but in that moment, Belle's love proved stronger than any curse.<br><br>
+                        The Beast transformed into a handsome prince, and the castle burst into light and song.<br><br>
+                        <em>"A心意相通，美梦成真。"</em><br>
+                        <em>"Believing hearts align, dreams become real."</em>
+                    </p>
+                    <p style="color: #ffd700;">Final Gold: ${gameState.gold} | Charm Points: ${gameState.charmPoints}</p>
+                    <button class="btn" onclick="location.reload()">Play Again</button>
+                `;
+            } else if (type === 'bad') {
+                content.className = 'ending bad';
+                content.innerHTML = `
+                    <h2>The Curse Completes</h2>
+                    <p style="font-size: 18px; margin: 20px 0;">
+                        The final petal fell. The Beast turned to stone forever, and the castle fell into eternal darkness.<br><br>
+                        Some say on full moons, you can hear the Beast's roar echoing through the ruins.<br><br>
+                        <em>"Beauty fades, darkness remains."</em>
+                    </p>
+                    <p style="color: #ff0000;">The curse claimed its victim.</p>
+                    <button class="btn" onclick="location.reload()">Try Again</button>
+                `;
+            }
+        }
+
+        function showMessage(text) {
+            document.getElementById('dialogue-text').innerHTML = text;
+        }
+
+        function updateUI() {
+            document.getElementById('gold').textContent = gameState.gold;
+            document.getElementById('charm-points').textContent = gameState.charmPoints;
+            document.getElementById('stat-int').textContent = gameState.attributes.intelligence;
+            document.getElementById('stat-emp').textContent = gameState.attributes.empathy;
+            document.getElementById('stat-cou').textContent = gameState.attributes.courage;
+            document.getElementById('stat-kin').textContent = gameState.attributes.kindness;
+            
+            const invList = document.getElementById('inventory-list');
+            if (gameState.inventory.length > 0) {
+                invList.innerHTML = gameState.inventory.map(i => `<span class="item">${i}</span>`).join('');
+            } else {
+                invList.textContent = 'Empty';
+            }
+        }
+
+        function applyStatsToUI() {
+            document.getElementById('stat-int').textContent = gameState.attributes.intelligence;
+            document.getElementById('stat-emp').textContent = gameState.attributes.empathy;
+            document.getElementById('stat-cou').textContent = gameState.attributes.courage;
+            document.getElementById('stat-kin').textContent = gameState.attributes.kindness;
+            document.getElementById('gold').textContent = gameState.gold;
+            document.getElementById('charm-points').textContent = gameState.charmPoints;
+        }
+
+        function saveGame() {
+            localStorage.setItem('beautyBeastSave', JSON.stringify(gameState));
+        }
+
+        // Add keyboard controls hint
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Beauty and the Beast loaded. Use arrow keys in maze, SPACE in rhythm game.');
+        });
+    </script>
+</body>
+</html>

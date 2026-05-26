@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Projects | 0604.ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --earth-dark: #2C1810;
+            --earth-brown: #4A2C17;
+            --earth-warm: #6B4423;
+            --earth-gold: #B8860B;
+            --earth-sand: #D4A574;
+            --earth-cream: #F5E6D3;
+            --earth-light: #FAF6F0;
+            --accent-sage: #6B8E6B;
+            --accent-rust: #C75B39;
+            --accent-purple: #7B68EE;
+            --text-dark: #2C1810;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--earth-light);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        .back-link { display: inline-block; color: var(--earth-gold); text-decoration: none; margin-bottom: 2rem; }
+        .back-link:hover { color: var(--earth-warm); }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--earth-dark);
+            margin-bottom: 1rem;
+        }
+        .subtitle { color: var(--earth-warm); font-size: 1.1rem; margin-bottom: 3rem; }
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--earth-dark);
+            margin: 2.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--earth-sand);
+        }
+        h3 { color: var(--earth-warm); margin: 1.5rem 0 0.5rem; }
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--accent-purple);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .project-card h4 {
+            color: var(--earth-dark);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .time-tag, .diff-tag {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+        }
+        .time-tag { background: var(--earth-sand); color: var(--earth-dark); }
+        .diff-easy { background: #E8F5E9; color: #2E7D32; }
+        .diff-med { background: #FFF3E0; color: #E65100; }
+        .diff-hard { background: #FCE4EC; color: #C2185B; }
+        .rubric-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            font-size: 0.9rem;
+        }
+        .rubric-table th {
+            background: var(--earth-dark);
+            color: var(--earth-cream);
+            padding: 0.75rem;
+            text-align: left;
+        }
+        .rubric-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--earth-cream);
+        }
+        .prompt-box {
+            background: var(--earth-dark);
+            color: var(--earth-cream);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        .prompt-box code {
+            color: var(--earth-sand);
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            display: block;
+            margin-top: 1rem;
+        }
+        .idea-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .idea-card {
+            background: linear-gradient(135deg, var(--earth-cream), white);
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+        .idea-card h4 { color: var(--earth-gold); margin-bottom: 0.5rem; }
+        .cross-curriculum {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        .subject-tag {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            margin-right: 0.3rem;
+            margin-bottom: 0.3rem;
+        }
+        .tag-math { background: #E3F2FD; color: #1565C0; }
+        .tag-science { background: #E8F5E9; color: #2E7D32; }
+        .tag-art { background: #FCE4EC; color: #C2185B; }
+        .tag-tech { background: #FFF3E0; color: #E65100; }
+        .tag-history { background: #F3E5F5; color: #7B1FA2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/ai-for-school/" class="back-link">← Back to AI for School</a>
+        
+        <h1>✨ Creative Projects</h1>
+        <p class="subtitle">Project-based learning ideas, cross-curricular connections, and creative alternatives to traditional tests</p>
+
+        <h2>🤖 AI Prompt for Project Ideas</h2>
+        
+        <div class="prompt-box">
+            <strong>Creative Project Generator</strong>
+            <code>Generate 5 creative project ideas for students studying [BOOK/TOPIC].
+
+Requirements:
+- Target grade: [GRADE LEVEL]
+- Mix of individual and group options
+- At least 2 that don't require essays or written reports
+- At least 1 that uses technology
+- At least 1 that is hands-on/craft-based
+- Time: [1 class period / 1 week / 2 weeks]
+
+For each project, include:
+- Catchy title
+- Brief description (2-3 sentences)
+- What students will create/submit
+- Skills they'll develop
+- Simple 4-point rubric criteria
+- Materials needed</code>
+        </div>
+
+        <h2>🎭 Literature-Based Projects</h2>
+
+        <div class="project-card">
+            <h4>📱 Character Social Media Campaign</h4>
+            <span class="time-tag">1-2 weeks</span>
+            <span class="diff-tag diff-easy">Easy</span>
+            <p>Students create a complete social media presence for a character:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Instagram: 6 posts with captions and relevant hashtags</li>
+                <li>Bio that captures personality and situation</li>
+                <li>3 "Stories" showing key moments</li>
+                <li>Comments from other characters</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>Assessment focus:</strong> Understanding of character motivation, relationships, and story events.</p>
+            <p><strong>EAL-friendly:</strong> Visual-heavy, shorter text requirements, character empathy without complex language.</p>
+        </div>
+
+        <div class="project-card">
+            <h4>🎬 Movie Adaptation Pitch</h4>
+            <span class="time-tag">1 week</span>
+            <span class="diff-tag diff-med">Medium</span>
+            <p>Students pitch a film version to "studio executives" (the class):</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Logline (one compelling sentence)</li>
+                <li>Casting choices with justification tied to character traits</li>
+                <li>One scene they'd adapt differently and why</li>
+                <li>Movie poster design</li>
+                <li>3-minute verbal pitch</li>
+            </ul>
+        </div>
+
+        <div class="project-card">
+            <h4>📰 Historical Newspaper</h4>
+            <span class="time-tag">2 weeks</span>
+            <span class="diff-tag diff-med">Medium</span>
+            <p>Create a newspaper from the world of the book:</p>
+            
+            <strong>Sections to include:</strong>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Front page headline story (major plot event)</li>
+                <li>Interview with a character (Q&A format)</li>
+                <li>Editorial opinion piece on a theme from the book</li>
+                <li>Advice column ("Dear Abby" style) from a character's perspective</li>
+                <li>Advertisements appropriate to the time/setting</li>
+                <li>Obituaries or birth announcements for characters</li>
+            </ul>
+        </div>
+
+        <div class="project-card">
+            <h4>🎨 Diorama or 3D Scene</h4>
+            <span class="time-tag">1 week</span>
+            <span class="diff-tag diff-easy">Easy</span>
+            <p>Build a physical representation of a key scene:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Recreate the setting with attention to detail</li>
+                <li>Include 1-2 paragraph placard explaining the scene's significance</li>
+                <li>Oral presentation: "tour guide" explains the scene</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>Materials:</strong> Shoebox, clay, paper, fabric scraps, found objects</p>
+        </div>
+
+        <div class="project-card">
+            <h4>🎭 Monologue or Scene Rewrite</h4>
+            <span class="time-tag">1 week</span>
+            <span class="diff-tag diff-hard">Hard</span>
+            <p>Write and perform from a character's perspective:</p>
+            
+            <strong>Option A - Interior Monologue:</strong> A 2-3 minute speech revealing the character's private thoughts about a key moment.<br>
+            <strong>Option B - Scene Rewrite:</strong> Rewrite a scene from another character's perspective.<br>
+            <strong>Option C - "Missing Scene":</strong> Write a scene that isn't in the book but could have happened.
+            
+            <p style="margin-top: 0.5rem;"><strong>Performance or submission:</strong> Can be live, recorded video, or written with director's notes.</p>
+        </div>
+
+        <div class="project-card">
+            <h4>🔍 CSI: Literature Detective</h4>
+            <span class="time-tag">1 week</span>
+            <span class="diff-tag diff-med">Medium</span>
+            <p>Students investigate a "crime" or mystery from the book:</p>
+            
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Evidence board with quotes as "evidence"</li>
+                <li>Character suspect profiles</li>
+                <li>Timeline of events</li>
+                <li>Final "case report" with conclusion</li>
+            </ul>
+            
+            <p style="margin-top: 0.5rem;">Works great for: mystery novels, "whodunit" chapters, analyzing character motivations.</p>
+        </div>
+
+        <h2>🔀 Cross-Curricular Project Ideas</h2>
+
+        <div class="cross-curriculum">
+            <h4>Literature + Math: The Economics of the Story</h4>
+            <span class="subject-tag tag-math">Math</span>
+            <span class="subject-tag tag-history">History</span>
+            
+            <p>Analyze the financial realities of the book's setting:</p>
+            
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Research wages and prices from the time period</li>
+                <li>Calculate how much characters earned vs. what things cost</li>
+                <li>Create a budget for a character's household</li>
+                <li>Compare to modern-day equivalents (adjusted for inflation)</li>
+            </ul>
+            
+            <p style="margin-top: 0.5rem;"><strong>Example:</strong> In <em>Of Mice and Men</em>, calculate how long George and Lennie would need to work to buy their farm.</p>
+        </div>
+
+        <div class="cross-curriculum">
+            <h4>Literature + Science: The Science Behind the Story</h4>
+            <span class="subject-tag tag-science">Science</span>
+            
+            <p>Investigate scientific concepts mentioned or implied in the book:</p>
+            
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Research the real science behind fictional elements</li>
+                <li>Create a "scientific journal" entry from a character's perspective</li>
+                <li>Design an experiment inspired by the book</li>
+            </ul>
+            
+            <p style="margin-top: 0.5rem;"><strong>Examples:</strong> <em>Frankenstein</em> (electricity and biology), <em>The Hobbit</em> (geology and ecosystems), <em>Journey to the West</em> (geography of the Silk Road)</p>
+        </div>
+
+        <div class="cross-curriculum">
+            <h4>Literature + Art: Visual Storytelling</h4>
+            <span class="subject-tag tag-art">Art</span>
+            
+            <p>Create visual interpretations:</p>
+            
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Graphic novel/comic adaptation of a chapter</li>
+                <li>Storyboard for a film version</li>
+                <li>"Gallery wall" of symbolic artwork inspired by themes</li>
+                <li>Character portrait series with symbolic elements</li>
+            </ul>
+        </div>
+
+        <div class="cross-curriculum">
+            <h4>Literature + Tech: Digital Storytelling</h4>
+            <span class="subject-tag tag-tech">Technology</span>
+            
+            <p>Use digital tools to extend the story:</p>
+            
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Interactive "Choose Your Own Adventure" story using Google Forms</li>
+                <li>Podcast episode analyzing the book</li>
+                <li>Video book trailer</li>
+                <li>Website for a character or fictional business from the book</li>
+                <li>Soundtrack playlist with written justification for each song</li>
+            </ul>
+        </div>
+
+        <h2>📊 Sample Creative Project Rubric</h2>
+
+        <table class="rubric-table">
+            <tr>
+                <th>Criteria</th>
+                <th>4 - Exemplary</th>
+                <th>3 - Proficient</th>
+                <th>2 - Developing</th>
+                <th>1 - Beginning</th>
+            </tr>
+            <tr>
+                <td><strong>Comprehension</strong></td>
+                <td>Demonstrates deep understanding of characters, plot, and themes</td>
+                <td>Shows solid understanding with minor gaps</td>
+                <td>Basic understanding; some confusion evident</td>
+                <td>Significant misunderstanding of key elements</td>
+            </tr>
+            <tr>
+                <td><strong>Creativity</strong></td>
+                <td>Highly original; brings new insights to the text</td>
+                <td>Creative with some original elements</td>
+                <td>Somewhat predictable; few original ideas</td>
+                <td>Lacks creativity; derivative or copied</td>
+            </tr>
+            <tr>
+                <td><strong>Presentation</strong></td>
+                <td>Polished, professional, engaging</td>
+                <td>Well-organized and clear</td>
+                <td>Adequate but unpolished</td>
+                <td>Incomplete or rushed</td>
+            </tr>
+            <tr>
+                <td><strong>Text Evidence</strong></td>
+                <td>Specific quotes/details support all creative choices</ctd>
+                <td>Good use of evidence; mostly supported</td>
+                <td>Some evidence; may not fully support</td>
+                <td>Little or no textual support</td>
+            </tr>
+            <tr>
+                <td><strong>Effort</strong></td>
+                <td>Clearly invested significant time and care</td>
+                <td>Good effort evident</td>
+                <td>Minimal effort; meets basic requirements</td>
+                <td>Incomplete or careless</td>
+            </tr>
+        </table>
+
+        <h2>💡 Project Management Tips</h2>
+
+        <div class="idea-grid">
+            <div class="idea-card">
+                <h4>🎯 Choice Boards</h4>
+                <p>Create a 3x3 grid of project options. Students choose one row, column, or diagonal. Ensures variety while giving agency.</p>
+            </div>
+            
+            <div class="idea-card">
+                <h4>📅 Milestone Checkpoints</strong></h4>
+                <p>Don't just set a due date. Create check-ins: proposal → rough draft/blueprint → peer review → final product.</p>
+            </div>
+            
+            <div class="idea-card">
+                <h4>👥 Peer Review Protocol</h4>
+                <p>Before final submission, students give feedback using "I like... / I wonder... / I suggest..." format.</p>
+            </div>
+            
+            <div class="idea-card">
+                <h4>🏛️ Gallery Walks</h4>
+                <p>Display projects around the room. Students walk with sticky notes to leave feedback. Great for visual projects.</p>
+            </div>
+        </div>
+
+        <h2>🌍 EAL Considerations for Projects</h2>
+
+        <div class="project-card" style="border-left-color: var(--accent-sage);">
+            <h4>✅ Why Creative Projects Work for EAL Students</h4>
+            
+            <ul style="margin-left: 1.5rem;">
+                <li><strong>Multiple ways to show understanding:</strong> Visual, oral, and kinesthetic learners can all succeed</li>
+                <li><strong>Reduced language load:</strong> Art, building, and performance don't require perfect English</li>
+                <li><strong>Cultural contributions:</strong> Students can bring their own cultural perspectives</li>
+                <li><strong>Collaboration opportunities:</strong> Group projects allow peer language support</li>
+            </ul>
+        </div>
+
+        <div class="project-card" style="border-left-color: var(--accent-sage);">
+            <h4>🛠️ Scaffolding Strategies</h4>
+            
+            <ul style="margin-left: 1.5rem;">
+                <li><strong>Graphic organizers:</strong> Provide planning templates for every project type</li>
+                <li><strong>Word banks:</strong> Key vocabulary for presentations and written components</li>
+                <li><strong>Model examples:</strong> Show finished examples from previous years</li>
+                <li><strong>Sentence starters:</strong> For any written or oral explanation required</li>
+                <li><strong>L1 allowance:</strong> Let students brainstorm or plan in their first language</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

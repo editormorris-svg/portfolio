@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Hobbit - An Unexpected Journey</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Georgia', serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; color: #e8d5b7; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; padding: 30px; background: linear-gradient(180deg, rgba(139,90,43,0.8) 0%, rgba(101,67,33,0.9) 100%); border-radius: 15px; margin-bottom: 20px; border: 3px solid #d4a574; box-shadow: 0 0 30px rgba(212,165,116,0.3); }
+        .header h1 { font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); margin-bottom: 10px; }
+        .header p { font-style: italic; color: #c9a86c; }
+        .screen { display: none; background: rgba(20,20,40,0.95); border-radius: 15px; padding: 30px; border: 2px solid #8b5a2b; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .screen.active { display: block; }
+        .btn { background: linear-gradient(135deg, #8b4513 0%, #654321 100%); color: #f5deb3; padding: 12px 25px; border: 2px solid #d4a574; border-radius: 8px; cursor: pointer; font-size: 1em; margin: 5px; transition: all 0.3s; font-family: inherit; }
+        .btn:hover { background: linear-gradient(135deg, #a0522d 0%, #8b4513 100%); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(139,69,19,0.4); }
+        .btn:disabled { background: #555; border-color: #666; cursor: not-allowed; opacity: 0.6; }
+        .btn-small { padding: 8px 15px; font-size: 0.9em; }
+        .token-grid, .attr-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 20px 0; }
+        .token-option { background: rgba(139,90,43,0.3); border: 2px solid #8b5a2b; border-radius: 10px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .token-option:hover { background: rgba(139,90,43,0.5); border-color: #d4a574; transform: scale(1.05); }
+        .token-option.selected { border-color: #ffd700; background: rgba(255,215,0,0.2); box-shadow: 0 0 15px rgba(255,215,0,0.3); }
+        .token-icon { font-size: 2.5em; margin-bottom: 5px; }
+        .attr-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(139,90,43,0.2); border-radius: 8px; margin: 8px 0; }
+        .attr-name { font-weight: bold; width: 120px; }
+        .attr-controls { display: flex; align-items: center; gap: 10px; }
+        .attr-btn { width: 30px; height: 30px; border-radius: 50%; background: #8b4513; border: 1px solid #d4a574; color: #f5deb3; font-size: 1.2em; cursor: pointer; }
+        .attr-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .attr-value { font-size: 1.3em; font-weight: bold; width: 30px; text-align: center; }
+        .attr-remaining { text-align: center; font-size: 1.2em; margin: 15px 0; color: #ffd700; }
+        .map-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0; }
+        .location { background: rgba(139,90,43,0.4); border: 2px solid #654321; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .location:hover:not(.locked) { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(139,69,19,0.4); border-color: #d4a574; }
+        .location.locked { opacity: 0.5; cursor: not-allowed; }
+        .location-icon { font-size: 2em; margin-bottom: 10px; }
+        .location-name { font-weight: bold; margin-bottom: 5px; }
+        .location-cr { font-size: 0.85em; color: #c9a86c; }
+        .status-bar { display: flex; flex-wrap: wrap; gap: 15px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; margin-bottom: 20px; }
+        .status-item { display: flex; align-items: center; gap: 8px; }
+        .status-icon { font-size: 1.3em; }
+        .health-bar, .xp-bar { width: 100px; height: 12px; background: #333; border-radius: 6px; overflow: hidden; }
+        .health-fill { height: 100%; background: linear-gradient(90deg, #8b0000, #ff4444); transition: width 0.3s; }
+        .xp-fill { height: 100%; background: linear-gradient(90deg, #ffd700, #ffed4a); transition: width 0.3s; }
+        .dialogue-box { background: rgba(139,90,43,0.2); border-left: 4px solid #d4a574; padding: 15px; margin: 15px 0; border-radius: 0 10px 10px 0; }
+        .dialogue-speaker { font-weight: bold; color: #d4a574; margin-bottom: 8px; }
+        .dialogue-text { font-style: italic; line-height: 1.6; }
+        .choice-list { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+        .choice-btn { text-align: left; padding: 15px; background: rgba(101,67,33,0.5); border: 1px solid #8b5a2b; border-radius: 8px; cursor: pointer; transition: all 0.3s; color: #e8d5b7; font-family: inherit; font-size: 1em; }
+        .choice-btn:hover { background: rgba(139,90,43,0.6); border-color: #d4a574; }
+        .shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+        .shop-item { background: rgba(139,90,43,0.3); border: 2px solid #654321; border-radius: 10px; padding: 15px; text-align: center; }
+        .shop-item-icon { font-size: 2em; margin-bottom: 10px; }
+        .shop-item-name { font-weight: bold; margin-bottom: 5px; }
+        .shop-item-desc { font-size: 0.85em; color: #c9a86c; margin-bottom: 10px; }
+        .shop-item-price { color: #ffd700; margin-bottom: 10px; }
+        .inventory-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin: 15px 0; }
+        .inv-item { background: rgba(101,67,33,0.4); border-radius: 8px; padding: 10px; display: flex; align-items: center; gap: 10px; }
+        .inv-icon { font-size: 1.5em; }
+        .trivia-question { font-size: 1.2em; margin: 20px 0; line-height: 1.6; }
+        .trivia-options { display: flex; flex-direction: column; gap: 10px; }
+        .dice-result { font-size: 3em; text-align: center; margin: 20px 0; animation: roll 0.5s ease-out; }
+        @keyframes roll { 0% { transform: rotate(0deg) scale(0); } 50% { transform: rotate(180deg) scale(1.2); } 100% { transform: rotate(360deg) scale(1); } }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal.active { display: flex; }
+        .modal-content { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border: 3px solid #d4a574; border-radius: 15px; padding: 30px; max-width: 500px; width: 90%; text-align: center; }
+        .quote-box { background: rgba(139,90,43,0.2); border-radius: 10px; padding: 20px; margin: 15px 0; font-style: italic; text-align: center; }
+        .quote-text::before { content: '"'; font-size: 2em; color: #d4a574; }
+        .quote-text::after { content: '"'; font-size: 2em; color: #d4a574; }
+        .ending-good { border-color: #ffd700; background: linear-gradient(135deg, #1a2a1a 0%, #162116 100%); }
+        .ending-bad { border-color: #8b0000; background: linear-gradient(135deg, #2a1a1a 0%, #211616 100%); }
+        .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0; }
+        .memory-card { aspect-ratio: 1; background: linear-gradient(135deg, #8b4513 0%, #654321 100%); border-radius: 8px; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 2em; transition: all 0.3s; border: 2px solid #d4a574; }
+        .memory-card.flipped { background: rgba(139,90,43,0.5); }
+        .memory-card.matched { background: rgba(50,205,50,0.3); border-color: #32cd32; }
+        .memory-card.hidden { visibility: hidden; }
+        .game-icon { font-size: 1.5em; margin-right: 5px; }
+        .games-remaining { text-align: center; padding: 10px; background: rgba(255,215,0,0.1); border-radius: 8px; margin-bottom: 15px; }
+        .mini-games-section { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.8em; }
+            .token-grid, .attr-grid { grid-template-columns: repeat(2, 1fr); }
+            .map-grid { grid-template-columns: repeat(2, 1fr); }
+            .mini-games-section { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>The Hobbit</h1>
+            <p>Your Unexpected Journey Awaits</p>
+        </div>
+
+        <div id="title-screen" class="screen active">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <div style="font-size: 4em;">🗺️</div>
+                <p style="font-size: 1.1em; margin-top: 15px;">"In a hole in the ground there lived a hobbit..."</p>
+            </div>
+            <div style="text-align: center;">
+                <button class="btn" onclick="showScreen('new-game')">New Quest</button>
+                <button class="btn" onclick="loadGame()">Continue Quest</button>
+            </div>
+            <div class="quote-box" style="margin-top: 30px;">
+                <p class="quote-text">Not all those who wander are lost</p>
+                <p style="margin-top: 10px; font-size: 0.9em;">— J.R.R. Tolkien</p>
+            </div>
+        </div>
+
+        <div id="new-game" class="screen">
+            <h2 style="text-align: center; margin-bottom: 20px;">⚔️ Begin Your Journey</h2>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 10px; font-size: 1.1em;">Enter Your Name:</label>
+                <input type="text" id="player-name" style="width: 100%; padding: 12px; font-size: 1.1em; border-radius: 8px; border: 2px solid #8b5a2b; background: rgba(20,20,40,0.8); color: #e8d5b7;" placeholder="Your name...">
+            </div>
+            <h3 style="margin: 20px 0;">Choose Your Token:</h3>
+            <div class="token-grid" id="token-grid"></div>
+            <h3 style="margin: 20px 0;">Distribute 5 Points:</h3>
+            <div id="attributes"></div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" onclick="startGame()">Begin Quest</button>
+            </div>
+        </div>
+
+        <div id="main-game" class="screen">
+            <div class="status-bar">
+                <div class="status-item"><span class="status-icon">🏠</span><span id="player-name-display"></span></div>
+                <div class="status-item"><span class="status-icon" id="player-token"></span></div>
+                <div class="status-item"><span class="status-icon">❤️</span><span id="health-display">100</span></div>
+                <div class="status-item"><span class="status-icon">💰</span><span id="gold-display">25</span> Sovereigns</div>
+                <div class="status-item"><span class="status-icon">📅</span>Day <span id="day-display">1</span></div>
+                <div class="status-item"><span class="status-icon">🎮</span>Games: <span id="games-display">0</span>/5</div>
+            </div>
+            <div class="games-remaining" id="games-remaining">
+                <span id="quest-status">Mini-games available today: 5</span>
+            </div>
+            <div class="map-grid" id="map-grid"></div>
+        </div>
+
+        <div id="location-screen" class="screen">
+            <button class="btn btn-small" onclick="showScreen('main-game')">← Back to Map</button>
+            <h2 style="text-align: center; margin: 20px 0;" id="location-title"></h2>
+            <div id="location-content"></div>
+        </div>
+
+        <div id="trivia-screen" class="screen">
+            <h2 style="text-align: center;">📜 Tolkien Trivia</h2>
+            <div id="trivia-content"></div>
+        </div>
+
+        <div id="challenge-screen" class="screen">
+            <h2 style="text-align: center;">⚔️ Skill Challenge</h2>
+            <div id="challenge-content"></div>
+        </div>
+
+        <div id="dice-screen" class="screen">
+            <h2 style="text-align: center;">🎲 Dice Duel</h2>
+            <div id="dice-content"></div>
+        </div>
+
+        <div id="dialogue-screen" class="screen">
+            <h2 style="text-align: center;">💬 Encounter</h2>
+            <div id="dialogue-content"></div>
+        </div>
+
+        <div id="memory-screen" class="screen">
+            <h2 style="text-align: center;">🧠 Memory Challenge</h2>
+            <p style="text-align: center; margin-bottom: 15px;">Match the Middle-earth symbols!</p>
+            <div id="memory-content"></div>
+        </div>
+
+        <div id="shop-screen" class="screen">
+            <h2 style="text-align: center;">🏪 Dwarven Market</h2>
+            <div id="shop-content"></div>
+        </div>
+
+        <div id="inventory-screen" class="screen">
+            <h2 style="text-align: center;">🎒 Inventory</h2>
+            <div id="inventory-content"></div>
+        </div>
+
+        <div id="ending-screen" class="screen">
+            <h2 style="text-align: center;" id="ending-title"></h2>
+            <div id="ending-content"></div>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content" id="modal-content"></div>
+    </div>
+
+    <script>
+        const tokens = [
+            { icon: '🧝', name: 'Elf', desc: 'Graceful & Wise' },
+            { icon: '🪓', name: 'Dwarf', desc: 'Strong & Sturdy' },
+            { icon: '🧙', name: 'Wizard', desc: 'Magical Power' },
+            { icon: '🗡️', name: 'Ranger', desc: 'Swift & Alert' },
+            { icon: '🏹', name: 'Archer', desc: 'Deadly Aim' },
+            { icon: '⚔️', name: 'Warrior', desc: 'Battle Master' },
+            { icon: '🔮', name: 'Mage', desc: 'Arcane Arts' },
+            { icon: '🛡️', name: 'Guardian', desc: 'Protector' },
+            { icon: '🍖', name: 'Hobbit', desc: 'Lucky & Resourceful' },
+            { icon: '👑', name: 'King', desc: 'Noble Leader' },
+            { icon: '🗝️', name: 'Thief', desc: 'Shadow Walker' },
+            { icon: '🎭', name: 'Bard', desc: 'Silver Tongue' }
+        ];
+
+        const locations = [
+            { id: 'bag-end', name: "Bag End", icon: '🏠', cr: 1, desc: "Your cozy hobbit-hole home in the Shire", unlocked: true, bg: 'The comfortable life of a hobbit awaits.' },
+            { id: 'prancing-pony', name: "Prancing Pony", icon: '🍺', cr: 2, desc: "A lively inn in Bree", unlocked: false, bg: 'The innkeeper eyes you curiously.' },
+            { id: 'troll-shire', name: "Troll Camp", icon: '🌲', cr: 3, desc: "Dangerous territory in the Lone-lands", unlocked: false, bg: 'Three trolls argue outside their camp.' },
+            { id: 'misty-mtn', name: "Misty Mountains", icon: '⛰️', cr: 4, desc: "The vast dwarven kingdom", unlocked: false, bg: 'Goblins lurk in the shadows.' },
+            { id: 'gollum-cave', name: "Gollum's Cave", icon: '💎', cr: 5, desc: "The creature\'s underwater domain", unlocked: false, bg: 'Precious riddles and deadly stakes await.' },
+            { id: 'mirkwood', name: "Mirkwood Forest", icon: '🌲', cr: 4, desc: "Dark woods filled with spiders", unlocked: false, bg: 'The forest grows darker as you enter.' },
+            { id: 'lake-town', name: "Lake-town", icon: '🏘️', cr: 3, desc: "The town of Men by the Long Lake", unlocked: false, bg: 'The people here have suffered under Smaug\'s shadow.' },
+            { id: 'lonely-mtn', name: "Lonely Mountain", icon: '🏔️', cr: 6, desc: "The destination - Erebor", unlocked: false, bg: 'The treasure of the dwarves awaits.' }
+        ];
+
+        const dialogues = {
+            'bag-end': [
+                { speaker: 'Gandalf', text: "Good morning! What do you mean? Do you wish to go on an adventure?", choices: [
+                    { text: "An adventure? Me? That's absurd!", next: 1 },
+                    { text: "Tell me more about this quest.", next: 2 },
+                    { text: "I need time to think...", next: -1 }
+                ]},
+                { speaker: 'Gandalf', text: "The dwarves will arrive soon. Thorin Oakenshield seeks to reclaim his ancestral home.", choices: [
+                    { text: "I'll hear them out.", next: -1 }
+                ]},
+                { speaker: 'Gandalf', text: "A dragon has stolen the dwarves' homeland. But between here and there... many dangers.", choices: [
+                    { text: "Count me in!", next: -1 }
+                ]}
+            ],
+            'prancing-pony': [
+                { speaker: 'Strider', text: "Keep your hood up. There are rangers in Bree, and not all wish you well.", choices: [
+                    { text: "Who are you?", next: 1 },
+                    { text: "I'll be careful.", next: -1 }
+                ]},
+                { speaker: 'Strider', text: "I am Aragorn. I guide folk through the wild. You have a long road ahead.", choices: [
+                    { text: "Thank you for the warning.", next: -1 }
+                ]}
+            ],
+            'troll-shire': [
+                { speaker: 'Bert', text: "What's this? A morsel for the pot!", choices: [
+                    { text: "I'm just passing through!", next: 1 },
+                    { text: "Stand back! I know magic!", next: 2 }
+                ]},
+                { speaker: 'Tom', text: "Fresh meat! Bert, get the fire ready!", choices: [
+                    { text: "Wait - I have gold!", next: -1 }
+                ]},
+                { speaker: 'William', text: "Magic? Don't believe it for a second!", choices: [
+                    { text: "Conjure a flash of light to save yourself", next: -1 }
+                ]}
+            ],
+            'misty-mtn': [
+                { speaker: 'Goblin', text: "入侵者! Infiltrators! Seize them!", choices: [
+                    { text: "Run for the exits!", next: 1 },
+                    { text: "Fight your way through!", next: 2 }
+                ]},
+                { speaker: 'Bilbo', text: "Following the dwarves through the tunnels, you emerge near Rivendell - exhausted but alive.", choices: [
+                    { text: "Continue the journey.", next: -1 }
+                ]},
+                { speaker: 'Gandalf', text: "You handle yourself well in battle. The dwarves are lucky to have you.", choices: [
+                    { text: "Thank you, Gandalf.", next: -1 }
+                ]}
+            ],
+            'gollum-cave': [
+                { speaker: 'Gollum', text: "What has it got in its pocketses? What has it got in its pocketses?", choices: [
+                    { text: "Let's play a riddle game.", next: 1 },
+                    { text: "I'll take the ring by force!", next: 2 },
+                    { text: "Try to sneak past.", next: -1 }
+                ]},
+                { speaker: 'Gollum', text: "Ohhhh... riddles in the dark! My favorite game! You first, precious!", choices: [
+                    { text: "Begin the riddle contest.", next: -1 }
+                ]},
+                { speaker: 'Gollum', text: "Yesss... angry it makes us! But we has the advantage here, precious!", choices: [
+                    { text: "Time to escape!", next: -1 }
+                ]}
+            ],
+            'mirkwood': [
+                { speaker: 'Giant Spider', text: "Creeping, creeping, waiting to bite...", choices: [
+                    { text: "Use Sting to cut through!", next: 1 },
+                    { text: "Try to outrun them.", next: 2 }
+                ]},
+                { speaker: 'Bilbo', text: "The webs part before Sting! You escape just in time!", choices: [
+                    { text: "Continue through Mirkwood.", next: -1 }
+                ]},
+                { speaker: 'Gandalf', text: "Spiders are swift in Mirkwood. You must be swifter.", choices: [
+                    { text: "I learned my lesson.", next: -1 }
+                ]}
+            ],
+            'lake-town': [
+                { speaker: 'Master of Lake-town', text: "Dwarves seeking the Lonely Mountain? You'll find no aid here.", choices: [
+                    { text: "We mean no harm to your people.", next: 1 },
+                    { text: "Smaug is the real threat!", next: 2 }
+                ]},
+                { speaker: 'Bard', text: "Perhaps not all dwarves are the same. I may help... for a price.", choices: [
+                    { text: "We can negotiate.", next: -1 }
+                ]},
+                { speaker: 'Bard', text: "The dragon's shadow falls on all of us. Together, we may be stronger.", choices: [
+                    { text: "A fair point. Let's talk.", next: -1 }
+                ]}
+            ],
+            'lonely-mtn': [
+                { speaker: 'Thorin', text: "This is it. The gates of Erebor. Our homeland awaits.", choices: [
+                    { text: "What's the plan?", next: 1 },
+                    { text: "The dragon may still be inside...", next: 2 }
+                ]},
+                { speaker: 'Thorin', text: "Bilbo the Burglar goes first. That is why we brought you.", choices: [
+                    { text: "I'll do my best.", next: -1 }
+                ]},
+                { speaker: 'Bilbo', text: "Looking at the gold-encrusted walls, you sense the dragon's presence.", choices: [
+                    { text: "Proceed with caution.", next: -1 }
+                ]}
+            ]
+        };
+
+        const triviaQuestions = [
+            { q: "What is the name of Bilbo's hobbit-hole?", opts: ["Bag End", "Shire Haven", "The Green Dragon", "Oakenshield"], ans: 0 },
+            { q: "Who leads the company of dwarves?", opts: ["Balin", "Gandalf", "Thorin Oakenshield", "Elrond"], ans: 2 },
+            { q: "What is the name of Bilbo's sword?", opts: ["Glamdring", "Sting", "Orcrist", "Anduril"], ans: 1 },
+            { q: "How many dwarves accompany Thorin?", opts: ["10", "11", "12", "13"], ans: 2 },
+            { q: "What creature lives in the Lonely Mountain?", opts: ["Worm", "Smaug", "Gollum", "Nazgul"], ans: 1 },
+            { q: "Where do the dwarves hide from the trolls?", opts: ["Underwater", "In barrels", "In caves", "In trees"], ans: 1 },
+            { q: "What color are the trolls' skin?", opts: ["Green", "Grey", "Orange", "Purple"], ans: 2 },
+            { q: "Who saves the company from the goblins?", opts: ["Elves", "Eagles", "Wizards", "Rangers"], ans: 1 },
+            { q: "What does Gollum call the One Ring?", opts: ["My Precious", "Gold Band", "Magic Ring", "Sneaky"], ans: 0 },
+            { q: "Who kills Smaug?", opts: ["Thorin", "Bilbo", "Bard", "Gandalf"], ans: 2 }
+        ];
+
+        const shopItems = [
+            { id: 'cloak', name: 'Elven Cloak', icon: '🧥', price: 15, desc: 'Blend into shadows', effect: 'Might +1' },
+            { id: 'rope', name: 'Mithril Rope', icon: '🪢', price: 10, desc: 'Useful for climbing', effect: 'Wisdom +1' },
+            { id: 'lamp', name: 'Dwarven Lamp', icon: '🏮', price: 8, desc: 'Lights dark places', effect: 'Cunning +1' },
+            { id: 'map', name: 'Old Map', icon: '🗺️', price: 12, desc: 'Shows hidden paths', effect: 'Wisdom +1' },
+            { id: 'shire', name: 'Shire Pipeweed', icon: '🌿', price: 5, desc: 'Calms the nerves', effect: 'Charm +1' },
+            { id: 'sting', name: 'Sting (Sword)', icon: '⚔️', price: 25, desc: 'Glows blue near orcs', effect: 'Might +2' }
+        ];
+
+        let gameState = {
+            player: { name: '', token: null, faction: null, attributes: { Might: 5, Cunning: 5, Vitality: 5, Wisdom: 5, Charm: 5 }, gold: 25, health: 100, items: {} },
+            day: 1, gamesPlayed: 0, gamesPerDay: 5, currentLocation: '',
+            completedMiniGames: [], locationsVisited: [], totalGoldEarned: 0,
+            challengesWon: 0, challengesLost: 0, triviaCorrect: 0, triviaTotal: 0,
+            memoryHighScore: 0
+        };
+
+        function initTokenGrid() {
+            const grid = document.getElementById('token-grid');
+            grid.innerHTML = tokens.map((t, i) => `
+                <div class="token-option" onclick="selectToken(${i})">
+                    <div class="token-icon">${t.icon}</div>
+                    <div>${t.name}</div>
+                    <div style="font-size:0.8em;color:#c9a86c">${t.desc}</div>
+                </div>
+            `).join('');
+        }
+
+        function initAttributes() {
+            const attrs = ['Might', 'Cunning', 'Vitality', 'Wisdom', 'Charm'];
+            const attrIcons = { Might: '💪', Cunning: '🧠', Vitality: '❤️', Wisdom: '📚', Charm: '✨' };
+            const container = document.getElementById('attributes');
+            container.innerHTML = `<div class="attr-remaining">Points remaining: <span id="points-left">5</span></div>`;
+            container.innerHTML += attrs.map(a => `
+                <div class="attr-row">
+                    <div class="attr-name">${attrIcons[a]} ${a}</div>
+                    <div class="attr-controls">
+                        <button class="attr-btn" onclick="adjustAttr('${a}', -1)">−</button>
+                        <span class="attr-value" id="attr-${a}">5</span>
+                        <button class="attr-btn" onclick="adjustAttr('${a}', 1)">+</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        let pointsRemaining = 5;
+        function adjustAttr(attr, delta) {
+            const current = gameState.player.attributes[attr];
+            if (delta > 0 && pointsRemaining > 0) {
+                gameState.player.attributes[attr]++;
+                pointsRemaining--;
+            } else if (delta < 0 && current > 5) {
+                gameState.player.attributes[attr]--;
+                pointsRemaining++;
+            }
+            document.getElementById('attr-' + attr).textContent = gameState.player.attributes[attr];
+            document.getElementById('points-left').textContent = pointsRemaining;
+        }
+
+        function selectToken(index) {
+            document.querySelectorAll('.token-option').forEach((el, i) => {
+                el.classList.toggle('selected', i === index);
+            });
+            gameState.player.token = index;
+        }
+
+        function startGame() {
+            const name = document.getElementById('player-name').value.trim();
+            if (!name) { alert('Please enter your name!'); return; }
+            if (gameState.player.token === null) { alert('Please choose a token!'); return; }
+            if (pointsRemaining > 0) { alert('Please distribute all points!'); return; }
+            gameState.player.name = name;
+            saveGame();
+            showScreen('main-game');
+            updateMainGame();
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            if (screenId === 'main-game') updateMainGame();
+        }
+
+        function updateMainGame() {
+            document.getElementById('player-name-display').textContent = gameState.player.name;
+            document.getElementById('player-token').textContent = tokens[gameState.player.token].icon;
+            document.getElementById('health-display').textContent = gameState.player.health;
+            document.getElementById('gold-display').textContent = gameState.player.gold;
+            document.getElementById('day-display').textContent = gameState.day;
+            document.getElementById('games-display').textContent = gameState.gamesPlayed;
+            const remaining = Math.max(0, gameState.gamesPerDay - gameState.gamesPlayed);
+            document.getElementById('quest-status').textContent = `Mini-games available today: ${remaining}`;
+
+            const mapGrid = document.getElementById('map-grid');
+            mapGrid.innerHTML = locations.map(loc => {
+                const isLocked = !loc.unlocked && loc.id !== 'bag-end';
+                return `
+                    <div class="location ${isLocked ? 'locked' : ''}" onclick="${isLocked ? '' : `visitLocation('${loc.id}')`}">
+                        <div class="location-icon">${loc.icon}</div>
+                        <div class="location-name">${loc.name}</div>
+                        <div class="location-cr">CR: ${loc.cr}</div>
+                        <div style="font-size:0.8em;margin-top:5px">${loc.desc}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function visitLocation(locId) {
+            gameState.currentLocation = locId;
+            const loc = locations.find(l => l.id === locId);
+            if (!gameState.locationsVisited.includes(locId)) {
+                gameState.locationsVisited.push(locId);
+                unlockNextLocation(locId);
+            }
+            saveGame();
+
+            document.getElementById('location-title').textContent = loc.icon + ' ' + loc.name;
+            const content = document.getElementById('location-content');
+            content.innerHTML = `
+                <div class="dialogue-box" style="margin-bottom:20px;">
+                    <div class="dialogue-speaker">Background</div>
+                    <div class="dialogue-text">${loc.bg}</div>
+                </div>
+                <div class="quote-box">"Not all those who wander are lost."</div>
+                <div class="mini-games-section">
+                    <button class="btn" onclick="startTrivia()"><span class="game-icon">📜</span>Trivia</button>
+                    <button class="btn" onclick="startChallenge()"><span class="game-icon">⚔️</span>Challenge</button>
+                    <button class="btn" onclick="startDice()"><span class="game-icon">🎲</span>Dice Duel</button>
+                    <button class="btn" onclick="startDialogue()"><span class="game-icon">💬</span>Dialogue</button>
+                    <button class="btn" onclick="startMemory()"><span class="game-icon">🧠</span>Memory</button>
+                </div>
+                <div style="text-align:center;margin-top:20px;">
+                    <button class="btn" onclick="openShop()">🏪 Market</button>
+                    <button class="btn" onclick="openInventory()">🎒 Inventory</button>
+                    ${gameState.locationsVisited.length >= 5 ? '<button class="btn" onclick="attemptEnding()" style="background:linear-gradient(135deg,#ffd700,#ff8c00);">👑 Seek Ending</button>' : ''}
+                </div>
+            `;
+            showScreen('location-screen');
+        }
+
+        function unlockNextLocation(locId) {
+            const locOrder = ['bag-end', 'prancing-pony', 'troll-shire', 'misty-mtn', 'gollum-cave', 'mirkwood', 'lake-town', 'lonely-mtn'];
+            const idx = locOrder.indexOf(locId);
+            if (idx < locOrder.length - 1) {
+                const nextLoc = locations.find(l => l.id === locOrder[idx + 1]);
+                if (nextLoc) nextLoc.unlocked = true;
+            }
+        }
+
+        function startTrivia() {
+            if (gameState.gamesPlayed >= gameState.gamesPerDay) { showModal('No Games Left', 'You have played all mini-games today. Return tomorrow!'); return; }
+            const q = triviaQuestions[Math.floor(Math.random() * triviaQuestions.length)];
+            const content = document.getElementById('trivia-content');
+            content.innerHTML = `
+                <div class="trivia-question">${q.q}</div>
+                <div class="trivia-options">
+                    ${q.opts.map((o, i) => `<button class="choice-btn" onclick="answerTrivia(${i}, ${q.ans})">${o}</button>`).join('')}
+                </div>
+            `;
+            showScreen('trivia-screen');
+        }
+
+        function answerTrivia(selected, correct) {
+            gameState.gamesPlayed++;
+            gameState.triviaTotal++;
+            const correct_count = selected === correct;
+            if (correct_count) {
+                gameState.triviaCorrect++;
+                gameState.player.gold += 5;
+                gameState.totalGoldEarned += 5;
+                showModal('Correct!', `Well done! +5 Sovereigns\n\nTotal Gold: ${gameState.player.gold}`);
+            } else {
+                showModal('Incorrect', `The answer was: ${triviaQuestions.find(t => t.opts[correct] === triviaQuestions[gameState.triviaTotal - 1].opts[correct])}`);
+            }
+            saveGame();
+            setTimeout(() => { showScreen('location-screen'); updateMainGame(); }, 1500);
+        }
+
+        function startChallenge() {
+            if (gameState.gamesPlayed >= gameState.gamesPerDay) { showModal('No Games Left', 'You have played all mini-games today.'); return; }
+            const loc = locations.find(l => l.id === gameState.currentLocation);
+            const challengeContent = document.getElementById('challenge-content');
+            challengeContent.innerHTML = `
+                <p style="text-align:center;margin-bottom:20px;">Challenge Rating: ${loc.cr}</p>
+                <p style="text-align:center;margin-bottom:20px;">Choose your attribute for this challenge:</p>
+                <div class="choice-list">
+                    ${['Might', 'Cunning', 'Vitality', 'Wisdom', 'Charm'].map(attr => `
+                        <button class="choice-btn" onclick="attemptChallenge('${attr}', ${loc.cr})">
+                            ${attr} (Modifier: ${getMod(attr)})
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+            showScreen('challenge-screen');
+        }
+
+        function attemptChallenge(attr, cr) {
+            gameState.gamesPlayed++;
+            const roll = rollD6();
+            const mod = getMod(attr);
+            const total = roll + mod;
+            const success = total >= cr;
+
+            if (success) {
+                gameState.challengesWon++;
+                const reward = cr * 3;
+                gameState.player.gold += reward;
+                gameState.totalGoldEarned += reward;
+                showModal('Victory!', `🎲 ${roll} + ${mod} = ${total}\n\nvs CR ${cr}\n\nYou win! +${reward} Sovereigns!`);
+            } else {
+                gameState.challengesLost++;
+                gameState.player.health -= 10;
+                showModal('Defeat', `🎲 ${roll} + ${mod} = ${total}\n\nvs CR ${cr}\n\nYou lose! -10 Health`);
+            }
+            if (gameState.player.health <= 0) gameState.player.health = 100;
+            saveGame();
+            setTimeout(() => { showScreen('location-screen'); updateMainGame(); }, 2000);
+        }
+
+        function startDice() {
+            if (gameState.gamesPlayed >= gameState.gamesPerDay) { showModal('No Games Left', 'You have played all mini-games today.'); return; }
+            const content = document.getElementById('dice-content');
+            content.innerHTML = `
+                <p style="text-align:center;margin-bottom:20px;">Roll against an opponent! Beat their roll to win!</p>
+                <div style="text-align:center;">
+                    <button class="btn" onclick="rollDice()">🎲 Roll the Dice!</button>
+                </div>
+            `;
+            showScreen('dice-screen');
+        }
+
+        function rollDice() {
+            gameState.gamesPlayed++;
+            const playerRoll = Math.floor(Math.random() * 10) + 1;
+            const opponentRoll = Math.floor(Math.random() * 10) + 1;
+            const content = document.getElementById('dice-content');
+            content.innerHTML = `
+                <div style="display:flex;justify-content:space-around;margin:30px 0;">
+                    <div style="text-align:center;">
+                        <p>You</p>
+                        <div class="dice-result">${playerRoll}</div>
+                    </div>
+                    <div style="text-align:center;">
+                        <p>Opponent</p>
+                        <div class="dice-result">${opponentRoll}</div>
+                    </div>
+                </div>
+                <div style="text-align:center;font-size:1.3em;">
+                    ${playerRoll > opponentRoll ? '🎉 Victory! +5 Sovereigns' : playerRoll < opponentRoll ? '💔 Defeat! -5 Gold' : '🤝 Draw!'}
+                </div>
+            `;
+            if (playerRoll > opponentRoll) {
+                gameState.player.gold += 5;
+                gameState.totalGoldEarned += 5;
+            } else if (playerRoll < opponentRoll) {
+                gameState.player.gold = Math.max(0, gameState.player.gold - 5);
+            }
+            saveGame();
+            setTimeout(() => { showScreen('location-screen'); updateMainGame(); }, 2500);
+        }
+
+        function startDialogue() {
+            if (gameState.gamesPlayed >= gameState.gamesPerDay) { showModal('No Games Left', 'You have played all mini-games today.'); return; }
+            const locDialogues = dialogues[gameState.currentLocation] || dialogues['bag-end'];
+            showDialogueNode(0, locDialogues);
+        }
+
+        function showDialogueNode(nodeIndex, dialogueTree) {
+            gameState.gamesPlayed++;
+            const node = dialogueTree[nodeIndex];
+            const content = document.getElementById('dialogue-content');
+            content.innerHTML = `
+                <div class="dialogue-box">
+                    <div class="dialogue-speaker">${node.speaker}</div>
+                    <div class="dialogue-text">${node.text}</div>
+                </div>
+                <div class="choice-list">
+                    ${node.choices.map(c => `
+                        <button class="choice-btn" onclick="${c.next === -1 ? 'endDialogue()' : `showDialogueNode(${c.next}, dialogueTree)`}">
+                            ${c.text}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+            showScreen('dialogue-screen');
+        }
+
+        function endDialogue() {
+            gameState.player.gold += 3;
+            gameState.totalGoldEarned += 3;
+            showModal('Dialogue Complete', 'The conversation ends well. +3 Sovereigns');
+            saveGame();
+            setTimeout(() => { showScreen('location-screen'); updateMainGame(); }, 1500);
+        }
+
+        let memoryCards = [], flippedCards = [], matchedPairs = 0, memoryMoves = 0;
+        const memorySymbols = ['⚔️', '🗡️', '🛡️', '🗺️', '💎', '🔮', '🧙', '🏔️'];
+
+        function startMemory() {
+            if (gameState.gamesPlayed >= gameState.gamesPerDay) { showModal('No Games Left', 'You have played all mini-games today.'); return; }
+            memoryCards = [...memorySymbols, ...memorySymbols].sort(() => Math.random() - 0.5);
+            flippedCards = [];
+            matchedPairs = 0;
+            memoryMoves = 0;
+
+            const content = document.getElementById('memory-content');
+            content.innerHTML = `
+                <p style="text-align:center;">Moves: <span id="memory-moves">0</span> | Pairs: <span id="memory-pairs">0</span>/8</p>
+                <div class="memory-grid">
+                    ${memoryCards.map((s, i) => `<div class="memory-card" id="mem-${i}" onclick="flipCard(${i})">❓</div>`).join('')}
+                </div>
+                <button class="btn" onclick="startDialogue()" style="margin-top:15px;">Skip Memory Game</button>
+            `;
+            showScreen('memory-screen');
+        }
+
+        function flipCard(index) {
+            if (flippedCards.length >= 2 || flippedCards.includes(index)) return;
+            const card = document.getElementById(`mem-${index}`);
+            card.textContent = memoryCards[index];
+            card.classList.add('flipped');
+            flippedCards.push(index);
+
+            if (flippedCards.length === 2) {
+                memoryMoves++;
+                document.getElementById('memory-moves').textContent = memoryMoves;
+                setTimeout(checkMemoryMatch, 800);
+            }
+        }
+
+        function checkMemoryMatch() {
+            const [i1, i2] = flippedCards;
+            if (memoryCards[i1] === memoryCards[i2]) {
+                document.getElementById(`mem-${i1}`).classList.add('matched');
+                document.getElementById(`mem-${i2}`).classList.add('matched');
+                matchedPairs++;
+                document.getElementById('memory-pairs').textContent = matchedPairs;
+                flippedCards = [];
+
+                if (matchedPairs === 8) {
+                    gameState.memoryHighScore = Math.max(gameState.memoryHighScore, memoryMoves);
+                    const reward = Math.max(1, 10 - memoryMoves) * 2;
+                    gameState.player.gold += reward;
+                    gameState.totalGoldEarned += reward;
+                    showModal('Memory Complete!', `Excellent! You found all pairs in ${memoryMoves} moves! +${reward} Sovereigns`);
+                    saveGame();
+                    setTimeout(() => { showScreen('location-screen'); updateMainGame(); }, 2000);
+                }
+            } else {
+                document.getElementById(`mem-${i1}`).textContent = '❓';
+                document.getElementById(`mem-${i1}`).classList.remove('flipped');
+                document.getElementById(`mem-${i2}`).textContent = '❓';
+                document.getElementById(`mem-${i2}`).classList.remove('flipped');
+                flippedCards = [];
+            }
+        }
+
+        function openShop() {
+            const content = document.getElementById('shop-content');
+            content.innerHTML = `
+                <p style="text-align:center;margin-bottom:15px;">Your Gold: ${gameState.player.gold} Sovereigns</p>
+                <div class="shop-grid">
+                    ${shopItems.map(item => `
+                        <div class="shop-item">
+                            <div class="shop-item-icon">${item.icon}</div>
+                            <div class="shop-item-name">${item.name}</div>
+                            <div class="shop-item-desc">${item.desc}</div>
+                            <div class="shop-item-price">${item.price} Sovereigns</div>
+                            <button class="btn btn-small" onclick="buyItem('${item.id}')" ${gameState.player.gold < item.price ? 'disabled' : ''}>
+                                Buy
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            showScreen('shop-screen');
+        }
+
+        function buyItem(itemId) {
+            const item = shopItems.find(i => i.id === itemId);
+            if (gameState.player.gold >= item.price) {
+                gameState.player.gold -= item.price;
+                gameState.player.items[itemId] = (gameState.player.items[itemId] || 0) + 1;
+
+                // Apply stat bonuses
+                if (item.effect.includes('Might')) gameState.player.attributes.Might += 1;
+                if (item.effect.includes('Cunning')) gameState.player.attributes.Cunning += 1;
+                if (item.effect.includes('Wisdom')) gameState.player.attributes.Wisdom += 1;
+                if (item.effect.includes('Charm')) gameState.player.attributes.Charm += 1;
+
+                showModal('Purchased!', `${item.icon} ${item.name} acquired!`);
+                saveGame();
+                openShop();
+            }
+        }
+
+        function openInventory() {
+            const items = Object.entries(gameState.player.items).filter(([_, qty]) => qty > 0);
+            const content = document.getElementById('inventory-content');
+            content.innerHTML = `
+                <p style="text-align:center;margin-bottom:15px;">Stats: ${Object.entries(gameState.player.attributes).map(([k, v]) => `${k}: ${v}`).join(' | ')}</p>
+                <div class="inventory-list">
+                    ${items.length ? items.map(([id, qty]) => {
+                        const item = shopItems.find(i => i.id === id);
+                        return `<div class="inv-item"><span class="inv-icon">${item.icon}</span>${item.name} x${qty}</div>`;
+                    }).join('') : '<p>No items yet!</p>'}
+                </div>
+                <div style="text-align:center;margin-top:20px;">
+                    <button class="btn" onclick="newDay()">📅 Start New Day</button>
+                </div>
+            `;
+            showScreen('inventory-screen');
+        }
+
+        function newDay() {
+            gameState.day++;
+            gameState.gamesPlayed = 0;
+            gameState.player.health = 100;
+            showModal('New Day', `Day ${gameState.day} begins! All mini-games refreshed.`);
+            saveGame();
+            showScreen('main-game');
+        }
+
+        function attemptEnding() {
+            const totalScore = calculateScore();
+            const content = document.getElementById('ending-content');
+            const title = document.getElementById('ending-title');
+
+            let ending, endingClass;
+            if (totalScore >= 80) {
+                ending = {
+                    title: 'The Dragon Slayer',
+                    text: `Through wisdom, courage, and perhaps a bit of hobbit-luck, you helped reclaim Erebor! Smaug has been defeated, and the dwarves' homeland is restored. The dwarves sing songs of your bravery for generations to come. The Shire will never be the same for you - you are now a legend of Middle-earth.`,
+                    class: 'ending-good'
+                };
+            } else if (totalScore >= 50) {
+                ending = {
+                    title: 'The Return Home',
+                    text: `You return to the Shire having witnessed wonders and dangers beyond imagination. Though Erebor was not reclaimed, you carry stories that will be told for years. Home feels different now - smaller, but dearer. You plant a garden and begin writing your memoirs.`,
+                    class: 'ending-good'
+                };
+            } else {
+                ending = {
+                    title: 'The Quiet Life',
+                    text: `The adventure was not meant to be. You return to your comfortable hole, your armchair, and your books. Sometimes, late at night, you wonder what lay beyond the Misty Mountains. But morning comes, and with it, second breakfast.`,
+                    class: 'ending-bad'
+                };
+            }
+
+            title.textContent = '👑 ' + ending.title;
+            content.innerHTML = `
+<div class="dialogue-box" style="border-color:${ending.class === 'ending-good' ? '#ffd700' : '#8b0000'}">
+                    <p>${ending.text}</p>
+                </div>
+                <div style="margin-top:20px;text-align:center;">
+                    <h3>Final Statistics</h3>
+                    <p>Days: ${gameState.day}</p>
+                    <p>Gold Earned: ${gameState.totalGoldEarned}</p>
+                    <p>Challenges Won: ${gameState.challengesWon}/${gameState.challengesWon + gameState.challengesLost}</p>
+                    <p>Trivia Correct: ${gameState.triviaCorrect}/${gameState.triviaTotal}</p>
+                    <p>Locations Visited: ${gameState.locationsVisited.length}/8</p>
+                    <p>Total Score: ${totalScore}/100</p>
+                </div>
+                <div style="text-align:center;margin-top:20px;">
+                    <button class="btn" onclick="resetGame()">Start New Quest</button>
+                </div>
+            `;
+            document.getElementById('ending-screen').className = 'screen ' + ending.class;
+            showScreen('ending-screen');
+        }
+
+        function calculateScore() {
+            let score = 0;
+            score += (gameState.challengesWon * 5);
+            score += (gameState.triviaCorrect * 3);
+            score += (gameState.locationsVisited.length * 5);
+            score += (gameState.totalGoldEarned / 5);
+            score += (Object.values(gameState.player.items).reduce((a, b) => a + b, 0) * 2);
+            score = Math.min(100, score);
+            return Math.floor(score);
+        }
+
+        function rollD6() { return Math.floor(Math.random() * 6) + 1; }
+        function getMod(attr) { return gameState.player.attributes[attr] - 5; }
+
+        function showModal(title, text) {
+            document.getElementById('modal-content').innerHTML = `
+                <h3 style="margin-bottom:15px;">${title}</h3>
+                <p>${text}</p>
+                <button class="btn" onclick="closeModal()" style="margin-top:15px;">OK</button>
+            `;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() { document.getElementById('modal').classList.remove('active'); }
+
+        function saveGame() { localStorage.setItem('hobbit-game', JSON.stringify(gameState)); }
+        function loadGame() {
+            const saved = localStorage.getItem('hobbit-game');
+            if (saved) {
+                gameState = JSON.parse(saved);
+                showScreen('main-game');
+            } else {
+                showModal('No Save Found', 'Start a new quest!');
+            }
+        }
+
+        function resetGame() {
+            localStorage.removeItem('hobbit-game');
+            location.reload();
+        }
+
+        initTokenGrid();
+        initAttributes();
+    </script>
+</body>
+</html>

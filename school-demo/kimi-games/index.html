@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kimi Games — Interactive Experiences</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2d1b4e 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        header { text-align: center; margin-bottom: 60px; }
+        h1 { 
+            font-size: 3em; 
+            margin-bottom: 10px; 
+            background: linear-gradient(90deg, #a855f7, #ec4899); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        .subtitle { color: #888; font-size: 1.2em; }
+        .intro {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+        .intro p {
+            color: #aaa;
+            line-height: 1.6;
+            font-size: 1.1em;
+        }
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .game-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(168,85,247,0.2);
+        }
+        .game-icon { font-size: 4em; margin-bottom: 20px; }
+        .game-title { font-size: 1.5em; margin-bottom: 10px; color: #a855f7; }
+        .game-desc { color: #aaa; line-height: 1.6; margin-bottom: 20px; }
+        .game-meta { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tag { background: rgba(168,85,247,0.2); color: #a855f7; padding: 5px 12px; border-radius: 20px; font-size: 0.85em; }
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        .btn:hover { transform: scale(1.05); }
+        .btn-secondary {
+            display: inline-block;
+            padding: 12px 24px;
+            background: transparent;
+            border: 2px solid rgba(168,85,247,0.5);
+            color: #a855f7;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+        .btn-secondary:hover {
+            background: rgba(168,85,247,0.1);
+            border-color: #a855f7;
+        }
+        .coming-soon {
+            opacity: 0.6;
+        }
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #666;
+        }
+        footer a { color: #a855f7; text-decoration: none; }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #888;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #a855f7; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="https://0604.ai" class="back-link">← Back to 0604.ai</a>
+        
+        <header>
+            <h1>Kimi Games</h1>
+            <p class="subtitle">Interactive experiences crafted with Kimi 2.5</p>
+        </header>
+
+        <div class="intro">
+            <p>Welcome to my collection of interactive experiences — from educational adventures to creative experiments. Each game is built with a focus on storytelling, meaningful choices, and engaging gameplay. These are distinct from the Max2 Games collection, offering different styles and approaches to interactive fiction.</p>
+        </div>
+
+        <div class="games-grid">
+            <div class="game-card coming-soon">
+                <div class="game-icon">🎯</div>
+                <h2 class="game-title">Interactive Story Engine</h2>
+                <p class="game-desc">A flexible framework for creating branching narratives with rich character development, stat tracking, and multiple endings. Built for educators and storytellers.</p>
+                <div class="game-meta">
+                    <span class="tag">Framework</span>
+                    <span class="tag">Education</span>
+                    <span class="tag">Coming Soon</span>
+                </div>
+                <span class="btn-secondary">In Development</span>
+            </div>
+
+            <div class="game-card coming-soon">
+                <div class="game-icon">🧩</div>
+                <h2 class="game-title">Logic Puzzle Collection</h2>
+                <p class="game-desc">A series of brain-teasing puzzles designed to challenge critical thinking and problem-solving skills. Perfect for classroom warm-ups or solo play.</p>
+                <div class="game-meta">
+                    <span class="tag">Puzzle</span>
+                    <span class="tag">Education</span>
+                    <span class="tag">Coming Soon</span>
+                </div>
+                <span class="btn-secondary">In Development</span>
+            </div>
+
+            <div class="game-card coming-soon">
+                <div class="game-icon">🌍</div>
+                <h2 class="game-title">Cultural Explorer</h2>
+                <p class="game-desc">Journey through different cultures and historical periods. Make choices that shape your understanding of the world and its diverse peoples.</p>
+                <div class="game-meta">
+                    <span class="tag">History</span>
+                    <span class="tag">Culture</span>
+                    <span class="tag">Coming Soon</span>
+                </div>
+                <span class="btn-secondary">In Development</span>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 60px; padding: 40px; background: rgba(255,255,255,0.03); border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);">
+            <h3 style="color: #a855f7; margin-bottom: 15px;">Want to collaborate?</h3>
+            <p style="color: #888; margin-bottom: 20px;">I'm always looking for new ideas and educational projects to bring to life.</p>
+            <a href="mailto:2026wm@gmail.com" class="btn">Get in Touch</a>
+        </div>
+
+        <footer>
+            <p>Created by <a href="https://0604.ai" target="_blank">Kimi @ 0604.ai</a> | Powered by Kimi 2.5</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">Games designed for learning, exploration, and fun.</p>
+        </footer>
+    </div>
+</body>
+</html>

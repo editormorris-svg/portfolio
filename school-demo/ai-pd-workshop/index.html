@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tools for Educators | Professional Development Workshop | 0604.ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #264653;
+            --primary-teal: #2A9D8F;
+            --accent-gold: #E9C46A;
+            --accent-orange: #F4A261;
+            --bg-light: #F8F9FA;
+            --text-dark: #264653;
+            --text-light: #FFFFFF;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .slide {
+            min-height: 100vh;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            scroll-snap-align: start;
+        }
+        .slide-dark { background: var(--primary-dark); color: var(--text-light); }
+        .slide-light { background: var(--bg-light); color: var(--text-dark); }
+        .slide-teal { background: var(--primary-teal); color: var(--text-light); }
+        
+        /* Navigation */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(38, 70, 83, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 2px solid var(--accent-gold);
+        }
+        .nav-brand {
+            font-family: 'Playfair Display', serif;
+            color: var(--text-light);
+            font-size: 1.2rem;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .nav-btn {
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-btn:hover { background: var(--accent-orange); }
+        .download-btn {
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .download-btn:hover { background: var(--accent-orange); }
+        
+        /* Slide 1 - Title */
+        .title-slide {
+            text-align: left;
+            background: var(--primary-dark);
+            position: relative;
+            overflow: hidden;
+        }
+        .title-slide::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: var(--primary-teal);
+            opacity: 0.5;
+            border-radius: 50%;
+        }
+        .title-slide::after {
+            content: '';
+            position: absolute;
+            bottom: 20%;
+            right: 10%;
+            width: 300px;
+            height: 300px;
+            background: var(--accent-gold);
+            opacity: 0.6;
+            border-radius: 50%;
+        }
+        .title-content {
+            position: relative;
+            z-index: 1;
+        }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--accent-orange);
+            margin-bottom: 2rem;
+        }
+        .workshop-info {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-top: 2rem;
+        }
+        
+        /* Slide 2 - Agenda */
+        .agenda-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .agenda-item {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+        .agenda-number {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-teal);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+        }
+        .agenda-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+        .agenda-content p {
+            color: var(--primary-teal);
+            font-size: 0.95rem;
+        }
+        
+        /* Section Headers */
+        .section-number {
+            font-size: 8rem;
+            font-weight: bold;
+            opacity: 0.2;
+            position: absolute;
+            top: 2rem;
+            left: 3rem;
+            line-height: 1;
+        }
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+        .section-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+        
+        /* Content Slides */
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--primary-dark);
+        }
+        .definition-box {
+            background: var(--primary-teal);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            margin: 2rem 0;
+        }
+        
+        /* AI Types Grid */
+        .ai-types-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .ai-type-card {
+            background: white;
+            border: 3px solid var(--accent-orange);
+            border-radius: 15px;
+            padding: 1.5rem;
+            position: relative;
+        }
+        .ai-type-number {
+            width: 50px;
+            height: 50px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+        }
+        .ai-type-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+        .ai-type-card p {
+            font-size: 0.9rem;
+            color: var(--primary-teal);
+        }
+        
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .tool-category {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-top: 4px solid var(--primary-teal);
+        }
+        .tool-category h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+        }
+        .tool-category ul {
+            list-style: none;
+            font-size: 0.85rem;
+        }
+        .tool-category li {
+            padding: 0.3rem 0;
+            color: #666;
+        }
+        .tool-category li::before {
+            content: '•';
+            color: var(--primary-teal);
+            margin-right: 0.5rem;
+        }
+        
+        /* Lesson Planning */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+        .benefits-box, .prompts-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+        }
+        .benefits-box h3, .prompts-box h3 {
+            color: var(--primary-teal);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        .benefits-box ul {
+            list-style: none;
+        }
+        .benefits-box li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .benefits-box li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary-teal);
+            font-weight: bold;
+        }
+        .prompt-item {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            font-family: monospace;
+            font-size: 0.85rem;
+            border-left: 3px solid var(--accent-gold);
+        }
+        
+        /* Assessment */
+        .assessment-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .assessment-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary-teal);
+        }
+        .assessment-box h3 {
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+        }
+        .assessment-box ul {
+            list-style: none;
+        }
+        .assessment-box li {
+            padding: 0.4rem 0;
+            padding-left: 1.2rem;
+            position: relative;
+        }
+        .assessment-box li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-gold);
+        }
+        
+        /* Activity */
+        .activity-box {
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+        .activity-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .difficulty-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .difficulty-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+        .difficulty-card h4 {
+            color: var(--primary-teal);
+            margin-bottom: 0.5rem;
+        }
+        .difficulty-card p {
+            font-size: 0.9rem;
+        }
+        
+        /* Ethics */
+        .ethics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+        .ethics-do, .ethics-dont {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+        }
+        .ethics-do { border-left: 5px solid #2E7D32; }
+        .ethics-dont { border-left: 5px solid #C62828; }
+        .ethics-do h3 { color: #2E7D32; }
+        .ethics-dont h3 { color: #C62828; }
+        .ethics-do ul, .ethics-dont ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        .ethics-do li, .ethics-dont li {
+            padding: 0.7rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .ethics-do li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #2E7D32;
+            font-weight: bold;
+        }
+        .ethics-dont li::before {
+            content: '✗';
+            position: absolute;
+            left: 0;
+            color: #C62828;
+            font-weight: bold;
+        }
+        
+        /* Takeaways */
+        .takeaways-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+        .takeaways-box, .next-steps-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+        }
+        .takeaways-box h3, .next-steps-box h3 {
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        .takeaway-item, .step-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            align-items: flex-start;
+        }
+        .takeaway-number, .step-number {
+            width: 30px;
+            height: 30px;
+            background: var(--primary-teal);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        
+        /* Slide numbers */
+        .slide-number {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .agenda-grid, .ai-types-grid, .tools-grid, .two-column, 
+            .assessment-grid, .difficulty-grid, .ethics-grid, .takeaways-grid {
+                grid-template-columns: 1fr;
+            }
+            .slide { padding: 2rem 1.5rem; }
+        }
+        
+        /* Smooth scroll */
+        html { scroll-behavior: smooth; }
+        .presentation-container { scroll-snap-type: y mandatory; }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="/" class="nav-brand">← Back to 0604.ai</a>
+        <div class="nav-links">
+            <a href="AI_PD_Workshop_Presentation.pptx" class="download-btn" download>
+                📥 Download PPT
+            </a>
+        </div>
+    </nav>
+
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <section class="slide slide-dark title-slide" id="slide1">
+            <div class="title-content">
+                <h1>AI TOOLS FOR<br>EDUCATORS</h1>
+                <p class="subtitle">Transforming Teaching with Artificial Intelligence</p>
+                <div class="workshop-info">
+                    <p>🎓 2-Hour Professional Development Workshop</p>
+                    <p>Presented by: William Morris | 0604.ai</p>
+                </div>
+            </div>
+            <div class="slide-number">1</div>
+        </section>
+
+        <!-- Slide 2: Agenda -->
+        <section class="slide slide-light" id="slide2">
+            <h2>WORKSHOP AGENDA</h2>
+            <div class="agenda-grid">
+                <div class="agenda-item">
+                    <div class="agenda-number">01</div>
+                    <div class="agenda-content">
+                        <h3>AI Fundamentals</h3>
+                        <p>Understanding artificial intelligence and its relevance to education</p>
+                    </div>
+                </div>
+                <div class="agenda-item">
+                    <div class="agenda-number">02</div>
+                    <div class="agenda-content">
+                        <h3>Practical Applications</h3>
+                        <p>Real-world AI tools for lesson planning, assessment, and creativity</p>
+                    </div>
+                </div>
+                <div class="agenda-item">
+                    <div class="agenda-number">03</div>
+                    <div class="agenda-content">
+                        <h3>Hands-On Exploration</h3>
+                        <p>Experience AI tools firsthand with guided activities</p>
+                    </div>
+                </div>
+                <div class="agenda-item">
+                    <div class="agenda-number">04</div>
+                    <div class="agenda-content">
+                        <h3>Best Practices & Ethics</h3>
+                        <p>Guidelines for responsible AI use in the classroom</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">2</div>
+        </section>
+
+        <!-- Slide 3: Section Header -->
+        <section class="slide slide-teal" id="slide3">
+            <div class="section-number">01</div>
+            <h1 class="section-title">AI FUNDAMENTALS</h1>
+            <p class="section-subtitle">Understanding Artificial Intelligence</p>
+            <div class="slide-number">3</div>
+        </section>
+
+        <!-- Slide 4: What is AI? -->
+        <section class="slide slide-light" id="slide4">
+            <h2>What is Artificial Intelligence?</h2>
+            <div class="definition-box">
+                AI enables computers to perform tasks that typically require human intelligence, such as understanding language, recognizing patterns, making decisions, and generating content.
+            </div>
+            <div class="ai-types-grid">
+                <div class="ai-type-card">
+                    <div class="ai-type-number">1</div>
+                    <h3>Machine Learning</h3>
+                    <p>Systems that learn from data to improve performance</p>
+                </div>
+                <div class="ai-type-card">
+                    <div class="ai-type-number">2</div>
+                    <h3>Natural Language</h3>
+                    <p>Understanding and generating human language</p>
+                </div>
+                <div class="ai-type-card">
+                    <div class="ai-type-number">3</div>
+                    <h3>Generative AI</h3>
+                    <p>Creating new content: text, images, audio, video</p>
+                </div>
+            </div>
+            <div class="slide-number">4</div>
+        </section>
+
+        <!-- Slide 5: Types of AI Tools -->
+        <section class="slide slide-light" id="slide5">
+            <h2>Types of AI Tools for Education</h2>
+            <div class="tools-grid">
+                <div class="tool-category">
+                    <h3>✏️ Writing & Content</h3>
+                    <ul>
+                        <li>Lesson plan generators</li>
+                        <li>Quiz creators</li>
+                        <li>Text generators</li>
+                        <li>Proofreading assistants</li>
+                    </ul>
+                </div>
+                <div class="tool-category">
+                    <h3>🎨 Visuals & Media</h3>
+                    <ul>
+                        <li>Image generators</li>
+                        <li>Video creation</li>
+                        <li>Presentation makers</li>
+                        <li>Infographic tools</li>
+                    </ul>
+                </div>
+                <div class="tool-category">
+                    <h3>📚 Research & Planning</h3>
+                    <ul>
+                        <li>Search assistants</li>
+                        <li>Summarizers</li>
+                        <li>Study planners</li>
+                        <li>Research organizers</li>
+                    </ul>
+                </div>
+                <div class="tool-category">
+                    <h3>📊 Assessment</h3>
+                    <ul>
+                        <li>Auto-graders</li>
+                        <li>Feedback generators</li>
+                        <li>Rubric creators</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="slide-number">5</div>
+        </section>
+
+        <!-- Slide 6: Section Header -->
+        <section class="slide slide-teal" id="slide6">
+            <div class="section-number">02</div>
+            <h1 class="section-title">PRACTICAL<br>APPLICATIONS</h1>
+            <p class="section-subtitle">Real-World AI Tools for Your Classroom</p>
+            <div class="slide-number">6</div>
+        </section>
+
+        <!-- Slide 7: AI for Lesson Planning -->
+        <section class="slide slide-light" id="slide7">
+            <h2>AI for Lesson Planning</h2>
+            <div class="two-column">
+                <div class="benefits-box">
+                    <h3>BENEFITS</h3>
+                    <ul>
+                        <li>Generate lesson ideas quickly</li>
+                        <li>Create differentiated materials</li>
+                        <li>Adapt content for various levels</li>
+                        <li>Produce diverse activity types</li>
+                        <li>Save time on planning</li>
+                    </ul>
+                </div>
+                <div class="prompts-box">
+                    <h3>TRY THESE PROMPTS</h3>
+                    <div class="prompt-item">
+                        "Create a 45-minute lesson on [topic] for [level] students"
+                    </div>
+                    <div class="prompt-item">
+                        "Generate 5 opening activities for [theme]"
+                    </div>
+                    <div class="prompt-item">
+                        "Write discussion questions about [subject]"
+                    </div>
+                    <div class="prompt-item">
+                        "Design a project-based learning unit on [topic]"
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">7</div>
+        </section>
+
+        <!-- Slide 8: AI for Assessment -->
+        <section class="slide slide-light" id="slide8">
+            <h2>AI for Assessment & Feedback</h2>
+            <div class="assessment-grid">
+                <div class="assessment-box">
+                    <h3>ASSESSMENT TOOLS</h3>
+                    <ul>
+                        <li>Quiz and test generators</li>
+                        <li>Multiple choice creators</li>
+                        <li>Matching and ordering activities</li>
+                        <li>Rubric builders</li>
+                        <li>Flashcard generators</li>
+                    </ul>
+                </div>
+                <div class="assessment-box">
+                    <h3>FEEDBACK TOOLS</h3>
+                    <ul>
+                        <li>Essay and writing feedback</li>
+                        <li>Grammar and style suggestions</li>
+                        <li>Personalized comment banks</li>
+                        <li>Progress monitoring</li>
+                        <li>Student self-assessment</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="slide-number">8</div>
+        </section>
+
+        <!-- Slide 9: Section Header -->
+        <section class="slide slide-teal" id="slide9">
+            <div class="section-number">03</div>
+            <h1 class="section-title">HANDS-ON<br>PRACTICE</h1>
+            <p class="section-subtitle">Experience AI Tools Firsthand</p>
+            <div class="slide-number">9</div>
+        </section>
+
+        <!-- Slide 10: Activity -->
+        <section class="slide slide-light" id="slide10">
+            <h2>Your Turn: Try AI Tools!</h2>
+            <div class="activity-box">
+                <h3>🎯 ACTIVITY (15 minutes)</h3>
+                <p>Choose one tool category and create something useful for your classroom using the AI assistant.</p>
+            </div>
+            <div class="difficulty-grid">
+                <div class="difficulty-card">
+                    <h4>🌱 BEGINNER</h4>
+                    <p>Generate 5 vocabulary flashcards for your current unit</p>
+                </div>
+                <div class="difficulty-card">
+                    <h4>⭐ INTERMEDIATE</h4>
+                    <p>Create a 20-question quiz with answer key</p>
+                </div>
+                <div class="difficulty-card">
+                    <h4>🚀 ADVANCED</h4>
+                    <p>Design a complete 45-minute lesson plan</p>
+                </div>
+            </div>
+            <div class="slide-number">10</div>
+        </section>
+
+        <!-- Slide 11: Best Practices -->
+        <section class="slide slide-light" id="slide11">
+            <h2>Best Practices & Ethics</h2>
+            <div class="ethics-grid">
+                <div class="ethics-do">
+                    <h3>✓ DO</h3>
+                    <ul>
+                        <li>Always review AI-generated content before use</li>
+                        <li>Verify facts and add your expertise</li>
+                        <li>Disclose AI use to students appropriately</li>
+                        <li>Maintain student privacy and data security</li>
+                        <li>Use AI to enhance, not replace, teaching</li>
+                        <li>Encourage critical thinking about AI outputs</li>
+                    </ul>
+                </div>
+                <div class="ethics-dont">
+                    <h3>✗ DON'T</h3>
+                    <ul>
+                        <li>Use AI outputs without review or editing</li>
+                        <li>Share sensitive student data with AI tools</li>
+                        <li>Rely solely on AI for grading high-stakes work</li>
+                        <li>Ignore bias or errors in AI-generated content</li>
+                        <li>Use AI to replace human connection</li>
+                        <li>Forget to cite AI assistance when required</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="slide-number">11</div>
+        </section>
+
+        <!-- Slide 12: Key Takeaways -->
+        <section class="slide slide-dark" id="slide12">
+            <h2 style="color: white;">Key Takeaways & Next Steps</h2>
+            <div class="takeaways-grid">
+                <div class="takeaways-box">
+                    <h3>📌 KEY TAKEAWAYS</h3>
+                    <div class="takeaway-item">
+                        <div class="takeaway-number">1</div>
+                        <p>AI is a powerful tool that can enhance teaching</p>
+                    </div>
+                    <div class="takeaway-item">
+                        <div class="takeaway-number">2</div>
+                        <p>Start small - try one AI tool at a time</p>
+                    </div>
+                    <div class="takeaway-item">
+                        <div class="takeaway-number">3</div>
+                        <p>Always review and personalize AI outputs</p>
+                    </div>
+                    <div class="takeaway-item">
+                        <div class="takeaway-number">4</div>
+                        <p>AI should augment, not replace, teacher judgment</p>
+                    </div>
+                </div>
+                <div class="next-steps-box">
+                    <h3>🎯 YOUR NEXT STEPS</h3>
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <p>Choose one AI tool to try this week</p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <p>Create one AI-assisted resource</p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <p>Share one success with a colleague</p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <p>Join our AI in Education community</p>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 3rem; font-size: 1.3rem;">
+                <p>🤔 Questions? Reach out at <a href="mailto:1@0604.ai" style="color: var(--accent-gold);">1@0604.ai</a></p>
+            </div>
+            <div class="slide-number">12</div>
+        </section>
+    </div>
+</body>
+</html>

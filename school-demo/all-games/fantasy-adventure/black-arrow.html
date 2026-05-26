@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Black Arrow - An Interactive Adventure</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Times New Roman', serif; background: linear-gradient(135deg, #2c1810 0%, #1a0f0a 100%); min-height: 100vh; color: #f5e6d3; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        h1 { text-align: center; color: #d4af37; text-shadow: 2px 2px 4px #000; margin-bottom: 20px; font-size: 2.5em; }
+        h2 { color: #cd853f; margin-bottom: 15px; }
+        .screen { display: none; background: rgba(20,10,5,0.85); border-radius: 15px; padding: 30px; margin-bottom: 20px; border: 3px solid #8b4513; }
+        .screen.active { display: block; }
+        .btn { background: linear-gradient(180deg, #8b4513, #5c2d0e); color: #f5e6d3; border: 2px solid #d4af37; padding: 12px 25px; font-size: 16px; cursor: pointer; border-radius: 8px; margin: 5px; transition: all 0.3s; font-family: inherit; }
+        .btn:hover { background: linear-gradient(180deg, #a0522d, #8b4513); transform: scale(1.05); }
+        .btn:disabled { background: #444; cursor: not-allowed; opacity: 0.6; }
+        .character-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
+        .character-card { background: rgba(92,45,14,0.4); border: 2px solid #5c2d0e; border-radius: 10px; padding: 15px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .character-card:hover, .character-card.selected { border-color: #d4af37; background: rgba(212,175,55,0.2); transform: scale(1.05); }
+        .character-card h3 { color: #d4af37; margin-bottom: 10px; }
+        .stats-panel { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+        .stat { text-align: center; padding: 10px 20px; background: rgba(92,45,14,0.4); border-radius: 8px; }
+        .stat-name { color: #cd853f; font-size: 12px; text-transform: uppercase; }
+        .stat-value { color: #d4af37; font-size: 24px; font-weight: bold; }
+        .location-map { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .location { background: rgba(60,30,10,0.5); border: 2px solid #8b4513; border-radius: 10px; padding: 15px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .location:hover { background: rgba(92,45,14,0.6); border-color: #d4af37; transform: scale(1.02); }
+        .location.locked { opacity: 0.5; cursor: not-allowed; }
+        .location h3 { color: #d4af37; margin-bottom: 5px; }
+        .location p { font-size: 12px; color: #ccc; }
+        .narrative { background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px; margin-bottom: 20px; line-height: 1.8; font-size: 16px; border-left: 4px solid #cd853f; }
+        .dialogue { background: rgba(40,20,10,0.6); padding: 15px; border-radius: 10px; margin: 10px 0; border-left: 4px solid #d4af37; }
+        .speaker { color: #cd853f; font-weight: bold; }
+        .choices { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+        .choice-btn { background: rgba(92,45,14,0.4); border: 2px solid #5c2d0e; padding: 15px; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-align: left; }
+        .choice-btn:hover { background: rgba(92,45,14,0.7); border-color: #d4af37; }
+        .inventory { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
+        .item { background: rgba(212,175,55,0.2); padding: 8px 15px; border-radius: 20px; border: 1px solid #d4af37; font-size: 14px; }
+        .mini-game { background: rgba(30,15,5,0.6); padding: 20px; border-radius: 10px; text-align: center; margin: 20px 0; }
+        .game-area { min-height: 200px; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 20px; margin: 15px 0; }
+        .archery-range { position: relative; width: 100%; height: 250px; background: linear-gradient(180deg, #87ceeb 0%, #98fb98 70%, #8b4513 100%); border-radius: 10px; overflow: hidden; }
+        .target { position: absolute; right: 50px; top: 50%; transform: translateY(-50%); width: 80px; height: 80px; background: radial-gradient(circle, #fff 0%, #fff 20%, #000 25%, #fff 30%, #ff0000 35%, #fff 40%, #000 45%, #fff 50%, #ff0000 55%, #fff 60%, #000 65%, #fff 70%, #ff0000 75%, #fff 80%, #000 85%, #fff 90%, #000 95%, #fff 100%); border-radius: 50%; }
+        .bow { position: absolute; left: 50px; top: 50%; transform: translateY(-50%); font-size: 50px; }
+        .arrow { position: absolute; left: 100px; top: 50%; width: 60px; font-size: 30px; transition: all 0.5s; }
+        .power-bar { width: 200px; height: 20px; background: rgba(0,0,0,0.5); border-radius: 10px; margin: 10px auto; overflow: hidden; }
+        .power-fill { height: 100%; background: linear-gradient(90deg, #228b22, #ffff00, #ff0000); width: 0%; transition: width 0.1s; }
+        .timing-indicator { position: relative; width: 300px; height: 30px; background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #ffff00, #ff0000); margin: 15px auto; border-radius: 5px; }
+        .timing-cursor { position: absolute; width: 4px; height: 100%; background: #000; left: 50%; }
+        .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px auto; max-width: 400px; }
+        .memory-card { aspect-ratio: 1; background: linear-gradient(135deg, #8b4513, #5c2d0e); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 30px; transition: all 0.3s; }
+        .memory-card:hover { transform: scale(1.05); }
+        .memory-card.matched { background: #d4af37; cursor: default; }
+        .memory-card.flipped { background: #f5e6d3; color: #000; }
+        .riddle-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+        .dice-container { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
+        .dice { width: 80px; height: 80px; background: #f5e6d3; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 40px; color: #000; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .lockpick-area { position: relative; width: 200px; height: 200px; margin: 20px auto; border: 3px solid #d4af37; border-radius: 50%; }
+        .lockpin { position: absolute; width: 20px; height: 60px; background: #8b4513; top: 50%; left: 50%; transform-origin: bottom center; transition: transform 0.1s; }
+        .ending { text-align: center; padding: 40px; }
+        .ending h2 { font-size: 2em; margin-bottom: 20px; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .shake { animation: shake 0.3s; }
+        .game-title { font-size: 14px; color: #888; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>The Black Arrow</h1>
+        <p class="game-title">A Tale of the Wars of the Roses - An Interactive Adventure for EAL Learners</p>
+        
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen active">
+            <h2>England, 1461</h2>
+            <div class="narrative">
+                <p>The Wars of the Roses rage across England. The Yorkists and Lancastrians tear the kingdom apart, and in the lawless North, each lord rules with his own banner.</p>
+                <p style="margin-top: 15px;">You are Richard Shelton, a young squire raised at the fortified tower of Holywater. Your father was murdered by treacherous hands, and four black arrows mark the criminals who must be brought to justice.</p>
+                <p style="margin-top: 15px; color: #cd853f;">"In these troubled times, a man's word is his bond, and his sword is his law." - from the prologue</p>
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn" onclick="startCharacterSelect()">Begin Your Quest</button>
+            </div>
+        </div>
+        
+        <!-- Character Select -->
+        <div id="character-screen" class="screen">
+            <h2>Choose Your Path</h2>
+            <p style="margin-bottom: 20px;">How will you pursue justice in these lawless times?</p>
+            <div class="character-grid">
+                <div class="character-card" onclick="selectCharacter('richard')">
+                    <h3>Richard Shelton</h3>
+                    <p><strong>The Squire</strong></p>
+                    <p style="font-size: 12px; color: #ccc; margin-top: 10px;">The rightful heir to Holywater. Balanced skills with a knight's training.</p>
+                    <p style="font-size: 11px; color: #888; margin-top: 10px;">+2 to all attributes</p>
+                </div>
+                <div class="character-card" onclick="selectCharacter('joanna')">
+                    <h3>Joanna Sedley</h3>
+                    <p><strong>The Lady</strong></p>
+                    <p style="font-size: 12px; color: #ccc; margin-top: 10px;">A lady of noble birth disguised as a page. Clever and persuasive.</p>
+                    <p style="font-size: 11px; color: #888; margin-top: 10px;">+3 Diplomacy, +2 Intelligence</p>
+                </div>
+                <div class="character-card" onclick="selectCharacter('munc')">
+                    <h3>Muncaster</h3>
+                    <p><strong>The Archer</strong></p>
+                    <p style="font-size: 12px; color: #ccc; margin-top: 10px;">A master bowman with secrets. His aim is deadly true.</p>
+                    <p style="font-size: 11px; color: #888; margin-top: 10px;">+4 Archery, +1 Stealth</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" id="confirm-char-btn" onclick="confirmCharacter()" disabled>Confirm Character</button>
+            </div>
+        </div>
+        
+        <!-- Main Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="stats-panel">
+                <div class="stat"><div class="stat-name">Archery</div><div class="stat-value" id="stat-archery">5</div></div>
+                <div class="stat"><div class="stat-name">Strength</div><div class="stat-value" id="stat-strength">5</div></div>
+                <div class="stat"><div class="stat-name">Diplomacy</div><div class="stat-value" id="stat-diplomacy">5</div></div>
+                <div class="stat"><div class="stat-name">Stealth</div><div class="stat-value" id="stat-stealth">5</div></div>
+                <div class="stat"><div class="stat-name">Justice</div><div class="stat-value" id="stat-justice">5</div></div>
+                <div class="stat"><div class="stat-name">Gold</div><div class="stat-value" id="stat-gold">10</div></div>
+            </div>
+            <div class="inventory" id="inventory"></div>
+            
+            <h2 id="location-title">Holywater Tower</h2>
+            <div id="narrative-area" class="narrative"></div>
+            <div id="dialogue-area"></div>
+            <div id="game-area"></div>
+            <div id="choices-area" class="choices"></div>
+        </div>
+        
+        <!-- Mini-Game Screen -->
+        <div id="minigame-screen" class="screen">
+            <h2 id="minigame-title">Mini-Game</h2>
+            <div id="minigame-content" class="mini-game"></div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" onclick="exitMinigame()">Return to Story</button>
+            </div>
+        </div>
+        
+        <!-- Ending Screen -->
+        <div id="ending-screen" class="screen">
+            <div class="ending">
+                <h2 id="ending-title"></h2>
+                <div id="ending-content"></div>
+                <div style="margin-top: 30px;">
+                    <button class="btn" onclick="saveGame()">Save Progress</button>
+                    <button class="btn" onclick="loadGame()">Load Game</button>
+                    <button class="btn" onclick="restartGame()">Play Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        let gameState = {
+            character: null,
+            stats: { archery: 5, strength: 5, diplomacy: 5, stealth: 5, justice: 5 },
+            gold: 10,
+            inventory: [],
+            currentLocation: 'holywater',
+            visitedLocations: ['holywater'],
+            storyProgress: 0,
+            choices: [],
+            arrowsCollected: 0,
+            enemiesDefeated: 0,
+            reputation: 50
+        };
+
+        // Locations
+        const locations = {
+            'holywater': { 
+                name: 'Holywater Tower', 
+                desc: 'Your ancestral home, a fortified tower on the coast. Dame Dick rud welcomed you when you were orphaned. The walls hold memories of your murdered father.',
+                minigame: 'archery',
+                npcs: ['dame-dick', 'arnold'],
+                unlocked: true
+            },
+            'forest': { 
+                name: 'The Dark Forest', 
+                desc: 'Dense woodland between rival territories. Here, outlaws and deserters make their camps. The trees whisper secrets of those who never left.',
+                minigame: 'stealth',
+                npcs: ['outlaw'],
+                unlocked: false
+            },
+            'coast': { 
+                name: 'The Rocky Coast', 
+                desc: 'Jagged cliffs meet the cold northern sea. Fishermen and smugglers alike use these hidden coves. The salt air carries the scent of danger.',
+                minigame: 'timing',
+                npcs: ['fisherman'],
+                unlocked: false
+            },
+            'inn': { 
+                name: 'The Crossed Keys Inn', 
+                desc: 'A travelers\' haven where the roads divide. Here, lords and peasants drink side by side, and information flows as freely as ale.',
+                minigame: 'riddle',
+                npcs: ['innkeeper', 'mystery-man'],
+                unlocked: false
+            },
+            'castle': { 
+                name: 'Dunbar Castle', 
+                desc: 'The stronghold of Sir Owen, ally to the Yorkist cause. Knights and men-at-arms fill the great hall. Here you might find allies against your father\'s killers.',
+                minigame: 'memory',
+                npcs: ['sir-owen'],
+                unlocked: false
+            },
+            'battlefield': { 
+                name: 'The Battlefield', 
+                desc: 'Where the Wars of the Roses meet in bloody combat. The grass is still stained red from the last engagement. Choose your side carefully.',
+                minigame: 'archery',
+                npcs: ['captain'],
+                unlocked: false
+            },
+            'embassy': { 
+                name: 'The Embassy', 
+                desc: 'Where Yorkist and Lancastrian envoys meet in secret. Here, treaties are made and broken. Your next move could change the course of the war.',
+                minigame: 'dice',
+                npcs: ['ambassador'],
+                unlocked: false
+            }
+        };
+
+// NPCs
+        const npcs = {
+            'dame-dick': {
+                name: 'Dame Dick',
+                portrait: '👵',
+                dialogues: [
+                    { text: "Your father was a good man, Richard. He trusted too easily, and that cost him his life. But he lives on in you - I see his courage in your eyes.", options: [
+                        { text: "I will avenge my father, Dame Dick.", effect: () => { modifyStat('justice', 2); modifyStat('strength', 1); } },
+                        { text: "Tell me more about my father's last days.", effect: () => { modifyStat('diplomacy', 1); modifyStat('archery', 1); } }
+                    ]}
+                ]
+            },
+            'arnold': {
+                name: 'Arnold',
+                portrait: '🧙',
+                dialogues: [
+                    { text: "Young squire! The Black Arrow - they say it's a curse. Four men, four arrows. Each one a man of note, struck down. The killer rides with the black crest.", options: [
+                        { text: "I will hunt them to the end of the earth.", effect: () => { modifyStat('stealth', 1); modifyStat('justice', 1); gameState.arrowsCollected++; } },
+                        { text: "What do you know of Sir Bracy?", effect: () => { modifyStat('diplomacy', 2); } }
+                    ]}
+                ]
+            },
+            'outlaw': {
+                name: 'The Outlaw',
+                portrait: '🏴',
+                dialogues: [
+                    { text: "Hold, traveler! These woods answer to no lord. But I see you carry the crest of Holywater. Perhaps we have a common enemy - Sir Bracy has taken much from my band.", options: [
+                        { text: "We may help each other.", effect: () => { modifyStat('diplomacy', 2); modifyStat('stealth', 1); addItem('Forest Map'); } },
+                        { text: "Stand aside, criminal!", effect: () => { modifyStat('strength', 2); modifyStat('reputation', -10); } }
+                    ]}
+                ]
+            },
+            'fisherman': {
+                name: 'Old Fisherman',
+                portrait: '👨‍🦳',
+                dialogues: [
+                    { text: "The sea takes what she wants, young master. I've seen ships go down with gold from both sides of this cursed war. But secrets sink slower than men.", options: [
+                        { text: "What secrets have you seen?", effect: () => { modifyStat('diplomacy', 1); modifyStat('stealth', 1); addItem('Coast Map'); modifyGold(10); } },
+                        { text: "I seek passage across the water.", effect: () => { modifyStat('diplomacy', 2); } }
+                    ]}
+                ]
+            },
+            'innkeeper': {
+                name: 'Innkeeper',
+                portrait: '🧔',
+                dialogues: [
+                    { text: "Welcome to the Crossed Keys! We serve all sorts - Yorkist, Lancastrian, or plain outlaw. Here in the North, we take no sides... but we hear many things.", options: [
+                        { text: "What news from the war?", effect: () => { modifyStat('diplomacy', 2); modifyStat('justice', 1); } },
+                        { text: "I need a room for the night.", effect: () => { modifyGold(-5); addItem('Rested'); modifyStat('strength', 1); } }
+                    ]}
+                ]
+            },
+            'mystery-man': {
+                name: 'Hooded Figure',
+                portrait: '🥷',
+                dialogues: [
+                    { text: "You seek the Black Arrow killer, don't you? I know more than I should. But information has a price... or perhaps a favor.", options: [
+                        { text: "Name your price.", effect: () => { modifyGold(-15); modifyStat('diplomacy', 1); gameState.arrowsCollected++; } },
+                        { text: "I have no gold, but I have skill.", effect: () => { modifyStat('archery', 2); modifyStat('stealth', 1); } }
+                    ]}
+                ]
+            },
+            'sir-owen': {
+                name: 'Sir Owen',
+                portrait: '⚔️',
+                dialogues: [
+                    { text: "Richard Shelton! Your father was a brave man, and brave men are rare in these times. The Yorkist cause needs such men. But Sir Bracy... he serves the Lancastrian rose.", options: [
+                        { text: "I will join your cause.", effect: () => { modifyStat('strength', 2); modifyStat('justice', 2); modifyStat('reputation', 20); } },
+                        { text: "First, I must see my father's murder avenged.", effect: () => { modifyStat('archery', 2); modifyStat('diplomacy', 1); } }
+                    ]}
+                ]
+            },
+            'captain': {
+                name: 'Captain of the Guard',
+                portrait: '🛡️',
+                dialogues: [
+                    { text: "These lands are contested! Choose your side wisely, squire. Fight with us, and you gain York's protection. But cross us... and you cross an army.", options: [
+                        { text: "I fight for justice, not politics.", effect: () => { modifyStat('strength', 2); modifyStat('justice', 1); modifyStat('reputation', -10); } },
+                        { text: "Perhaps we can come to an arrangement.", effect: () => { modifyStat('diplomacy', 2); modifyGold(20); } }
+                    ]}
+                ]
+            },
+            'ambassador': {
+                name: 'The Ambassador',
+                portrait: '🎩',
+                dialogues: [
+                    { text: "Young Shelton. The Crown watches those who seek revenge. But perhaps... your goals align with the Crown's interests. Sir Bracy is a traitor to both sides.", options: [
+                        { text: "Then help me destroy him.", effect: () => { modifyStat('diplomacy', 2); modifyStat('stealth', 2); gameState.arrowsCollected++; } },
+                        { text: "I need no help from the Crown.", effect: () => { modifyStat('strength', 2); modifyStat('reputation', -5); } }
+                    ]}
+                ]
+            }
+        };
+
+        // Memory Game
+        let memoryCards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        const memorySymbols = ['⚔️', '🏰', '🦅', '🌹', '🏴', '🛡️', '⚜️', '🗡️'];
+
+        // Archery Game
+        let archeryScore = 0;
+        let archeryShots = 3;
+        let isAiming = false;
+        let power = 0;
+        let angle = 45;
+
+        // Timing Game
+        let timingScore = 0;
+        let timingPosition = 0;
+        let timingDirection = 1;
+        let timingRunning = false;
+        let timingMoves = 5;
+
+        // Functions
+        function startCharacterSelect() {
+            showScreen('character-screen');
+        }
+
+        function selectCharacter(char) {
+            gameState.character = char;
+            document.querySelectorAll('.character-card').forEach(c => c.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            document.getElementById('confirm-char-btn').disabled = false;
+        }
+
+        function confirmCharacter() {
+            if (!gameState.character) return;
+            
+            switch(gameState.character) {
+                case 'richard':
+                    Object.keys(gameState.stats).forEach(s => gameState.stats[s] += 2);
+                    break;
+                case 'joanna':
+                    gameState.stats.diplomacy += 3;
+                    gameState.stats.archery += 2;
+                    break;
+                case 'munc':
+                    gameState.stats.archery += 4;
+                    gameState.stats.stealth += 1;
+                    break;
+            }
+            
+            updateStats();
+            showScreen('game-screen');
+            enterLocation('holywater');
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function modifyStat(stat, amount) {
+            gameState.stats[stat] = Math.max(0, Math.min(20, gameState.stats[stat] + amount));
+            updateStats();
+        }
+
+        function modifyGold(amount) {
+            gameState.gold = Math.max(0, gameState.gold + amount);
+            updateStats();
+        }
+
+        function modifyReputation(amount) {
+            gameState.reputation = Math.max(0, Math.min(100, gameState.reputation + amount));
+        }
+
+        function addItem(item) {
+            if (!gameState.inventory.includes(item)) {
+                gameState.inventory.push(item);
+                updateInventory();
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('stat-archery').textContent = gameState.stats.archery;
+            document.getElementById('stat-strength').textContent = gameState.stats.strength;
+            document.getElementById('stat-diplomacy').textContent = gameState.stats.diplomacy;
+            document.getElementById('stat-stealth').textContent = gameState.stats.stealth;
+            document.getElementById('stat-justice').textContent = gameState.stats.justice;
+            document.getElementById('stat-gold').textContent = gameState.gold;
+        }
+
+        function updateInventory() {
+            const inv = document.getElementById('inventory');
+            inv.innerHTML = '<strong>Items:</strong> ';
+            gameState.inventory.forEach(item => {
+                inv.innerHTML += `<span class="item">${item}</span> `;
+            });
+        }
+
+        function enterLocation(locId) {
+            const loc = locations[locId];
+            if (!loc || loc.locked) return;
+            
+            gameState.currentLocation = locId;
+            if (!gameState.visitedLocations.includes(locId)) {
+                gameState.visitedLocations.push(locId);
+            }
+            
+            document.getElementById('location-title').textContent = loc.name;
+            document.getElementById('narrative-area').innerHTML = `<p>${loc.desc}</p>`;
+            
+            gameState.storyProgress = Math.min(100, gameState.storyProgress + 12);
+            checkLocationUnlocks();
+            showNPCDialogue();
+        }
+
+        function checkLocationUnlocks() {
+            if (gameState.storyProgress >= 12 && gameState.visitedLocations.includes('holywater')) {
+                locations['forest'].unlocked = true;
+            }
+            if (gameState.reputation >= 40) {
+                locations['inn'].unlocked = true;
+                locations['coast'].unlocked = true;
+            }
+            if (gameState.stats.justice >= 8) {
+                locations['castle'].unlocked = true;
+            }
+            if (gameState.stats.archery >= 8) {
+                locations['battlefield'].unlocked = true;
+            }
+            if (gameState.stats.diplomacy >= 8) {
+                locations['embassy'].unlocked = true;
+            }
+        }
+
+        function showNPCDialogue() {
+            const loc = locations[gameState.currentLocation];
+            if (!loc.npcs || loc.npcs.length === 0) {
+                showLocationChoices();
+                return;
+            }
+            
+            const npcId = loc.npcs[0];
+            const npc = npcs[npcId];
+            const dialogue = npc.dialogues[0];
+            
+            let dialogueHtml = `<div class="dialogue"><span class="speaker">${npc.portrait} ${npc.name}:</span> "${dialogue.text}"</div>`;
+            
+            let choicesHtml = '<div class="choices">';
+            dialogue.options.forEach((opt, idx) => {
+                choicesHtml += `<button class="choice-btn" onclick="chooseDialogue(${idx}, '${npcId}')">${opt.text}</button>`;
+            });
+            choicesHtml += '</div>';
+            
+            document.getElementById('dialogue-area').innerHTML = dialogueHtml;
+            document.getElementById('choices-area').innerHTML = choicesHtml;
+            document.getElementById('game-area').innerHTML = '';
+        }
+
+        function chooseDialogue(idx, npcId) {
+            const npc = npcs[npcId];
+            const dialogue = npc.dialogues[0];
+            
+            if (dialogue.options[idx].effect) {
+                dialogue.options[idx].effect();
+            }
+            
+            gameState.choices.push({ npc: npcId, choice: idx });
+            
+            document.getElementById('dialogue-area').innerHTML = `<div class="dialogue"><span class="speaker">${npc.portrait} ${npc.name}:</span> "May fortune favor your cause."</div>`;
+            showLocationChoices();
+        }
+
+        function showLocationChoices() {
+            const loc = locations[gameState.currentLocation];
+            
+            let html = `<div class="location-map">`;
+            Object.keys(locations).forEach(locId => {
+                const l = locations[locId];
+                const isUnlocked = l.unlocked;
+                const isVisited = gameState.visitedLocations.includes(locId);
+                html += `<div class="location ${isUnlocked ? '' : 'locked'}" onclick="${isUnlocked ? `enterLocation('${locId}')` : ''}">
+                    <h3>${l.name}</h3>
+                    <p>${isUnlocked ? (isVisited ? 'Visited' : 'New Area') : 'Locked'}</p>
+                </div>`;
+            });
+            html += '</div>';
+            
+            html += '<h3 style="margin-top: 20px; color: #cd853f;">Actions</h3>';
+            html += '<div class="choices">';
+            html += `<button class="choice-btn" onclick="startMinigame('${loc.minigame}')">Practice: ${getMinigameName(loc.minigame)} (Costs 5 Gold)</button>`;
+            html += '<button class="choice-btn" onclick="checkEnding()">Check Your Destiny</button>';
+            html += '<button class="choice-btn" onclick="saveGame()">Save Game</button>';
+            html += '<button class="choice-btn" onclick="loadGame()">Load Game</button>';
+            html += '</div>';
+            
+            document.getElementById('game-area').innerHTML = html;
+            document.getElementById('choices-area').innerHTML = '';
+        }
+
+        function getMinigameName(game) {
+            const names = {
+                'archery': 'Archery Challenge - Master the Longbow',
+                'memory': 'Memory Match - Remember Your Enemies',
+                'stealth': 'Stealth Challenge - Move Like Shadow',
+                'timing': 'Sailing Challenge - Read the Waves',
+                'riddle': 'Tournament Riddles - Prove Your Wit',
+                'dice': 'Dice Game - Fortune Favors the Bold'
+            };
+            return names[game] || 'Mini-Game';
+        }
+
+        function startMinigame(game) {
+            if (gameState.gold < 5) {
+                alert('Not enough gold! You need at least 5 gold to practice.');
+                return;
+            }
+            modifyGold(-5);
+            
+            showScreen('minigame-screen');
+            
+            switch(game) {
+                case 'archery': startArcheryGame(); break;
+                case 'memory': startMemoryGame(); break;
+                case 'stealth': startStealthGame(); break;
+                case 'timing': startTimingGame(); break;
+                case 'riddle': startRiddleGame(); break;
+                case 'dice': startDiceGame(); break;
+            }
+        }
+
+        // Archery Game
+        function startArcheryGame() {
+            document.getElementById('minigame-title').textContent = "The Longbow Challenge";
+            archeryScore = 0;
+            archeryShots =3;
+            
+            let html = '<p>Master the English longbow! Adjust your aim and power, then shoot.</p>';
+            html += '<div class="archery-range" id="archery-range">';
+            html += '<div class="bow">🏹</div>';
+            html += '<div class="arrow" id="arrow">�</div>';
+            html += '<div class="target"></div>';
+            html += '</div>';
+            html += '<p>Power: <span id="power-text">50</span>%</p>';
+            html += '<input type="range" id="power-slider" min="20" max="100" value="50" onchange="updatePower(this.value)" style="width: 200px;">';
+            html += '<p>Angle: <span id="angle-text">45</span>°</p>';
+            html += '<input type="range" id="angle-slider" min="20" max="80" value="45" onchange="updateAngle(this.value)" style="width: 200px;">';
+            html += '<p>Shots: <span id="shots-text">3</span> | Score: <span id="archery-score">0</span></p>';
+            html += `<button class="btn" onclick="shootArrow()" id="shoot-btn">Shoot!</button>`;
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function updatePower(val) {
+            power = parseInt(val);
+            document.getElementById('power-text').textContent = power;
+        }
+
+        function updateAngle(val) {
+            angle = parseInt(val);
+            document.getElementById('angle-text').textContent = angle;
+        }
+
+        function shootArrow() {
+            if (archeryShots <= 0) return;
+            
+            document.getElementById('shoot-btn').disabled = true;
+            archeryShots--;
+            document.getElementById('shots-text').textContent = archeryShots;
+            
+            const arrow = document.getElementById('arrow');
+            arrow.style.top = '50%';
+            
+            // Calculate hit based on stats and timing
+            const skillBonus = gameState.stats.archery * 2;
+            const randomFactor = Math.random() * 100;
+            const hitChance = skillBonus + (100 - Math.abs(power - 50) * 2) + (100 - Math.abs(angle - 45) * 3);
+            
+            // Animate arrow
+            arrow.style.transition = 'all 0.8s ease-out';
+            arrow.style.top = '50%';
+            arrow.style.transform = `rotate(${angle - 90}deg)`;
+            
+            setTimeout(() => {
+                if (randomFactor < hitChance / 2) {
+                    // Bullseye!
+                    archeryScore += 10;
+                    arrow.style.right = '50px';
+                } else if (randomFactor < hitChance) {
+                    // Hit
+                    archeryScore += 5;
+                    arrow.style.right = '100px';
+                } else {
+                    // Miss
+                    arrow.style.right = '150px';
+                }
+                document.getElementById('archery-score').textContent = archeryScore;
+                
+                if (archeryShots > 0) {
+                    setTimeout(() => {
+                        arrow.style.right = 'auto';
+                        arrow.style.left = '100px';
+                        document.getElementById('shoot-btn').disabled = false;
+                    }, 500);
+                } else {
+                    setTimeout(() => {
+                        if (archeryScore >= 15) {
+                            modifyStat('archery', 2);
+                            modifyGold(15);
+                            alert(`Excellent shooting! You scored ${archeryScore} points!`);
+                        } else if (archeryScore >= 5) {
+                            modifyStat('archery', 1);
+                            modifyGold(5);
+                            alert(`Good effort! You scored ${archeryScore} points.`);
+                        } else {
+                            alert(`You scored ${archeryScore} points. Keep practicing!`);
+                        }
+                        showLocationChoices();
+                        showScreen('game-screen');
+                    }, 1000);
+                }
+            }, 800);
+        }
+
+        // Memory Game
+        function startMemoryGame() {
+            document.getElementById('minigame-title').textContent = "Remember Your Enemies";
+            matchedPairs = 0;
+            flippedCards = [];
+            memoryCards = [...memorySymbols, ...memorySymbols].sort(() => Math.random() - 0.5);
+            
+            let html = '<p>Match the war symbols to prove your memory!</p>';
+            html += '<div class="memory-grid">';
+            memoryCards.forEach((sym, idx) => {
+                html += `<div class="memory-card" id="mem-${idx}" onclick="flipCard(${idx})">?</div>`;
+            });
+            html += '</div>';
+            html += '<p id="memory-status">Matches: 0 / 8</p>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function flipCard(idx) {
+            if (flippedCards.length >= 2) return;
+            if (flippedCards.includes(idx)) return;
+            
+            const card = document.getElementById(`mem-${idx}`);
+            card.textContent = memoryCards[idx];
+            card.classList.add('flipped');
+            flippedCards.push(idx);
+            
+            if (flippedCards.length === 2) {
+                setTimeout(checkMemoryMatch, 800);
+            }
+        }
+
+        function checkMemoryMatch() {
+            const [idx1, idx2] = flippedCards;
+            
+            if (memoryCards[idx1] === memoryCards[idx2]) {
+                document.getElementById(`mem-${idx1}`).classList.add('matched');
+                document.getElementById(`mem-${idx2}`).classList.add('matched');
+                matchedPairs++;
+                document.getElementById('memory-status').textContent = `Matches: ${matchedPairs} / 8`;
+                
+                if (matchedPairs === 8) {
+                    setTimeout(() => {
+                        modifyStat('diplomacy', 2);
+                        modifyStat('stealth', 1);
+                        modifyGold(15);
+                        alert('Excellent! You remember well!');
+                        showLocationChoices();
+                        showScreen('game-screen');
+                    }, 500);
+                }
+            } else {
+                document.getElementById(`mem-${idx1}`).textContent = '?';
+                document.getElementById(`mem-${idx2}`).textContent = '?';
+                document.getElementById(`mem-${idx1}`).classList.remove('flipped');
+                document.getElementById(`mem-${idx2}`).classList.remove('flipped');
+            }
+            flippedCards = [];
+        }
+
+        // Stealth Game
+        function startStealthGame() {
+            document.getElementById('minigame-title').textContent = "Move Like a Shadow";
+            timingScore = 0;
+            timingMoves = 8;
+            
+            let html = '<p>Press SPACE at the right moment to sneak past the guards!</p>';
+            html += '<div class="timing-indicator" id="timing-bar">';
+            html += '<div class="timing-cursor" id="timing-cursor"></div>';
+            html += '<div id="timing-zone" style="position:absolute; left:40%; width:20%; height:100%; background:rgba(0,255,0,0.3); border:2px solid #0f0;"></div>';
+            html += '</div>';
+            html += '<p>Moves left: <span id="timing-moves">8</span> | Successes: <span id="timing-successes">0</span></p>';
+            html += '<button class="btn" onclick="startStealthTiming()">Start Sneaking</button>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function startStealthTiming() {
+            timingRunning = true;
+            timingPosition = 0;
+            timingDirection = 1;
+            
+            const moveInterval = setInterval(() => {
+                if (!timingRunning) {
+                    clearInterval(moveInterval);
+                    return;
+                }
+                
+                timingPosition += timingDirection * 2;
+                if (timingPosition >= 100 || timingPosition <= 0) timingDirection *= -1;
+                
+                document.getElementById('timing-cursor').style.left = timingPosition + '%';
+            }, 30);
+        }
+
+        document.addEventListener('keydown', function stealthInput(e) {
+            if (e.code === 'Space' && timingRunning && document.getElementById('minigame-screen').classList.contains('active')) {
+                e.preventDefault();
+                timingMoves--;
+                document.getElementById('timing-moves').textContent = timingMoves;
+                
+                // Check if in green zone (40-60%)
+                if (timingPosition >= 40 && timingPosition <= 60) {
+                    timingScore++;
+                    document.getElementById('timing-successes').textContent = timingScore;
+                    document.getElementById('timing-bar').classList.add('glow');
+                    setTimeout(() => document.getElementById('timing-bar').classList.remove('glow'), 300);
+                } else {
+                    document.getElementById('timing-bar').classList.add('shake');
+                    setTimeout(() => document.getElementById('timing-bar').classList.remove('shake'), 300);
+                }
+                
+                if (timingMoves <= 0) {
+                    timingRunning = false;
+                    setTimeout(() => {
+                        if (timingScore >= 5) {
+                            modifyStat('stealth', 2);
+                            modifyGold(15);
+                            alert(`Sneaky! ${timingScore} successes!`);
+                        } else {
+                            modifyStat('stealth', 1);
+                            alert(`${timingScore} successes. The guards grew suspicious.`);
+                        }
+                        showLocationChoices();
+                        showScreen('game-screen');
+                    }, 500);
+                }
+            }
+        });
+
+        // Timing Game (Sailing)
+        function startTimingGame() {
+            document.getElementById('minigame-title').textContent = "Read the Waves";
+            timingScore = 0;
+            timingMoves = 5;
+            
+            let html = '<p>Navigate the rocky coast! Press SPACE when the cursor is in the safe zone.</p>';
+            html += '<div class="timing-indicator" id="timing-bar">';
+            html += '<div class="timing-cursor" id="timing-cursor"></div>';
+            html += '<div id="timing-zone" style="position:absolute; left:35%; width:30%; height:100%; background:rgba(0,100,200,0.3); border:2px solid #00f;"></div>';
+            html += '</div>';
+            html += '<p>Waves to navigate: <span id="timing-moves">5</span> | Safe passages: <span id="timing-successes">0</span></p>';
+            html += '<button class="btn" onclick="startTimingLoop()">Set Sail!</button>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function startTimingLoop() {
+            timingRunning = true;
+            timingPosition = 0;
+            timingDirection = 1;
+            
+            const interval = setInterval(() => {
+                if (!timingRunning) {
+                    clearInterval(interval);
+                    return;
+                }
+                
+                timingPosition += timingDirection * 3;
+                if (timingPosition >= 100 || timingPosition <= 0) timingDirection *= -1;
+                document.getElementById('timing-cursor').style.left = timingPosition + '%';
+            }, 40);
+        }
+
+        // Riddle Game
+        function startRiddleGame() {
+            document.getElementById('minigame-title').textContent = "Tournament Riddles";
+            
+            const riddles = [
+                { q: "I am the beginning of eternity, the end of time and space, the beginning of every end, and the end of every place. What am I?", a: "e", options: ["earth", "e", "eye", "echo"] },
+                { q: "What has a head and a tail but no body?", a: "coin", options: ["snake", "coin", "river", "ghost"] },
+                { q: "The more you take, the more you leave behind. What am I?", a: "footsteps", options: ["memories", "footsteps", "breath", "time"] },
+                { q: "I have cities but no houses, forests but no trees, and water but no fish. What am I?", a: "map", options: ["dream", "mirror", "map", "painting"] },
+                { q: "What can travel around the world while staying in a corner?", a: "stamp", options: ["sun", "moon", "stamp", "shadow"] }
+            ];
+            
+            const riddle = riddles[Math.floor(Math.random() * riddles.length)];
+            
+            let html = `<p>${riddle.q}</p>`;
+            html += '<div class="riddle-options">';
+            riddle.options.forEach(opt => {
+                html += `<button class="choice-btn" onclick="answerRiddle('${opt}', '${riddle.a}')">${opt.charAt(0).toUpperCase() + opt.slice(1)}</button>`;
+            });
+            html += '</div>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function answerRiddle(answer, correct) {
+            if (answer === correct) {
+                modifyStat('diplomacy', 2);
+                modifyGold(10);
+                alert('Correct! Your wisdom shines forth.');
+            } else {
+                modifyStat('diplomacy', 1);
+                alert(`The answer was "${correct}".`);
+            }
+            showLocationChoices();
+            showScreen('game-screen');
+        }
+
+        // Dice Game
+        function startDiceGame() {
+            document.getElementById('minigame-title').textContent = "Fortune Favors the Bold";
+            
+            let html = '<p>Test your luck in the game of dice!</p>';
+            html += '<div class="dice-container">';
+            html += '<div class="dice" id="dice1">?</div>';
+            html += '<div class="dice" id="dice2">?</div>';
+            html += '</div>';
+            html += '<p>Roll and try to beat 7! Win: 2x bet | Lose: lose bet</p>';
+            html += '<button class="btn" onclick="rollDice()">Roll Dice (Bet 5 Gold)</button>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function rollDice() {
+            if (gameState.gold < 5) {
+                alert('Not enough gold!');
+                return;
+            }
+            modifyGold(-5);
+            
+            const d1 = Math.floor(Math.random() * 6) + 1;
+            const d2 = Math.floor(Math.random() * 6) + 1;
+            
+            document.getElementById('dice1').textContent = d1;
+            document.getElementById('dice2').textContent = d2;
+            
+            setTimeout(() => {
+                const total = d1 + d2;
+                if (total > 7) {
+                    modifyGold(15);
+                    alert(`You rolled ${total}! You win 15 gold!`);
+                } else if (total < 7) {
+                    alert(`You rolled ${total}. You lose.`);
+                } else {
+                    modifyGold(5);
+                    alert(`You rolled 7! Your bet is returned.`);
+                }
+                showLocationChoices();
+                showScreen('game-screen');
+            }, 1000);
+        }
+
+        function exitMinigame() {
+            timingRunning = false;
+            showLocationChoices();
+            showScreen('game-screen');
+        }
+
+        function checkEnding() {
+            gameState.storyProgress = 100;
+            
+            let endingTitle = '';
+            let endingContent = '';
+            
+            if (gameState.arrowsCollected >= 4) {
+                endingTitle = 'Justice Achieved';
+                endingContent = `
+                    <p>You have collected all four Black Arrows and brought your father's murderers to justice!</p>
+                    <p style="margin-top: 20px;">Sir Bracy and his co-conspirators face the executioner's block. The Black Arrow conspiracy is ended.</p>
+                    <p style="margin-top: 20px; color: #d4af37;">"The law of England shall prevail, and no man shall escape justice."</p>
+                    <p style="margin-top: 20px;"><strong>Final Justice:</strong> ${gameState.stats.justice} | <strong>Arrows Collected:</strong> ${gameState.arrowsCollected}/4</p>
+                `;
+            } else if (gameState.reputation >= 80 && gameState.stats.strength >= 10) {
+                endingTitle = 'Knight of the Realm';
+                endingContent = `
+                    <p>Your deeds have earned you a knighthood! King Edward himself confers the honor upon you.</p>
+                    <p style="margin-top: 20px;">You lead men in battle for the Yorkist cause. The Wars of the Roses continue, but you fight with honor.</p>
+                    <p style="margin-top: 20px; color: #cd853f;">Sir Richard Shelton, Knight of the Realm, defender of justice.</p>
+                    <p style="margin-top: 20px;"><strong>Final Strength:</strong> ${gameState.stats.strength} | <strong>Reputation:</strong> ${gameState.reputation}</p>
+                `;
+            } else if (gameState.stats.diplomacy >= 12) {
+                endingTitle = 'The Diplomat';
+                endingContent = `
+                    <p>Your silver tongue has forged alliances where swords could not.</p>
+                    <p style="margin-top: 20px;">You serve as an ambassador, preventing battles and saving lives through clever negotiation.</p>
+                    <p style="margin-top: 20px; color: #888;">Perhaps justice need not always be served with steel.</p>
+                    <p style="margin-top: 20px;"><strong>Final Diplomacy:</strong> ${gameState.stats.diplomacy}</p>
+                `;
+            } else if (gameState.stats.stealth >= 12) {
+                endingTitle = 'The Shadow';
+                endingContent = `
+                    <p>You have become a master of secrets and shadows.</p>
+                    <p style="margin-top: 20px;">Your enemies never see you coming. You work in darkness, striking at corruption from within.</p>
+                    <p style="margin-top: 20px; color: #666;">The Black Arrow killer... perhaps it is you, in the end.</p>
+                    <p style="margin-top: 20px;"><strong>Final Stealth:</strong> ${gameState.stats.stealth}</p>
+                `;
+            } else {
+                endingTitle = 'A Life in Interesting Times';
+                endingContent = `
+                    <p>The Wars of the Roses rage on. You have carved your own path through the chaos.</p>
+                    <p style="margin-top: 20px;">Not the greatest hero, nor the worst villain. Just a person trying to survive in troubled times.</p>
+                    <p style="margin-top: 20px; color: #888;">"These are interesting times," the old folk say. "May you live in them."</p>
+                    <p style="margin-top: 20px;"><strong>Final Stats:</strong> Archery ${gameState.stats.archery} | Strength ${gameState.stats.strength} | Diplomacy ${gameState.stats.diplomacy} | Stealth ${gameState.stats.stealth} | Justice ${gameState.stats.justice}</p>
+                `;
+            }
+            
+            document.getElementById('ending-title').textContent = endingTitle;
+            document.getElementById('ending-content').innerHTML = endingContent;
+            showScreen('ending-screen');
+        }
+
+        function saveGame() {
+            localStorage.setItem('blackArrowSave', JSON.stringify(gameState));
+            alert('Game saved!');
+        }
+
+        function loadGame() {
+            const saved = localStorage.getItem('blackArrowSave');
+            if (saved) {
+                gameState = JSON.parse(saved);
+                updateStats();
+                updateInventory();
+                showScreen('game-screen');
+                enterLocation(gameState.currentLocation);
+            } else {
+                alert('No saved game found!');
+            }
+        }
+
+        function restartGame() {
+            gameState = {
+                character: null,
+                stats: { archery: 5, strength: 5, diplomacy: 5, stealth: 5, justice: 5 },
+                gold: 10,
+                inventory: [],
+                currentLocation: 'holywater',
+                visitedLocations: ['holywater'],
+                storyProgress: 0,
+                choices: [],
+                arrowsCollected: 0,
+                enemiesDefeated: 0,
+                reputation: 50
+            };
+            
+            Object.keys(locations).forEach(k => {
+                if (k !== 'holywater') locations[k].unlocked = false;
+            });
+            locations['forest'].unlocked = true;
+            
+            showScreen('start-screen');
+        }
+    </script>
+</body>
+</html>

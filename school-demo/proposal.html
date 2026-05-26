@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI for Education — NAS Jiaxing Proposal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #1a237e;
+            --navy-light: #283593;
+            --gold: #b8860b;
+            --gold-light: #d4a574;
+            --cream: #faf6f0;
+            --text: #2c1810;
+            --text-light: #5d4037;
+            --border: rgba(44,24,16,0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        .page {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 40px rgba(0,0,0,0.05);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid var(--gold);
+            padding-bottom: 2rem;
+            margin-bottom: 2.5rem;
+        }
+        .school-badge {
+            display: inline-block;
+            background: var(--navy);
+            color: white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+        .meta {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--navy);
+            margin: 2.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--gold-light);
+        }
+        h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--navy-light);
+            margin: 1.5rem 0 0.5rem;
+        }
+        p { margin-bottom: 1rem; }
+        .highlight-box {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+        }
+        .highlight-box h3 { color: var(--gold-light); margin-top: 0; }
+        ul, ol {
+            margin: 0.5rem 0 1rem 1.5rem;
+        }
+        li { margin-bottom: 0.4rem; }
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        .spec-table th {
+            background: var(--navy);
+            color: white;
+            padding: 0.6rem 1rem;
+            text-align: left;
+            font-weight: 500;
+        }
+        .spec-table td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .spec-table tr:nth-child(even) { background: var(--cream); }
+        .ask-box {
+            background: var(--cream);
+            border: 2px solid var(--gold);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        .ask-box h3 {
+            color: var(--navy);
+            margin-top: 0;
+            text-align: center;
+        }
+        .ask-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .ask-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .ask-text h4 { margin-bottom: 0.3rem; color: var(--navy); }
+        .ask-text p { margin: 0; font-size: 0.95rem; }
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--gold);
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        .page-break {
+            page-break-after: always;
+            border-top: 3px dashed var(--border);
+            margin: 2rem 0;
+            padding-top: 2rem;
+        }
+        @media print {
+            .page { box-shadow: none; max-width: 100%; }
+            body { background: white; }
+            .page-break { page-break-before: always; border: none; margin: 0; padding: 0; }
+        }
+        @media (max-width: 700px) {
+            .two-col { grid-template-columns: 1fr; }
+            h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <div class="header">
+        <div class="school-badge">NAS JIAXING · PROFESSIONAL DEVELOPMENT</div>
+        <h1>AI for Education Initiative</h1>
+        <p class="subtitle">Building Local AI Infrastructure for Teachers and Students</p>
+        <p class="meta">Prepared by William Morris | May 2026</p>
+    </div>
+
+    <h2>Executive Summary</h2>
+    <p>We propose establishing a dedicated AI education server at NAS Jiaxing — a local, privacy-focused platform that gives teachers and students direct access to cutting-edge AI tools without relying on external cloud services or VPNs.</p>
+
+    <div class="highlight-box">
+        <h3>The Problem We Are Solving</h3>
+        <p>Teachers want to use AI in classrooms, but face three barriers:</p>
+        <ol>
+            <li><strong>Access blocked</strong> — Many AI tools (ChatGPT, Claude, Gemini) are blocked on school networks without VPN</li>
+            <li><strong>Data privacy</strong> — Uploading student work to foreign cloud services raises compliance concerns</li>
+            <li><strong>Cost and complexity</strong> — Premium AI subscriptions are expensive; teachers don't know where to start</li>
+        </ol>
+    </div>
+
+    <h2>Our Solution</h2>
+    <p>A local AI server running inside the school network, hosting open-source AI models and educational tools that are:</p>
+    <ul>
+        <li><strong>Always accessible</strong> — No VPN needed; works on school WiFi</li>
+        <li><strong>Fully private</strong> — All data stays inside the school; no external cloud uploads</li>
+        <li><strong>Free to use</strong> — Open-source software; no subscription fees</li>
+        <li><strong>Educational</strong> — Designed specifically for teaching, not general chat</li>
+    </ul>
+
+    <h2>What Is Already Working (Demo)</h2>
+    <p>We have built a proof-of-concept running on a personal workstation. This demonstrates that the technology works and the concept is viable.</p>
+
+    <h3>Current Demo Machine Specs</h3>
+    <table class="spec-table">
+        <tr><th>Component</th><th>Specification</th></tr>
+        <tr><td>CPU</td><td>AMD Ryzen 9 7950X3D (16 cores, 32 threads)</td></tr>
+        <tr><td>RAM</td><td>96GB DDR5</td></tr>
+        <tr><td>GPU</td><td>AMD RX 7900 XTX (24GB VRAM)</td></tr>
+        <tr><td>Storage</td><td>2TB NVMe SSD + 4TB HDD</td></tr>
+        <tr><td>OS</td><td>Ubuntu 24.04 LTS</td></tr>
+        <tr><td>Network</td><td>School LAN — accessible from any classroom</td></tr>
+        <tr><td>Total Build Cost</td><td>~¥20,000 (personal funds)</td></tr>
+    </table>
+
+    <p><em>This machine currently serves educational content and AI tools to the school network. It proves the concept. For a permanent school solution, we recommend a purpose-built server at roughly half the cost.</em></p>
+
+    <div class="page-break"></div>
+
+    <h2>Proposed School Server — Two Configurations</h2>
+    <p>Both configurations use professional server-grade hardware sourced from Taobao's used enterprise market. Both are significantly more cost-effective than the ¥20,000 demo build while delivering far more capability than any new desktop PC at the same price.</p>
+
+    <div class="highlight-box">
+        <h3>⭐ Recommended: Standard Tier (A1 Rackmount)</h3>
+        <p>A professional 2U rackmount server with 32-core AMD EPYC processor, dual Tesla A2 GPUs, and enterprise-grade reliability. Redundant power, 10GbE networking, and massive expansion capacity. This is what real data centers use — repurposed for education.</p>
+    </div>
+
+    <h3>Option A1: GIGABYTE G292-Z20 Rackmount — Standard Configuration (~¥12,050) ⭐</h3>
+    <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem;"><em>2U enterprise server. Sourced from Taobao used/server refurb market. Tested before shipping. 1-year seller warranty.</em></p>
+    <table class="spec-table">
+        <tr><th>Component</th><th>Specification</th><th>Est. Price</th></tr>
+        <tr><td>Chassis</td><td>GIGABYTE G292-Z20 2U Rackmount Server (used)</td><td rowspan="3">¥4,700</td></tr>
+        <tr><td>Motherboard</td><td>MZ22-G20 (SP3 socket, 8x DDR4, 10x PCIe x16)</td></tr>
+        <tr><td>CPU</td><td>AMD EPYC 7532 — 32 cores / 64 threads, 2.4GHz, 256MB L3 cache</td></tr>
+        <tr><td>RAM</td><td><strong>256GB DDR4 ECC RDIMM</strong> (8x 32GB, used, Samsung/SK Hynix) — expandable to 512GB</td><td><strong>¥2,400</strong></td></tr>
+        <tr><td>GPU</td><td><strong>2x NVIDIA Tesla A2</strong> (16GB GDDR6 each, 60W, datacenter AI inference) — expandable to 4x or more</td><td><strong>¥4,000</strong></td></tr>
+        <tr><td>Storage (System)</td><td>1TB NVMe SSD (used enterprise, e.g., Intel P4510 / Samsung PM981)</td><td>¥400</td></tr>
+        <tr><td>Storage (Data)</td><td>4TB HDD (used enterprise, e.g., HGST / Seagate Exos)</td><td>¥350</td></tr>
+        <tr><td>Power</td><td>2200W Dual Redundant PSU (hot-swap, included with chassis)</td><td>Included</td></tr>
+        <tr><td>Cooling</td><td>4x Server-grade fans with thermal management (included)</td><td>Included</td></tr>
+        <tr><td>Network</td><td>Dual 10GbE SFP+ ports (onboard) + IPMI remote management</td><td>Included</td></tr>
+        <tr><td>Rails / Rack Kit</td><td>Sliding rail kit for server cabinet (recommended)</td><td>¥200</td></tr>
+        <tr><td>OS & Software</td><td>Ubuntu 24.04 LTS (free, open-source)</td><td>¥0</td></tr>
+        <tr><td><strong>Total</strong></td><td><strong>32 cores · 256GB RAM · 32GB VRAM (2x Tesla A2) · Rackmount · 10GbE · Redundant PSU</strong></td><td><strong>~¥12,050</strong></td></tr>
+    </table>
+
+        <h2>Two Budget Tiers</h2>
+    <p>Both tiers use professional server-grade hardware. The difference is configuration scale — choose what fits the school's needs and resources.</p>
+
+    <table class="spec-table">
+        <tr><th>Tier</th><th>Configuration</th><th>Price</th><th>Best For</th></tr>
+        <tr><td>🟢 <strong>Entry</strong></td><td>A1 Rackmount — 32 cores, <strong>128GB RAM</strong>, <strong>1x Tesla A2</strong> (16GB VRAM), 1TB NVMe + 4TB HDD, redundant PSU, 10GbE</td><td><strong>~¥8,850</strong></td><td>Pilot program, 5–10 teachers, proof of concept</td></tr>
+        <tr><td>⭐ <strong>Standard</strong></td><td>A1 Rackmount — 32 cores, <strong>256GB RAM</strong>, <strong>2x Tesla A2</strong> (32GB VRAM), 1TB NVMe + 4TB HDD, redundant PSU, 10GbE</td><td><strong>~¥12,050</strong></td><td>Full deployment, all teachers and students, long-term growth</td></tr>
+    </table>
+
+    <div class="highlight-box" style="background: linear-gradient(135deg, var(--accent-sage) 0%, #4a7c59 100%);">
+        <h3>Upgrade Path</h3>
+        <p>Both tiers use the same components and can be upgraded later without replacing the entire machine:</p>
+        <ul>
+            <li><strong>Entry → Standard:</strong> Add 4x 32GB RAM sticks (+¥1,200) and a second Tesla A2 (+¥2,000) = ~¥12,050 total</li>
+            <li><strong>Any tier:</strong> Add more Tesla A2 GPUs (¥2,000 each) as AI usage grows. A1 rackmount can hold up to 4–6 cards.</li>
+        </ul>
+    </div>
+
+    <h3>Side-by-Side Comparison</h3>
+    <table class="spec-table">
+        <tr><th>Feature</th><th>Entry Tier (A1 Rackmount)</th><th>Standard Tier (A1 Rackmount) ⭐</th></tr>
+        <tr><td>CPU Cores</td><td>32 cores / 64 threads</td><td>32 cores / 64 threads</td></tr>
+        <tr><td>Form Factor</td><td>🟢 2U Rackmount (server room)</td><td>🟢 2U Rackmount (server room)</td></tr>
+        <tr><td>Power Supply</td><td>🟢 Dual 2200W redundant (hot-swap)</td><td>🟢 Dual 2200W redundant (hot-swap)</td></tr>
+        <tr><td>GPU / VRAM</td><td>1x Tesla A2 (16GB)</td><td>2x Tesla A2 (32GB total)</td></tr>
+        <tr><td>GPU Expansion</td><td>🟢 10x PCIe slots — add second GPU later</td><td>🟢 10x PCIe slots — add more GPUs later</td></tr>
+        <tr><td>RAM</td><td>128GB DDR4 ECC</td><td>🟢 256GB DDR4 ECC</td></tr>
+        <tr><td>RAM Slots / Max</td><td>8x DDR4 (max 512GB)</td><td>8x DDR4 (max 512GB)</td></tr>
+        <tr><td>Drive Bays</td><td>🟢 8x hot-swap 2.5" + NVMe</td><td>🟢 8x hot-swap 2.5" + NVMe</td></tr>
+        <tr><td>Network</td><td>🟢 Dual 10GbE SFP+</td><td>🟢 Dual 10GbE SFP+</td></tr>
+        <tr><td>Remote Management</td><td>🟢 IPMI/iKVM</td><td>🟢 IPMI/iKVM</td></tr>
+        <tr><td>OS</td><td>Ubuntu 24.04 LTS</td><td>Ubuntu 24.04 LTS</td></tr>
+        <tr><td>Warranty</td><td>1 year (Taobao seller)</td><td>1 year (Taobao seller)</td></tr>
+        <tr><td>Total Price</td><td><strong>~¥8,850</strong></td><td><strong>~¥12,050</strong></td></tr>
+    </table>
+
+    <div class="highlight-box">
+        <h3>Why We Recommend the Standard Tier (A1 Rackmount, ~¥12,050)</h3>
+        <p>For a school environment with a server room, the Standard tier is the best long-term investment:</p>
+        <ul>
+            <li><strong>Enterprise form factor</strong> — 2U rackmount sits in the server room, not on a desk. Professional, secure, out of the way.</li>
+            <li><strong>Redundant power</strong> — dual 2200W hot-swap PSUs. If one fails, the other keeps running. Zero downtime for students.</li>
+            <li><strong>10GbE networking</strong> — dual SFP+ ports onboard. Future-proof when the school upgrades network infrastructure. 10x faster than 1GbE for large AI model transfers.</li>
+            <li><strong>Maximum expansion</strong> — 10 PCIe slots (can add 2–4 more Tesla A2s later), 8 hot-swap drive bays (add storage without opening the case).</li>
+            <li><strong>Enterprise reliability</strong> — built for 24/7 datacenter operation. Full-tower cases with tower coolers are not designed for sustained 100% load.</li>
+            <li><strong>32 cores is enough</strong> — AI inference is GPU-bound, not CPU-bound. The Tesla A2s will be the bottleneck long before 32 EPYC cores max out.</li>
+            <li><strong>Clear upgrade path</strong> — Start with Entry (~¥8,850) for a pilot, then add RAM and a second GPU to reach Standard (~¥12,050) when proven.</li>
+        </ul>
+        <p style="margin-top: 1rem;"><strong>When to choose Entry tier:</strong> If the school wants to start small and validate the concept before full deployment. Entry gives the same rackmount chassis, redundancy, and 10GbE — just less RAM and one GPU. Upgrade later without replacing hardware.</p>
+        <p><strong>If no server room is available:</strong> A full-tower dual-CPU workstation (~¥13,650, 64 cores, 2x Tesla A2) is an alternative. It delivers more CPU cores for only ¥1,600 more than Standard, but loses rackmount, redundant PSU, and 10GbE. Best for offices or classrooms where rackmount is impossible. Full details available upon request.</p>
+    </div>
+
+    <h2>What the Server Will Host</h2>
+
+    <h3>For Teachers — Professional Development</h3>
+    <ul>
+        <li><strong>AI Lesson Plan Assistant</strong> — Generate differentiated activities, rubrics, and assessments</li>
+        <li><strong>Text Simplifier</strong> — Adapt reading passages for ESL students by level</li>
+        <li><strong>Discussion Starter Generator</strong> — Create engaging prompts for any topic</li>
+        <li><strong>Vocabulary Builder</strong> — Auto-generate word lists with definitions and example sentences</li>
+        <li><strong>Reading Assessment Creator</strong> — Build comprehension questions with answer keys</li>
+    </ul>
+
+    <h3>For Students — Learning Tools</h3>
+    <ul>
+        <li><strong>Educational Games</strong> — Grammar, vocabulary, and critical thinking games</li>
+        <li><strong>Creative Project Generator</strong> — AI-assisted story writing and project ideas</li>
+        <li><strong>AI Tutor</strong> — Students can ask questions and get explanations without leaving the school network</li>
+        <li><strong>Listening Practice</strong> — AI-generated listening exercises with transcripts</li>
+    </ul>
+
+    <h3>For the School — Infrastructure</h3>
+    <ul>
+        <li><strong>Internal AI Resource Website</strong> — <code>ai.nasjiaxing.cn</code> — a professional portal for all AI tools</li>
+        <li><strong>Content Management</strong> — IT controls what content is available; everything is curated for education</li>
+        <li><strong>No External Dependencies</strong> — Works even if the school's internet connection is slow or filtered</li>
+    </ul>
+
+    <div class="page-break"></div>
+
+    <h2>Benefits to NAS Jiaxing</h2>
+
+    <div class="two-col">
+        <div>
+            <h3>For Teachers</h3>
+            <ul>
+                <li>Save hours on lesson planning and material creation</li>
+                <li>Differentiate instruction automatically</li>
+                <li>Access PD workshop materials anytime</li>
+                <li>No need for personal VPNs or subscriptions</li>
+                <li>Data stays inside the school — fully compliant</li>
+            </ul>
+        </div>
+        <div>
+            <h3>For Students</h3>
+            <ul>
+                <li>Personalized learning tools available 24/7 on campus</li>
+                <li>Interactive games that reinforce curriculum</li>
+                <li>AI writing and creativity support</li>
+                <li>Safe environment — no ads, no tracking, no external data sharing</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="two-col">
+        <div>
+            <h3>For the School</h3>
+            <ul>
+                <li>Position NAS Jiaxing as a leader in AI education</li>
+                <li>One-time hardware cost vs. ongoing subscription fees</li>
+                <li>Full control over content and access</li>
+                <li>Scalable — add more capabilities as needed</li>
+            </ul>
+        </div>
+        <div>
+            <h3>For IT & Compliance</h3>
+            <ul>
+                <li>All traffic stays on the school LAN</li>
+                <li>No student data leaves the building</li>
+                <li>Can be placed under school's existing ICP备案</li>
+                <li>Centrally managed and monitored</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>Implementation Timeline</h2>
+    <table class="spec-table">
+        <tr><th>Phase</th><th>Duration</th><th>Actions</th></tr>
+        <tr><td><strong>Phase 1: Approval & Procurement</strong></td><td>2–3 weeks</td><td>Principal and IT approve budget; order server hardware</td></tr>
+        <tr><td><strong>Phase 2: Setup & Configuration</strong></td><td>1 week</td><td>Install Ubuntu, configure AI software, set up internal website</td></tr>
+        <tr><td><strong>Phase 3: Content & Testing</strong></td><td>1–2 weeks</td><td>Load educational tools, test with pilot teachers, gather feedback</td></tr>
+        <tr><td><strong>Phase 4: Launch & Training</strong></td><td>1 week</td><td>Internal launch, PD workshop for staff, onboarding materials</td></tr>
+        <tr><td><strong>Phase 5: Expansion</strong></td><td>Ongoing</td><td>Add new tools based on teacher requests, student feedback</td></tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h2>Compliance & Security</h2>
+    <p>We are committed to full compliance with Chinese regulations:</p>
+    <ul>
+        <li><strong>ICP备案</strong> — The site will operate under the school's existing ICP filing as a subdomain (<code>ai.nasjiaxing.cn</code>)</li>
+        <li><strong>Data Sovereignty</strong> — All data stored locally; nothing sent to foreign servers</li>
+        <li><strong>Content Control</strong> — IT and school leadership review and approve all content before go-live</li>
+        <li><strong>No VPN Required</strong> — Everything runs on the school internal network</li>
+        <li><strong>Firewall Friendly</strong> — Standard HTTP on port 80; no special ports or protocols needed</li>
+    </ul>
+
+    <h2>What We Need From the School</h2>
+
+    <div class="ask-box">
+        <h3>📋 Three Requests to Move Forward</h3>
+
+        <div class="ask-item">
+            <div class="ask-icon">💰</div>
+            <div class="ask-text">
+                <h4>1. Budget Approval (~¥10,000)</h4>
+                <p>For a dedicated school AI server. We can source used enterprise hardware to stay within budget.</p>
+            </div>
+        </div>
+
+        <div class="ask-item">
+            <div class="ask-icon">🌐</div>
+            <div class="ask-text">
+                <h4>2. IT Support — Static IP & Subdomain</h4>
+                <p>A reserved static IP on the school LAN for the server, and a DNS entry for <code>ai.nasjiaxing.cn</code> pointing to that IP.</p>
+            </div>
+        </div>
+
+        <div class="ask-item">
+            <div class="ask-icon">✅</div>
+            <div class="ask-text">
+                <h4>3. ICP Subdomain Authorization</h4>
+                <p>Permission to add <code>ai.nasjiaxing.cn</code> under the school's existing ICP备案.</p>
+            </div>
+        </div>
+    </div>
+
+    <h2>About the Demo</h2>
+    <p>A live demo is already running on the school network. You can access it from any device connected to the school WiFi at:</p>
+    <div class="highlight-box" style="text-align: center;">
+        <p style="font-size: 1.2rem; margin: 0;"><code>http://10.39.26.217/</code></p>
+        <p style="margin: 0.5rem 0 0; opacity: 0.8;">Accessible only from the school LAN</p>
+    </div>
+    <p>This demo shows the landing page, educational games, AI tools, and the general look and feel of what the final site would be.</p>
+
+    <h2>About Me — William Morris</h2>
+    <p>I am an English teacher at NAS Jiaxing with a background in technology and a personal interest in AI. I built the demo machine in my own time using personal funds to prove that this is feasible and valuable for our school. I am not asking the school to fund my personal project — I am proposing a separate, school-owned server that serves the entire faculty and student body.</p>
+    <p>I am happy to manage the technical setup, maintain the server, and train teachers on how to use the tools. My goal is to make NAS Jiaxing a model school for AI-integrated education.</p>
+
+    <div class="footer">
+        <p><strong>Questions?</strong> Contact William Morris at william.morris@nasjiaxing.cn</p>
+        <p style="margin-top: 0.5rem;">Full technical details available upon request · Demo accessible on school network</p>
+    </div>
+
+</div>
+</body>
+</html>

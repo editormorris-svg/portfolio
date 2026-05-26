@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Assessment Tools | 0604.ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --earth-dark: #2C1810;
+            --earth-brown: #4A2C17;
+            --earth-warm: #6B4423;
+            --earth-gold: #B8860B;
+            --earth-sand: #D4A574;
+            --earth-cream: #F5E6D3;
+            --earth-light: #FAF6F0;
+            --accent-rust: #C75B39;
+            --accent-sage: #6B8E6B;
+            --accent-blue: #4A6FA5;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--earth-light);
+            color: var(--earth-dark);
+            line-height: 1.7;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        header {
+            background: linear-gradient(135deg, var(--accent-blue), #6B8E9B);
+            color: var(--earth-cream);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        header p { opacity: 0.9; max-width: 600px; margin: 0 auto; }
+        .breadcrumb {
+            background: var(--earth-cream);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--earth-sand);
+        }
+        .breadcrumb a {
+            color: var(--earth-warm);
+            text-decoration: none;
+        }
+        .breadcrumb a:hover { color: var(--earth-gold); }
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--earth-dark);
+            margin: 2.5rem 0 1rem;
+            border-bottom: 2px solid var(--accent-blue);
+            padding-bottom: 0.5rem;
+        }
+        h3 {
+            font-size: 1.3rem;
+            color: var(--earth-warm);
+            margin: 1.5rem 0 0.5rem;
+        }
+        .taxonomy-box {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .taxonomy-level {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        .level-1 { background: #E3F2FD; border-color: #2196F3; }
+        .level-2 { background: #E8F5E9; border-color: #4CAF50; }
+        .level-3 { background: #FFF3E0; border-color: #FF9800; }
+        .level-4 { background: #FCE4EC; border-color: #E91E63; }
+        .level-5 { background: #F3E5F5; border-color: #9C27B0; }
+        .level-6 { background: #E0F2F1; border-color: #009688; }
+        .prompt-box {
+            background: white;
+            border: 2px solid var(--earth-sand);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        .prompt-box h4 {
+            color: var(--earth-gold);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        .prompt-box pre {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .question-bank {
+            background: var(--earth-cream);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .question-bank h4 {
+            color: var(--earth-warm);
+            margin-bottom: 1rem;
+        }
+        .question {
+            background: white;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 5px;
+            border-left: 3px solid var(--accent-blue);
+        }
+        .question-level {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            margin-left: 0.5rem;
+        }
+        .rubric-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .rubric-table th {
+            background: var(--accent-blue);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+        }
+        .rubric-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+        .rubric-table tr:hover { background: #f9f9f9; }
+        .assessment-type {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--accent-blue);
+        }
+        .assessment-type h4 {
+            color: var(--accent-blue);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .tag {
+            display: inline-block;
+            background: var(--earth-gold);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+        }
+        .tip-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-left: 4px solid var(--accent-blue);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .tip-box strong { color: var(--accent-blue); }
+        ul, ol { margin: 1rem 0 1rem 1.5rem; }
+        li { margin: 0.5rem 0; }
+        footer {
+            background: var(--earth-dark);
+            color: var(--earth-cream);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📊 Reading Assessment Tools</h1>
+        <p>AI-generated comprehension questions, discussion prompts, and assessment rubrics tailored to your literature units. Build meaningful assessments that measure true understanding.</p>
+    </header>
+
+    <div class="breadcrumb">
+        <div class="container" style="padding: 0;">
+            <a href="/ai-for-school/">← Back to AI for School</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Bloom's Taxonomy for Reading Comprehension</h2>
+        
+        <p>Effective reading assessments span all cognitive levels. Use this framework to ensure your questions build from basic recall to critical analysis:</p>
+
+        <div class="taxonomy-box">
+            <div class="taxonomy-level level-1">
+                <strong>1. REMEMBER</strong> — Recall facts and basic concepts<br>
+                <em>Keywords: Define, identify, list, name, recall</em><br>
+                Example: "Who is the protagonist of the story?"
+            </div>
+            <div class="taxonomy-level level-2">
+                <strong>2. UNDERSTAND</strong> — Explain ideas or concepts<br>
+                <em>Keywords: Classify, describe, explain, paraphrase, summarize</em><br>
+                Example: "In your own words, what happened in Chapter 3?"
+            </div>
+            <div class="taxonomy-level level-3">
+                <strong>3. APPLY</strong> — Use information in new situations<br>
+                <em>Keywords: Demonstrate, illustrate, interpret, use, apply</em><br>
+                Example: "How would the protagonist react in this new situation?"
+            </div>
+            <div class="taxonomy-level level-4">
+                <strong>4. ANALYZE</strong> — Draw connections among ideas<br>
+                <em>Keywords: Compare, contrast, distinguish, examine, analyze</em><br>
+                Example: "What is the relationship between the setting and the character's mood?"
+            </div>
+            <div class="taxonomy-level level-5">
+                <strong>5. EVALUATE</strong> — Justify a stand or decision<br>
+                <em>Keywords: Appraise, defend, judge, support, evaluate</em><br>
+                Example: "Was the protagonist's decision justified? Support your answer with evidence."
+            </div>
+            <div class="taxonomy-level level-6">
+                <strong>6. CREATE</strong> — Produce new or original work<br>
+                <em>Keywords: Design, develop, formulate, compose, construct</em><br>
+                Example: "Write an alternative ending that changes the theme of the story."
+            </div>
+        </div>
+
+        <h2>AI Prompts for Question Generation</h2>
+
+        <h3>Prompt 1: Balanced Question Set</h3>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>Generate 12 reading comprehension questions for [TEXT] at [GRADE LEVEL].
+
+Distribute across Bloom's Taxonomy:
+- 2 Remember (recall details)
+- 2 Understand (explain concepts)
+- 2 Apply (make connections)
+- 3 Analyze (examine relationships)
+- 2 Evaluate (make judgments)
+- 1 Create (produce something new)
+
+For each question:
+- Include the specific text evidence needed to answer
+- Note the cognitive level
+- Provide a model answer</pre>
+        </div>
+
+        <h3>Prompt 2: Differentiated by Proficiency</h3e>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>Create 3 versions of comprehension questions for [TEXT]:
+
+VERSION A (Emerging EAL):
+- 8 questions total
+- Focus: Literal comprehension, vocabulary in context
+- Formats: Multiple choice, matching, true/false with text evidence
+- Sentence frames provided for written responses
+
+VERSION B (Developing EAL):
+- 10 questions total
+- Focus: Inferential understanding, character motivation
+- Formats: Short answer, fill-in, simple graphic organizers
+- Word bank for written responses
+
+VERSION C (Expanding EAL):
+- 12 questions total
+- Focus: Critical analysis, theme development, author's craft
+- Formats: Extended response, essay, Socratic questions
+- Open-ended with multiple valid interpretations</pre>
+        </div>
+
+        <h3>Prompt 3: Text-Dependent Questions</h3e>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>Generate text-dependent questions for these specific passages from [TEXT]:
+
+[PROVIDE 3-5 KEY QUOTES OR PASSAGES]
+
+For each passage:
+1. Literal question (what does it say?)
+2. Inferential question (what does it imply?)
+3. Analytical question (why does it matter?)
+4. Comparative question (how does it connect to other parts?)
+
+All answers must be supported with direct text evidence.</pre>
+        </div>
+
+        <h2>Complete Question Bank Examples</h2>
+
+        <div class="question-bank">
+            <h4>🎭 Sample: "Romeo and Juliet" Act 2 Scene 2 (Balcony Scene)</h4>
+            
+            <div class="question">
+                <strong>1.</strong> What time of day does this scene take place?
+                <span class="question-level" style="background: #E3F2FD;">Remember</span>
+            </div>
+            
+            <div class="question">
+                <strong>2.</strong> Paraphrase Juliet's "What's in a name?" speech in modern English.
+                <span class="question-level" style="background: #E8F5E9;">Understand</span>
+            </div>
+            
+            <div class="question">
+                <strong>3.</strong> How might Romeo's words sound different if he knew Juliet was listening?
+                <span class="question-level" style="background: #FFF3E0;">Apply</span>
+            </div>
+            
+            <div class="question">
+                <strong>4.</strong> Compare Romeo's language when he thinks he's alone versus when he's speaking to Juliet. What changes?
+                <span class="question-level" style="background: #FCE4EC;">Analyze</span>
+            </div>
+            
+            <div class="question">
+                <strong>5.</strong> Is love at first sight possible, based on Romeo and Juliet's interaction? Use evidence to support your position.
+                <span class="question-level" style="background: #F3E5F5;">Evaluate</span>
+            </div>
+            
+            <div class="question">
+                <strong>6.</strong> Write a soliloquy from the Nurse's perspective observing this scene. What would she think and feel?
+                <span class="question-level" style="background: #E0F2F1;">Create</span>
+            </div>
+        </div>
+
+        <h2>Assessment Types for Reading Comprehension</h2>
+
+        <div class="assessment-type">
+            <h4>📝 Traditional Comprehension Quiz</h4>
+            <p><strong>Best for:</strong> Quick check for understanding, plot recall, basic comprehension</p>
+            <p><strong>Format:</strong> 10-15 questions mixing MC, short answer, matching</p>
+            <p><strong>AI Prompt:</strong> "Create a 15-question reading check quiz for Chapters 1-3 of [BOOK]. Include 8 MC, 4 short answer (1-2 sentences), 3 matching. Focus on plot, characters, and key events. Include answer key."</p>
+        </div>
+
+        <div class="assessment-type">
+            <h4>🎭 Performance-Based Assessment</h4>
+            <p><strong>Best for:</strong> Deep comprehension, multiple interpretations, creative engagement</p>
+            <p><strong>Format:</strong> Students choose from 3-4 options (dramatic reading, artistic response, written analysis, multimedia)</p>
+            <p><strong>AI Prompt:</strong> "Design a performance-based assessment for [TEXT] with 4 options: (1) Dramatic monologue from a minor character's perspective, (2) Visual art piece with artist statement, (3) Analytical essay on theme, (4) Video 'book trailer.' Include rubric for each option."</p>
+        </div>
+
+        <div class="assessment-type">
+            <h4>🔍 Document-Based Analysis (DBA)</h4>
+            <p><strong>Best for:</strong> Close reading, evidence-based argumentation, literary analysis</p>
+            <p><strong>Format:</strong> Students analyze 3-5 key passages and write a structured response</p>
+            <p><strong>AI Prompt:</strong> "Create a Document-Based Analysis for [TEXT] with 4 excerpts. For each excerpt: provide the text, 2 scaffolding questions, and space for annotation. Final prompt: 'Using at least 3 excerpts, analyze how the author develops [THEME/CHARACTER].'"</p>
+        </div>
+
+        <div class="assessment-type">
+            <h4>💬 Socratic Seminar Assessment</h4>
+            <p><strong>Best for:</strong> Discussion skills, critical thinking, listening comprehension</p>
+            <p><strong>Format:</strong> Student-led discussion with prepared questions and participation rubric</p>
+            <p><strong>AI Prompt:</strong> "Generate 8 open-ended Socratic questions for [TEXT]. Questions should have no single right answer, require text evidence, and spark debate. Include preparation guide for students and participation rubric."</p>
+        </div>
+
+        <div class="assessment-type">
+            <h4>📊 Reading Portfolio</h4>
+            <p><strong>Best for:</strong> Growth over time, self-reflection, metacognition</p>
+            <p><strong>Format:</strong> Collection of reading responses, annotations, reflections throughout a unit</p>
+            <p><strong>AI Prompt:</strong> "Design a reading portfolio assignment for [TEXT/UNIT]. Include: 5 different response formats (journal entry, character map, theme tracker, quote analysis, creative piece), reflection prompts, and portfolio rubric."</p>
+        </div>
+
+        <h2>Reading Assessment Rubrics</h2>
+
+        <h3>Literary Analysis Rubric (Single-Point Format)</h3e>
+        <table class="rubric-table">
+            <tr>
+                <th>Criteria</th>
+                <th>Concerns (Below)</th>
+                <th>Proficient (Target)</th>
+                <th>Advanced (Above)</th>
+            </tr>
+            <tr>
+                <td><strong>Claim/Thesis</strong></td>
+                <td>Unclear or missing claim about the text</td>
+                <td>Clear, arguable claim about literary element with preview of reasoning</td>
+                <td>Sophisticated claim showing nuanced understanding of text complexity</td>
+            </tr>
+            <tr>
+                <td><strong>Evidence</strong></td>
+                <td>Evidence unrelated or insufficient to support claim</td>
+                <td>Relevant textual evidence with proper citations</td>
+                <td>Well-selected evidence including literary devices and techniques</td>
+            </tr>
+            <tr>
+                <td><strong>Analysis</strong></td>
+                <td>Summary without interpretation</td>
+                <td>Explains HOW evidence supports claim; shows reasoning</td>
+                <td>Insightful analysis revealing deeper layers of meaning</td>
+            </tr>
+            <tr>
+                <td><strong>Organization</strong></td>
+                <td>Confusing structure; no transitions</td>
+                <td>Logical structure with clear transitions and conclusion</td>
+                <td>Sophisticated organization enhancing argument flow</td>
+            </tr>
+            <tr>
+                <td><strong>Conventions</strong></td>
+                <td>Errors interfere with meaning</td>
+                <td>Few errors; doesn't interfere with communication</td>
+                <td>Consistent control; appropriate academic register</td>
+            </tr>
+        </table>
+
+        <h3>AI Prompt for Custom Rubrics</h3e>
+        <div class="prompt-box">
+            <h4>🎯 Copy This Prompt</h4>
+            <pre>Create a single-point rubric for [ASSESSMENT TYPE] on [TEXT].
+
+Include 5 criteria relevant to the task.
+For each criterion, provide:
+- Concerns column (common errors, missing elements)
+- Proficient column (target performance)
+- Advanced column (exceeds expectations)
+
+Consider EAL learners: highlight where sentence frames or vocabulary support would help.</pre>
+        </div>
+
+        <h2>Formative Assessment Strategies</h2>
+
+        <p>Use these low-stakes checks throughout your unit to guide instruction:</p>
+
+        <ul>
+            <li><strong>Exit Tickets (3-5 minutes):</strong> "One thing I learned... One thing I'm confused about... One question I have..."</li>
+            <li><strong>Thumbs Up/Down:</strong> Quick comprehension check on key plot points or vocabulary</li>
+            <li><strong>One-Sentence Summary:</strong> Students summarize a chapter in exactly 20 words</li>
+            <li><strong>Quote Response:</strong> Project a key quote; students write immediate reaction or question</li>
+            <li><strong>Character Hot Seat:</strong> Student answers questions in character (assesses deep comprehension)</li>
+            <li><strong>Predict-Observe-Explain:</strong> Predict what happens next, read, explain prediction accuracy</li>
+        </ul>
+
+        <div class="tip-box">
+            <strong>🎯 The Feedback Loop:</strong><br><br>
+            Assessment without feedback is just grading. Build in time for:<br>
+            1. Students self-assess using the rubric<br>
+            2. Peer feedback using specific protocols<br>
+            3. Teacher feedback on process, not just product<br>
+            4. Revision opportunities based on feedback
+        </div>
+
+        <h2>Scaffolding Assessments for EAL Students</h2>
+
+        <table class="rubric-table">
+            <tr>
+                <th>Support Type</th>
+                <th>Emerging</th>
+                <th>Developing</th>
+                <th>Expanding</th>
+            </tr>
+            <tr>
+                <td><strong>Response Format</strong></td>
+                <td>Graphic organizers, drawings, matching</td>
+                <td>Sentence frames, word banks, cloze</td>
+                <td>Open-ended written, oral presentation</td>
+            </tr>
+            <tr>
+                <td><strong>Text Support</strong></td>
+                <td>Text provided during assessment with highlighting</td>
+                <td>Key passages pre-selected; page numbers noted</td>
+                <td>Students locate own evidence</td>
+            </tr>
+            <tr>
+                <td><strong>Time</strong></td>
+                <td>Extended time; breaks allowed</td>
+                <td>Some extra time</td>
+                <td>Standard time</td>
+            </tr>
+            <tr>
+                <td><strong>Language Support</strong></td>
+                <td>Bilingual dictionary; cognate list</td>
+                <td>Simplified glossary; visual dictionary</td>
+                <td>Standard dictionary</td>
+            </tr>
+        </table>
+
+    </div>
+
+    <footer>
+        <p>© 2026 William Morris | 0604.ai | Free resources for educators worldwide</p>
+        <p><a href="/ai-for-school/" style="color: var(--earth-sand);">← Back to AI for School</a></p>
+    </footer>
+</body>
+</html>

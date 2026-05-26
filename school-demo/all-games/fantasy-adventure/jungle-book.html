@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Jungle Book - An Interactive Adventure</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Georgia, serif; background: linear-gradient(135deg, #1a4a1a 0%, #0d260d 100%); min-height: 100vh; color: #f4e4bc; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        h1 { text-align: center; color: #ffd700; text-shadow: 2px 2px 4px #000; margin-bottom: 20px; font-size: 2.5em; }
+        h2 { color: #ffa500; margin-bottom: 15px; }
+        .screen { display: none; background: rgba(0,0,0,0.7); border-radius: 15px; padding: 30px; margin-bottom: 20px; border: 3px solid #8b4513; }
+        .screen.active { display: block; }
+        .btn { background: linear-gradient(180deg, #228b22, #006400); color: #fff; border: 2px solid #ffd700; padding: 12px 25px; font-size: 16px; cursor: pointer; border-radius: 8px; margin: 5px; transition: all 0.3s; font-family: inherit; }
+        .btn:hover { background: linear-gradient(180deg, #32cd32, #228b22); transform: scale(1.05); }
+        .btn:disabled { background: #555; cursor: not-allowed; opacity: 0.6; }
+        .character-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
+        .character-card { background: rgba(139,69,19,0.3); border: 2px solid #8b4513; border-radius: 10px; padding: 15px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .character-card:hover, .character-card.selected { border-color: #ffd700; background: rgba(255,215,0,0.2); transform: scale(1.05); }
+        .character-card h3 { color: #ffd700; margin-bottom: 10px; }
+        .stats-panel { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+        .stat { text-align: center; padding: 10px 20px; background: rgba(139,69,19,0.4); border-radius: 8px; }
+        .stat-name { color: #ffa500; font-size: 12px; text-transform: uppercase; }
+        .stat-value { color: #ffd700; font-size: 24px; font-weight: bold; }
+        .location-map { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .location { background: rgba(34,139,34,0.4); border: 2px solid #228b22; border-radius: 10px; padding: 15px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .location:hover { background: rgba(34,139,34,0.7); border-color: #ffd700; transform: scale(1.02); }
+        .location.locked { opacity: 0.5; cursor: not-allowed; }
+        .location h3 { color: #ffd700; margin-bottom: 5px; }
+        .location p { font-size: 12px; color: #ccc; }
+        .narrative { background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px; margin-bottom: 20px; line-height: 1.8; font-size: 16px; border-left: 4px solid #ffa500; }
+        .dialogue { background: rgba(50,50,50,0.6); padding: 15px; border-radius: 10px; margin: 10px 0; border-left: 4px solid #ffd700; }
+        .speaker { color: #ffa500; font-weight: bold; }
+        .choices { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+        .choice-btn { background: rgba(139,69,19,0.5); border: 2px solid #8b4513; padding: 15px; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-align: left; }
+        .choice-btn:hover { background: rgba(139,69,19,0.8); border-color: #ffd700; }
+        .inventory { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
+        .item { background: rgba(255,215,0,0.2); padding: 8px 15px; border-radius: 20px; border: 1px solid #ffd700; font-size: 14px; }
+        .mini-game { background: rgba(0,50,0,0.6); padding: 20px; border-radius: 10px; text-align: center; margin: 20px 0; }
+        .game-area { min-height: 200px; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 20px; margin: 15px 0; }
+        .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px auto; max-width: 400px; }
+        .memory-card { aspect-ratio: 1; background: linear-gradient(135deg, #228b22, #006400); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 30px; transition: all 0.3s; }
+        .memory-card:hover { transform: scale(1.05); }
+        .memory-card.matched { background: #ffd700; cursor: default; }
+        .memory-card.flipped { background: #fff; color: #000; }
+        .riddle-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+        .rhythm-game { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
+        .rhythm-btn { width: 60px; height: 60px; border-radius: 50%; font-size: 24px; cursor: pointer; border: 3px solid; transition: all 0.2s; }
+        .rhythm-btn.red { background: #8b0000; border-color: #ff0000; }
+        .rhythm-btn.blue { background: #00008b; border-color: #0000ff; }
+        .rhythm-btn.yellow { background: #8b8b00; border-color: #ffff00; }
+        .rhythm-btn.green { background: #006400; border-color: #00ff00; }
+        .rhythm-btn.active { transform: scale(1.2); box-shadow: 0 0 20px #fff; }
+        .sequence-display { font-size: 24px; letter-spacing: 20px; margin: 15px 0; min-height: 40px; }
+        .stealth-game { position: relative; width: 100%; height: 300px; background: linear-gradient(180deg, #0d260d 0%, #1a4a1a 100%); border-radius: 10px; overflow: hidden; }
+        .stealth-meter { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 5px; }
+        .honey-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 350px; margin: 15px auto; }
+        .honey-cell { aspect-ratio: 1; background: #8b4513; border-radius: 50%; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .honey-cell:hover { transform: scale(1.1); }
+        .honey-cell.bee { background: #ffd700; }
+        .honey-cell.honey { background: #ff8c00; }
+        .dice-container { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
+        .dice { width: 80px; height: 80px; background: #fff; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 40px; color: #000; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .ending { text-align: center; padding: 40px; }
+        .ending h2 { font-size: 2em; margin-bottom: 20px; }
+        .progress-bar { height: 20px; background: rgba(0,0,0,0.5); border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #ffd700, #ffa500); transition: width 0.5s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .shake { animation: shake 0.3s; }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 5px #ffd700; } 50% { box-shadow: 0 0 20px #ffd700, 0 0 30px #ffa500; } }
+        .glow { animation: glow 2s infinite; }
+        .game-title { font-size: 14px; color: #888; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>The Jungle Book</h1>
+        <p class="game-title">An Interactive Adventure for EAL Learners</p>
+        
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen active">
+            <h2>Welcome to the Jungle!</h2>
+            <div class="narrative">
+                <p>The moon rises over the Seeonee jungle. You are Mowgli, a human cub raised by wolves. The monsoon season approaches, and Shere Khan the tiger has returned to the jungle.</p>
+                <p style="margin-top: 15px;">Bagheera the panther has warned you: you must prove yourself worthy of the jungle's protection, or return to the man-village forever.</p>
+                <p style="margin-top: 15px; color: #ffa500;">"The strength of the Pack is in the Wolf, and the strength of the Wolf is in the Pack." - Rudyard Kipling</p>
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn" onclick="startCharacterSelect()">Begin Your Journey</button>
+            </div>
+        </div>
+        
+        <!-- Character Select -->
+        <div id="character-screen" class="screen">
+            <h2>Choose Your Path</h2>
+            <p style="margin-bottom: 20px;">Your journey depends on how you approach the jungle's challenges.</p>
+            <div class="character-grid">
+                <div class="character-card" onclick="selectCharacter('mowgli')">
+                    <h3>Mowgli</h3>
+                    <p><strong>The Man-Cub</strong></p>
+                    <p style="font-size: 12px; color: #ccc; margin-top: 10px;">Balanced attributes. You know both the Law of the Jungle and human ways. Your choices shape your destiny.</p>
+                    <p style="font-size: 11px; color: #888; margin-top: 10px;">+2 to all attributes</p>
+                </div>
+                <div class="character-card" onclick="selectCharacter('bagheera')">
+                    <h3>Bagheera</h3>
+                    <p><strong>The Black Panther</strong></p>
+                    <p style="font-size: 12px; color: #ccc; margin-top: 10px;">Master of stealth and wisdom. You guide Mowgli but fear the fire of man.</p>
+                    <p style="font-size: 11px; color: #888; margin-top: 10px;">+3 Stealth, +2 Wisdom</p>
+                </div>
+                <div class="character-card" onclick="selectCharacter('baloo')">
+                    <h3>Baloo</h3>
+                    <p><strong>The Bear</strong></p>
+                    <p style="font-size: 12px; color: #ccc; margin-top: 10px;">The bear who believes in simple living. You taught Mowgli "The Bare Necessities."</p>
+                    <p style="font-size: 11px; color: #888; margin-top: 10px;">+3 Strength, +2 Survival</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" id="confirm-char-btn" onclick="confirmCharacter()" disabled>Confirm Character</button>
+            </div>
+        </div>
+        
+        <!-- Main Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="stats-panel">
+                <div class="stat"><div class="stat-name">Stealth</div><div class="stat-value" id="stat-stealth">5</div></div>
+                <div class="stat"><div class="stat-name">Strength</div><div class="stat-value" id="stat-strength">5</div></div>
+                <div class="stat"><div class="stat-name">Wisdom</div><div class="stat-value" id="stat-wisdom">5</div></div>
+                <div class="stat"><div class="stat-name">Survival</div><div class="stat-value" id="stat-survival">5</div></div>
+                <div class="stat"><div class="stat-name">Loyalty</div><div class="stat-value" id="stat-loyalty">5</div></div>
+                <div class="stat"><div class="stat-name">Gold</div><div class="stat-value" id="stat-gold">10</div></div>
+            </div>
+            <div class="inventory" id="inventory"></div>
+            
+            <h2 id="location-title">The Seeonee Jungle</h2>
+            <div id="narrative-area" class="narrative"></div>
+            <div id="dialogue-area"></div>
+            <div id="game-area"></div>
+            <div id="choices-area" class="choices"></div>
+        </div>
+        
+        <!-- Mini-Game Screen -->
+        <div id="minigame-screen" class="screen">
+            <h2 id="minigame-title">Mini-Game</h2>
+            <div id="minigame-content" class="mini-game"></div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" onclick="exitMinigame()">Return to Story</button>
+            </div>
+        </div>
+        
+        <!-- Ending Screen -->
+        <div id="ending-screen" class="screen">
+            <div class="ending">
+                <h2 id="ending-title"></h2>
+                <div id="ending-content"></div>
+                <div style="margin-top: 30px;">
+                    <button class="btn" onclick="saveGame()">Save Progress</button>
+                    <button class="btn" onclick="loadGame()">Load Game</button>
+                    <button class="btn" onclick="restartGame()">Play Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        let gameState = {
+            character: null,
+            stats: { stealth: 5, strength: 5, wisdom: 5, survival: 5, loyalty: 5 },
+            gold: 10,
+            inventory: [],
+            currentLocation: 'wolf-den',
+            visitedLocations: ['wolf-den'],
+            storyProgress: 0,
+            choices: [],
+            shereKhanThreat: 0,
+            jungleRespect: 50,
+            humanTies: 50
+        };
+
+        // Locations
+        const locations = {
+            'wolf-den': { 
+                name: 'Wolf Den', 
+                desc: 'The heart of the Seeonee wolf pack. Akela the old wolf sleeps beneath the rock where the Five sleep. Raksha the Mother Wolf watches over the cubs.',
+                minigame: 'memory',
+                npcs: ['akela', 'raksha'],
+                unlocked: true
+            },
+            'ancient-ruins': { 
+                name: 'Ancient Ruins', 
+                desc: 'Crumbling temples from a forgotten human civilization. Kaa the python dwells here, his hypnotic eyes promising ancient wisdom... or danger.',
+                minigame: 'hypnotic',
+                npcs: ['kaa'],
+                unlocked: false
+            },
+            'cold-lairs': { 
+                name: 'Cold Lairs', 
+                desc: 'The abandoned territory of the lame tiger. Shere Khan has claimed this area. Tabaqui the jackal scurries here, spreading the tiger\'s cruel words.',
+                minigame: 'stealth',
+                npcs: ['tabaaqui'],
+                unlocked: false
+            },
+            'river': { 
+                name: 'The River', 
+                desc: 'The Seeonee River flows cool and deep. Baloo the bear often relaxes here, humming tunes about bare necessities.',
+                minigame: 'rhythm',
+                npcs: ['baloo'],
+                unlocked: false
+            },
+            'boulder': { 
+                name: 'The Boulder', 
+                desc: 'A great rock where the Law of the Jungle is taught. Bagheera the panther waits here, ready to test your understanding of the jungle\'s rules.',
+                minigame: 'riddle',
+                npcs: ['bagheera'],
+                unlocked: false
+            },
+            'man-village': { 
+                name: 'Man-Village Edge', 
+                desc: 'The boundary between the jungle and human settlement. Messua the village woman has shown kindness to you before. This is your last chance to turn back.',
+                minigame: 'dice',
+                npcs: ['messua'],
+                unlocked: false
+            },
+            'king-louie': { 
+                name: 'King Louie\'s Palace', 
+                desc: 'Deep in the jungle, ancient monkeys have built a ruined palace. King Louie the orangutan rules here, offering to teach you "the secret of the red flower" (fire).',
+                minigame: 'honey',
+                npcs: ['king-louie'],
+                unlocked: false
+            }
+        };
+
+        // NPCs
+        const npcs = {
+            'akela': {
+                name: 'Akela',
+                portrait: '🐺',
+                dialogues: [
+                    { text: "The bull elephant Haathi has saved us by chance. But Shere Khan will return. You must learn the Law, Mowgli, or be driven out.", options: [
+                        { text: "I will learn the Law, Akela.", effect: () => { modifyStat('wisdom', 1); modifyStat('loyalty', 1); } },
+                        { text: "Why must I choose between the jungle and the man-village?", effect: () => { modifyStat('wisdom', 2); } }
+                    ]}
+                ]
+            },
+            'raksha': {
+                name: 'Raksha',
+                portrait: '🐾',
+                dialogues: [
+                    { text: "My cub, my cub! When the tigers left, I ran with the dead goat under my teeth, and they said nothing because I was a wolf. Now you are mine!", options: [
+                        { text: "You are my Mother Wolf!", effect: () => { modifyStat('loyalty', 2); modifyStat('survival', 1); } },
+                        { text: "Tell me about my real parents.", effect: () => { modifyStat('humanTies', 5); } }
+                    ]}
+                ]
+            },
+            'kaa': {
+                name: 'Kaa',
+                portrait: '🐍',
+                dialogues: [
+                    { text: "Artfully artful! Hypnotic Kaa! Come, little brother. Look into my eyes. I have seen the writing on the walls of the old palaces. I know things others do not.", options: [
+                        { text: "I will look into your eyes.", effect: () => { modifyStat('wisdom', 3); modifyStat('stealth', -1); gameState.shereKhanThreat += 5; } },
+                        { text: "Bagheera warned me about you, Kaa.", effect: () => { modifyStat('stealth', 1); modifyStat('survival', 1); } }
+                    ]}
+                ]
+            },
+            'tabaaqui': {
+                name: 'Tabaaqui',
+                portrait: '🦊',
+                dialogues: [
+                    { text: "The Grey Brother speaks too soft! Shere Khan is the lord of the jungle! The man-cub will be driven out - this I swear by the Dead Lepper who wears his bones in his skin!", options: [
+                        { text: "You are just a cowardly jackal!", effect: () => { modifyStat('strength', 1); modifyStat('jungleRespect', 10); gameState.shereKhanThreat += 10; } },
+                        { text: "Perhaps we can make a deal?", effect: () => { modifyStat('wisdom', 1); modifyStat('stealth', 1); } }
+                    ]}
+                ]
+            },
+            'baloo': {
+                name: 'Baloo',
+                portrait: '🐻',
+                dialogues: [
+                    { text: "Oh, hmmmm, ma ma hum! The bare necessities! Look at those berries - just the right size for eating! Come, let's learn the really important things in life.", options: [
+                        { text: "Teach me about the bare necessities!", effect: () => { modifyStat('survival', 2); modifyStat('strength', 1); } },
+                        { text: "I need to learn the Law, Baloo.", effect: () => { modifyStat('wisdom', 1); modifyStat('jungleRespect', 5); } }
+                    ]}
+                ]
+            },
+            'bagheera': {
+                name: 'Bagheera',
+                portrait: '🐆',
+                dialogues: [
+                    { text: "The jungle is not a playground, Mowgli. You must prove yourself. Answer my riddles, and I will teach you the secret hunting call.", options: [
+                        { text: "I am ready to prove myself.", effect: () => { modifyStat('wisdom', 2); modifyStat('jungleRespect', 5); unlockLocation('river'); } },
+                        { text: "What is this secret call?", effect: () => { modifyStat('stealth', 2); modifyStat('survival', 1); } }
+                    ]}
+                ]
+            },
+            'messua': {
+                name: 'Messua',
+                portrait: '👩',
+                dialogues: [
+                    { text: "You look like my son who was taken by the river. Perhaps you could stay at the village? There is much I could teach you - reading, writing, the ways of men.", options: [
+                        { text: "Perhaps there is another way...", effect: () => { modifyStat('wisdom', 1); modifyStat('humanTies', 5); } },
+                        { text: "The jungle is my home, but thank you.", effect: () => { modifyStat('humanTies', -5); modifyStat('jungleRespect', 5); } }
+                    ]}
+                ]
+            },
+            'king-louie': {
+                name: 'King Louie',
+                portrait: '🦧',
+                dialogues: [
+                    { text: "Ooo ooo ah ah! I am the king of the swingers! Give me the secret of the red flower, man-cub, and I will make you very powerful!", options: [
+                        { text: "Fire is dangerous! I cannot help you.", effect: () => { modifyStat('wisdom', 2); modifyStat('jungleRespect', 10); } },
+                        { text: "What would you offer in return?", effect: () => { modifyStat('stealth', 1); addItem('Golden Bananas'); modifyStat('gold', 20); } }
+                    ]}
+                ]
+            }
+        };
+
+        // Memory Game
+        let memoryCards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        const memorySymbols = ['🍯', '🐍', '🐺', '🍌', '🦋', '🌿', '🐆', '🐻'];
+
+        // Hypnotic Challenge Game
+        let hypnoticSequence = [];
+        let hypnoticPlayerSequence = [];
+        let hypnoticLevel = 1;
+
+        // Stealth Game
+        let playerX = 50;
+        let stealthScore = 0;
+        let enemyX = 300;
+        let gameRunning = false;
+
+        // Rhythm Game
+        let rhythmSequence = [];
+        let rhythmIndex = 0;
+        let rhythmScore = 0;
+        let isPlayingSequence = false;
+        const rhythmColors = ['red', 'blue', 'yellow', 'green'];
+
+        // Honey Game
+        let honeyGrid = [];
+        let honeyScore = 0;
+        let honeyMoves = 0;
+
+        // Functions
+        function startCharacterSelect() {
+            showScreen('character-screen');
+        }
+
+        function selectCharacter(char) {
+            gameState.character = char;
+            document.querySelectorAll('.character-card').forEach(c => c.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            document.getElementById('confirm-char-btn').disabled = false;
+        }
+
+        function confirmCharacter() {
+            if (!gameState.character) return;
+            
+            // Apply character bonuses
+            switch(gameState.character) {
+                case 'mowgli':
+                    Object.keys(gameState.stats).forEach(s => gameState.stats[s] += 2);
+                    break;
+                case 'bagheera':
+                    gameState.stats.stealth += 3;
+                    gameState.stats.wisdom += 2;
+                    break;
+                case 'baloo':
+                    gameState.stats.strength += 3;
+                    gameState.stats.survival += 2;
+                    break;
+            }
+            
+            updateStats();
+            showScreen('game-screen');
+            enterLocation('wolf-den');
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function modifyStat(stat, amount) {
+            gameState.stats[stat] = Math.max(0, Math.min(20, gameState.stats[stat] + amount));
+            updateStats();
+        }
+
+        function modifyGold(amount) {
+            gameState.gold = Math.max(0, gameState.gold + amount);
+            updateStats();
+        }
+
+        function addItem(item) {
+            if (!gameState.inventory.includes(item)) {
+                gameState.inventory.push(item);
+                updateInventory();
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('stat-stealth').textContent = gameState.stats.stealth;
+            document.getElementById('stat-strength').textContent = gameState.stats.strength;
+            document.getElementById('stat-wisdom').textContent = gameState.stats.wisdom;
+            document.getElementById('stat-survival').textContent = gameState.stats.survival;
+            document.getElementById('stat-loyalty').textContent = gameState.stats.loyalty;
+            document.getElementById('stat-gold').textContent = gameState.gold;
+        }
+
+        function updateInventory() {
+            const inv = document.getElementById('inventory');
+            inv.innerHTML = '<strong>Items:</strong> ';
+            gameState.inventory.forEach(item => {
+                inv.innerHTML += `<span class="item">${item}</span> `;
+            });
+        }
+
+        function enterLocation(locId) {
+            const loc = locations[locId];
+            if (!loc || loc.locked) return;
+            
+            gameState.currentLocation = locId;
+            if (!gameState.visitedLocations.includes(locId)) {
+                gameState.visitedLocations.push(locId);
+            }
+            
+            document.getElementById('location-title').textContent = loc.name;
+            document.getElementById('narrative-area').innerHTML = `<p>${loc.desc}</p>`;
+            
+            // Progress story
+            gameState.storyProgress = Math.min(100, gameState.storyProgress + 10);
+            
+            // Unlock new locations based on progress
+            checkLocationUnlocks();
+            
+            showNPCDialogue();
+        }
+
+        function checkLocationUnlocks() {
+            if (gameState.storyProgress >= 10 && gameState.visitedLocations.includes('wolf-den')) {
+                locations['ancient-ruins'].unlocked = true;
+            }
+            if (gameState.jungleRespect >= 30) {
+                locations['cold-lairs'].unlocked = true;
+                locations['river'].unlocked = true;
+            }
+            if (gameState.stats.wisdom >= 7) {
+                locations['boulder'].unlocked = true;
+                locations['man-village'].unlocked = true;
+            }
+            if (gameState.stats.stealth >= 8) {
+                locations['king-louie'].unlocked = true;
+            }
+        }
+
+        function showNPCDialogue() {
+            const loc = locations[gameState.currentLocation];
+            if (!loc.npcs || loc.npcs.length === 0) {
+                showLocationChoices();
+                return;
+            }
+            
+            const npcId = loc.npcs[0];
+            const npc = npcs[npcId];
+            const dialogue = npc.dialogues[0];
+            
+            let dialogueHtml = `<div class="dialogue"><span class="speaker">${npc.portrait} ${npc.name}:</span> "${dialogue.text}"</div>`;
+            
+            let choicesHtml = '<div class="choices">';
+            dialogue.options.forEach((opt, idx) => {
+                choicesHtml += `<button class="choice-btn" onclick="chooseDialogue(${idx}, '${npcId}')">${opt.text}</button>`;
+            });
+            choicesHtml += '</div>';
+            
+            document.getElementById('dialogue-area').innerHTML = dialogueHtml;
+            document.getElementById('choices-area').innerHTML = choicesHtml;
+            document.getElementById('game-area').innerHTML = '';
+        }
+
+        function chooseDialogue(idx, npcId) {
+            const npc = npcs[npcId];
+            const dialogue = npc.dialogues[0];
+            
+            if (dialogue.options[idx].effect) {
+                dialogue.options[idx].effect();
+            }
+            
+            gameState.choices.push({ npc: npcId, choice: idx });
+            
+            document.getElementById('dialogue-area').innerHTML = `<div class="dialogue"><span class="speaker">${npc.portrait} ${npc.name}:</span> "Choose wisely, young one..."</div>`;
+            showLocationChoices();
+        }
+
+        function showLocationChoices() {
+            const loc = locations[gameState.currentLocation];
+            
+            let html = `<div class="location-map">`;
+            Object.keys(locations).forEach(locId => {
+                const l = locations[locId];
+                const isUnlocked = l.unlocked;
+                const isVisited = gameState.visitedLocations.includes(locId);
+                html += `<div class="location ${isUnlocked ? '' : 'locked'}" onclick="${isUnlocked ? `enterLocation('${locId}')` : ''}">
+                    <h3>${l.name}</h3>
+                    <p>${isUnlocked ? (isVisited ? 'Visited' : 'New Area') : 'Locked'}</p>
+                </div>`;
+            });
+            html += '</div>';
+            
+            html += '<h3 style="margin-top: 20px; color: #ffa500;">Actions</h3>';
+            html += '<div class="choices">';
+            html += `<button class="choice-btn" onclick="startMinigame('${loc.minigame}')">Play: ${getMinigameName(loc.minigame)} (Costs 5 Gold)</button>`;
+            html += '<button class="choice-btn" onclick="checkEnding()">Check Your Fate</button>';
+            html += '<button class="choice-btn" onclick="saveGame()">Save Game</button>';
+            html += '<button class="choice-btn" onclick="loadGame()">Load Game</button>';
+            html += '</div>';
+            
+            document.getElementById('game-area').innerHTML = html;
+            document.getElementById('choices-area').innerHTML = '';
+        }
+
+        function getMinigameName(game) {
+            const names = {
+                'memory': 'Memory Match - Remember the Jungle',
+                'hypnotic': 'Kaa\'s Challenge - Resist the Snake',
+                'stealth': 'Stealth Mission - Avoid Shere Khan',
+                'rhythm': 'Baloo\'s Beat - Dance to Survival',
+                'riddle': 'Jungle Riddles - Prove Your Wisdom',
+                'dice': 'Dice Game - Bet Against Fate',
+                'honey': 'Honey Hunt - Collect Without Stinging'
+            };
+            return names[game] || 'Mini-Game';
+        }
+
+        function startMinigame(game) {
+            if (gameState.gold < 5) {
+                alert('Not enough gold! You need at least 5 gold to play.');
+                return;
+            }
+            modifyGold(-5);
+            
+            showScreen('minigame-screen');
+            
+            switch(game) {
+                case 'memory': startMemoryGame(); break;
+                case 'hypnotic': startHypnoticGame(); break;
+                case 'stealth': startStealthGame(); break;
+                case 'rhythm': startRhythmGame(); break;
+                case 'riddle': startRiddleGame(); break;
+                case 'dice': startDiceGame(); break;
+                case 'honey': startHoneyGame(); break;
+            }
+        }
+
+        // Memory Game
+        function startMemoryGame() {
+            document.getElementById('minigame-title').textContent = "Kaa's Memory Challenge";
+            matchedPairs = 0;
+            flippedCards = [];
+            memoryCards = [...memorySymbols, ...memorySymbols].sort(() => Math.random() - 0.5);
+            
+            let html = '<p>Match the jungle symbols to prove your memory!</p>';
+            html += '<div class="memory-grid">';
+            memoryCards.forEach((sym, idx) => {
+                html += `<div class="memory-card" id="mem-${idx}" onclick="flipCard(${idx})">❓</div>`;
+            });
+            html += '</div>';
+            html += '<p id="memory-status">Matches: 0 / 8</p>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function flipCard(idx) {
+            if (flippedCards.length >= 2) return;
+            if (flippedCards.includes(idx)) return;
+            
+            const card = document.getElementById(`mem-${idx}`);
+            card.textContent = memoryCards[idx];
+            card.classList.add('flipped');
+            flippedCards.push(idx);
+            
+            if (flippedCards.length === 2) {
+                setTimeout(checkMemoryMatch, 800);
+            }
+        }
+
+        function checkMemoryMatch() {
+            const [idx1, idx2] = flippedCards;
+            
+            if (memoryCards[idx1] === memoryCards[idx2]) {
+                document.getElementById(`mem-${idx1}`).classList.add('matched');
+                document.getElementById(`mem-${idx2}`).classList.add('matched');
+                matchedPairs++;
+                document.getElementById('memory-status').textContent = `Matches: ${matchedPairs} / 8`;
+                
+                if (matchedPairs === 8) {
+                    setTimeout(() => {
+                        modifyStat('wisdom', 2);
+                        modifyStat('survival', 1);
+                        modifyGold(15);
+                        alert('Excellent! Your memory serves you well in the jungle!');
+                        showLocationChoices();
+                        showScreen('game-screen');
+                    }, 500);
+                }
+            } else {
+                document.getElementById(`mem-${idx1}`).textContent = '❓';
+                document.getElementById(`mem-${idx2}`).textContent = '❓';
+                document.getElementById(`mem-${idx1}`).classList.remove('flipped');
+                document.getElementById(`mem-${idx2}`).classList.remove('flipped');
+            }
+            flippedCards = [];
+        }
+
+        // Hypnotic Challenge
+        function startHypnoticGame() {
+            document.getElementById('minigame-title').textContent = "Kaa's Hypnotic Challenge";
+            hypnoticLevel = 1;
+            hypnoticSequence = [];
+            hypnoticPlayerSequence = [];
+            
+            let html = '<p>Resist Kaa\'s hypnotic gaze! Repeat the color sequence to break free!</p>';
+            html += '<p>Watch carefully: Red=1, Blue=2, Yellow=3, Green=4</p>';
+            html += '<div class="sequence-display" id="hypno-sequence"></div>';
+            html += '<div class="rhythm-game">';
+            rhythmColors.forEach((c, i) => {
+                html += `<button class="rhythm-btn ${c}" onclick="inputHypno(${i+1})">${i+1}</button>`;
+            });
+            html += '</div>';
+            html += '<p id="hypno-status">Level: 1</p>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+            setTimeout(addHypnoStep, 1000);
+        }
+
+        function addHypnoStep() {
+            const next = Math.floor(Math.random() * 4) + 1;
+            hypnoticSequence.push(next);
+            playHypnoSequence();
+        }
+
+        function playHypnoSequence() {
+            const display = document.getElementById('hypno-sequence');
+            let i = 0;
+            const interval = setInterval(() => {
+                display.textContent = hypnoticSequence.slice(0, i + 1).join(' → ');
+                i++;
+                if (i >= hypnoticSequence.length) clearInterval(interval);
+            }, 600);
+        }
+
+        function inputHypno(num) {
+            hypnoticPlayerSequence.push(num);
+            
+            const lastIdx = hypnoticPlayerSequence.length - 1;
+            if (hypnoticPlayerSequence[lastIdx] !== hypnoticSequence[lastIdx]) {
+                // Failed!
+                document.getElementById('hypno-status').textContent = 'Broke free... partially!';
+                modifyStat('wisdom', 1);
+                modifyStat('stealth', 1);
+                modifyGold(10);
+                setTimeout(() => {
+                    showLocationChoices();
+                    showScreen('game-screen');
+                }, 1500);
+                return;
+            }
+            
+            if (hypnoticPlayerSequence.length === hypnoticSequence.length) {
+                // Success!
+                hypnoticLevel++;
+                document.getElementById('hypno-status').textContent = `Level ${hypnoticLevel}! Watch next sequence...`;
+                hypnoticPlayerSequence = [];
+                setTimeout(() => {
+                    addHypnoStep();
+                    document.getElementById('hypno-status').textContent = `Level: ${hypnoticLevel}`;
+                }, 2000);
+                
+                if (hypnoticLevel > 5) {
+                    setTimeout(() => {
+                        modifyStat('wisdom', 3);
+                        modifyStat('survival', 2);
+                        modifyGold(25);
+                        alert('You resisted Kaa\'s hypnosis completely!');
+                        showLocationChoices();
+                        showScreen('game-screen');
+                    }, 2000);
+                }
+            }
+        }
+
+        // Stealth Game
+        function startStealthGame() {
+            document.getElementById('minigame-title').textContent = "Stealth in the Cold Lairs";
+            playerX = 50;
+            stealthScore = 0;
+            enemyX = 300;
+            gameRunning = true;
+            
+            let html = '<p>Use LEFT/RIGHT arrows or A/D to move. Avoid Shere Khan!</p>';
+            html += '<div class="stealth-game" id="stealth-area">';
+            html += '<div id="player" style="position:absolute; left:50px; top:130px; font-size:40px;">🐺</div>';
+            html += '<div id="enemy" style="position:absolute; left:300px; top:130px; font-size:40px;">🐅</div>';
+            html += '<div class="stealth-meter">Score: <span id="stealth-score">0</span></div>';
+            html += '</div>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+            
+            document.addEventListener('keydown', handleStealthInput);
+            runStealthLoop();
+        }
+
+        function handleStealthInput(e) {
+            if (!gameRunning) return;
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+                playerX = Math.max(10, playerX - 20);
+            } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+                playerX = Math.min(460, playerX + 20);
+            }
+            document.getElementById('player').style.left = playerX + 'px';
+        }
+
+        function runStealthLoop() {
+            if (!gameRunning) return;
+            
+            // Move enemy
+            enemyX += (Math.random() > 0.5 ? 8 : -8);
+            enemyX = Math.max(10, Math.min(460, enemyX));
+            document.getElementById('enemy').style.left = enemyX + 'px';
+            
+            // Check collision
+            if (Math.abs(playerX - enemyX) < 50) {
+                stealthScore--;
+                document.getElementById('stealth-score').textContent = stealthScore;
+                document.getElementById('stealth-area').classList.add('shake');
+                setTimeout(() => document.getElementById('stealth-area').classList.remove('shake'), 300);
+            } else {
+                stealthScore++;
+                document.getElementById('stealth-score').textContent = stealthScore;
+            }
+            
+            // Win condition
+            if (stealthScore >= 20) {
+                gameRunning = false;
+                document.removeEventListener('keydown', handleStealthInput);
+                modifyStat('stealth', 2);
+                modifyStat('survival', 1);
+                modifyGold(15);
+                alert('You escaped Shere Khan!');
+                showLocationChoices();
+                showScreen('game-screen');
+                return;
+            }
+            
+            // Lose condition
+            if (stealthScore <= -5) {
+                gameRunning = false;
+                document.removeEventListener('keydown', handleStealthInput);
+                modifyStat('stealth', -1);
+                gameState.shereKhanThreat += 15;
+                alert('Shere Khan caught you! Your jungle reputation suffers.');
+                showLocationChoices();
+                showScreen('game-screen');
+                return;
+            }
+            
+            setTimeout(runStealthLoop, 500);
+        }
+
+        // Rhythm Game
+        function startRhythmGame() {
+            document.getElementById('minigame-title').textContent = "Baloo's Bare Necessities Beat";
+            rhythmSequence = [];
+            rhythmIndex = 0;
+            rhythmScore = 0;
+            isPlayingSequence = false;
+            
+            let html = '<p>Watch and repeat Baloo\'s jungle rhythm!</p>';
+            html += '<div class="sequence-display" id="rhythm-display">Press START to begin</div>';
+            html += '<div class="rhythm-game">';
+            rhythmColors.forEach((c, i) => {
+                html += `<button class="rhythm-btn ${c}" onclick="inputRhythm(${i})" id="rhythm-btn-${i}">${['', '', '', ''][i]}</button>`;
+            });
+            html += '</div>';
+            html += '<p id="rhythm-status">Score: 0</p>';
+            html += '<button class="btn" onclick="startRhythmSequence()">START</button>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function startRhythmSequence() {
+            rhythmSequence.push(Math.floor(Math.random() * 4));
+            playRhythmSequence();
+        }
+
+        function playRhythmSequence() {
+            isPlayingSequence = true;
+            document.getElementById('rhythm-display').textContent = 'Watch...';
+            
+            let i = 0;
+            const interval = setInterval(() => {
+                document.querySelectorAll('.rhythm-btn').forEach(b => b.classList.remove('active'));
+                document.getElementById(`rhythm-btn-${rhythmSequence[i]}`).classList.add('active');
+                i++;
+                if (i >= rhythmSequence.length) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.querySelectorAll('.rhythm-btn').forEach(b => b.classList.remove('active'));
+                        document.getElementById('rhythm-display').textContent = 'Your turn!';
+                        isPlayingSequence = false;
+                        rhythmIndex = 0;
+                    }, 500);
+                }
+            }, 600);
+        }
+
+        function inputRhythm(idx) {
+            if (isPlayingSequence) return;
+            
+            document.getElementById(`rhythm-btn-${idx}`).classList.add('active');
+            setTimeout(() => document.getElementById(`rhythm-btn-${idx}`).classList.remove('active'), 200);
+            
+            if (rhythmSequence[rhythmIndex] === idx) {
+                rhythmScore++;
+                rhythmIndex++;
+                document.getElementById('rhythm-status').textContent = `Score: ${rhythmScore}`;
+                
+                if (rhythmIndex >= rhythmSequence.length) {
+                    document.getElementById('rhythm-display').textContent = 'Great! Next round...';
+                    setTimeout(startRhythmSequence, 1000);
+                }
+            } else {
+                // Wrong
+                document.getElementById('rhythm-display').textContent = 'Wrong note!';
+                if (rhythmScore >= 5) {
+                    modifyStat('survival', 2);
+                    modifyStat('strength', 1);
+                    modifyGold(15);
+                    alert('Baloo loves your dancing! You learned the Bare Necessities!');
+                    showLocationChoices();
+                    showScreen('game-screen');
+                } else {
+                    setTimeout(startRhythmSequence, 1000);
+                }
+            }
+        }
+
+        // Riddle Game
+        function startRiddleGame() {
+            document.getElementById('minigame-title').textContent = "Jungle Riddles from Bagheera";
+            
+            const riddles = [
+                { q: "I have cities, but no houses live there. I have mountains, but no trees grow. I have water, but no fish swim. What am I?", a: "map", options: ["map", "mirror", "dream", "cloud"] },
+                { q: "The more you take, the more you leave behind. What am I?", a: "footsteps", options: ["time", "footsteps", "breath", "memories"] },
+                { q: "I can fly without wings. I cry without eyes. Wherever I go, darkness follows me. What am I?", a: "cloud", options: ["bird", "shadow", "cloud", "night"] },
+                { q: "What has keys but no locks, space but no room, and you can enter but can't go inside?", a: "keyboard", options: ["piano", "keyboard", "map", "book"] },
+                { q: "I am not alive, but I grow; I don't have lungs, but I need air; I don't have a mouth, but water kills me. What am I?", a: "fire", options: ["fire", "plant", "dragon", "wind"] }
+            ];
+            
+            const riddle = riddles[Math.floor(Math.random() * riddles.length)];
+            
+            let html = `<p>${riddle.q}</p>`;
+            html += '<div class="riddle-options">';
+            riddle.options.forEach(opt => {
+                html += `<button class="choice-btn" onclick="answerRiddle('${opt}', '${riddle.a}')">${opt.charAt(0).toUpperCase() + opt.slice(1)}</button>`;
+            });
+            html += '</div>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function answerRiddle(answer, correct) {
+            if (answer === correct) {
+                modifyStat('wisdom', 2);
+                modifyGold(10);
+                alert('Correct! Bagheera nods approvingly.');
+            } else {
+                modifyStat('wisdom', 1);
+                alert(`Not quite! The answer was ${correct}.`);
+            }
+            showLocationChoices();
+            showScreen('game-screen');
+        }
+
+        // Dice Game
+        function startDiceGame() {
+            document.getElementById('minigame-title').textContent = "Dice Against Fate";
+            
+            let html = '<p>Test your luck against the jungle\'s fortune!</p>';
+            html += '<div class="dice-container">';
+            html += '<div class="dice" id="dice1">?</div>';
+            html += '<div class="dice" id="dice2">?</div>';
+            html += '</div>';
+            html += '<p>Roll and try to beat 7! Win: 2x bet | Lose: lose bet</p>';
+            html += '<button class="btn" onclick="rollDice()">Roll Dice (Bet 5 Gold)</button>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function rollDice() {
+            if (gameState.gold < 5) {
+                alert('Not enough gold!');
+                return;
+            }
+            modifyGold(-5);
+            
+            const d1 = Math.floor(Math.random() * 6) + 1;
+            const d2 = Math.floor(Math.random() * 6) + 1;
+            
+            document.getElementById('dice1').textContent = d1;
+            document.getElementById('dice2').textContent = d2;
+            
+            setTimeout(() => {
+                const total = d1 + d2;
+                if (total > 7) {
+                    modifyGold(15);
+                    alert(`You rolled ${total}! You win 15 gold!`);
+                } else if (total < 7) {
+                    alert(`You rolled ${total}. You lose.`);
+                } else {
+                    modifyGold(5);
+                    alert(`You rolled 7! Your bet is returned.`);
+                }
+                showLocationChoices();
+                showScreen('game-screen');
+            }, 1000);
+        }
+
+        // Honey Game
+        function startHoneyGame() {
+            document.getElementById('minigame-title').textContent = "Honey Hunt with Baloo";
+            honeyScore = 0;
+            honeyMoves = 15;
+            honeyGrid = [];
+            
+            for (let i = 0; i < 25; i++) {
+                honeyGrid.push(Math.random() > 0.7 ? 'bee' : 'empty');
+            }
+            honeyGrid[Math.floor(Math.random() * 25)] = 'honey';
+            honeyGrid[Math.floor(Math.random() * 25)] = 'honey';
+            honeyGrid[Math.floor(Math.random() * 25)] = 'honey';
+            
+            renderHoneyGrid();
+        }
+
+        function renderHoneyGrid() {
+            let html = `<p>Moves left: ${honeyMoves} | Honey found: ${honeyScore}/3</p>`;
+            html += '<div class="honey-grid">';
+            honeyGrid.forEach((cell, idx) => {
+                const classes = cell === 'bee' ? 'honey-cell bee' : 
+                               cell === 'honey' ? 'honey-cell honey' : 'honey-cell';
+                html += `<div class="${classes}" onclick="clickHoney(${idx})">${cell === 'honey' ? '🍯' : cell === 'bee' ? '🐝' : ''}</div>`;
+            });
+            html += '</div>';
+            
+            document.getElementById('minigame-content').innerHTML = html;
+        }
+
+        function clickHoney(idx) {
+            if (honeyMoves <= 0 || honeyGrid[idx] === 'revealed') return;
+            
+            honeyMoves--;
+            const cell = honeyGrid[idx];
+            
+            if (cell === 'honey') {
+                honeyScore++;
+                honeyGrid[idx] = 'revealed';
+            } else if (cell === 'bee') {
+                honeyScore = Math.max(0, honeyScore - 1);
+                honeyGrid[idx] = 'revealed';
+            } else {
+                honeyGrid[idx] = 'revealed';
+            }
+            
+            renderHoneyGrid();
+            
+            if (honeyMoves <= 0 || honeyScore >= 3) {
+                setTimeout(() => {
+                    if (honeyScore >= 3) {
+                        modifyStat('survival', 2);
+                        modifyGold(20);
+                        alert('You collected all the honey!');
+                    } else {
+                        modifyStat('survival', 1);
+                        alert('Not bad! The jungle provides.');
+                    }
+                    showLocationChoices();
+                    showScreen('game-screen');
+                }, 500);
+            }
+        }
+
+        function exitMinigame() {
+            gameRunning = false;
+            document.removeEventListener('keydown', handleStealthInput);
+            showLocationChoices();
+            showScreen('game-screen');
+        }
+
+        function checkEnding() {
+            gameState.storyProgress = 100;
+            
+            let ending = '';
+            let endingTitle = '';
+            let endingContent = '';
+            
+            if (gameState.shereKhanThreat >= 50) {
+                endingTitle = 'The Flight from the Jungle';
+                endingContent = `
+                    <p>Shere Khan has become too powerful. The wolves cannot protect you anymore.</p>
+                    <p style="margin-top: 20px;">Bagheera leads you to the man-village. Messua takes you in as her own son.</p>
+                    <p style="margin-top: 20px; color: #888;">You live among humans now, but sometimes at night, you hear Baloo's laughter in your dreams...</p>
+                    <p style="margin-top: 20px;"><strong>Final Loyalty:</strong> ${gameState.stats.loyalty} | <strong>Jungle Respect:</strong> ${gameState.jungleRespect}</p>
+                `;
+            } else if (gameState.humanTies >= 80) {
+                endingTitle = 'The Man-Cub Returns Home';
+                endingContent = `
+                    <p>You have embraced your human heritage. The village becomes your new home.</p>
+                    <p style="margin-top: 20px;">Messua teaches you to read and write. You become a teacher yourself, helping others learn.</p>
+                    <p style="margin-top: 20px; color: #888;">But you never forget the jungle, and sometimes you tell stories to the children about a bear named Baloo and a panther named Bagheera.</p>
+                    <p style="margin-top: 20px;"><strong>Final Wisdom:</strong> ${gameState.stats.wisdom} | <strong>Human Ties:</strong> ${gameState.humanTies}</p>
+                `;
+            } else if (gameState.jungleRespect >= 80 && gameState.stats.wisdom >= 10) {
+                endingTitle = 'The Master of the Jungle';
+                endingContent = `
+                    <p>You have proven yourself worthy of the Law of the Jungle!</p>
+                    <p style="margin-top: 20px;">Akela passes the leadership to you. You become the new protector of the Seeonee wolves.</p>
+                    <p style="margin-top: 20px; color: #ffd700;">"The strength of the Pack is in the Wolf, and the strength of the Wolf is in the Pack. Now the strength of the Pack lies in YOU."</p>
+                    <p style="margin-top: 20px;"><strong>Final Wisdom:</strong> ${gameState.stats.wisdom} | <strong>Jungle Respect:</strong> ${gameState.jungleRespect}</p>
+                `;
+            } else if (gameState.stats.loyalty >= 12) {
+                endingTitle = 'The Loyal Wolf';
+                endingContent = `
+                    <p>Raksha's cub to the end! You remain with your wolf family through all trials.</p>
+                    <p style="margin-top: 20px;">Your bond with the wolf pack is unbreakable. Together, you face Shere Khan and drive him from the jungle.</p>
+                    <p style="margin-top: 20px; color: #ffa500;">"This is the cub of Raksha. Let him run with his brothers."</p>
+                    <p style="margin-top: 20px;"><strong>Final Loyalty:</strong> ${gameState.stats.loyalty} | <strong>Jungle Respect:</strong> ${gameState.jungleRespect}</p>
+                `;
+            } else {
+                endingTitle = 'The Path Between Two Worlds';
+                endingContent = `
+                    <p>You have found a balance between the jungle and human worlds.</p>
+                    <p style="margin-top: 20px;">Neither fully wolf nor fully man, you forge your own path.</p>
+                    <p style="margin-top: 20px; color: #888;">Some say they still see a figure walking at the edge of the jungle - a being that belongs to both worlds.</p>
+                    <p style="margin-top: 20px;"><strong>Final Stats:</strong> Stealth ${gameState.stats.stealth} | Strength ${gameState.stats.strength} | Wisdom ${gameState.stats.wisdom} | Survival ${gameState.stats.survival} | Loyalty ${gameState.stats.loyalty}</p>
+                `;
+            }
+            
+            document.getElementById('ending-title').textContent = endingTitle;
+            document.getElementById('ending-content').innerHTML = endingContent;
+            showScreen('ending-screen');
+        }
+
+        function saveGame() {
+            localStorage.setItem('jungleBookSave', JSON.stringify(gameState));
+            alert('Game saved!');
+        }
+
+        function loadGame() {
+            const saved = localStorage.getItem('jungleBookSave');
+            if (saved) {
+                gameState = JSON.parse(saved);
+                updateStats();
+                updateInventory();
+                showScreen('game-screen');
+                enterLocation(gameState.currentLocation);
+            } else {
+                alert('No saved game found!');
+            }
+        }
+
+        function restartGame() {
+            gameState = {
+                character: null,
+                stats: { stealth: 5, strength: 5, wisdom: 5, survival: 5, loyalty: 5 },
+                gold: 10,
+                inventory: [],
+                currentLocation: 'wolf-den',
+                visitedLocations: ['wolf-den'],
+                storyProgress: 0,
+                choices: [],
+                shereKhanThreat: 0,
+                jungleRespect: 50,
+                humanTies: 50
+            };
+            
+            // Reset location locks
+            Object.keys(locations).forEach(k => {
+                if (k !== 'wolf-den') locations[k].unlocked = false;
+            });
+            locations['ancient-ruins'].unlocked = true;
+            
+            showScreen('start-screen');
+        }
+    </script>
+</body>
+</html>

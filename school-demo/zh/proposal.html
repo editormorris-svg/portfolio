@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教育人工智能提案 — NAS Jiaxing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #1a237e;
+            --navy-light: #283593;
+            --gold: #b8860b;
+            --gold-light: #d4a574;
+            --cream: #faf6f0;
+            --text: #2c1810;
+            --text-light: #5d4037;
+            --border: rgba(44,24,16,0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', 'Noto Serif SC', sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            line-height: 1.8;
+        }
+        .page {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 40px rgba(0,0,0,0.05);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid var(--gold);
+            padding-bottom: 2rem;
+            margin-bottom: 2.5rem;
+        }
+        .school-badge {
+            display: inline-block;
+            background: var(--navy);
+            color: white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+        h1 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2.4rem;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+        .meta {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        h2 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.5rem;
+            color: var(--navy);
+            margin: 2.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--gold-light);
+        }
+        h3 {
+            font-family: 'Inter', 'Noto Serif SC', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--navy-light);
+            margin: 1.5rem 0 0.5rem;
+        }
+        p { margin-bottom: 1rem; }
+        .highlight-box {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+        }
+        .highlight-box h3 { color: var(--gold-light); margin-top: 0; }
+        ul, ol {
+            margin: 0.5rem 0 1rem 1.5rem;
+        }
+        li { margin-bottom: 0.4rem; }
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        .spec-table th {
+            background: var(--navy);
+            color: white;
+            padding: 0.6rem 1rem;
+            text-align: left;
+            font-weight: 500;
+        }
+        .spec-table td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .spec-table tr:nth-child(even) { background: var(--cream); }
+        .ask-box {
+            background: var(--cream);
+            border: 2px solid var(--gold);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        .ask-box h3 {
+            color: var(--navy);
+            margin-top: 0;
+            text-align: center;
+        }
+        .ask-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .ask-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .ask-text h4 { margin-bottom: 0.3rem; color: var(--navy); }
+        .ask-text p { margin: 0; font-size: 0.95rem; }
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--gold);
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        .lang-toggle {
+            display: inline-block;
+            background: var(--navy);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+        .lang-toggle:hover { background: var(--navy-light); }
+        @media (max-width: 700px) {
+            .two-col { grid-template-columns: 1fr; }
+            h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <a href="../proposal.html" class="lang-toggle">🇺🇸 English Version</a>
+
+    <div class="header">
+        <div class="school-badge">NAS JIAXING · 专业发展</div>
+        <h1>教育人工智能倡议</h1>
+        <p class="subtitle">为教师和学生建设本地化 AI 基础设施</p>
+        <p class="meta">提案人：William Morris | 2026年5月</p>
+    </div>
+
+    <h2>执行摘要</h2>
+    <p>我们建议为 NAS Jiaxing 建立一台专属的 AI 教育服务器 —— 一个本地化、注重隐私的平台，让教师和学生能够直接使用最先进的 AI 工具，无需依赖外部云服务或 VPN。</p>
+
+    <div class="highlight-box">
+        <h3>我们正在解决的问题</h3>
+        <p>教师希望将 AI 应用于课堂教学，但面临三大障碍：</p>
+        <ol>
+            <li><strong>访问受限</strong> — 许多 AI 工具（ChatGPT、Claude、Gemini）在校园网络被屏蔽，需要 VPN 才能使用</li>
+            <li><strong>数据隐私</strong> — 将学生作业上传至国外云服务引发合规性担忧</li>
+            <li><strong>成本与复杂性</strong> — 高级 AI 订阅服务价格昂贵；教师不知从何入手</li>
+        </ol>
+    </div>
+
+    <h2>我们的解决方案</h2>
+    <p>一台运行在校园网络内部的本地 AI 服务器，托管开源 AI 模型和教育工具：</p>
+    <ul>
+        <li><strong>随时可用</strong> — 无需 VPN，校园 WiFi 即可直接访问</li>
+        <li><strong>完全私密</strong> — 所有数据保留在学校内部，不上传至外部云端</li>
+        <li><strong>免费使用</strong> — 开源软件，无需订阅费用</li>
+        <li><strong>教育专用</strong> — 专为教学场景设计，非通用聊天工具</li>
+    </ul>
+
+    <h2>已有成果（演示系统）</h2>
+    <p>我们已在个人工作站上搭建了概念验证系统。这台设备证明了技术的可行性，目前可为校园网络提供教育内容和 AI 工具。</p>
+
+    <h3>演示设备配置</h3>
+    <table class="spec-table">
+        <tr><th>组件</th><th>规格</th></tr>
+        <tr><td>CPU</td><td>AMD Ryzen 9 7950X3D（16 核，32 线程）</td></tr>
+        <tr><td>内存</td><td>96GB DDR5</td></tr>
+        <tr><td>GPU</td><td>AMD RX 7900 XTX（24GB 显存）</td></tr>
+        <tr><td>存储</td><td>2TB NVMe SSD + 4TB HDD</td></tr>
+        <tr><td>操作系统</td><td>Ubuntu 24.04 LTS</td></tr>
+        <tr><td>网络</td><td>校园局域网 — 任何教室均可访问</td></tr>
+        <tr><td>总成本</td><td>约 ¥20,000（个人出资）</td></tr>
+    </table>
+
+    <p><em>这台设备目前为校园网络提供教育内容和 AI 工具服务，证明了概念的可行性。对于永久性学校解决方案，我们建议购买一台专用服务器，成本约为演示系统的一半。</em></p>
+
+    <h2>推荐服务器配置 — 两个预算方案</h2>
+    <p>两个方案均采用专业级服务器硬件，采购自淘宝二手企业设备市场。两者都比 ¥20,000 的演示系统更具性价比，同时比同价位的新台式电脑功能更强大。</p>
+
+    <div class="highlight-box">
+        <h3>⭐ 推荐方案：标准级（A1 机架式服务器）</h3>
+        <p>一台专业的 2U 机架式服务器，配备 32 核 AMD EPYC 处理器、双 Tesla A2 GPU 及企业级可靠性。冗余电源、10GbE 网络、强大扩展能力。这是真实数据中心使用的设备 —— 为教育重新定位。</p>
+    </div>
+
+    <h3>方案 A1：GIGABYTE G292-Z20 机架式服务器 — 标准配置（约 ¥12,050）⭐</h3>
+    <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem;"><em>2U 企业级服务器，采购自淘宝二手/服务器翻新市场。发货前经过测试。1 年卖家保修。</em></p>
+    <table class="spec-table">
+        <tr><th>组件</th><th>规格</th><th>预估价格</th></tr>
+        <tr><td>机箱</td><td>GIGABYTE G292-Z20 2U 机架式服务器（二手）</td><td rowspan="3">¥4,700</td></tr>
+        <tr><td>主板</td><td>MZ22-G20（SP3 插槽，8x DDR4，10x PCIe x16）</td></tr>
+        <tr><td>CPU</td><td>AMD EPYC 7532 — 32 核 / 64 线程，2.4GHz，256MB 三级缓存</td></tr>
+        <tr><td>内存</td><td><strong>256GB DDR4 ECC RDIMM</strong>（8x 32GB，二手，Samsung/SK Hynix）— 可扩展至 512GB</td><td><strong>¥2,400</strong></td></tr>
+        <tr><td>GPU</td><td><strong>2x NVIDIA Tesla A2</strong>（各 16GB GDDR6，60W，数据中心 AI 推理卡）— 可扩展至 4x 或更多</td><td><strong>¥4,000</strong></td></tr>
+        <tr><td>存储（系统）</td><td>1TB NVMe SSD（二手企业级，如 Intel P4510 / Samsung PM981）</td><td>¥400</td></tr>
+        <tr><td>存储（数据）</td><td>4TB HDD（二手企业级，如 HGST / Seagate Exos）</td><td>¥350</td></tr>
+        <tr><td>电源</td><td>2200W 双冗余电源（热插拔，随机箱附带）</td><td>已含</td></tr>
+        <tr><td>散热</td><td>4x 服务器级风扇及温控管理（已含）</td><td>已含</td></tr>
+        <tr><td>网络</td><td>双 10GbE SFP+ 端口（板载）+ IPMI 远程管理</td><td>已含</td></tr>
+        <tr><td>导轨 / 机架套件</td><td>服务器机柜滑动导轨套件（建议选配）</td><td>¥200</td></tr>
+        <tr><td>操作系统及软件</td><td>Ubuntu 24.04 LTS（免费，开源）</td><td>¥0</td></tr>
+        <tr><td><strong>总计</strong></td><td><strong>32 核 · 256GB 内存 · 32GB 显存（2x Tesla A2）· 机架式 · 10GbE · 冗余电源</strong></td><td><strong>约 ¥12,050</strong></td></tr>
+    </table>
+
+    <div class="highlight-box" style="background: linear-gradient(135deg, #6B8E6B 0%, #4a7c59 100%);">
+        <h3>💡 入门级方案（约 ¥8,850）</h3>
+        <p>如 ¥12,000 预算超出承受范围，可将内存缩减至 128GB（4x 32GB 二手 DDR4 ECC = ¥1,200），并使用 1x Tesla A2（16GB 显存 = ¥2,000）。总计约 ¥8,850。仍保留完整机架式结构、冗余电源和 10GbE 网络 —— 仅内存和 GPU 数量减少。</p>
+    </div>
+
+    <h2>两个预算层级对比</h2>
+    <p>两个层级均采用相同的专业服务器硬件。区别在于配置规模 —— 根据学校的需求和资源选择。</p>
+
+    <table class="spec-table">
+        <tr><th>层级</th><th>配置</th><th>价格</th><th>适用场景</th></tr>
+        <tr><td>🟢 <strong>入门级</strong></td><td>A1 机架式 — 32 核，<strong>128GB 内存</strong>，<strong>1x Tesla A2</strong>（16GB 显存），1TB NVMe + 4TB HDD，冗余电源，10GbE</td><td><strong>约 ¥8,850</strong></td><td>试点项目，5–10 名教师，概念验证</td></tr>
+        <tr><td>⭐ <strong>标准级</strong></td><td>A1 机架式 — 32 核，<strong>256GB 内存</strong>，<strong>2x Tesla A2</strong>（32GB 显存），1TB NVMe + 4TB HDD，冗余电源，10GbE</td><td><strong>约 ¥12,050</strong></td><td>全面部署，所有教师和学生，长期发展</td></tr>
+    </table>
+
+    <div class="highlight-box" style="background: linear-gradient(135deg, #6B8E6B 0%, #4a7c59 100%);">
+        <h3>升级路径</h3>
+        <p>两个层级采用相同组件，日后升级无需更换整机：</p>
+        <ul>
+            <li><strong>入门级 → 标准级：</strong>增加 4x 32GB 内存条（+¥1,200）和第二块 Tesla A2（+¥2,000）= 总计约 ¥12,050</li>
+            <li><strong>任意层级：</strong>随着 AI 使用量增长，可添加更多 Tesla A2 GPU（每块 ¥2,000）。A1 机架式最多可容纳 4–6 块显卡。</li>
+        </ul>
+    </div>
+
+    <h3>横向对比</h3>
+    <table class="spec-table">
+        <tr><th>功能</th><th>入门级（A1 机架式）</th><th>标准级（A1 机架式）⭐</th></tr>
+        <tr><td>CPU 核心</td><td>32 核 / 64 线程</td><td>32 核 / 64 线程</td></tr>
+        <tr><td>外形</td><td>🟢 2U 机架式（服务器机房）</td><td>🟢 2U 机架式（服务器机房）</td></tr>
+        <tr><td>电源</td><td>🟢 双 2200W 冗余（热插拔）</td><td>🟢 双 2200W 冗余（热插拔）</td></tr>
+        <tr><td>GPU / 显存</td><td>1x Tesla A2（16GB）</td><td>2x Tesla A2（32GB 总计）</td></tr>
+        <tr><td>GPU 扩展</td><td>🟢 10x PCIe 插槽 — 日后可添加第二块 GPU</td><td>🟢 10x PCIe 插槽 — 日后可添加更多 GPU</td></tr>
+        <tr><td>内存</td><td>128GB DDR4 ECC</td><td>🟢 256GB DDR4 ECC</td></tr>
+        <tr><td>内存插槽 / 上限</td><td>8x DDR4（最大 512GB）</td><td>8x DDR4（最大 512GB）</td></tr>
+        <tr><td>硬盘位</td><td>🟢 8x 热插拔 2.5" + NVMe</td><td>🟢 8x 热插拔 2.5" + NVMe</td></tr>
+        <tr><td>网络</td><td>🟢 双 10GbE SFP+</td><td>🟢 双 10GbE SFP+</td></tr>
+        <tr><td>远程管理</td><td>🟢 IPMI/iKVM</td><td>🟢 IPMI/iKVM</td></tr>
+        <tr><td>操作系统</td><td>Ubuntu 24.04 LTS</td><td>Ubuntu 24.04 LTS</td></tr>
+        <tr><td>保修</td><td>1 年（淘宝卖家）</td><td>1 年（淘宝卖家）</td></tr>
+        <tr><td>总价</td><td><strong>约 ¥8,850</strong></td><td><strong>约 ¥12,050</strong></td></tr>
+    </table>
+
+    <h3>为何推荐标准级（A1 机架式，约 ¥12,050）</h3>
+    <p>对于拥有服务器机房的学校环境，标准级是最佳长期投资：</p>
+    <ul>
+        <li><strong>企业级外形</strong> — 2U 机架式安装在服务器机房，不占用办公桌。专业、安全、不占空间。</li>
+        <li><strong>冗余电源</strong> — 双 2200W 热插拔电源。如一块故障，另一块继续运行。学生使用零中断。</li>
+        <li><strong>10GbE 网络</strong> — 板载双 SFP+ 端口。当学校升级网络基础设施时，传输大型 AI 模型速度是 1GbE 的 10 倍。</li>
+        <li><strong>最大扩展性</strong> — 10 个 PCIe 插槽（日后可添加 2–4 块 Tesla A2），8 个热插拔硬盘位（不开机箱即可添加存储）。</li>
+        <li><strong>企业级可靠性</strong> — 为 24/7 数据中心运行而设计。台式机机箱及塔式散热器不适合持续 100% 负载。</li>
+        <li><strong>32 核已足够</strong> — AI 推理负载由 GPU 决定，非 CPU。在 32 核 EPYC 达到瓶颈之前，Tesla A2 显卡会先成为瓶颈。</li>
+        <li><strong>清晰的升级路径</strong> — 从入门级（约 ¥8,850）开始试点，验证效果后添加内存和第二块 GPU 升级至标准级（约 ¥12,050）。</li>
+    </ul>
+
+    <h2>服务器将提供的服务</h2>
+
+    <h3>面向教师 — 专业发展</h3>
+    <ul>
+        <li><strong>AI 教案助手</strong> — 生成分层教学活动、评分标准及评估方案</li>
+        <li><strong>文本简化器</strong> — 按级别为 ESL 学生调整阅读材料难度</li>
+        <li><strong>讨论引导生成器</strong> — 为任何主题创建引人入胜的讨论题</li>
+        <li><strong>词汇构建器</strong> — 自动生成词汇表，含定义和例句</li>
+        <li><strong>阅读理解评估生成器</strong> — 构建含答案的 comprehension questions</li>
+    </ul>
+
+    <h3>面向学生 — 学习工具</h3>
+    <ul>
+        <li><strong>教育游戏</strong> — 语法、词汇和批判性思维游戏</li>
+        <li><strong>创意项目生成器</strong> — AI 辅助故事写作和项目创意</li>
+        <li><strong>AI 辅导</strong> — 学生可在校园网络内提问并获得解答</li>
+        <li><strong>听力练习</strong> — 含文字稿的 AI 生成听力练习</li>
+    </ul>
+
+    <h3>面向学校 — 基础设施</h3>
+    <ul>
+        <li><strong>内部 AI 资源网站</strong> — <code>ai.nasjiaxing.cn</code> — 所有 AI 工具的专业门户</li>
+        <li><strong>内容管理</strong> — IT 部门控制可用内容；所有内容均经教育筛选</li>
+        <li><strong>无外部依赖</strong> — 即使学校互联网连接缓慢或被过滤，仍可正常运行</li>
+    </ul>
+
+    <h2>为 NAS Jiaxing 带来的益处</h2>
+
+    <div class="two-col">
+        <div>
+            <h3>面向教师</h3>
+            <ul>
+                <li>节省数小时教案编写和材料制作时间</li>
+                <li>自动实现差异化教学</li>
+                <li>随时访问 PD 培训材料</li>
+                <li>无需个人 VPN 或订阅</li>
+                <li>数据保留在学校内部 —— 完全合规</li>
+            </ul>
+        </div>
+        <div>
+            <h3>面向学生</h3>
+            <ul>
+                <li>校园内 24/7 可用的个性化学习工具</li>
+                <li>强化课程的互动游戏</li>
+                <li>AI 写作和创意支持</li>
+                <li>安全环境 —— 无广告、无追踪、无外部数据共享</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="two-col">
+        <div>
+            <h3>面向学校</h3>
+            <ul>
+                <li>将 NAS Jiaxing 定位为 AI 教育领导者</li>
+                <li>一次性硬件成本 vs. 持续订阅费用</li>
+                <li>完全控制内容和访问权限</li>
+                <li>可扩展 —— 按需添加更多功能</li>
+            </ul>
+        </div>
+        <div>
+            <h3>面向 IT 与合规</h3>
+            <ul>
+                <li>所有流量保留在校园局域网</li>
+                <li>学生数据不离开学校大楼</li>
+                <li>可纳入学校现有 ICP 备案体系</li>
+                <li>集中管理和监控</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>实施时间表</h2>
+    <table class="spec-table">
+        <tr><th>阶段</th><th>时长</th><th>行动</th></tr>
+        <tr><td><strong>第一阶段：审批与采购</strong></td><td>2–3 周</td><td>校长和 IT 部门批准预算；订购服务器硬件</td></tr>
+        <tr><td><strong>第二阶段：搭建与配置</strong></td><td>1 周</td><td>安装 Ubuntu，配置 AI 软件，搭建内部网站</td></tr>
+        <tr><td><strong>第三阶段：内容与测试</strong></td><td>1–2 周</td><td>加载教育工具，与试点教师测试，收集反馈</td></tr>
+        <tr><td><strong>第四阶段：上线与培训</strong></td><td>1 周</td><td>内部上线，为全体教职工举办 PD 培训，提供入门材料</td></tr>
+        <tr><td><strong>第五阶段：扩展</strong></td><td>持续</td><td>根据教师需求和学生反馈添加新工具</td></tr>
+    </table>
+
+    <h2>合规与安全</h2>
+    <p>我们承诺完全遵守中国法规：</p>
+    <ul>
+        <li><strong>ICP 备案</strong> — 网站将作为子域名纳入学校现有 ICP 备案体系（<code>ai.nasjiaxing.cn</code>）</li>
+        <li><strong>数据主权</strong> — 所有数据本地存储；不发送至国外服务器</li>
+        <li><strong>内容管控</strong> — IT 和学校领导层在上线前审查并批准所有内容</li>
+        <li><strong>无需 VPN</strong> — 所有服务在校园内部网络运行</li>
+        <li><strong>防火墙友好</strong> — 标准 HTTP 80 端口；无需特殊端口或协议</li>
+    </ul>
+
+    <h2>学校的三个请求</h2>
+
+    <div class="ask-box">
+        <h3>📋 推进项目所需的三个请求</h3>
+
+        <div class="ask-item">
+            <div class="ask-icon">💰</div>
+            <div class="ask-text">
+                <h4>1. 预算审批（约 ¥10,000）</h4>
+                <p>用于购置专用学校 AI 服务器。我们将采购二手企业级硬件以控制预算。</p>
+            </div>
+        </div>
+
+        <div class="ask-item">
+            <div class="ask-icon">🌐</div>
+            <div class="ask-text">
+                <h4>2. IT 支持 — 静态 IP 及子域名</h4>
+                <p>为服务器在校园局域网预留一个静态 IP，并为 <code>ai.nasjiaxing.cn</code> 配置 DNS 指向该 IP。</p>
+            </div>
+        </div>
+
+        <div class="ask-item">
+            <div class="ask-icon">✅</div>
+            <div class="ask-text">
+                <h4>3. ICP 子域名授权</h4>
+                <p>授权将 <code>ai.nasjiaxing.cn</code> 纳入学校现有 ICP 备案体系。</p>
+            </div>
+        </div>
+    </div>
+
+    <h2>关于演示系统</h2>
+    <p>实时演示系统已在校园网络运行。通过校园 WiFi 连接的任何设备均可访问：</p>
+    <div class="highlight-box" style="text-align: center;">
+        <p style="font-size: 1.2rem; margin: 0;"><code>http://10.39.26.217/</code></p>
+        <p style="margin: 0.5rem 0 0; opacity: 0.8;">仅校园局域网可访问</p>
+    </div>
+    <p>该演示展示了着陆页、教育游戏、AI 工具及最终网站的总体外观。</p>
+
+    <h2>关于提案人 — William Morris</h2>
+    <p>我是 NAS Jiaxing 的一名英语教师，具有技术背景并对 AI 有浓厚兴趣。我利用个人时间使用个人资金搭建了演示设备，以证明这对我们学校是可行且有价值的。我并非要求学校资助我的个人项目 —— 而是提议建设一台独立、学校所有的服务器，为全体教职工和学生提供服务。</p>
+    <p>我很乐意负责技术搭建、维护服务器，并培训教师如何使用这些工具。我的目标是让 NAS Jiaxing 成为 AI 融合教育的示范学校。</p>
+
+    <div class="footer">
+        <p><strong>如有疑问？</strong>请联系 William Morris：william.morris@nasjiaxing.cn</p>
+        <p style="margin-top: 0.5rem;">完整技术细节可应要求提供 · 演示系统可在校园网络访问</p>
+    </div>
+
+</div>
+</body>
+</html>

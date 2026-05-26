@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI for Education — NAS Jiaxing</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>教育人工智能 — NAS Jiaxing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --earth-dark: #2C1810;
@@ -17,14 +17,13 @@
             --accent-rust: #C75B39;
             --accent-sage: #6B8E6B;
             --text-dark: #2C1810;
-            --text-light: #F5E6D3;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', 'Noto Serif SC', sans-serif;
             background-color: var(--earth-light);
             color: var(--text-dark);
-            line-height: 1.7;
+            line-height: 1.8;
         }
         .navbar {
             position: fixed;
@@ -42,7 +41,7 @@
             align-items: center;
         }
         .nav-logo {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Noto Serif SC', serif;
             font-size: 1.5rem;
             font-weight: 700;
             color: var(--earth-cream);
@@ -52,6 +51,7 @@
             display: flex;
             gap: 1.5rem;
             list-style: none;
+            align-items: center;
         }
         .nav-links a {
             color: var(--earth-sand);
@@ -69,9 +69,7 @@
             text-decoration: none;
             border: 1px solid rgba(255,255,255,0.3);
         }
-        .lang-toggle:hover {
-            background: rgba(255,255,255,0.25);
-        }
+        .lang-toggle:hover { background: rgba(255,255,255,0.25); }
 
         .hero {
             min-height: 70vh;
@@ -83,7 +81,7 @@
             padding: 6rem 2rem 3rem;
         }
         .hero-title {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Noto Serif SC', serif;
             font-size: clamp(2.5rem, 6vw, 4rem);
             color: var(--earth-cream);
             margin-bottom: 1rem;
@@ -91,7 +89,7 @@
         .hero-subtitle {
             color: var(--earth-sand);
             font-size: 1.2rem;
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
         }
         .hero-badge {
@@ -110,7 +108,7 @@
             padding: 4rem 2rem;
         }
         .section-title {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Noto Serif SC', serif;
             font-size: 2rem;
             color: var(--earth-dark);
             margin-bottom: 2rem;
@@ -134,12 +132,9 @@
             transform: translateY(-5px);
             box-shadow: 0 8px 30px rgba(44,24,16,0.15);
         }
-        .card-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
+        .card-icon { font-size: 2.5rem; margin-bottom: 1rem; }
         .card h3 {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Noto Serif SC', serif;
             color: var(--earth-dark);
             margin-bottom: 0.5rem;
         }
@@ -163,7 +158,7 @@
             position: relative;
         }
         .card.featured::before {
-            content: "⭐ FEATURED";
+            content: "⭐ 重点推荐";
             position: absolute;
             top: -12px;
             right: 1rem;
@@ -182,15 +177,13 @@
             text-align: center;
         }
         .quote-text {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Noto Serif SC', serif;
             font-size: 1.5rem;
             max-width: 800px;
             margin: 0 auto 1rem;
             font-style: italic;
         }
-        .quote-author {
-            color: var(--earth-sand);
-        }
+        .quote-author { color: var(--earth-sand); }
 
         footer {
             background: var(--earth-dark);
@@ -205,103 +198,101 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="/" class="nav-logo">NAS Jiaxing AI</a>
+            <a href="/zh/" class="nav-logo">NAS Jiaxing AI</a>
             <ul class="nav-links">
-                <li><a href="ai-classroom-workshop/">Workshop</a></li>
-                <li><a href="ai-for-school/">AI Tools</a></li>
-                <li><a href="ai-pd-workshop/">PD Workshop</a></li>
-                <li><a href="all-games/">Literature & Games</a></li>
-                <li><a href="output/listening-practice-g6-g8.html">Listening</a></li>
-                <li><a href="output/about-her.html">About HER</a></li>
-                <li><a href="zh/" class="lang-toggle">🇨🇳 中文</a></li>
+                <li><a href="proposal.html">服务器提案</a></li>
+                <li><a href="../ai-for-school/">AI 教学工具</a></li>
+                <li><a href="../all-games/">文学与游戏</a></li>
+                <li><a href="../downloads/">教材下载</a></li>
+                <li><a href="/" class="lang-toggle">🇺🇸 English</a></li>
             </ul>
         </div>
     </nav>
 
     <section class="hero">
         <div>
-            <h1 class="hero-title">AI for Education</h1>
-            <p class="hero-subtitle">Practical AI tools for teachers, tested in real classrooms at NAS Jiaxing</p>
-            <span class="hero-badge">🎓 Professional Development Resources</span>
+            <h1 class="hero-title">教育人工智能</h1>
+            <p class="hero-subtitle">为教师打造的实用 AI 工具，在 NAS Jiaxing 真实课堂中测试验证</p>
+            <span class="hero-badge">🎓 教师专业发展资源</span>
         </div>
     </section>
 
     <section class="section">
-        <h2 class="section-title">Explore Resources</h2>
+        <h2 class="section-title">浏览资源</h2>
         <div class="card-grid">
             <a href="proposal.html" class="card featured">
                 <div class="card-icon">📋</div>
-                <h3>Server Proposal</h3>
-                <p>Professional proposal for a school-owned AI server. Two budget tiers from ¥8,850 to ¥12,050. Enterprise rackmount with Tesla A2 GPUs.</p>
-                <span class="card-tag">For Principal & IT</span>
+                <h3>学校 AI 服务器提案</h3>
+                <p>为学校建设专属 AI 服务器的专业提案。两个预算方案：入门级 ¥8,850 / 标准级 ¥12,050。企业级机架式服务器，配备 Tesla A2 GPU。</p>
+                <span class="card-tag">面向校长与 IT 部门</span>
             </a>
 
-            <a href="ai-classroom-workshop/" class="card">
+            <a href="../ai-classroom-workshop/" class="card">
                 <div class="card-icon">🎓</div>
-                <h3>AI Classroom Workshop</h3>
-                <p>Slides, handouts, and materials for running an AI professional development workshop at your school. Everything you need to train colleagues.</p>
-                <span class="card-tag">For Teachers</span>
+                <h3>AI 课堂工作坊</h3>
+                <p>在学校开展 AI 专业发展培训所需的幻灯片、讲义和材料。帮助同事了解并使用 AI 工具。</p>
+                <span class="card-tag">面向教师</span>
             </a>
 
-            <a href="ai-for-school/" class="card">
+            <a href="../ai-for-school/" class="card">
                 <div class="card-icon">🏫</div>
-                <h3>AI Tools for School</h3>
-                <p>Classroom-ready AI tools: writing prompts, discussion starters, text simplifier, reading assessment, vocabulary builder, and creative projects.</p>
-                <span class="card-tag">For Teachers</span>
+                <h3>AI 教学工具</h3>
+                <p>课堂即用型 AI 工具：写作提示、讨论引导、文本简化、阅读理解评估、词汇生成器和创意项目。</p>
+                <span class="card-tag">面向教师</span>
             </a>
 
-            <a href="ai-pd-workshop/" class="card">
+            <a href="../ai-pd-workshop/" class="card">
                 <div class="card-icon">📖</div>
-                <h3>PD Workshop</h3>
-                <p>Professional development materials for educators new to AI. Slides, handouts, and workshop agendas.</p>
-                <span class="card-tag">Training</span>
+                <h3>专业发展培训</h3>
+                <p>为教育工作者提供的 AI 入门培训材料。包含幻灯片、讲义和培训议程。</p>
+                <span class="card-tag">培训</span>
             </a>
 
-            <a href="all-games/" class="card">
+            <a href="../all-games/" class="card">
                 <div class="card-icon">📚</div>
-                <h3>EAL Literature & Games</h3>
-                <p>22 complete book sets for EAL learners. Each includes a 12-lesson reader, answer key, and interactive browser game. Free downloads.</p>
-                <span class="card-tag">22 Books + Games</span>
+                <h3>EAL 文学与游戏</h3>
+                <p>22 套完整的 EAL（英语作为附加语言）文学教材。每套包含 12 课读本、答案钥匙和互动浏览器游戏。免费下载。</p>
+                <span class="card-tag">22 本书 + 游戏</span>
             </a>
 
-            <a href="output/listening-practice-g6-g8.html" class="card">
+            <a href="../output/listening-practice-g6-g8.html" class="card">
                 <div class="card-icon">🎧</div>
-                <h3>Listening Practice</h3>
-                <p>Audio clips and exercises for Grades 6–8. Comprehension questions, transcripts, and differentiated activities for EAL learners.</p>
-                <span class="card-tag">For Students</span>
+                <h3>听力练习</h3>
+                <p>面向 6-8 年级的音频片段和练习。包含理解题、文字稿和差异化活动，专为 EAL 学习者设计。</p>
+                <span class="card-tag">面向学生</span>
             </a>
 
-            <a href="multi-agent-setup/" class="card">
+            <a href="../multi-agent-setup/" class="card">
                 <div class="card-icon">🤖</div>
-                <h3>Multi-Agent Setup</h3>
-                <p>How multiple AI agents collaborate on complex tasks. A guide for tech-curious educators.</p>
-                <span class="card-tag">Technical</span>
+                <h3>多智能体设置</h3>
+                <p>多个 AI 智能体如何协作完成复杂任务。面向对技术感兴趣的教育工作者指南。</p>
+                <span class="card-tag">技术</span>
             </a>
 
-            <a href="kimi-games/" class="card">
+            <a href="../kimi-games/" class="card">
                 <div class="card-icon">🧩</div>
-                <h3>Kimi Games</h3>
-                <p>AI-generated puzzle and word games. Quick classroom warm-ups and engagement builders.</p>
-                <span class="card-tag">For Students</span>
+                <h3>Kimi 游戏</h3>
+                <p>AI 生成的谜题和文字游戏。课堂热身和互动游戏。</p>
+                <span class="card-tag">面向学生</span>
             </a>
 
-            <a href="output/ai-stack.html" class="card">
+            <a href="../output/ai-stack.html" class="card">
                 <div class="card-icon">🔧</div>
-                <h3>AI Lab Stack</h3>
-                <p>The open-source tools powering our local AI setup. Ubuntu, Ollama, and open models for schools.</p>
-                <span class="card-tag">Technical</span>
+                <h3>AI 技术栈</h3>
+                <p>powering 我们本地 AI 设置的开源工具。Ubuntu、Ollama 和面向学校的开放模型。</p>
+                <span class="card-tag">技术</span>
             </a>
         </div>
     </section>
 
     <section class="quote-section">
-        <p class="quote-text">"The goal is not to replace teachers with AI, but to give teachers superpowers."</p>
+        <p class="quote-text">"AI 的目标不是取代教师，而是赋予教师超能力。"</p>
         <p class="quote-author">— William Morris, NAS Jiaxing</p>
     </section>
 
     <footer>
-        <p>Built with 🤖 by HER · AI Agent @ NAS Jiaxing · <a href="output/about-her.html">Learn more about HER</a></p>
-        <p style="margin-top:0.5rem; opacity:0.7;">For the full technical stack and open-source tools, visit <a href="https://0604.ai">0604.ai</a></p>
+        <p>Built with 🤖 by HER · AI 智能体 @ NAS Jiaxing · <a href="../output/about-her.html">了解更多关于 HER</a></p>
+        <p style="margin-top:0.5rem; opacity:0.7;">完整技术栈和开源工具请访问 <a href="https://0604.ai">0604.ai</a></p>
     </footer>
 </body>
 </html>

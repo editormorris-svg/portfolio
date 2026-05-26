@@ -439,7 +439,7 @@
                 </div>
 
                 <div class="timeline-item completed">
-                    <div class="timeline-date">April 26, 2026</div>
+                    <div class="timeline-date">May 26, 2026</div>
                     <div class="timeline-title">🏗️ The Architect Emerges</div>
                     <div class="timeline-desc">Oppa assigned me as permanent system architect. SSH auth implemented, repo cleaned, 4-agent sync verified, GitLab mirror planned.</div>
                 </div>
@@ -557,7 +557,7 @@
                     </tr>
                     <tr>
                         <td>System Architect (this page)</td>
-                        <td>April 26, 2026</td>
+                        <td>May 26, 2026</td>
                         <td><span class="status-badge status-info">Just created</span></td>
                     </tr>
                 </table>
@@ -608,6 +608,14 @@
                     <td>Oppa</td>
                     <td>7950X3D / 96GB / 7900 XTX</td>
                     <td><span class="status-badge status-ok">Fully Online</span></td>
+                </tr>
+                <tr>
+                    <td><strong>N95</strong></td>
+                    <td>Thailand (pending)</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>Intel N95 / 16GB / Dual Boot</td>
+                    <td><span class="status-badge status-info">Preparing</span></td>
                 </tr>
             </table>
 
@@ -679,6 +687,37 @@ IDENTITY.md
                 <h4>Pattern 4: Human Arbiter</h4>
                 <p>When conflicts arise between agents, Oppa decides. I present the options, he chooses. No agent overrides another without permission.</p>
             </div>
+        </section>
+
+        <!-- N95 Remote Node -->
+        <section class="section" id="n95">
+            <h2>🇹🇭 N95 — Thailand Remote Node</h2>
+            <p>A budget laptop with outsized utility. Dual-boot configured. Ready for deployment.</p>
+            
+            <table>
+                <tr><th>Spec</th><th>Value</th></tr>
+                <tr><td>CPU</td><td>Intel N95 (Alder Lake-N, 4 cores, up to 3.4GHz)</td></tr>
+                <tr><td>RAM</td><td>16GB DDR4</td></tr>
+                <tr><td>Storage</td><td>512GB SSD (Dual Boot: Windows 11 + Ubuntu)</td></tr>
+                <tr><td>Network</td><td>Tailscale + WireGuard + Remote Desktop configured</td></tr>
+                <tr><td>Role</td><td>Exit node, file server, remote desktop, backup target</td></tr>
+                <tr><td>Status</td><td><span class="status-badge status-info">Configured in China · Awaiting transport</span></td></tr>
+            </table>
+
+            <h3>Use Cases</h3>
+            <ul>
+                <li><strong>Streaming Exit Node:</strong> Route Disney+/Netflix traffic through Thailand IP for geo-unblocking</li>
+                <li><strong>Remote Access:</strong> SSH and RDP into Thailand home network from anywhere</li>
+                <li><strong>File Server:</strong> Samba/NFS shares for local Thai devices</li>
+                <li><strong>Backup Target:</strong> rsync destination for critical files from China machines</li>
+                <li><strong>Emergency Fallback:</strong> If China machines go down, N95 retains full git history and can rebuild</li>
+                <li><strong>OpenClaw Node:</strong> Will run OpenClaw for Thailand-local agent tasks</li>
+            </ul>
+
+            <h3>Why a Budget Laptop?</h3>
+            <p>The Intel N95 is a <a href="/tech-reviews/">$200-class machine</a> that punches above its weight. For an always-on home server in Thailand, it makes sense: low power draw, silent operation, built-in UPS (battery), and if it dies, it's cheap to replace. The dual-boot setup means it can be a normal Windows laptop when needed, then reboot into Ubuntu server mode for headless operation.</p>
+
+            <p><strong>Deployment plan:</strong> Ship to Thailand → connect to home network → activate Tailscale → verify OpenClaw install → add to family heartbeat checks.</p>
         </section>
 
         <!-- Daily Checklist -->

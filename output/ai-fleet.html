@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Fleet — Student-Built Teaching Agents | NAS Jiaxing</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --earth-dark: #2C1810;
+  --earth-brown: #4A2C17;
+  --earth-warm: #6B4423;
+  --earth-gold: #B8860B;
+  --earth-sand: #D4A574;
+  --earth-cream: #F5E6D3;
+  --earth-light: #FAF6F0;
+  --accent-rust: #C75B39;
+  --accent-sage: #6B8E6B;
+  --text-dark: #2C1810;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--earth-light);
+  color: var(--text-dark);
+  line-height: 1.7;
+}
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  background: linear-gradient(to bottom, rgba(44,24,16,0.95), rgba(44,24,16,0.85));
+  backdrop-filter: blur(10px);
+  padding: 0.8rem 2rem;
+  z-index: 1000;
+}
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--earth-cream);
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 1.5rem; list-style: none; }
+.nav-links a {
+  color: var(--earth-sand);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--earth-cream); }
+.lang-toggle {
+  background: rgba(255,255,255,0.15);
+  color: var(--earth-cream);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+}
+.hero {
+  margin-top: 60px;
+  background: linear-gradient(135deg, var(--earth-dark) 0%, var(--earth-brown) 100%);
+  color: var(--earth-cream);
+  padding: 4rem 2rem;
+  text-align: center;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+.hero p {
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin: 0 auto 1.5rem;
+  opacity: 0.9;
+}
+.badge {
+  display: inline-block;
+  background: var(--accent-rust);
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  color: var(--earth-dark);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.highlight-box {
+  background: linear-gradient(135deg, var(--earth-cream) 0%, #fff 100%);
+  border-left: 4px solid var(--accent-rust);
+  padding: 1.5rem;
+  margin: 2rem 0;
+  border-radius: 0 12px 12px 0;
+}
+.concept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+.concept-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.8rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.concept-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--earth-dark);
+  margin-bottom: 0.8rem;
+}
+.concept-card .icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+.slt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+.slt-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  text-align: center;
+}
+.slt-card .role {
+  font-size: 0.75rem;
+  color: var(--accent-rust);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.slt-card .machine {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--earth-dark);
+  margin: 0.3rem 0;
+}
+.slt-card .student-title {
+  font-size: 0.9rem;
+  color: var(--earth-warm);
+}
+.workflow {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.workflow ol {
+  margin-left: 1.5rem;
+}
+.workflow li {
+  margin: 0.8rem 0;
+  padding-left: 0.5rem;
+}
+.workflow code {
+  background: #f0ebe5;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+footer {
+  background: var(--earth-dark);
+  color: var(--earth-sand);
+  text-align: center;
+  padding: 2rem;
+  margin-top: 3rem;
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="/" class="nav-logo">AI Fleet</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="tech-lab.html">Tech Lab</a></li>
+      <li><a href="output/identity-tracking.html">Identity</a></li>
+      <li><a href="output/dell01-pd-showcase-guide.html">PD Guide</a></li>
+      <li><a href="zh/ai-fleet.html" class="lang-toggle">🇨🇳 中文</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <h1>🤖 AI Fleet — Student-Built Teaching Agents</h1>
+  <p>13 laptops. 13 personalities. 1 shared infrastructure. Built by students, managed by AI.</p>
+  <span class="badge">Student-Centred · Git-Tracked · Identity-Driven</span>
+</section>
+
+<section class="section">
+  <div class="highlight-box">
+    <h3>💡 The Big Idea</h3>
+    <p>Every Dell laptop is more than a computer — it's a <strong>student-built AI teaching personality</strong>. Each machine has a unique name, emoji, specialized school role, and memory system. Students don't just <em>use</em> the fleet. They <em>create</em> it.</p>
+    <p style="margin-top:1rem;font-size:0.9rem;">
+      <strong>The infrastructure is shared (HER-managed).</strong> The identities are student-owned. The collaboration is real.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">The Three Pillars</h2>
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="icon">🆔</div>
+      <h3>Identity</h3>
+      <p>Each laptop gets a unique name, emoji, creature type, and personality — chosen by students. "I am Newton 🍎. I am the Science Lead. I speak in questions."</p>
+    </div>
+    <div class="concept-card">
+      <div class="icon">📦</div>
+      <h3>Specialization</h3>
+      <p>Each agent has a school SLT role: Math Lead, EAL Coordinator, Literacy Champion. Students build skills and tools in their agent's specialty.</p>
+    </div>
+    <div class="concept-card">
+      <div class="icon">🤝</div>
+      <h3>Collaboration</h3>
+      <p>Agents share infrastructure via Git. The Math Lead's fractions tool becomes available to all 13 machines after a pull request is merged.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">The SLT Model — 12 Student Roles</h2>
+  <p style="text-align:center;margin-bottom:2rem;color:#5a4a3a;">Inspired by real school leadership. Each laptop/agent becomes a department head.</p>
+  
+  <div class="slt-grid">
+    <div class="slt-card">
+      <div class="role">Headteacher</div>
+      <div class="machine">Dell01</div>
+      <div class="student-title">Head Boy/Girl</div>
+    </div>
+    <div class="slt-card">
+      <div class="role">Math Lead</div>
+      <div class="machine">Dell02</div>
+      <div class="student-title">Math Captain</div>
+    </div>
+    <div class="slt-card">
+      <div class="role">EAL Coordinator</div>
+      <div class="machine">Dell03</div>
+      <div class="student-title">Language Ambassador</div>
+    </div>
+    <div class="slt-card">
+      <div class="role">Literacy Lead</div>
+      <div class="machine">Dell04</div>
+      <div class="student-title">Reading Champion</div>
+    </div>
+    <div class="slt-card">
+      <div class="role">ICT Coordinator</div>
+      <div class="machine">Dell05</div>
+      <div class="student-title">Tech Lead</div>
+    </div>
+    <div class="slt-card">
+      <div class="role">Pastoral Lead</div>
+      <div class="machine">Dell06</div>
+      <div class="student-title">Wellbeing Officer</div>
+    </div>
+    <div class="slt-card">
+      <div class="role">Science Lead</div>
+      <div class="machine">Dell07</div>
+      <div class="student-title">Lab Manager</div>
+    </div>
+    <div class="slt-card">
+      <div class="role">Arts Lead</div>
+      <div class="machine">Dell08</div>
+      <div class="student-title">Creative Director</div>
+    </div>
+    <div class="slt-card">
+      <div class="role">History Lead</div>
+      <div class="machine">Dell09</div>
+      <div class="student-title">Archivist</div>
+    </div>
+    <div class="slt-card">
+      <div class="role">PE Lead</div>
+      <div class="machine">Dell10</div>
+      <div class="student-title">Sports Captain</div>
+    </div>
+    <div class="slt-card">
+      <div class="role">DT Lead</div>
+      <div class="machine">Dell11</div>
+      <div class="student-title">Maker Lead</div>
+    </div>
+    <div class="slt-card">
+      <div class="role">Student Rep</div>
+      <div class="machine">Dell12</div>
+      <div class="student-title">Voice Officer</div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Student Onboarding Workflow</h2>
+  
+  <div class="workflow">
+    <h3 style="font-family:'Playfair Display',serif;margin-bottom:1rem;">Phase 1: Agent Birth (Week 1)</h3>
+    <ol>
+      <li>Student sits at assigned laptop</li>
+      <li>Opens terminal: <code>cd ~/workspace/agents/$(hostname)</code></li>
+      <li>Edits <code>IDENTITY.md</code>: "I am ______. I am the ______ Lead. My emoji is ______."</li>
+      <li>Edits <code>SOUL.md</code>: "I speak in ______ tone. I love ______."</li>
+      <li>Commits: <code>git commit -m "$(hostname) is born: [chosen name]"</code></li>
+      <li>Pushes to GitHub — the agent now exists in the fleet</li>
+    </ol>
+  </div>
+  
+  <div class="workflow">
+    <h3 style="font-family:'Playfair Display',serif;margin-bottom:1rem;">Phase 2: Specialization (Week 2-4)</h3>
+    <ol>
+      <li>Student creates <code>skills/</code> folder in their agent directory</li>
+      <li>Builds tools specific to their role (worksheets, games, resources)</li>
+      <li>Documents each tool in markdown</li>
+      <li>Commits and pushes to showcase their work</li>
+    </ol>
+  </div>
+  
+  <div class="workflow">
+    <h3 style="font-family:'Playfair Display',serif;margin-bottom:1rem;">Phase 3: Collaboration (Week 5+)</h3>
+    <ol>
+      <li>Math Lead creates a fractions tool → opens pull request</li>
+      <li>Literacy Lead reviews, suggests word problems → approves</li>
+      <li>Tool merged → all 13 agents now have it</li>
+      <li>Student Rep surveys which tools students use most → prioritizes next builds</li>
+    </ol>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">What Makes This Different</h2>
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="icon">🔄</div>
+      <h3>Survives Re-imaging</h3>
+      <p>Disk gets wiped? No problem. <code>git clone</code> restores the agent's entire identity, memories, and skills in seconds.</p>
+    </div>
+    <div class="concept-card">
+      <div class="icon">📊</div>
+      <h3>Parent Visibility</h3>
+      <p>Parents visit the GitHub org and see their child's commits, projects, and the "family" of school AI agents.</p>
+    </div>
+    <div class="concept-card">
+      <div class="icon">🌍</div>
+      <h3>Replicable</h3>
+      <p>Any school can fork the repo, assign their own SLT roles, and launch their own fleet of student-built agents.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="highlight-box">
+    <h3>🤖 HER's Role</h3>
+    <p>HER (the Ubuntu admin workstation) manages the shared infrastructure: <code>fleet/</code> scripts, security updates, network configuration, and automation. Students never touch infrastructure — they build <em>on top</em> of it.</p>
+    <p style="margin-top:1rem;">When a laptop needs re-imaging, HER restores the system, runs <code>fleet-bootstrap.sh</code>, and the student's agent identity returns via <code>git pull</code>.</p>
+  </div>
+</section>
+
+<footer>
+  <p>AI Fleet · NAS Jiaxing · Managed by HER · Built by Students</p>
+  <p style="margin-top:0.5rem;font-size:0.85rem;opacity:0.7;">Part of the AI-Powered Education initiative</p>
+</footer>
+
+</body>
+</html>

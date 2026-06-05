@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clonezilla USB Fleet — Parallel Cloning | NAS Jiaxing</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --earth-dark: #2C1810;
+  --earth-brown: #4A2C17;
+  --earth-warm: #6B4423;
+  --earth-gold: #B8860B;
+  --earth-sand: #D4A574;
+  --earth-cream: #F5E6D3;
+  --earth-light: #FAF6F0;
+  --accent-rust: #C75B39;
+  --accent-sage: #6B8E6B;
+  --text-dark: #2C1810;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--earth-light);
+  color: var(--text-dark);
+  line-height: 1.7;
+}
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  background: linear-gradient(to bottom, rgba(44,24,16,0.95), rgba(44,24,16,0.85));
+  backdrop-filter: blur(10px);
+  padding: 0.8rem 2rem;
+  z-index: 1000;
+}
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--earth-cream);
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 1.5rem; list-style: none; }
+.nav-links a {
+  color: var(--earth-sand);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--earth-cream); }
+.hero {
+  margin-top: 60px;
+  background: linear-gradient(135deg, var(--earth-dark) 0%, var(--earth-brown) 100%);
+  color: var(--earth-cream);
+  padding: 4rem 2rem;
+  text-align: center;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+.hero p {
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin: 0 auto 1.5rem;
+  opacity: 0.9;
+}
+.badge {
+  display: inline-block;
+  background: var(--accent-rust);
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  color: var(--earth-dark);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.drive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+.drive-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.8rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  border-top: 4px solid var(--accent-sage);
+}
+.drive-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--earth-dark);
+  margin-bottom: 0.5rem;
+}
+.drive-status {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.status-ready { background: #d4edda; color: #155724; }
+.status-wait { background: #fff3cd; color: #856404; }
+footer {
+  background: var(--earth-dark);
+  color: var(--earth-sand);
+  text-align: center;
+  padding: 2rem;
+  margin-top: 3rem;
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="/" class="nav-logo">Clonezilla USB Fleet</a>
+    <ul class="nav-links">
+      <li><a href="tech-lab.html">Tech Lab</a></li>
+      <li><a href="ai-fleet.html">AI Fleet</a></li>
+      <li><a href="output/identity-tracking.html">Identity</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <h1>🖥️ Clonezilla USB Fleet — 3×64GB</h1>
+  <p>Three bootable Clonezilla USBs ready for parallel fleet cloning. Store images on each, clone 3 laptops simultaneously.</p>
+  <span class="badge">3× Bootable USBs · Parallel Cloning · 57GB Image Storage Each</span>
+</section>
+
+<section class="section">
+  <h2 class="section-title">USB Drive Status</h2>
+  <div class="drive-grid">
+    <div class="drive-card">
+      <h3>USB #1 (sdb)</h3>
+      <span class="drive-status status-ready">✅ Ready</span>
+      <p><strong>Size:</strong> 58.6 GB</p>
+      <p><strong>Boot:</strong> Clonezilla Live 3.3.2-31-amd64</p>
+      <p><strong>Image Storage:</strong> ~57 GB (Partition 2)</p>
+      <p><strong>Use:</strong> Store Dell01 golden master image here</p>
+    </div>
+    <div class="drive-card">
+      <h3>USB #2 (sdc)</h3>
+      <span class="drive-status status-ready">✅ Ready</span>
+      <p><strong>Size:</strong> 58.6 GB</p>
+      <p><strong>Boot:</strong> Clonezilla Live 3.3.2-31-amd64</p>
+      <p><strong>Image Storage:</strong> ~57 GB (Partition 2)</p>
+      <p><strong>Use:</strong> Copy image from USB #1, then clone Dell03</p>
+    </div>
+    <div class="drive-card">
+      <h3>USB #3 (sdd)</h3>
+      <span class="drive-status status-ready">✅ Ready</span>
+      <p><strong>Size:</strong> 57.7 GB</p>
+      <p><strong>Boot:</strong> Clonezilla Live 3.3.2-31-amd64</p>
+      <p><strong>Image Storage:</strong> ~56 GB (Partition 2)</p>
+      <p><strong>Use:</strong> Copy image from USB #1, then clone Dell04</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">How to Use</h2>
+  <div class="drive-grid">
+    <div class="drive-card">
+      <h3>Step 1: Create Dell01 Image</h3>
+      <span class="drive-status status-wait">⏳ Pending</span>
+      <ol>
+        <li>Plug USB #1 into Dell01</li>
+        <li>Power on Dell01, press <strong>F12</strong></li>
+        <li>Select USB UEFI boot</li>
+        <li>Clonezilla boots automatically</li>
+        <li>Select: device-image → local_dev → /dev/sdb2</li>
+        <li>Choose folder: /images</li>
+        <li>Mode: saveparts → name: <strong>dell01-golden</strong></li>
+        <li>Select source: /dev/sda2</li>
+        <li>Wait 15-30 minutes</li>
+      </ol>
+    </div>
+    <div class="drive-card">
+      <h3>Step 2: Copy to USB #2 & #3</h3>
+      <span class="drive-status status-wait">⏳ Pending</span>
+      <ol>
+        <li>Boot Dell01 normally (remove USB #1)</li>
+        <li>Plug USB #1, #2, #3 into Dell01</li>
+        <li>Mount all three: /dev/sdb2, /dev/sdc2, /dev/sdd2</li>
+        <li>Copy image: <code>sudo cp -r /media/usb1/images/dell01-golden /media/usb2/images/</code></li>
+        <li>Copy image: <code>sudo cp -r /media/usb1/images/dell01-golden /media/usb3/images/</code></li>
+        <li>Wait ~10 minutes per copy</li>
+      </ol>
+    </div>
+    <div class="drive-card">
+      <h3>Step 3: Parallel Clone</h3>
+      <span class="drive-status status-wait">⏳ Pending</span>
+      <ol>
+        <li>USB #1 → Dell02</li>
+        <li>USB #2 → Dell03</li>
+        <li>USB #3 → Dell04</li>
+        <li>Power all on, press <strong>F12</strong> on each</li>
+        <li>Select USB UEFI boot on each</li>
+        <li>Clonezilla boots → device-image → local_dev</li>
+        <li>Mode: restoreparts → select <strong>dell01-golden</strong></li>
+        <li>Target: internal disk (/dev/sda or /dev/nvme0n1)</li>
+        <li>Wait 15-20 minutes per laptop</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Quick Reference</h2>
+  <div class="drive-grid">
+    <div class="drive-card">
+      <h3>Image Size Estimate</h3>
+      <p><strong>Dell01 used space:</strong> ~17 GB</p>
+      <p><strong>Compressed image:</strong> ~8-15 GB</p>
+      <p><strong>Fits on 64GB USB:</strong> ✅ Yes, with 40+ GB to spare</p>
+    </div>
+    <div class="drive-card">
+      <h3>Clone Time Estimate</h3>
+      <p><strong>Create image:</strong> 15-30 minutes</p>
+      <p><strong>Copy image to USB:</strong> ~10 minutes</p>
+      <p><strong>Restore per laptop:</strong> 15-20 minutes</p>
+      <p><strong>3 laptops parallel:</strong> ~20 minutes total</p>
+    </div>
+    <div class="drive-card">
+      <h3>Drive Layout</h3>
+      <p><strong>Partition 1:</strong> Clonezilla ISO (bootable)</p>
+      <p><strong>Partition 2:</strong> exFAT (~57GB, image storage)</p>
+      <p><strong>Boot mode:</strong> UEFI or Legacy (hybrid ISO)</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Clonezilla USB Fleet · NAS Jiaxing · Managed by HER</p>
+  <p style="margin-top:0.5rem;font-size:0.85rem;opacity:0.7;">3× Bootable USBs · Parallel Cloning · 57GB Storage Each</p>
+</footer>
+
+</body>
+</html>

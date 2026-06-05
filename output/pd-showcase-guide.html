@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教师培训展示指南 — Dell01 黄金母版 | NAS Jiaxing</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --earth-dark: #2C1810;
+  --earth-brown: #4A2C17;
+  --earth-warm: #6B4423;
+  --earth-gold: #B8860B;
+  --earth-sand: #D4A574;
+  --earth-cream: #F5E6D3;
+  --earth-light: #FAF6F0;
+  --accent-rust: #C75B39;
+  --accent-sage: #6B8E6B;
+  --text-dark: #2C1810;
+  --code-bg: #1a1a2e;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', 'Noto Serif SC', sans-serif;
+  background-color: var(--earth-light);
+  color: var(--text-dark);
+  line-height: 1.8;
+}
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  background: linear-gradient(to bottom, rgba(44,24,16,0.95), rgba(44,24,16,0.85));
+  backdrop-filter: blur(10px);
+  padding: 0.8rem 2rem;
+  z-index: 1000;
+}
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-logo {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--earth-cream);
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 1.5rem; list-style: none; }
+.nav-links a {
+  color: var(--earth-sand);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--earth-cream); }
+.lang-toggle {
+  background: rgba(255,255,255,0.15);
+  color: var(--earth-cream);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+}
+.hero {
+  margin-top: 60px;
+  background: linear-gradient(135deg, var(--earth-dark) 0%, var(--earth-brown) 100%);
+  color: var(--earth-cream);
+  padding: 4rem 2rem;
+  text-align: center;
+}
+.hero h1 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+.hero p {
+  font-size: 1.05rem;
+  max-width: 700px;
+  margin: 0 auto 1.5rem;
+  opacity: 0.9;
+}
+.badge {
+  display: inline-block;
+  background: var(--accent-rust);
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.toc {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.toc h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.6rem;
+  color: var(--earth-dark);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+.toc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 0.8rem;
+}
+.toc-item {
+  padding: 0.8rem 1rem;
+  background: var(--earth-light);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-dark);
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+.toc-item:hover { background: var(--earth-cream); }
+.toc-num {
+  display: inline-block;
+  background: var(--accent-rust);
+  color: white;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 1.8rem;
+  font-weight: 600;
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+}
+.section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+.section-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.6rem;
+  color: var(--earth-dark);
+  margin-bottom: 1.5rem;
+  padding-left: 1rem;
+  border-left: 4px solid var(--accent-rust);
+}
+.package-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.package-table th, .package-table td {
+  padding: 0.8rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e0d5c7;
+}
+.package-table th {
+  background: var(--earth-cream);
+  color: var(--earth-dark);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.package-table tr:hover { background: rgba(245,230,211,0.3); }
+.package-table code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  background: #f0ebe5;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+}
+.demo-card {
+  background: linear-gradient(135deg, var(--earth-cream) 0%, #fff 100%);
+  border-left: 4px solid var(--accent-sage);
+  border-radius: 0 12px 12px 0;
+  padding: 1.5rem;
+  margin: 1rem 0;
+}
+.demo-card h4 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.15rem;
+  color: var(--earth-dark);
+  margin-bottom: 0.8rem;
+}
+.code-block {
+  background: var(--code-bg);
+  color: #e0d5c7;
+  border-radius: 8px;
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+  line-height: 1.6;
+}
+.code-block .comment { color: #7ee787; }
+.code-block .cmd { color: #58a6ff; }
+.tip-box {
+  background: rgba(107,142,107,0.1);
+  border-left: 4px solid var(--accent-sage);
+  padding: 1rem 1.5rem;
+  margin: 1rem 0;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.95rem;
+}
+.tip-box strong { color: var(--accent-sage); }
+.scenario-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+.scenario-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s;
+}
+.scenario-card:hover { transform: translateY(-3px); }
+.scenario-icon {
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+}
+.scenario-card h4 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.1rem;
+  color: var(--earth-dark);
+  margin-bottom: 0.5rem;
+}
+.scenario-card .time {
+  display: inline-block;
+  background: var(--earth-cream);
+  color: var(--earth-warm);
+  padding: 0.15rem 0.6rem;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+.quick-ref {
+  background: var(--earth-dark);
+  color: var(--earth-cream);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+}
+.quick-ref h3 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: var(--earth-gold);
+}
+.quick-ref-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.quick-ref h4 {
+  color: var(--earth-sand);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.quick-ref pre {
+  background: rgba(255,255,255,0.05);
+  padding: 0.8rem;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  color: #c9d1d9;
+}
+.meta-info {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 2rem auto;
+  max-width: 900px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+.meta-item strong {
+  display: block;
+  color: var(--earth-warm);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3rem;
+}
+footer {
+  background: var(--earth-dark);
+  color: var(--earth-sand);
+  text-align: center;
+  padding: 2rem;
+  margin-top: 3rem;
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="/" class="nav-logo">教师培训展示指南</a>
+    <ul class="nav-links">
+      <li><a href="/">首页</a></li>
+      <li><a href="../tech-lab.html">技术实验室</a></li>
+      <li><a href="identity-tracking.html">身份追踪</a></li>
+      <li><a href="dell01-pd-showcase-guide.html" class="lang-toggle">🇺🇸 English</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <h1>🎓 教师培训展示指南</h1>
+  <p>黄金母版上安装的每个工具 —— 以及如何向教师演示。</p>
+  <span class="badge">30+ 软件包 · 6 个演示场景 · 100% 免费开源</span>
+</section>
+
+<div class="meta-info">
+  <div class="meta-item"><strong>机器</strong>Dell01（黄金母版）</div>
+  <div class="meta-item"><strong>Tailscale IP</strong>100.102.84.80</div>
+  <div class="meta-item"><strong>管理方</strong>HER（AI 管理员）</div>
+  <div class="meta-item"><strong>设备群规模</strong>13 台机器（12 个克隆）</div>
+  <div class="meta-item"><strong>日期</strong>2026-06-04</div>
+</div>
+
+<section class="section">
+  <div class="toc">
+    <h2>📋 目录</h2>
+    <div class="toc-grid">
+      <a href="#system" class="toc-item"><span class="toc-num">1</span>系统与管理</a>
+      <a href="#dev" class="toc-item"><span class="toc-num">2</span>开发与编程</a>
+      <a href="#ai" class="toc-item"><span class="toc-num">3</span>AI 与机器学习</a>
+      <a href="#media" class="toc-item"><span class="toc-num">4</span>媒体与内容创作</a>
+      <a href="#office" class="toc-item"><span class="toc-num">5</span>办公与生产力</a>
+      <a href="#browser" class="toc-item"><span class="toc-num">6</span>浏览器与网页工具</a>
+      <a href="#network" class="toc-item"><span class="toc-num">7</span>网络与连接</a>
+      <a href="#chinese" class="toc-item"><span class="toc-num">8</span>中文语言支持</a>
+      <a href="#translation" class="toc-item"><span class="toc-num">9</span>翻译与无障碍</a>
+      <a href="#pdf" class="toc-item"><span class="toc-num">10</span>PDF 与文档工具</a>
+      <a href="#security" class="toc-item"><span class="toc-num">11</span>安全与防火墙</a>
+      <a href="#pending" class="toc-item"><span class="toc-num">12</span>尚未安装的软件</a>
+      <a href="#scenarios" class="toc-item"><span class="toc-num">13</span>教师培训演示场景</a>
+      <a href="#commands" class="toc-item"><span class="toc-num">★</span>快速命令参考</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="system">
+  <h2 class="section-title">1. 系统与管理</h2>
+  <table class="package-table">
+    <tr><th>软件包</th><th>版本</th><th>功能</th><th>教师培训演示角度</th></tr>
+    <tr><td><code>git</code></td><td>2.43.0</td><td>版本控制 — 跟踪文档、代码、教案的变更</td><td>向教师展示如何保存工作表的每个修订版本；永不丢失工作</td></tr>
+    <tr><td><code>htop</code></td><td>3.3.0</td><td>交互式进程查看器 — 查看 CPU/内存使用情况</td><td>"实时观看 Chrome 占用内存"</td></tr>
+    <tr><td><code>tmux</code></td><td>—</td><td>终端复用器 — 断开后会话保持运行</td><td>远程管理演示：启动任务，断开连接，稍后重连 — 仍在运行</td></tr>
+    <tr><td><code>neofetch</code></td><td>7.1.0</td><td>系统信息展示 — 漂亮的硬件/操作系统摘要</td><td>开场：在每台机器上运行 neofetch 展示规格</td></tr>
+    <tr><td><code>unattended-upgrades</code></td><td>—</td><td>自动安全补丁 — 无需手动维护</td><td>"设置后忘记" 的设备群安全</td></tr>
+    <tr><td><code>openssh-server</code></td><td>—</td><td>远程 SSH 访问 — 从任何地方管理</td><td>HER 可以从家中管理所有 13 台机器</td></tr>
+    <tr><td><code>tailscale</code></td><td>—</td><td>零配置 VPN 网状网络 — 所有机器安全互联</td><td>演示：通过互联网 SSH 进入 Dell01，无需端口转发</td></tr>
+    <tr><td><code>ufw</code></td><td>active</td><td>简单防火墙 — 阻止不需要的网络流量</td><td>"这台笔记本电脑默认安全"</td></tr>
+    <tr><td><code>nmap</code></td><td>7.94SVN</td><td>网络扫描器 — 发现局域网设备</td><td>教师培训活动：扫描学校网络，绘制连接设备</td></tr>
+    <tr><td><code>net-tools</code></td><td>—</td><td>经典网络工具（ifconfig、netstat）</td><td>快速 IP 检查、网络调试</td></tr>
+    <tr><td><code>iperf3</code></td><td>—</td><td>带宽测试 — 测量机器间网速</td><td>"我们的教室局域网有多快？"</td></tr>
+  </table>
+</section>
+
+<section class="section" id="dev">
+  <h2 class="section-title">2. 开发与编程</h2>
+  <table class="package-table">
+    <tr><th>软件包</th><th>版本</th><th>功能</th><th>教师培训演示角度</th></tr>
+    <tr><td><code>python3</code></td><td>3.12.3</td><td>通用编程语言</td><td>编写文本分析器、字数统计器或语法检查器</td></tr>
+    <tr><td><code>pip</code></td><td>24.0</td><td>Python 包安装器</td><td>即时安装任何 Python 库：pip install pandas</td></tr>
+    <tr><td><code>nodejs</code></td><td>v24.16.0</td><td>JavaScript 运行时 — 在浏览器外运行 JS</td><td>构建本地网页服务器，运行网页应用</td></tr>
+    <tr><td><code>npm</code></td><td>11.13.0</td><td>Node 包管理器</td><td>为任何项目安装 200 万+ JS 库</td></tr>
+    <tr><td><code>jupyter-notebook</code></td><td>6.4.12</td><td>交互式 Python 笔记本 — 代码+文本+输出</td><td>⭐ 明星演示：现场编码课 — 学生写 Python，即时看结果</td></tr>
+    <tr><td><code>docker.io</code></td><td>29.1.3</td><td>容器运行时 — 隔离应用无需安装</td><td>演示：在盒子中运行网页服务器、数据库或 AI 模型，不触碰系统</td></tr>
+  </table>
+
+  <div class="demo-card">
+    <h4>🐳 Docker 快速演示</h4>
+    <div class="code-block">
+<span class="comment"># 10 秒内运行网页服务器</span>
+<span class="cmd">docker run -d -p 8080:80 nginx</span>
+<span class="comment"># 打开 Chrome → http://localhost:8080</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="ai">
+  <h2 class="section-title">3. AI 与机器学习</h2>
+  <table class="package-table">
+    <tr><th>软件包</th><th>版本</th><th>功能</th><th>教师培训演示角度</th></tr>
+    <tr><td><code>python3-pip</code></td><td>24.0</td><td>安装 AI/ML 库</td><td>pip install transformers torch — 本地运行 Hugging Face 模型</td></tr>
+    <tr><td><code>jupyter-notebook</code></td><td>6.4.12</td><td>交互式 AI 实验</td><td>构建生成文本、分析学生作文的笔记本</td></tr>
+    <tr><td><code>Ollama</code></td><td>⏳ 待定</td><td>本地 LLM 运行器 — 类 ChatGPT 的自有 AI</td><td>运行 Llama、Mistral 等开源 LLM，<strong>无需互联网</strong></td></tr>
+  </table>
+
+  <div class="tip-box">
+    <strong>💡 Ollama 演示（VPN 安装后）：</strong>
+    <div class="code-block">
+<span class="cmd">ollama run llama3.2</span>
+<span class="comment"># → 本地聊天机器人运行在笔记本电脑上，数据不离开建筑</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="media">
+  <h2 class="section-title">4. 媒体与内容创作</h2>
+  <table class="package-table">
+    <tr><th>软件包</th><th>版本</th><th>功能</th><th>教师培训演示角度</th></tr>
+    <tr><td><code>ffmpeg</code></td><td>6.1.1</td><td>视频/音频瑞士军刀 — 转换、编辑、流媒体</td><td>为智能板转换视频；从 YouTube 提取音频</td></tr>
+    <tr><td><code>mpv</code></td><td>0.37.0</td><td>轻量级媒体播放器 — 什么都能播放</td><td>比默认视频播放器更好；教师键盘快捷键</td></tr>
+    <tr><td><code>espeak-ng</code></td><td>1.51</td><td>文本转语音 — 机器人语音朗读任何文本</td><td>⭐ 无障碍演示：高亮文本，听它朗读；发音练习</td></tr>
+    <tr><td><code>obs-studio</code></td><td>30.0.2</td><td>录屏 + 直播流媒体</td><td>录制课程，直播到 YouTube，创建翻转课堂视频</td></tr>
+    <tr><td><code>gimp</code></td><td>2.10.36</td><td>图像编辑器 — Photoshop 替代品</td><td>编辑工作表照片，去除背景，创建图形</td></tr>
+    <tr><td><code>inkscape</code></td><td>1.2.2</td><td>矢量图形编辑器 — Illustrator 替代品</td><td>设计演示用的标志、图表、信息图</td></tr>
+  </table>
+
+  <div class="demo-card">
+    <h4>🎥 OBS Studio 教师培训演示</h4>
+    <ol>
+      <li>同时录制屏幕 + 摄像头</li>
+      <li>直播课程到 YouTube Live 供远程学生观看</li>
+      <li>为翻转课堂创建可重复使用的视频资源</li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="office">
+  <h2 class="section-title">5. 办公与生产力</h2>
+  <table class="package-table">
+    <tr><th>软件包</th><th>版本</th><th>功能</th><th>教师培训演示角度</th></tr>
+    <tr><td><code>libreoffice-writer</code></td><td>24.2.7.2</td><td>文字处理器 — 文档、教案、工作表</td><td>完整 .docx 兼容性；免费，无需微软许可证</td></tr>
+    <tr><td><code>libreoffice-calc</code></td><td>24.2.7.2</td><td>电子表格 — 成绩、数据、预算</td><td>跟踪学生分数，计算平均分，制作图表</td></tr>
+    <tr><td><code>libreoffice-draw</code></td><td>24.2.7.2</td><td>矢量绘图 — 图表、流程图、海报</td><td>创建教室海报、思维导图、流程图</td></tr>
+  </table>
+
+  <div class="tip-box">
+    <strong>LibreOffice 与 Microsoft Office 对比：</strong>
+    <ul>
+      <li><strong>优点：</strong>免费，无订阅，相同文件格式</li>
+      <li><strong>演示：</strong>打开 .docx 文件，编辑，保存 — 教师看不出区别</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="browser">
+  <h2 class="section-title">6. 浏览器与网页工具</h2>
+  <table class="package-table">
+    <tr><th>软件包</th><th>版本</th><th>功能</th><th>教师培训演示角度</th></tr>
+    <tr><td><code>google-chrome-stable</code></td><td>149.0.7827.53</td><td>现代网页浏览器</td><td>Google Classroom、YouTube、剑桥英语、在线测验</td></tr>
+    <tr><td><code>translate-shell</code></td><td>—</td><td>命令行翻译器（trans 命令）</td><td>trans :zh "Hello students" — 终端即时翻译</td></tr>
+  </table>
+
+  <div class="tip-box">
+    <strong>Chrome 教师培训演示：</strong>
+    <ul>
+      <li>Google Classroom 集成</li>
+      <li>扩展程序：Grammarly、Read&Write、Google 翻译</li>
+      <li>开发者工具：检查任何网页，向学生展示网站工作原理</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="network">
+  <h2 class="section-title">7. 网络与连接</h2>
+  <table class="package-table">
+    <tr><th>软件包</th><th>版本</th><th>功能</th><th>教师培训演示角度</th></tr>
+    <tr><td><code>tailscale</code></td><td>—</td><td>网状 VPN — 所有 13 台机器组成私有网络</td><td>Dell01 可以 SSH 到 Dell12 跨校园，无需路由器配置</td></tr>
+    <tr><td><code>samba</code></td><td>—</td><td>文件共享 — Windows 兼容的网络文件夹</td><td>在 Ubuntu 笔记本和 Windows 机器间共享文件</td></tr>
+    <tr><td><code>nmap</code></td><td>7.94SVN</td><td>网络发现</td><td>"查找学校 Wi-Fi 上的每台设备"</td></tr>
+    <tr><td><code>iperf3</code></td><td>—</td><td>速度测试</td><td>测量局域网速度："我们的网络够快看 4K 视频吗？"</td></tr>
+  </table>
+</section>
+
+<section class="section" id="chinese">
+  <h2 class="section-title">8. 中文语言支持</h2>
+  <table class="package-table">
+    <tr><th>软件包</th><th>版本</th><th>功能</th><th>教师培训演示角度</th></tr>
+    <tr><td><code>fcitx5</code></td><td>5.1.7</td><td>中文输入框架</td><td>在任何应用中输入中文</td></tr>
+    <tr><td><code>fcitx5-chinese-addons</code></td><td>—</td><td>拼音、五笔、仓颉输入法</td><td>不同用户的多种输入方法</td></tr>
+    <tr><td><code>ibus-libpinyin</code></td><td>—</td><td>替代中文输入（拼音）</td><td>教师可以原生输入中文课程内容</td></tr>
+  </table>
+
+  <div class="demo-card">
+    <h4>🀄 FCITX5 演示</h4>
+    <ol>
+      <li>按 <code>Ctrl+Space</code> 切换输入</li>
+      <li>输入拼音 → 中文字符出现</li>
+      <li>在 LibreOffice、Chrome、终端 — 任何地方都能用</li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="translation">
+  <h2 class="section-title">9. 翻译与无障碍</h2>
+  <table class="package-table">
+    <tr><th>软件包</th><th>版本</th><th>功能</th><th>教师培训演示角度</th></tr>
+    <tr><td><code>translate-shell</code></td><td>—</td><td>命令行翻译引擎</td><td>trans :es "Good morning" → "Buenos días"</td></tr>
+    <tr><td><code>espeak-ng</code></td><td>1.51</td><td>文本转语音合成</td><td>朗读任何文本 — 发音练习、视障辅助</td></tr>
+  </table>
+
+  <div class="tip-box">
+    <strong>无障碍展示：</strong>
+    <div class="code-block">
+<span class="comment"># 朗读一段文字用于发音练习</span>
+echo "The quick brown fox jumps over the lazy dog" | <span class="cmd">espeak-ng</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="pdf">
+  <h2 class="section-title">10. PDF 与文档工具</h2>
+  <table class="package-table">
+    <tr><th>软件包</th><th>版本</th><th>功能</th><th>教师培训演示角度</th></tr>
+    <tr><td><code>pdfarranger</code></td><td>—</td><td>PDF 页面组织器 — 拆分、合并、重新排序</td><td>"从文件 A 取 1-5 页，文件 B 取 3-7 页，合并为一个 PDF"</td></tr>
+    <tr><td><code>qpdf</code></td><td>11.9.0</td><td>命令行 PDF 操作</td><td>从终端旋转、加密、解密、线性化 PDF</td></tr>
+    <tr><td><code>libreoffice-draw</code></td><td>24.2.7.2</td><td>作为绘图编辑 PDF</td><td>打开 PDF，添加注释，添加形状，导出回 PDF</td></tr>
+  </table>
+
+  <div class="demo-card">
+    <h4>📄 PDF 工作流演示</h4>
+    <ol>
+      <li>下载剑桥历年真题 PDF</li>
+      <li>在 LibreOffice Draw 中打开</li>
+      <li>添加注释，高亮答案</li>
+      <li>为学生导出为新 PDF</li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="security">
+  <h2 class="section-title">11. 安全与防火墙</h2>
+  <table class="package-table">
+    <tr><th>组件</th><th>状态</th><th>功能</th></tr>
+    <tr><td><code>ufw</code>（防火墙）</td><td>Active</td><td>阻止所有入站，除 SSH、Tailscale、Samba 外</td></tr>
+    <tr><td>SSH 密钥认证</td><td>Enabled</td><td>无密码登录 — 仅加密密钥</td></tr>
+    <tr><td><code>unattended-upgrades</code></td><td>Enabled</td><td>自动安装安全补丁</td></tr>
+    <tr><td><code>pam_sss.so</code></td><td>Disabled</td><td>修复阻止登录的 PAM 错误配置</td></tr>
+    <tr><td>NOPASSWD sudo</td><td>Configured</td><td>dell01 无需密码提示即可运行管理员命令</td></tr>
+  </table>
+
+  <div class="tip-box">
+    <strong>教师培训安全要点：</strong>
+    <ul>
+      <li>"每台机器默认都有防火墙"</li>
+      <li>"SSH 无需密码 — 仅密钥，如同数字指纹"</li>
+      <li>"更新自动发生 — 无需 IT 人员"</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="pending">
+  <h2 class="section-title">12. 尚未安装的软件</h2>
+  <table class="package-table">
+    <tr><th>软件包</th><th>缺失原因</th><th>计划</th></tr>
+    <tr><td><strong>Ollama</strong>（本地 LLM）</td><td>从中国下载被阻止</td><td>VPN 网关运行后安装</td></tr>
+    <tr><td><strong>Mullvad VPN</strong></td><td>.deb 服务器不可达</td><td>在支持 VPN 的机器上下载，推送到设备群</td></tr>
+    <tr><td><strong>VS Code</strong></td><td>较重，非 PD 必需</td><td>可选：sudo snap install code</td></tr>
+    <tr><td><strong>Zoom/Teams</strong></td><td>Chrome 中的网页版本可用</td><td>如需要可安装原生客户端</td></tr>
+    <tr><td><strong>Anki</strong></td><td>闪卡应用</td><td>可选，用于词汇训练</td></tr>
+    <tr><td><strong>Khan Academy</strong></td><td>基于网页，无需安装</td><td>通过 Chrome 访问</td></tr>
+  </table>
+</section>
+
+<section class="section" id="scenarios">
+  <h2 class="section-title">13. 教师培训演示场景</h2>
+  <p style="margin-bottom:1.5rem;">六个脚本化演示。每个 3–5 分钟。适合教师培训或管理展示。</p>
+
+  <div class="scenario-grid">
+    <div class="scenario-card">
+      <div class="scenario-icon">📄</div>
+      <h4>场景 A：替代 Microsoft Office</h4>
+      <span class="time">5 分钟</span>
+      <ol>
+        <li>打开 LibreOffice Writer</li>
+        <li>创建教案</li>
+        <li>保存为 .docx</li>
+        <li>在 Windows 机器上打开</li>
+        <li><em>"免费。兼容。无订阅。"</em></li>
+      </ol>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-icon">🤖</div>
+      <h4>场景 B：本地机器上的 AI</h4>
+      <span class="time">5 分钟</span>
+      <ol>
+        <li>打开 Jupyter Notebook</li>
+        <li>运行 Python 词频脚本</li>
+        <li>展示词汇使用饼图</li>
+        <li><em>"无需云端，无需 API 密钥，无需互联网"</em></li>
+      </ol>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-icon">🎥</div>
+      <h4>场景 C：录制课程</h4>
+      <span class="time">5 分钟</span>
+      <ol>
+        <li>打开 OBS Studio</li>
+        <li>点击"开始录制"</li>
+        <li>讲授 30 秒微型课</li>
+        <li>点击"停止录制"</li>
+        <li>在 mpv 中播放视频</li>
+      </ol>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-icon">🀄</div>
+      <h4>场景 D：随处输入中文</h4>
+      <span class="time">3 分钟</span>
+      <ol>
+        <li>打开 LibreOffice Writer</li>
+        <li>按 Ctrl+Space</li>
+        <li>输入拼音：nihao</li>
+        <li>从候选词选择 你好</li>
+      </ol>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-icon">⌨️</div>
+      <h4>场景 E：终端高级用户</h4>
+      <span class="time">5 分钟</span>
+      <ol>
+        <li>neofetch → 显示规格</li>
+        <li>trans :zh "Welcome to class" → 即时翻译</li>
+        <li>espeak-ng "Welcome to class" → 文本转语音</li>
+        <li>docker run hello-world → 5 秒容器</li>
+      </ol>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-icon">🖥️</div>
+      <h4>场景 F：远程管理</h4>
+      <span class="time">5 分钟</span>
+      <ol>
+        <li>从 HER（另一台机器）SSH 进入 Dell01</li>
+        <li>如同坐在键盘前运行命令</li>
+        <li><em>"我可以在客厅修复所有 13 台机器"</em></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="commands">
+  <h2 class="section-title">★ 快速命令参考</h2>
+
+  <div class="quick-ref">
+    <h3>⚡ 基本命令</h3>
+    <div class="quick-ref-grid">
+      <div>
+        <h4>系统信息</h4>
+        <pre>neofetch
+htop</pre>
+      </div>
+      <div>
+        <h4>开发</h4>
+        <pre>jupyter notebook
+<span class="comment"># 盒子中的网页服务器</span>
+docker run -p 8080:80 nginx
+<span class="comment"># 终端中的 JavaScript</span>
+node -e "console.log('Hello')"</pre>
+      </div>
+      <div>
+        <h4>媒体</h4>
+        <pre><span class="comment"># 从视频提取音频</span>
+ffmpeg -i input.mp4 output.mp3
+<span class="comment"># 播放视频</span>
+mpv filename.mp4
+<span class="comment"># 启动 OBS</span>
+obs</pre>
+      </div>
+      <div>
+        <h4>办公</h4>
+        <pre>libreoffice --writer &
+libreoffice --calc &
+libreoffice --draw &</pre>
+      </div>
+      <div>
+        <h4>翻译</h4>
+        <pre><span class="comment"># 翻译成中文</span>
+trans :zh "Hello world"
+<span class="comment"># 文本转语音</span>
+espeak-ng "Hello world"</pre>
+      </div>
+      <div>
+        <h4>网络</h4>
+        <pre><span class="comment"># 显示 Tailscale IP</span>
+tailscale ip -4
+<span class="comment"># 扫描本地网络</span>
+nmap -sn 192.168.1.0/24
+<span class="comment"># 测试带宽</span>
+iperf3 -c &lt;server-ip&gt;</pre>
+      </div>
+      <div>
+        <h4>PDF</h4>
+        <pre><span class="comment"># GUI PDF 组织器</span>
+pdfarranger &
+<span class="comment"># 旋转 PDF</span>
+qpdf --rotate=+90 input.pdf output.pdf</pre>
+      </div>
+      <div>
+        <h4>AI（VPN 后）</h4>
+        <pre><span class="comment"># 本地 LLM 聊天机器人</span>
+ollama run llama3.2
+<span class="comment"># Python AI 库</span>
+pip install transformers torch</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>教师培训展示指南 · NAS Jiaxing · 由 HER 管理</p>
+  <p style="margin-top:0.5rem;font-size:0.85rem;opacity:0.7;">AI 驱动教育计划的一部分</p>
+</footer>
+
+</body>
+</html>

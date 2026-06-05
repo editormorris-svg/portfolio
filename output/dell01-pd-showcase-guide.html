@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PD Showcase Guide — Dell01 Golden Master | NAS Jiaxing</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --earth-dark: #2C1810;
+  --earth-brown: #4A2C17;
+  --earth-warm: #6B4423;
+  --earth-gold: #B8860B;
+  --earth-sand: #D4A574;
+  --earth-cream: #F5E6D3;
+  --earth-light: #FAF6F0;
+  --accent-rust: #C75B39;
+  --accent-sage: #6B8E6B;
+  --text-dark: #2C1810;
+  --code-bg: #1a1a2e;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--earth-light);
+  color: var(--text-dark);
+  line-height: 1.7;
+}
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  background: linear-gradient(to bottom, rgba(44,24,16,0.95), rgba(44,24,16,0.85));
+  backdrop-filter: blur(10px);
+  padding: 0.8rem 2rem;
+  z-index: 1000;
+}
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--earth-cream);
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 1.5rem; list-style: none; }
+.nav-links a {
+  color: var(--earth-sand);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--earth-cream); }
+.lang-toggle {
+  background: rgba(255,255,255,0.15);
+  color: var(--earth-cream);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+}
+.hero {
+  margin-top: 60px;
+  background: linear-gradient(135deg, var(--earth-dark) 0%, var(--earth-brown) 100%);
+  color: var(--earth-cream);
+  padding: 4rem 2rem;
+  text-align: center;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+.hero p {
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin: 0 auto 1.5rem;
+  opacity: 0.9;
+}
+.badge {
+  display: inline-block;
+  background: var(--accent-rust);
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.toc {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.toc h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: var(--earth-dark);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+.toc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 0.8rem;
+}
+.toc-item {
+  padding: 0.8rem 1rem;
+  background: var(--earth-light);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-dark);
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+.toc-item:hover {
+  background: var(--earth-cream);
+}
+.toc-num {
+  display: inline-block;
+  background: var(--accent-rust);
+  color: white;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 1.8rem;
+  font-weight: 600;
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+}
+.section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  color: var(--earth-dark);
+  margin-bottom: 1.5rem;
+  padding-left: 1rem;
+  border-left: 4px solid var(--accent-rust);
+}
+.subsection-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  color: var(--earth-warm);
+  margin: 2rem 0 1rem;
+}
+.package-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.package-table th, .package-table td {
+  padding: 0.8rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e0d5c7;
+}
+.package-table th {
+  background: var(--earth-cream);
+  color: var(--earth-dark);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.package-table tr:hover { background: rgba(245,230,211,0.3); }
+.package-table code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  background: #f0ebe5;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+}
+.demo-card {
+  background: linear-gradient(135deg, var(--earth-cream) 0%, #fff 100%);
+  border-left: 4px solid var(--accent-sage);
+  border-radius: 0 12px 12px 0;
+  padding: 1.5rem;
+  margin: 1rem 0;
+}
+.demo-card h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  color: var(--earth-dark);
+  margin-bottom: 0.8rem;
+}
+.demo-card ol {
+  margin-left: 1.2rem;
+}
+.demo-card li {
+  margin: 0.4rem 0;
+  padding-left: 0.5rem;
+}
+.code-block {
+  background: var(--code-bg);
+  color: #e0d5c7;
+  border-radius: 8px;
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+  line-height: 1.6;
+}
+.code-block .comment { color: #7ee787; }
+.code-block .cmd { color: #58a6ff; }
+.tip-box {
+  background: rgba(107,142,107,0.1);
+  border-left: 4px solid var(--accent-sage);
+  padding: 1rem 1.5rem;
+  margin: 1rem 0;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.95rem;
+}
+.tip-box strong { color: var(--accent-sage); }
+.warning-box {
+  background: rgba(199,91,57,0.08);
+  border-left: 4px solid var(--accent-rust);
+  padding: 1rem 1.5rem;
+  margin: 1rem 0;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.95rem;
+}
+.scenario-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+.scenario-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s;
+}
+.scenario-card:hover { transform: translateY(-3px); }
+.scenario-icon {
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+}
+.scenario-card h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--earth-dark);
+  margin-bottom: 0.5rem;
+}
+.scenario-card .time {
+  display: inline-block;
+  background: var(--earth-cream);
+  color: var(--earth-warm);
+  padding: 0.15rem 0.6rem;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+.quick-ref {
+  background: var(--earth-dark);
+  color: var(--earth-cream);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+}
+.quick-ref h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: var(--earth-gold);
+}
+.quick-ref-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.quick-ref h4 {
+  color: var(--earth-sand);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.quick-ref pre {
+  background: rgba(255,255,255,0.05);
+  padding: 0.8rem;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  color: #c9d1d9;
+}
+.quick-ref .comment { color: #7ee787; }
+.meta-info {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 2rem auto;
+  max-width: 900px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+.meta-item strong {
+  display: block;
+  color: var(--earth-warm);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3rem;
+}
+.meta-item {
+  font-size: 0.95rem;
+}
+footer {
+  background: var(--earth-dark);
+  color: var(--earth-sand);
+  text-align: center;
+  padding: 2rem;
+  margin-top: 3rem;
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="/" class="nav-logo">PD Showcase Guide</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="tech-lab.html">Tech Lab</a></li>
+      <li><a href="identity-tracking.html">Identity</a></li>
+      <li><a href="../zh/pd-showcase-guide.html" class="lang-toggle">🇨🇳 中文</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <h1>🎓 PD Showcase Guide</h1>
+  <p>Every tool installed on the school fleet's golden master image — and how to demo it to teachers.</p>
+  <span class="badge">30+ Packages · 6 Demo Scenarios · 100% Free Software</span>
+</section>
+
+<div class="meta-info">
+  <div class="meta-item"><strong>Machine</strong>Dell01 (Golden Master)</div>
+  <div class="meta-item"><strong>Tailscale IP</strong>100.102.84.80</div>
+  <div class="meta-item"><strong>Managed By</strong>HER (AI Administrator)</div>
+  <div class="meta-item"><strong>Fleet Size</strong>13 machines (12 clones)</div>
+  <div class="meta-item"><strong>Date</strong>2026-06-04</div>
+</div>
+
+<section class="section">
+  <div class="toc">
+    <h2>📋 Table of Contents</h2>
+    <div class="toc-grid">
+      <a href="#system" class="toc-item"><span class="toc-num">1</span>System & Administration</a>
+      <a href="#dev" class="toc-item"><span class="toc-num">2</span>Development & Programming</a>
+      <a href="#ai" class="toc-item"><span class="toc-num">3</span>AI & Machine Learning</a>
+      <a href="#media" class="toc-item"><span class="toc-num">4</span>Media & Content Creation</a>
+      <a href="#office" class="toc-item"><span class="toc-num">5</span>Office & Productivity</a>
+      <a href="#browser" class="toc-item"><span class="toc-num">6</span>Browser & Web Tools</a>
+      <a href="#network" class="toc-item"><span class="toc-num">7</span>Network & Connectivity</a>
+      <a href="#chinese" class="toc-item"><span class="toc-num">8</span>Chinese Language Support</a>
+      <a href="#translation" class="toc-item"><span class="toc-num">9</span>Translation & Accessibility</a>
+      <a href="#pdf" class="toc-item"><span class="toc-num">10</span>PDF & Document Tools</a>
+      <a href="#security" class="toc-item"><span class="toc-num">11</span>Security & Firewall</a>
+      <a href="#pending" class="toc-item"><span class="toc-num">12</span>What's Not Installed (Yet)</a>
+      <a href="#scenarios" class="toc-item"><span class="toc-num">13</span>PD Demo Scenarios</a>
+      <a href="#commands" class="toc-item"><span class="toc-num">★</span>Quick Command Reference</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="system">
+  <h2 class="section-title">1. System & Administration</h2>
+  <table class="package-table">
+    <tr><th>Package</th><th>Version</th><th>What It Does</th><th>PD Demo Angle</th></tr>
+    <tr><td><code>git</code></td><td>2.43.0</td><td>Version control — track changes to documents, code, lesson plans</td><td>Save every revision of a worksheet; never lose work</td></tr>
+    <tr><td><code>htop</code></td><td>3.3.0</td><td>Interactive process viewer — see CPU/RAM usage</td><td>"Watch Chrome eat RAM in real-time"</td></tr>
+    <tr><td><code>tmux</code></td><td>—</td><td>Terminal multiplexer — sessions stay alive after disconnect</td><td>Start a task, disconnect, reconnect later — still running</td></tr>
+    <tr><td><code>neofetch</code></td><td>7.1.0</td><td>System info display — pretty hardware summary</td><td>Icebreaker: run on every machine to show specs</td></tr>
+    <tr><td><code>unattended-upgrades</code></td><td>—</td><td>Auto security patches — no manual maintenance</td><td>"Set and forget" security for the fleet</td></tr>
+    <tr><td><code>openssh-server</code></td><td>—</td><td>Remote SSH access — admin from anywhere</td><td>HER manages all 13 machines from home</td></tr>
+    <tr><td><code>tailscale</code></td><td>—</td><td>Zero-config VPN mesh between all machines</td><td>SSH into Dell01 from HER across the internet, no port forwarding</td></tr>
+    <tr><td><code>ufw</code></td><td>active</td><td>Uncomplicated Firewall — blocks unwanted traffic</td><td>"This laptop is secure by default"</td></tr>
+    <tr><td><code>nmap</code></td><td>7.94SVN</td><td>Network scanner — discover devices on LAN</td><td>Scan the school network, map connected devices</td></tr>
+    <tr><td><code>net-tools</code></td><td>—</td><td>Classic network utilities (<code>ifconfig</code>, <code>netstat</code>)</td><td>Quick IP checks, network debugging</td></tr>
+    <tr><td><code>iperf3</code></td><td>—</td><td>Bandwidth testing — measure network speed</td><td>"How fast is our classroom LAN?"</td></tr>
+  </table>
+</section>
+
+<section class="section" id="dev">
+  <h2 class="section-title">2. Development & Programming</h2>
+  <table class="package-table">
+    <tr><th>Package</th><th>Version</th><th>What It Does</th><th>PD Demo Angle</th></tr>
+    <tr><td><code>python3</code></td><td>3.12.3</td><td>General-purpose programming language</td><td>Script a text analyzer, word counter, or grammar checker</td></tr>
+    <tr><td><code>pip</code></td><td>24.0</td><td>Python package installer</td><td>Install any library instantly: <code>pip install pandas</code></td></tr>
+    <tr><td><code>nodejs</code></td><td>v24.16.0</td><td>JavaScript runtime — run JS outside browser</td><td>Build a local web server, run web apps</td></tr>
+    <tr><td><code>npm</code></td><td>11.13.0</td><td>Node package manager</td><td>Install 2 million+ JS libraries for any project</td></tr>
+    <tr><td><code>jupyter-notebook</code></td><td>6.4.12</td><td>Interactive Python notebooks — code + text + output</td><td>⭐ <strong>Star demo:</strong> Live coding lesson — students write Python, see results instantly</td></tr>
+    <tr><td><code>docker.io</code></td><td>29.1.3</td><td>Container runtime — isolated apps without installing</td><td>Run a web server, database, or AI model in a box that doesn't touch the system</td></tr>
+  </table>
+
+  <div class="demo-card">
+    <h4>🐳 Docker Quick Demo</h4>
+    <div class="code-block">
+<span class="comment"># Run a web server in 10 seconds</span>
+<span class="cmd">docker run -d -p 8080:80 nginx</span>
+<span class="comment"># Open Chrome → http://localhost:8080</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="ai">
+  <h2 class="section-title">3. AI & Machine Learning</h2>
+  <table class="package-table">
+    <tr><th>Package</th><th>Version</th><th>What It Does</th><th>PD Demo Angle</th></tr>
+    <tr><td><code>python3-pip</code></td><td>24.0</td><td>Install AI/ML libraries</td><td><code>pip install transformers torch</code> — run Hugging Face models locally</td></tr>
+    <tr><td><code>jupyter-notebook</code></td><td>6.4.12</td><td>Interactive AI experimentation</td><td>Build a notebook that generates text, analyzes student essays</td></tr>
+    <tr><td><code>Ollama</code></td><td>⏳ Pending</td><td>Local LLM runner — ChatGPT-style AI on your own machine</td><td>Run Llama, Mistral, or other open-source LLMs <strong>without internet</strong></td></tr>
+  </table>
+
+  <div class="tip-box">
+    <strong>💡 Ollama Demo (After VPN Install):</strong>
+    <div class="code-block">
+<span class="cmd">ollama run llama3.2</span>
+<span class="comment"># → Local chatbot running on the laptop, no data leaves the building</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="media">
+  <h2 class="section-title">4. Media & Content Creation</h2>
+  <table class="package-table">
+    <tr><th>Package</th><th>Version</th><th>What It Does</th><th>PD Demo Angle</th></tr>
+    <tr><td><code>ffmpeg</code></td><td>6.1.1</td><td>Swiss Army knife of video/audio — convert, edit, stream</td><td>Convert a video for the smartboard; extract audio from YouTube</td></tr>
+    <tr><td><code>mpv</code></td><td>0.37.0</td><td>Lightweight media player — plays anything</td><td>Better than default video player; keyboard shortcuts for teachers</td></tr>
+    <tr><td><code>espeak-ng</code></td><td>1.51</td><td>Text-to-speech — robot voice reads any text</td><td>⭐ <strong>Accessibility demo:</strong> highlight text, hear it spoken; pronunciation practice</td></tr>
+    <tr><td><code>obs-studio</code></td><td>30.0.2</td><td>Screen recorder + live streamer</td><td>Record a lesson, stream to YouTube, create flipped classroom videos</td></tr>
+    <tr><td><code>gimp</code></td><td>2.10.36</td><td>Image editor — Photoshop alternative</td><td>Edit photos for worksheets, remove backgrounds, create graphics</td></tr>
+    <tr><td><code>inkscape</code></td><td>1.2.2</td><td>Vector graphics editor — Illustrator alternative</td><td>Design logos, diagrams, infographics for presentations</td></tr>
+  </table>
+
+  <div class="demo-card">
+    <h4>🎥 OBS Studio PD Demo</h4>
+    <ol>
+      <li>Record your screen + webcam simultaneously</li>
+      <li>Stream a lesson to YouTube Live for remote students</li>
+      <li>Create reusable video resources for flipped classroom</li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="office">
+  <h2 class="section-title">5. Office & Productivity</h2>
+  <table class="package-table">
+    <tr><th>Package</th><th>Version</th><th>What It Does</th><th>PD Demo Angle</th></tr>
+    <tr><td><code>libreoffice-writer</code></td><td>24.2.7.2</td><td>Word processor — documents, lesson plans, worksheets</td><td>Full .docx compatibility; free, no Microsoft license needed</td></tr>
+    <tr><td><code>libreoffice-calc</code></td><td>24.2.7.2</td><td>Spreadsheet — grades, data, budgets</td><td>Track student scores, calculate averages, make charts</td></tr>
+    <tr><td><code>libreoffice-draw</code></td><td>24.2.7.2</td><td>Vector drawing — diagrams, flowcharts, posters</td><td>Create classroom posters, mind maps, process diagrams</td></tr>
+  </table>
+
+  <div class="tip-box">
+    <strong>LibreOffice vs Microsoft Office:</strong>
+    <ul>
+      <li><strong>Pro:</strong> Free, no subscription, same file formats</li>
+      <li><strong>Demo:</strong> Open a <code>.docx</code> file, edit it, save it back — teacher can't tell the difference</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="browser">
+  <h2 class="section-title">6. Browser & Web Tools</h2>
+  <table class="package-table">
+    <tr><th>Package</th><th>Version</th><th>What It Does</th><th>PD Demo Angle</th></tr>
+    <tr><td><code>google-chrome-stable</code></td><td>149.0.7827.53</td><td>Modern web browser</td><td>Google Classroom, YouTube, Cambridge English, online quizzes</td></tr>
+    <tr><td><code>translate-shell</code></td><td>—</td><td>Command-line translator (<code>trans</code> command)</td><td><code>trans :zh "Hello students"</code> — instant translation in terminal</td></tr>
+  </table>
+
+  <div class="tip-box">
+    <strong>Chrome PD Demo:</strong>
+    <ul>
+      <li>Google Classroom integration</li>
+      <li>Extensions: Grammarly, Read&Write, Google Translate</li>
+      <li>Developer Tools: inspect any webpage, show students how websites work</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="network">
+  <h2 class="section-title">7. Network & Connectivity</h2>
+  <table class="package-table">
+    <tr><th>Package</th><th>Version</th><th>What It Does</th><th>PD Demo Angle</th></tr>
+    <tr><td><code>tailscale</code></td><td>—</td><td>Mesh VPN — all 13 machines form a private network</td><td>Dell01 can SSH into Dell12 across the school, no router config</td></tr>
+    <tr><td><code>samba</code></td><td>—</td><td>File sharing — Windows-compatible network folders</td><td>Share files between Ubuntu laptops and Windows machines</td></tr>
+    <tr><td><code>nmap</code></td><td>7.94SVN</td><td>Network discovery</td><td>"Find every device on the school Wi-Fi"</td></tr>
+    <tr><td><code>iperf3</code></td><td>—</td><td>Speed testing</td><td>Measure LAN speed: "Is our network fast enough for 4K video?"</td></tr>
+  </table>
+</section>
+
+<section class="section" id="chinese">
+  <h2 class="section-title">8. Chinese Language Support</h2>
+  <table class="package-table">
+    <tr><th>Package</th><th>Version</th><th>What It Does</th><th>PD Demo Angle</th></tr>
+    <tr><td><code>fcitx5</code></td><td>5.1.7</td><td>Chinese input framework</td><td>Type Chinese in any application</td></tr>
+    <tr><td><code>fcitx5-chinese-addons</code></td><td>—</td><td>Pinyin, Wubi, Cangjie input methods</td><td>Multiple input methods for different users</td></tr>
+    <tr><td><code>ibus-libpinyin</code></td><td>—</td><td>Alternative Chinese input (Pinyin)</td><td>Teachers can type Chinese lesson content natively</td></tr>
+  </table>
+
+  <div class="demo-card">
+    <h4>🀄 FCITX5 Demo</h4>
+    <ol>
+      <li>Switch input with <code>Ctrl+Space</code></li>
+      <li>Type Pinyin → Chinese characters appear</li>
+      <li>Works in LibreOffice, Chrome, terminal — everywhere</li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="translation">
+  <h2 class="section-title">9. Translation & Accessibility</h2>
+  <table class="package-table">
+    <tr><th>Package</th><th>Version</th><th>What It Does</th><th>PD Demo Angle</th></tr>
+    <tr><td><code>translate-shell</code></td><td>—</td><td>CLI translation engine</td><td><code>trans :es "Good morning"</code> → "Buenos días"</td></tr>
+    <tr><td><code>espeak-ng</code></td><td>1.51</td><td>Text-to-speech synthesis</td><td>Read any text aloud — great for pronunciation, visually impaired</td></tr>
+  </table>
+
+  <div class="tip-box">
+    <strong>Accessibility Showcase:</strong>
+    <div class="code-block">
+<span class="comment"># Read a passage aloud for pronunciation practice</span>
+echo "The quick brown fox jumps over the lazy dog" | <span class="cmd">espeak-ng</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="pdf">
+  <h2 class="section-title">10. PDF & Document Tools</h2>
+  <table class="package-table">
+    <tr><th>Package</th><th>Version</th><th>What It Does</th><th>PD Demo Angle</th></tr>
+    <tr><td><code>pdfarranger</code></td><td>—</td><td>PDF page organizer — split, merge, reorder pages</td><td>"Take pages 1-5 from file A, 3-7 from file B, combine into one PDF"</td></tr>
+    <tr><td><code>qpdf</code></td><td>11.9.0</td><td>Command-line PDF manipulation</td><td>Rotate, encrypt, decrypt, linearize PDFs from terminal</td></tr>
+    <tr><td><code>libreoffice-draw</code></td><td>24.2.7.2</td><td>Edit PDFs as drawings</td><td>Open a PDF, annotate, add shapes, export back to PDF</td></tr>
+  </table>
+
+  <div class="demo-card">
+    <h4>📄 PDF Workflow Demo</h4>
+    <ol>
+      <li>Download a Cambridge past paper PDF</li>
+      <li>Open in LibreOffice Draw</li>
+      <li>Add annotations, highlight answers</li>
+      <li>Export as new PDF for students</li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="security">
+  <h2 class="section-title">11. Security & Firewall</h2>
+  <table class="package-table">
+    <tr><th>Component</th><th>Status</th><th>What It Does</th></tr>
+    <tr><td><code>ufw</code> (firewall)</td><td>Active</td><td>Blocks all incoming except SSH, Tailscale, Samba</td></tr>
+    <tr><td>SSH key auth</td><td>Enabled</td><td>No password login — only cryptographic keys</td></tr>
+    <tr><td><code>unattended-upgrades</code></td><td>Enabled</td><td>Security patches install automatically</td></tr>
+    <tr><td><code>pam_sss.so</code></td><td>Disabled</td><td>Fixed PAM misconfiguration that blocked logins</td></tr>
+    <tr><td>NOPASSWD sudo</td><td>Configured</td><td><code>dell01</code> can run admin commands without password prompt</td></tr>
+  </table>
+
+  <div class="tip-box">
+    <strong>Security Talking Points for PD:</strong>
+    <ul>
+      <li>"Every machine has a firewall by default"</li>
+      <li>"No passwords for SSH — keys only, like a digital fingerprint"</li>
+      <li>"Updates happen automatically — no IT guy needed"</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="pending">
+  <h2 class="section-title">12. What's NOT Installed (Yet)</h2>
+  <table class="package-table">
+    <tr><th>Package</th><th>Why Missing</th><th>Plan</th></tr>
+    <tr><td><strong>Ollama</strong> (local LLM)</td><td>Download blocked from China</td><td>Install after VPN gateway working</td></tr>
+    <tr><td><strong>Mullvad VPN</strong></td><td><code>.deb</code> server unreachable</td><td>Download on VPN-enabled machine, push to fleet</td></tr>
+    <tr><td><strong>VS Code</strong></td><td>Heavy, not essential for PD</td><td>Optional: <code>sudo snap install code</code></td></tr>
+    <tr><td><strong>Zoom/Teams</strong></td><td>Web versions work in Chrome</td><td>Install native clients if needed</td></tr>
+    <tr><td><strong>Anki</strong></td><td>Flashcard app</td><td>Optional for vocabulary drilling</td></tr>
+    <tr><td><strong>Khan Academy</strong></td><td>Web-based, no install needed</td><td>Access via Chrome</td></tr>
+  </table>
+</section>
+
+<section class="section" id="scenarios">
+  <h2 class="section-title">13. PD Demo Scenarios</h2>
+  <p style="margin-bottom:1.5rem;">Six scripted demos. Each takes 3–5 minutes. Perfect for a PD session or admin showcase.</p>
+
+  <div class="scenario-grid">
+    <div class="scenario-card">
+      <div class="scenario-icon">📄</div>
+      <h4>Scenario A: Replace Microsoft Office</h4>
+      <span class="time">5 min</span>
+      <ol>
+        <li>Open LibreOffice Writer</li>
+        <li>Create a lesson plan</li>
+        <li>Save as <code>.docx</code></li>
+        <li>Open on a Windows machine</li>
+        <li><em>"Free. Compatible. No subscription."</em></li>
+      </ol>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-icon">🤖</div>
+      <h4>Scenario B: AI on a Local Machine</h4>
+      <span class="time">5 min</span>
+      <ol>
+        <li>Open Jupyter Notebook</li>
+        <li>Run a Python word frequency script</li>
+        <li>Show a pie chart of vocabulary usage</li>
+        <li><em>"No cloud, no API keys, no internet required"</em></li>
+      </ol>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-icon">🎥</div>
+      <h4>Scenario C: Record Your Lesson</h4>
+      <span class="time">5 min</span>
+      <ol>
+        <li>Open OBS Studio</li>
+        <li>Hit "Start Recording"</li>
+        <li>Deliver a 30-second mini-lesson</li>
+        <li>Hit "Stop Recording"</li>
+        <li>Play back the video in <code>mpv</code></li>
+      </ol>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-icon">🀄</div>
+      <h4>Scenario D: Chinese Input Everywhere</h4>
+      <span class="time">3 min</span>
+      <ol>
+        <li>Open LibreOffice Writer</li>
+        <li>Press <code>Ctrl+Space</code></li>
+        <li>Type Pinyin: <code>nihao</code></li>
+        <li>Select 你好 from candidates</li>
+      </ol>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-icon">⌨️</div>
+      <h4>Scenario E: Terminal Power User</h4>
+      <span class="time">5 min</span>
+      <ol>
+        <li><code>neofetch</code> → show specs</li>
+        <li><code>trans :zh "Welcome to class"</code> → instant translation</li>
+        <li><code>espeak-ng "Welcome to class"</code> → text-to-speech</li>
+        <li><code>docker run hello-world</code> → containers in 5 seconds</li>
+      </ol>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-icon">🖥️</div>
+      <h4>Scenario F: Remote Administration</h4>
+      <span class="time">5 min</span>
+      <ol>
+        <li>From HER (different machine), SSH into Dell01</li>
+        <li>Run commands as if sitting at the keyboard</li>
+        <li><em>"I can fix all 13 machines from my living room"</em></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="commands">
+  <h2 class="section-title">★ Quick Command Reference</h2>
+
+  <div class="quick-ref">
+    <h3>⚡ Essential Commands</h3>
+    <div class="quick-ref-grid">
+      <div>
+        <h4>System Info</h4>
+        <pre>neofetch
+htop</pre>
+      </div>
+      <div>
+        <h4>Development</h4>
+        <pre>jupyter notebook
+<span class="comment"># Web server in a box</span>
+docker run -p 8080:80 nginx
+<span class="comment"># JavaScript from terminal</span>
+node -e "console.log('Hello')"</pre>
+      </div>
+      <div>
+        <h4>Media</h4>
+        <pre><span class="comment"># Extract audio from video</span>
+ffmpeg -i input.mp4 output.mp3
+<span class="comment"># Play video</span>
+mpv filename.mp4
+<span class="comment"># Start OBS</span>
+obs</pre>
+      </div>
+      <div>
+        <h4>Office</h4>
+        <pre>libreoffice --writer &
+libreoffice --calc &
+libreoffice --draw &</pre>
+      </div>
+      <div>
+        <h4>Translation</h4>
+        <pre><span class="comment"># Translate to Chinese</span>
+trans :zh "Hello world"
+<span class="comment"># Text to speech</span>
+espeak-ng "Hello world"</pre>
+      </div>
+      <div>
+        <h4>Network</h4>
+        <pre><span class="comment"># Show Tailscale IP</span>
+tailscale ip -4
+<span class="comment"># Scan local network</span>
+nmap -sn 192.168.1.0/24
+<span class="comment"># Test bandwidth</span>
+iperf3 -c &lt;server-ip&gt;</pre>
+      </div>
+      <div>
+        <h4>PDF</h4>
+        <pre><span class="comment"># GUI PDF organizer</span>
+pdfarranger &
+<span class="comment"># Rotate PDF</span>
+qpdf --rotate=+90 input.pdf output.pdf</pre>
+      </div>
+      <div>
+        <h4>AI (After VPN)</h4>
+        <pre><span class="comment"># Local LLM chatbot</span>
+ollama run llama3.2
+<span class="comment"># Python AI libraries</span>
+pip install transformers torch</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>PD Showcase Guide · NAS Jiaxing · Managed by HER</p>
+  <p style="margin-top:0.5rem;font-size:0.85rem;opacity:0.7;">Part of the AI-Powered Education initiative</p>
+</footer>
+
+</body>
+</html>

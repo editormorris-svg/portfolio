@@ -9,15 +9,16 @@
 <body>
     <header class="site-header">
         <div class="container">
-            <a href="../index.html" class="logo">0604<span>.ai</span></a>
+            <a href="index.html" class="logo">0604<span>.ai</span></a>
             <nav class="nav-links">
-                <a href="../index.html">Home</a>
+                <a href="index.html">Home</a>
                 <a href="hardware.html">Hardware</a>
                 <a href="ai-stack.html">AI Stack</a>
                 <a href="services.html">Services</a>
                 <a href="network.html">Network</a>
                 <a href="backup.html">Backup</a>
                 <a href="troubleshooting.html">Fixes</a>
+                <a href="cron-tasks.html">Cron Tasks</a>
                 <a href="resources.html">Resources</a>
             </nav>
         </div>
@@ -59,21 +60,62 @@
                 </div>
                 <div class="spec-card">
                     <div class="label">Root SSD</div>
-                    <div class="value">295 GB (ext4)</div>
+                    <div class="value">Disk 0: 2 TB (Predator GM9)</div>
                 </div>
                 <div class="spec-card">
                     <div class="label">Data SSD</div>
-                    <div class="value">4 TB (NTFS)</div>
+                    <div class="value">Disk 1: 4 TB (Fanxiang S790)</div>
                 </div>
                 <div class="spec-card">
                     <div class="label">OS</div>
-                    <div class="value">Ubuntu 24.04 + Windows</div>
+                    <div class="value">Ubuntu 24.04 (Partition 5) + Windows (C:)</div>
                 </div>
             </div>
 
             <h2 id="storage">Storage Layout</h2>
-            <p>The 4TB SSD is the secret weapon. It holds models, backups, and Timeshift snapshots — all while keeping the root partition clean.</p>
+            <p>Disk 0 (Predator SSD GM9 2TB) is dual-boot: Windows + Ubuntu on the same physical drive. Disk 1 (Fanxiang S790 4TB) is pure data.</p>
 
+            <h3>Disk 0: Predator SSD GM9 2TB (System + Ubuntu)</h3>
+            <table>
+                <tr>
+                    <th>Partition</th>
+                    <th>Size</th>
+                    <th>Type</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>300 MB</td>
+                    <td>System (EFI)</td>
+                    <td>Windows boot</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>16 MB</td>
+                    <td>Reserved</td>
+                    <td>Microsoft reserved</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>1.6 TB</td>
+                    <td>C: (NTFS)</td>
+                    <td><strong>Windows</strong> (creative powerhouse)</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>841 MB</td>
+                    <td>Recovery</td>
+                    <td>Windows recovery</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>300 GB</td>
+                    <td>Linux (ext4)</td>
+                    <td><strong>Ubuntu</strong> (AI server, 24/7)</td>
+                </tr>
+            </table>
+
+            <h3>Disk 1: Fanxiang S790 4TB (Data)</h3>
             <table>
                 <tr>
                     <th>Partition</th>
@@ -83,28 +125,14 @@
                     <th>Purpose</th>
                 </tr>
                 <tr>
-                    <td>nvme1n1p5</td>
-                    <td>295 GB</td>
-                    <td>ext4</td>
-                    <td>/</td>
-                    <td>Ubuntu root, Docker images, configs</td>
-                </tr>
-                <tr>
-                    <td>nvme0n1p1</td>
-                    <td>~500 GB</td>
-                    <td>NTFS</td>
-                    <td>—</td>
-                    <td>Windows C: drive</td>
-                </tr>
-                <tr>
-                    <td>nvme0n1p3</td>
-                    <td>~1.8 TB</td>
+                    <td>D:</td>
+                    <td>~2 TB</td>
                     <td>NTFS</td>
                     <td>/media/wm/2TB-Data</td>
                     <td><strong>Ollama models, Restic repo, Timeshift</strong></td>
                 </tr>
                 <tr>
-                    <td>nvme0n1p4</td>
+                    <td>E:</td>
                     <td>~1.9 TB</td>
                     <td>NTFS</td>
                     <td>OS-BK</td>
@@ -118,20 +146,26 @@
             </div>
 
             <h2 id="dualboot">Dual Boot</h2>
-            <p>Windows stays for gaming and Macrium Reflect backups. Ubuntu runs the AI stack. GRUB handles boot selection.</p>
+            <p>Same physical machine (Disk 0), two OS personalities. GRUB handles boot selection.</p>
 
-            <h3>Windows side</h3>
+            <h3>Ubuntu side (Partition 5, 300 GB)</h3>
             <ul>
-                <li>Macrium Reflect for full disk imaging</li>
-                <li>No Linux version exists — use Timeshift on Ubuntu instead</li>
-                <li>HER (Windows agent) runs there when booted</li>
-            </ul>
-
-            <h3>Ubuntu side</h3>
-            <ul>
-                <li>All AI services run here</li>
+                <li><strong>Role:</strong> Automated AI server, 24/7</li>
+                <li>All AI services run here (Ollama, Open WebUI, Nextcloud, Jellyfin, AdGuard)</li>
+                <li>All work done remotely via WeChat — rarely used as desktop in person</li>
                 <li>Restic + Timeshift for backup</li>
                 <li>HER (Ubuntu agent) — the primary workhorse</li>
+            </ul>
+
+            <h3>Windows side (C: drive, 1.6 TB)</h3>
+            <ul>
+                <li><strong>Role:</strong> Creative powerhouse, booted as needed</li>
+                <li>Adobe Creative Suite (subscription)</li>
+                <li>GOG (gaming library)</li>
+                <li>Macrium Reflect (full disk imaging including Ubuntu Partition 5)</li>
+                <li>LM Studio, Ollama (local AI inference)</li>
+                <li><strong>No Microsoft Office</strong> (deliberate choice — avoids school/work account sync, zero safeguarding complications)</li>
+                <li>HER (Windows agent) — creative agent when booted</li>
             </ul>
 
             <div class="warning">

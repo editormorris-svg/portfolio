@@ -129,36 +129,68 @@ body {
   font-size: 2rem;
   margin-bottom: 0.5rem;
 }
-.slt-grid {
+.machine-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
   margin: 2rem 0;
 }
-.slt-card {
+.machine-card {
   background: white;
   border-radius: 10px;
   padding: 1.2rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   text-align: center;
 }
-.slt-card .role {
+.machine-card .status {
   font-size: 0.75rem;
   color: var(--accent-rust);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-.slt-card .machine {
+.machine-card .name {
   font-family: 'Playfair Display', serif;
   font-size: 1.1rem;
   color: var(--earth-dark);
   margin: 0.3rem 0;
 }
-.slt-card .student-title {
-  font-size: 0.9rem;
+.machine-card .role {
+  font-size: 0.85rem;
   color: var(--earth-warm);
 }
+.machine-card .specs {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 0.5rem;
+}
+.fleet-status {
+  background: var(--earth-dark);
+  color: var(--earth-cream);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+  font-family: 'SF Mono', monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+}
+.fleet-status table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.fleet-status th, .fleet-status td {
+  padding: 0.6rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.fleet-status th {
+  color: var(--earth-gold);
+  font-weight: 600;
+}
+.status-online { color: #7ee787; }
+.status-pending { color: #f0883e; }
+.status-offline { color: #f85149; }
+.status-dormant { color: #888; }
 .workflow {
   background: white;
   border-radius: 12px;
@@ -196,23 +228,23 @@ footer {
     <ul class="nav-links">
       <li><a href="/">Home</a></li>
       <li><a href="tech-lab.html">Tech Lab</a></li>
-      <li><a href="output/identity-tracking.html">Identity</a></li>
-      <li><a href="output/dell01-pd-showcase-guide.html">PD Guide</a></li>
-      <li><a href="zh/ai-fleet.html" class="lang-toggle">🇨🇳 中文</a></li>
+      <li><a href="identity-tracking.html">Identity</a></li>
+      <li><a href="dell01-pd-showcase-guide.html">PD Guide</a></li>
+
     </ul>
   </div>
 </nav>
 
 <section class="hero">
   <h1>🤖 AI Fleet — Student-Built Teaching Agents</h1>
-  <p>13 laptops. 13 personalities. 1 shared infrastructure. Built by students, managed by AI.</p>
+  <p>4 active machines + 13 dormant laptops. 1 shared infrastructure. Built by students, managed by AI.</p>
   <span class="badge">Student-Centred · Git-Tracked · Identity-Driven</span>
 </section>
 
 <section class="section">
   <div class="highlight-box">
-    <h3>💡 The Big Idea</h3>
-    <p>Every Dell laptop is more than a computer — it's a <strong>student-built AI teaching personality</strong>. Each machine has a unique name, emoji, specialized school role, and memory system. Students don't just <em>use</em> the fleet. They <em>create</em> it.</p>
+    <h3>💡 Fleet Restructure — June 2026</h3>
+    <p>The fleet has been reorganized. <strong>HER (Ubuntu side)</strong> is the automated AI server and control center. <strong>HER (Windows side)</strong> is the creative powerhouse (Adobe, gaming, Macrium). <strong>HIM</strong> has taken over LMS/exam duties and fleet golden master. <strong>N95</strong> is preparing for Thailand. <strong>MiniPC</strong> stays home for entertainment. The 13 Dell laptops are dormant until September.</p>
     <p style="margin-top:1rem;font-size:0.9rem;">
       <strong>The infrastructure is shared (HER-managed).</strong> The identities are student-owned. The collaboration is real.
     </p>
@@ -220,23 +252,56 @@ footer {
 </section>
 
 <section class="section">
-  <h2 class="section-title">The Three Pillars</h2>
-  <div class="concept-grid">
-    <div class="concept-card">
-      <div class="icon">🆔</div>
-      <h3>Identity</h3>
-      <p>Each laptop gets a unique name, emoji, creature type, and personality — chosen by students. "I am Newton 🍎. I am the Science Lead. I speak in questions."</p>
+  <h2 class="section-title">Active Machines — 4 Running 24/7</h2>
+  <div class="machine-grid">
+    <div class="machine-card">
+      <div class="status">● Online</div>
+      <div class="name">HER</div>
+      <div class="role">Ubuntu: AI Server (24/7) / Windows: Creative Powerhouse</div>
+      <div class="specs">AMD 7950X3D · 96GB · RX 7900 XTX</div>
     </div>
-    <div class="concept-card">
-      <div class="icon">📦</div>
-      <h3>Specialization</h3>
-      <p>Each agent has a school SLT role: Math Lead, EAL Coordinator, Literacy Champion. Students build skills and tools in their agent's specialty.</p>
+    <div class="machine-card">
+      <div class="status">● Online</div>
+      <div class="name">HIM</div>
+      <div class="role">LMS / Exam Server / Fleet Master</div>
+      <div class="specs">AMD 7800X3D · 32GB · WD 8TB</div>
     </div>
-    <div class="concept-card">
-      <div class="icon">🤝</div>
-      <h3>Collaboration</h3>
-      <p>Agents share infrastructure via Git. The Math Lead's fractions tool becomes available to all 13 machines after a pull request is merged.</p>
+    <div class="machine-card">
+      <div class="status">● Online</div>
+      <div class="name">N95</div>
+      <div class="role">Thailand / Disney Plus Streaming</div>
+      <div class="specs">Intel N95 · 32GB DDR4 · 512GB SATA</div>
     </div>
+    <div class="machine-card">
+      <div class="status">● Online</div>
+      <div class="name">MiniPC</div>
+      <div class="role">Home Entertainment</div>
+      <div class="specs">Ryzen 5 PRO 7640HS · 32GB · 512GB</div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Dell Fleet — 13 Machines (Dormant until September)</h2>
+  <p style="text-align:center;margin-bottom:2rem;color:#5a4a3a;">All cloned from Dell02 golden image on 2026-06-05. Currently at school, powered off for summer break.</p>
+  
+  <div class="fleet-status">
+    <table>
+      <tr><th>Machine</th><th>Status</th><th>Role</th><th>Notes</th></tr>
+      <tr><td>Dell01</td><td class="status-dormant">○ Dormant</td><td>Student Workstation</td><td>Reimaged from dell02</td></tr>
+      <tr><td>Dell02</td><td class="status-dormant">○ Dormant</td><td>Student Workstation</td><td>Source of golden image</td></tr>
+      <tr><td>Dell03</td><td class="status-dormant">○ Dormant</td><td>Student Workstation</td><td>—</td></tr>
+      <tr><td>Dell04</td><td class="status-dormant">○ Dormant</td><td>Student Workstation</td><td>—</td></tr>
+      <tr><td>Dell05</td><td class="status-dormant">○ Dormant</td><td>Student Workstation</td><td>—</td></tr>
+      <tr><td>Dell06</td><td class="status-dormant">○ Dormant</td><td>Student Workstation</td><td>—</td></tr>
+      <tr><td>Dell07</td><td class="status-dormant">○ Dormant</td><td>Student Workstation</td><td>—</td></tr>
+      <tr><td>Dell08</td><td class="status-dormant">○ Dormant</td><td>Student Workstation</td><td>—</td></tr>
+      <tr><td>Dell09</td><td class="status-dormant">○ Dormant</td><td>Student Workstation</td><td>—</td></tr>
+      <tr><td>Dell10</td><td class="status-dormant">○ Dormant</td><td>Student Workstation</td><td>—</td></tr>
+      <tr><td>Dell11</td><td class="status-dormant">○ Dormant</td><td>Student Workstation</td><td>—</td></tr>
+      <tr><td>Dell12</td><td class="status-dormant">○ Dormant</td><td>Student Workstation</td><td>—</td></tr>
+      <tr><td>Dell13</td><td class="status-dormant">○ Dormant</td><td>Student Workstation</td><td>—</td></tr>
+    </table>
   </div>
 </section>
 
@@ -244,66 +309,66 @@ footer {
   <h2 class="section-title">The SLT Model — 12 Student Roles</h2>
   <p style="text-align:center;margin-bottom:2rem;color:#5a4a3a;">Inspired by real school leadership. Each laptop/agent becomes a department head.</p>
   
-  <div class="slt-grid">
-    <div class="slt-card">
-      <div class="role">Headteacher</div>
-      <div class="machine">Dell01</div>
-      <div class="student-title">Head Boy/Girl</div>
+  <div class="machine-grid">
+    <div class="machine-card">
+      <div class="status">Headteacher</div>
+      <div class="name">Dell01</div>
+      <div class="role">Head Boy/Girl</div>
     </div>
-    <div class="slt-card">
-      <div class="role">Math Lead</div>
-      <div class="machine">Dell02</div>
-      <div class="student-title">Math Captain</div>
+    <div class="machine-card">
+      <div class="status">Math Lead</div>
+      <div class="name">Dell02</div>
+      <div class="role">Math Captain</div>
     </div>
-    <div class="slt-card">
-      <div class="role">EAL Coordinator</div>
-      <div class="machine">Dell03</div>
-      <div class="student-title">Language Ambassador</div>
+    <div class="machine-card">
+      <div class="status">EAL Coordinator</div>
+      <div class="name">Dell03</div>
+      <div class="role">Language Ambassador</div>
     </div>
-    <div class="slt-card">
-      <div class="role">Literacy Lead</div>
-      <div class="machine">Dell04</div>
-      <div class="student-title">Reading Champion</div>
+    <div class="machine-card">
+      <div class="status">Literacy Lead</div>
+      <div class="name">Dell04</div>
+      <div class="role">Reading Champion</div>
     </div>
-    <div class="slt-card">
-      <div class="role">ICT Coordinator</div>
-      <div class="machine">Dell05</div>
-      <div class="student-title">Tech Lead</div>
+    <div class="machine-card">
+      <div class="status">ICT Coordinator</div>
+      <div class="name">Dell05</div>
+      <div class="role">Tech Lead</div>
     </div>
-    <div class="slt-card">
-      <div class="role">Pastoral Lead</div>
-      <div class="machine">Dell06</div>
-      <div class="student-title">Wellbeing Officer</div>
+    <div class="machine-card">
+      <div class="status">Pastoral Lead</div>
+      <div class="name">Dell06</div>
+      <div class="role">Wellbeing Officer</div>
     </div>
-    <div class="slt-card">
-      <div class="role">Science Lead</div>
-      <div class="machine">Dell07</div>
-      <div class="student-title">Lab Manager</div>
+    <div class="machine-card">
+      <div class="status">Science Lead</div>
+      <div class="name">Dell07</div>
+      <div class="role">Lab Manager</div>
     </div>
-    <div class="slt-card">
-      <div class="role">Arts Lead</div>
-      <div class="machine">Dell08</div>
-      <div class="student-title">Creative Director</div>
+    <div class="machine-card">
+      <div class="status">Arts Lead</div>
+      <div class="name">Dell08</div>
+      <div class="role">Creative Director</div>
     </div>
-    <div class="slt-card">
-      <div class="role">History Lead</div>
-      <div class="machine">Dell09</div>
-      <div class="student-title">Archivist</div>
+    <div class="machine-card">
+      <div class="status">History Lead</div>
+      <div class="name">Dell09</div>
+      <div class="role">Archivist</div>
     </div>
-    <div class="slt-card">
-      <div class="role">PE Lead</div>
-      <div class="machine">Dell10</div>
-      <div class="student-title">Sports Captain</div>
+    <div class="machine-card">
+      <div class="status">PE Lead</div>
+      <div class="name">Dell10</div>
+      <div class="role">Sports Captain</div>
     </div>
-    <div class="slt-card">
-      <div class="role">DT Lead</div>
-      <div class="machine">Dell11</div>
-      <div class="student-title">Maker Lead</div>
+    <div class="machine-card">
+      <div class="status">DT Lead</div>
+      <div class="name">Dell11</div>
+      <div class="role">Maker Lead</div>
     </div>
-    <div class="slt-card">
-      <div class="role">Student Rep</div>
-      <div class="machine">Dell12</div>
-      <div class="student-title">Voice Officer</div>
+    <div class="machine-card">
+      <div class="status">Student Rep</div>
+      <div class="name">Dell12</div>
+      <div class="role">Voice Officer</div>
     </div>
   </div>
 </section>
@@ -369,7 +434,9 @@ footer {
   <div class="highlight-box">
     <h3>🤖 HER's Role</h3>
     <p>HER (the Ubuntu admin workstation) manages the shared infrastructure: <code>fleet/</code> scripts, security updates, network configuration, and automation. Students never touch infrastructure — they build <em>on top</em> of it.</p>
-    <p style="margin-top:1rem;">When a laptop needs re-imaging, HER restores the system, runs <code>fleet-bootstrap.sh</code>, and the student's agent identity returns via <code>git pull</code>.</p>
+    <p style="margin-top:1rem;font-size:0.9rem;color:#6B4423;">
+      <strong>Managed by:</strong> AI Agent (HER) · <strong>Location:</strong> NAS Jiaxing · <strong>Fleet Size:</strong> 17 machines (4 active + 13 dormant) · <strong>Status:</strong> Golden Master Configured
+    </p>
   </div>
 </section>
 

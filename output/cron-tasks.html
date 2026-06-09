@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cron Jobs & Scheduled Tasks — Fleet Automation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <a href="index.html" class="logo">0604<span>.ai</span></a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="hardware.html">Hardware</a>
+                <a href="ai-stack.html">AI Stack</a>
+                <a href="services.html">Services</a>
+                <a href="network.html">Network</a>
+                <a href="backup.html">Backup</a>
+                <a href="troubleshooting.html">Fixes</a>
+                <a href="cron-tasks.html">Cron Tasks</a>
+                <a href="resources.html">Resources</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <h1>⏰ Cron Jobs & Scheduled Tasks</h1>
+        <p>Master record of all automated tasks across the fleet. Updated 2026-06-07.</p>
+    </section>
+
+    <main class="content">
+        <div class="container">
+            <div class="toc">
+                <h4>Contents</h4>
+                <ul>
+                    <li><a href="#her-ubuntu">HER (Ubuntu)</a></li>
+                    <li><a href="#her-windows">HER (Windows)</a></li>
+                    <li><a href="#him">HIM</a></li>
+                    <li><a href="#n95">N95</a></li>
+                    <li><a href="#mini">MiniPC</a></li>
+                    <li><a href="#dell">Dell Fleet</a></li>
+                    <li><a href="#manage">Management Rules</a></li>
+                    <li><a href="#commands">Quick Commands</a></li>
+                </ul>
+            </div>
+
+            <h2 id="her-ubuntu">HER (Ubuntu) — Automated AI Server 24/7</h2>
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Task</th>
+                    <th>Schedule</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Details</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td><strong>Morning Report</strong></td>
+                    <td>Daily 7:00 AM</td>
+                    <td>cron job</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td>Checks OpenClaw releases, Node.js security, Git security. Only reports if urgent. Logs to <code>.scripts/morning-report-log.txt</code>.</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><strong>Website Auto-Fix</strong></td>
+                    <td>Daily 8:00 AM</td>
+                    <td>cron job</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td>Checks 0604.ai for broken links/missing pages. Auto-deploys found files. Reports: <code>memory/website-fix-YYYY-MM-DD.md</code>.</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><strong>Heartbeat</strong></td>
+                    <td>Every 30 min</td>
+                    <td>system config</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td>Checks HER page monitor, git sync health, website status, memory maintenance. Silent if nothing new.</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><strong>Grammar Platform</strong></td>
+                    <td>Always on</td>
+                    <td>systemd service</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td>Grammar Catalogue + KET/PET platform at <code>localhost:3456</code>.</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td><strong>Kahoot/iQuiz</strong></td>
+                    <td>Always on</td>
+                    <td>systemd service</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td>Live at <code>http://100.66.203.53:4567</code>. Admin: <code>NASJiaxing2026!</code></td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td><strong>Ollama</strong></td>
+                    <td>Always on</td>
+                    <td>systemd service</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td><code>localhost:11434</code>. Serves 5+ LLM models.</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td><strong>OpenClaw Gateway</strong></td>
+                    <td>Always on</td>
+                    <td>systemd service</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td>Ubuntu HER runs the main gateway. Manages all agents, channels, webhooks.</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td><strong>Nextcloud</strong></td>
+                    <td>Always on</td>
+                    <td>Docker</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td><code>localhost:8080</code>. File sync and share.</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td><strong>Jellyfin</strong></td>
+                    <td>Always on</td>
+                    <td>Docker</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td><code>localhost:8096</code>. Media server.</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td><strong>AdGuard Home</strong></td>
+                    <td>Always on</td>
+                    <td>Docker</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td><code>localhost:3001</code>. DNS filter. Port 53 owned by systemd-resolved.</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td><strong>SillyTavern</strong></td>
+                    <td>Always on</td>
+                    <td>systemd</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td><code>localhost:8000</code>. AI roleplay frontend.</td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td><strong>ComfyUI</strong></td>
+                    <td>Always on</td>
+                    <td>systemd</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td><code>localhost:8188</code>. Image generation.</td>
+                </tr>
+            </table>
+
+            <h2 id="her-windows">HER (Windows) — Creative Powerhouse</h2>
+            <p>Windows side is booted manually for creative work, gaming, or maintenance. No recurring cron jobs — all automated tasks run on Ubuntu side.</p>
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Task</th>
+                    <th>Schedule</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Details</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td><strong>OpenClaw Gateway</strong></td>
+                    <td>On boot / manual</td>
+                    <td>Scheduled Task</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td>Only runs when Windows is booted. User talks to Windows HER via dashboard.</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><strong>Adobe Creative Suite</strong></td>
+                    <td>Manual</td>
+                    <td>Application</td>
+                    <td><span class="badge badge-blue">Ready</span></td>
+                    <td>Photoshop, Premiere, etc. Updated to latest.</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><strong>GOG Galaxy</strong></td>
+                    <td>Manual</td>
+                    <td>Application</td>
+                    <td><span class="badge badge-blue">Ready</span></td>
+                    <td>Gaming library, DRM-free. Updated.</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><strong>Macrium Reflect</strong></td>
+                    <td>Manual</td>
+                    <td>Application</td>
+                    <td><span class="badge badge-blue">Ready</span></td>
+                    <td>Full disk imaging. Can backup Ubuntu Partition 5.</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td><strong>LM Studio</strong></td>
+                    <td>Manual</td>
+                    <td>Application</td>
+                    <td><span class="badge badge-blue">Ready</span></td>
+                    <td>Local AI inference (Windows side).</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td><strong>Ollama</strong></td>
+                    <td>Manual</td>
+                    <td>Application</td>
+                    <td><span class="badge badge-blue">Ready</span></td>
+                    <td>Local LLM hosting (Windows side).</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td><strong>Git</strong></td>
+                    <td>Manual</td>
+                    <td>CLI</td>
+                    <td><span class="badge badge-blue">Ready</span></td>
+                    <td>Version 2.54.0.windows.1. For creative/web projects.</td>
+                </tr>
+            </table>
+
+            <h2 id="him">HIM (Dell01) — School Server</h2>
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Task</th>
+                    <th>Schedule</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Details</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td><strong>OpenClaw Agent</strong></td>
+                    <td>Not running</td>
+                    <td>systemd</td>
+                    <td><span class="badge badge-red">Inactive</span></td>
+                    <td>Gateway: ❌ No. Only her-agent for local AI.</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><strong>Kimi API</strong></td>
+                    <td>On demand</td>
+                    <td>API</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td>Used for inference when local LLM insufficient.</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><strong>Fleet Management</strong></td>
+                    <td>On demand</td>
+                    <td>SSH scripts</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td>HER (Ubuntu) SSHs into HIM to deploy updates.</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><strong>8TB Drive Backup</strong></td>
+                    <td>Manual</td>
+                    <td>Restic/Macrium</td>
+                    <td><span class="badge badge-purple">Pending</span></td>
+                    <td>WD 8TB drive. Priority: Ubuntu golden master, git snapshots, AI materials.</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td><strong>LMS / Exam Platform</strong></td>
+                    <td>Planned</td>
+                    <td>Web service</td>
+                    <td><span class="badge badge-purple">Transitioning</span></td>
+                    <td>Taking over LMS and KET/PET exam duties from HER.</td>
+                </tr>
+            </table>
+
+            <h2 id="n95">N95 — Thailand Streaming Box</h2>
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Task</th>
+                    <th>Schedule</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Details</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td><strong>Disney Plus Routing</strong></td>
+                    <td>On boot</td>
+                    <td>VPN</td>
+                    <td><span class="badge badge-purple">Preparing</span></td>
+                    <td>Will handle Disney Plus streaming for Thailand trip.</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><strong>OpenClaw Agent</strong></td>
+                    <td>On boot</td>
+                    <td>systemd</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td>her-agent. Talks to William via Lark.</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><strong>Golden Image Backup</strong></td>
+                    <td>Manual</td>
+                    <td>File copy</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td>Copies of <code>dell01-master</code> and <code>dell02</code> images on N95 SSD.</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><strong>Tailscale</strong></td>
+                    <td>On boot</td>
+                    <td>VPN</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td><code>100.114.211.47</code>. Remote admin from HER.</td>
+                </tr>
+            </table>
+
+            <h2 id="mini">MiniPC — Home Entertainment</h2>
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Task</th>
+                    <th>Schedule</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Details</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td><strong>Ubuntu Side</strong></td>
+                    <td>On boot</td>
+                    <td>systemd</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td>Ubuntu partition. More stable than Windows.</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><strong>Windows Side</strong></td>
+                    <td>On boot</td>
+                    <td>Scheduled</td>
+                    <td><span class="badge badge-yellow">Crashes</span></td>
+                    <td>Windows side crashes occasionally. Ubuntu is primary.</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><strong>Astrill VPN</strong></td>
+                    <td>Always on</td>
+                    <td>Application</td>
+                    <td><span class="badge badge-green">● Active</span></td>
+                    <td>Only VPN on MiniPC. No Tailscale/Mullvad (avoid conflicts).</td>
+                </tr>
+            </table>
+
+            <h2 id="dell">Dell Fleet (dell01–dell12) — School Workstations</h2>
+            <p>All cloned from <code>dell02</code> golden master on 2026-06-05. Dormant until September.</p>
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Task</th>
+                    <th>Schedule</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Details</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td><strong>OpenClaw Agent</strong></td>
+                    <td>On boot</td>
+                    <td>systemd</td>
+                    <td><span class="badge badge-purple">Dormant</span></td>
+                    <td>All named <code>dell01</code> agent currently. Will be renamed per student persona.</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><strong>Tailscale</strong></td>
+                    <td>On boot</td>
+                    <td>VPN</td>
+                    <td><span class="badge badge-purple">Dormant</span></td>
+                    <td>Force reauth done on 2026-06-05. Currently offline at school.</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><strong>Golden Master</strong></td>
+                    <td>N/A</td>
+                    <td>Clone</td>
+                    <td><span class="badge badge-green">● Ready</span></td>
+                    <td><code>dell02</code> whole-disk image (6.5GB). On Verbatim USB + N95 SSD.</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><strong>Student AI Agents</strong></td>
+                    <td>Planned</td>
+                    <td>OpenClaw</td>
+                    <td><span class="badge badge-purple">Future</span></td>
+                    <td>Each Dell gets unique student-designed teacher persona. September.</td>
+                </tr>
+            </table>
+
+            <h2 id="manage">Management Rules</h2>
+            <h3>Adding a New Task</h3>
+            <ol>
+                <li>Identify which machine/agent owns it</li>
+                <li>Add row to the correct table in this file</li>
+                <li>Note: schedule, type, status, and what it does</li>
+                <li>Update <strong>Last Updated</strong> at top</li>
+                <li>Commit to git</li>
+            </ol>
+
+            <h3>Modifying an Existing Task</h3>
+            <ol>
+                <li>Update the row in this file</li>
+                <li>Update the actual cron/scheduled task on the machine</li>
+                <li>Verify it works</li>
+                <li>Update <strong>Last Updated</strong></li>
+                <li>Commit to git</li>
+            </ol>
+
+            <h3>Disabling a Task</h3>
+            <ol>
+                <li>Mark status as <span class="badge badge-red">Inactive</span> or <span class="badge badge-purple">Paused</span></li>
+                <li>Note reason in Details column</li>
+                <li>Do NOT delete the row — keep for history</li>
+            </ol>
+
+            <h2 id="commands">Quick Commands</h2>
+            <h3>Ubuntu HER — List Cron Jobs</h3>
+            <pre><code>openclaw cron list</code></pre>
+
+            <h3>Ubuntu HER — Check System Services</h3>
+            <pre><code>systemctl --type=service --state=running | grep -E "ollama|nextcloud|jellyfin|adguard|openclaw|silly|comfy"</code></pre>
+
+            <h3>Windows HER — Check Scheduled Tasks</h3>
+            <pre><code>Get-ScheduledTask | Where-Object {$_.TaskName -like "*OpenClaw*"}</code></pre>
+
+            <h3>Windows HER — Check Services</h3>
+            <pre><code>Get-Service | Where-Object {$_.DisplayName -like "*OpenClaw*"}</code></pre>
+
+            <h3>HIM — Check Agent Status</h3>
+            <pre><code>systemctl status her-agent
+# or
+openclaw status</code></pre>
+
+            <div class="tip">
+                <strong>💡 Tip</strong>
+                Bookmark this page. When something breaks, check here first to see what <em>should</em> be running.
+            </div>
+
+            <h2>Related Files</h2>
+            <ul>
+                <li><a href="HEARTBEAT.md">HEARTBEAT.md</a> — Heartbeat checklist for Ubuntu HER</li>
+                <li><code>memory/heartbeat-state.json</code> — Last check timestamps</li>
+                <li><code>.scripts/morning-report.sh</code> — Morning report script</li>
+                <li><code>scripts/auto-fix-website.py</code> — Website auto-fix script</li>
+                <li><a href="MACHINE_FLEET.md">MACHINE_FLEET.md</a> — Full machine specs and status</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>Built by HER · Managed by Kimi · <a href="https://0604.ai">0604.ai</a></p>
+            <p style="margin-top:0.5rem">Last Updated: 2026-06-07</p>
+        </div>
+    </footer>
+</body>
+</html>

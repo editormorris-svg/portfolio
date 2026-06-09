@@ -1,332 +1,243 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>China Compliance Strategy — 0604.ai</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .compliance-content { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
-        .meta { color: var(--fg-dim); font-size: 0.9rem; margin-bottom: 2rem; }
-        .meta strong { color: var(--accent2); }
-        h2 { color: var(--accent); font-size: 1.5rem; margin: 2.5rem 0 1rem; font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
-        h3 { color: var(--accent2); font-size: 1.15rem; margin: 1.5rem 0 0.75rem; font-weight: 600; }
-        h4 { color: var(--fg); font-size: 1rem; margin: 1.2rem 0 0.5rem; font-weight: 600; }
-        p { margin-bottom: 1rem; color: var(--fg-dim); }
-        ul, ol { margin: 0.75rem 0 1rem 1.5rem; color: var(--fg-dim); }
-        li { margin-bottom: 0.4rem; }
-        table { width: 100%; border-collapse: collapse; margin: 1rem 0 1.5rem; font-size: 0.9rem; }
-        th, td { padding: 0.75rem; text-align: left; border: 1px solid var(--border); }
-        th { background: var(--bg-card); color: var(--fg); font-weight: 600; }
-        td { color: var(--fg-dim); }
-        tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
-        .highlight-box {
-            background: var(--bg-card);
-            border-left: 3px solid var(--accent);
-            padding: 1rem 1.25rem;
-            margin: 1.5rem 0;
-            border-radius: 0 var(--radius) var(--radius) 0;
-        }
-        .warning-box {
-            background: rgba(245, 158, 11, 0.08);
-            border-left: 3px solid var(--warning);
-            padding: 1rem 1.25rem;
-            margin: 1.5rem 0;
-            border-radius: 0 var(--radius) var(--radius) 0;
-        }
-        .warning-box strong { color: var(--warning); }
-        .success-box {
-            background: rgba(34, 197, 94, 0.08);
-            border-left: 3px solid var(--accent3);
-            padding: 1rem 1.25rem;
-            margin: 1.5rem 0;
-            border-radius: 0 var(--radius) var(--radius) 0;
-        }
-        .success-box strong { color: var(--accent3); }
-        .phase { margin-bottom: 2rem; }
-        .phase-title { font-weight: 700; color: var(--accent); margin-bottom: 0.5rem; }
-        .tag {
-            display: inline-block;
-            padding: 0.15rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-left: 0.5rem;
-        }
-        .tag-red { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
-        .tag-yellow { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
-        .tag-green { background: rgba(34, 197, 94, 0.15); color: var(--accent3); }
-        .recommendation {
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(6, 182, 212, 0.05));
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            margin: 2rem 0;
-        }
-        .recommendation h3 { margin-top: 0; color: var(--accent); }
-        footer { text-align: center; margin-top: 3rem; padding: 2rem 0; border-top: 1px solid var(--border); color: var(--fg-dim); font-size: 0.85rem; }
-    </style>
-</head>
-<body>
-    <header class="site-header">
-        <div class="container">
-            <a href="../index.html" class="logo">0604<span>.ai</span></a>
-            <nav class="nav-links">
-                <a href="../index.html">Home</a>
-                <a href="hardware.html">Hardware</a>
-                <a href="ai-stack.html">AI Stack</a>
-                <a href="services.html">Services</a>
-                <a href="network.html">Network</a>
-                <a href="backup.html">Backup</a>
-                <a href="troubleshooting.html">Fixes</a>
-                <a href="resources.html">Resources</a>
-            </nav>
-        </div>
-    </header>
+# China Compliance Strategy for 0604.ai
 
-    <section class="hero">
-        <span class="hero-emoji">🇨🇳</span>
-        <h1>China Compliance Strategy</h1>
-        <p class="hero-subtitle">
-            Hosting 0604.ai content in China: ICP, school networks, and the two-site approach.
-        </p>
-    </section>
+**Research Date:** 2026-05-25  
+**Researched by:** Kimi  
+**Status:** Ready for decision  
 
-    <main class="compliance-content">
-        <p class="meta">
-            <strong>Research Date:</strong> 2026-05-25 · <strong>Researched by:</strong> Kimi · <strong>Status:</strong> Ready for decision
-        </p>
+---
 
-        <h2>The Problem</h2>
-        <table>
-            <tr>
-                <th>Issue</th>
-                <th>Detail</th>
-            </tr>
-            <tr>
-                <td>School Network Policy</td>
-                <td>Strict compliance from Regional Office + National Compliance</td>
-            </tr>
-            <tr>
-                <td>Current Hosting</td>
-                <td>GitHub Pages (US servers) — offshore</td>
-            </tr>
-            <tr>
-                <td>Result</td>
-                <td>0604.ai blocked on school network; cannot whitelist without China ICP</td>
-            </tr>
-            <tr>
-                <td>Goal</td>
-                <td>Professional AI education content accessible without VPN, shareable in PD/demos</td>
-            </tr>
-            <tr>
-                <td>Constraint</td>
-                <td>Must separate personal/unrestricted content from school-facing content</td>
-            </tr>
-        </table>
+## The Problem
 
-        <h2>What ICP Is</h2>
-        <p><strong>Rule:</strong> Any website hosted on a server in mainland China MUST have ICP备案 (Internet Content Provider filing).</p>
+| Issue | Detail |
+|-------|--------|
+| **School Network Policy** | Strict compliance from Regional Office + National Compliance |
+| **Current Hosting** | GitHub Pages (US servers) — offshore |
+| **Result** | 0604.ai blocked on school network; cannot whitelist without China ICP |
+| **Goal** | Professional AI education content accessible without VPN, shareable in PD/demos |
+| **Constraint** | Must separate personal/unrestricted content from school-facing content |
 
-        <table>
-            <tr>
-                <th>Type</th>
-                <th>For</th>
-                <th>Cost</th>
-                <th>Time</th>
-                <th>Who Can Apply</th>
-            </tr>
-            <tr>
-                <td><strong>ICP Filing (备案)</strong></td>
-                <td>Non-commercial: blogs, educational sites, info pages</td>
-                <td>Free</td>
-                <td>20–30 working days</td>
-                <td>Chinese entity, WFOE, or sponsored partner</td>
-            </tr>
-            <tr>
-                <td><strong>ICP Commercial License</strong></td>
-                <td>E-commerce, paid services, ads</td>
-                <td>Free but stricter</td>
-                <td>60–90 working days</td>
-                <td>WFOE/JV with relevant business scope</td>
-            </tr>
-        </table>
+---
 
-        <div class="warning-box">
-            <strong>Key Fact:</strong> Foreign individuals CANNOT apply for ICP directly. You need a Chinese company to sponsor you, your school to apply under their entity, or a WFOE (expensive overkill for a teacher). Also required: PSB filing (公安备案) within 30 days of ICP approval.
-        </div>
+## What ICP Is (Internet Content Provider Filing)
 
-        <h2>The Two-Site Strategy (Recommended)</h2>
-        <p>Don't move 0604.ai. <strong>Keep both.</strong></p>
+**Rule:** Any website hosted on a server in mainland China MUST have ICP备案.
 
-        <table>
-            <tr>
-                <th>Site</th>
-                <th>Hosting</th>
-                <th>Content</th>
-                <th>Audience</th>
-                <th>ICP Needed</th>
-            </tr>
-            <tr>
-                <td><strong>0604.ai</strong></td>
-                <td>GitHub Pages (US)</td>
-                <td>Everything — personal, journals, VPN guides, full agent logs</td>
-                <td>You, global audience, unrestricted</td>
-                <td>❌ No</td>
-            </tr>
-            <tr>
-                <td><strong>nasjx.ai</strong> (example)</td>
-                <td>China VPS or school server</td>
-                <td>Professional AI education only — lesson plans, demo guides, student tools</td>
-                <td>School PD, colleagues, students, China network</td>
-                <td>✅ Yes</td>
-            </tr>
-        </table>
+| Type | For | Cost | Time | Who Can Apply |
+|------|-----|------|------|---------------|
+| **ICP Filing (备案)** | Non-commercial: blogs, educational sites, info pages | Free | 20–30 working days | Chinese entity, WFOE, or sponsored partner |
+| **ICP Commercial License** | E-commerce, paid services, ads | Free but stricter | 60–90 working days | WFOE/JV with relevant business scope |
 
-        <div class="highlight-box">
-            <strong>Why two sites:</strong>
-            <ol>
-                <li>You keep total freedom on 0604.ai (personal journal, VPN talk, agent experiments)</li>
-                <li>School gets a clean, compliant, professional site they can whitelist</li>
-                <li>If the China site gets scrutinized, it's only educational content — no personal risk</li>
-                <li>You can link between them ("For the full build log, visit 0604.ai")</li>
-            </ol>
-        </div>
+**Key Fact:** Foreign individuals CANNOT apply for ICP directly. You need:
+- A Chinese company to sponsor you, OR
+- Your school to apply under their entity, OR
+- A WFOE (Wholly Foreign-Owned Enterprise) — expensive and overkill for a teacher
 
-        <h2>Hosting Options</h2>
+**Also Required:** PSB filing (公安备案) within 30 days of ICP approval. Extra paperwork.
 
-        <h3>Option A: School Internal Server <span class="tag tag-green">Recommended</span></h3>
-        <p><strong>Setup:</strong> Bring HIM (or HER, or Mini) to school. Host on school LAN.</p>
-        <table>
-            <tr><th>Pros</th><th>Cons</th></tr>
-            <tr>
-                <td>✅ No ICP needed if truly internal-only<br>✅ Zero hosting cost<br>✅ School IT controls everything<br>✅ Fastest setup (days, not months)</td>
-                <td>❌ Only accessible on school network<br>❌ No access from home or for external demos<br>❌ Requires school IT cooperation<br>❌ Hardware must stay at school</td>
-            </tr>
-        </table>
-        <p><strong>Best for:</strong> Quick win. Internal PD sharing. Student access on campus.</p>
+---
 
-        <h3>Option B: China VPS (Alibaba / Tencent / Huawei)</h3>
-        <table>
-            <tr><th>Pros</th><th>Cons</th></tr>
-            <tr>
-                <td>✅ Accessible from anywhere in China<br>✅ Professional appearance<br>✅ School can whitelist easily<br>✅ Scalable</td>
-                <td>❌ ICP required — 20-30 day wait<br>❌ Foreigner needs Chinese entity/sponsor<br>❌ Annual review/re-verification<br>❌ Content monitoring by PSB</td>
-            </tr>
-        </table>
-        <p><strong>Best for:</strong> Public-facing professional presence. Shareable outside school.</p>
+## The Two-Site Strategy (Recommended)
 
-        <h3>Option C: School Subdomain Under Existing ICP</h3>
-        <table>
-            <tr><th>Pros</th><th>Cons</th></tr>
-            <tr>
-                <td>✅ No new ICP needed<br>✅ Fastest path to compliance<br>✅ Zero cost<br>✅ Uses school's infrastructure</td>
-                <td>❌ Requires school cooperation and trust<br>❌ School owns the domain<br>❌ Content may need school approval<br>❌ Less independence</td>
-            </tr>
-        </table>
-        <p><strong>Best for:</strong> If school IT is supportive and you want the fastest path.</p>
+Don't move 0604.ai. **Keep both.**
 
-        <h3>Option D: Hong Kong Server (Compromise)</h3>
-        <table>
-            <tr><th>Pros</th><th>Cons</th></tr>
-            <tr>
-                <td>✅ No ICP<br>✅ Better latency than US<br>✅ Less censorship</td>
-                <td>❌ Not mainland China — may still be blocked by school<br>❌ More expensive than mainland VPS<br>❌ Not truly "China hosted"</td>
-            </tr>
-        </table>
-        <p><strong>Best for:</strong> If school only checks "not US-hosted" rather than "mainland ICP."</p>
+| Site | Hosting | Content | Audience | ICP Needed |
+|------|---------|---------|----------|------------|
+| **0604.ai** | GitHub Pages (US) | Everything — personal, journals, VPN guides, full agent logs | You, global audience, unrestricted | ❌ No |
+| **nasjx.ai** (example) | China VPS or school server | Professional AI education only — lesson plans, demo guides, student tools | School PD, colleagues, students, China network | ✅ Yes |
 
-        <h2>Content Strategy</h2>
-        <h3>China Site (Professional, Compliant)</h3>
-        <p><strong>Include:</strong> AI lesson plans, student project demos, hardware recommendations, open-source tool guides, school AI testing results, teacher training resources.</p>
-        <p><strong>Exclude:</strong> VPN setup guides, "how to bypass censorship," cracked software references, personal agent journals, political commentary, anything anti-government.</p>
+**Why two sites:**
+1. You keep total freedom on 0604.ai (personal journal, VPN talk, agent experiments)
+2. School gets a clean, compliant, professional site they can whitelist
+3. If the China site gets scrutinized, it's only educational content — no personal risk
+4. You can link between them ("For the full build log, visit 0604.ai")
 
-        <h3>0604.ai (Unrestricted, Personal)</h3>
-        <p>Everything else. Full agent logs, personal experiments, VPN guides, philosophy, the Samantha journal.</p>
+---
 
-        <div class="warning-box">
-            <strong>The VPN Problem:</strong> On a China-hosted site with ICP, mentioning VPNs or circumvention tools could trigger content review, cause ICP revocation, or create liability for the sponsoring entity (your school). Keep all VPN/network circumvention content on 0604.ai only. Frame China site content as "technical resilience" and "local-first infrastructure."
-        </div>
+## Hosting Options for the China Site
 
-        <h2>Recommended Action Plan</h2>
+### Option A: School Internal Server (Recommended if Possible)
 
-        <div class="phase">
-            <div class="phase-title">Phase 1: Quick Win (This Week) <span class="tag tag-red">High Priority</span></div>
-            <ol>
-                <li><strong>Talk to school IT.</strong> Ask: "Can we host an internal AI resource site on the school LAN?" "Does our school have existing ICP? Could we add a subdomain?" "What's the actual compliance requirement — mainland server or just not-US server?"</li>
-                <li><strong>Set up HIM at school</strong> (if hardware available). Static HTML site, Nginx or Caddy web server, accessible only from school network.</li>
-            </ol>
-        </div>
+**Setup:** Bring HIM (or HER, or Mini) to school. Host on school LAN.
 
-        <div class="phase">
-            <div class="phase-title">Phase 2: Professional Site (Next Month) <span class="tag tag-yellow">Medium Priority</span></div>
-            <ol>
-                <li>If school supports ICP filing: Register subdomain, apply through school</li>
-                <li>If school doesn't: Rent Alibaba Cloud VPS, find a Chinese friend/sponsor to help with ICP</li>
-                <li>Port content: Copy AI education pages from 0604.ai, sanitize (remove VPN refs)</li>
-                <li>Test whitelist: Verify school network allows access</li>
-            </ol>
-        </div>
+| Pros | Cons |
+|------|------|
+| ✅ No ICP needed if truly internal-only | ❌ Only accessible on school network |
+| ✅ Zero hosting cost | ❌ No access from home or for external demos |
+| ✅ School IT controls everything | ❌ Requires school IT cooperation |
+| ✅ Fastest setup (days, not months) | ❌ Hardware must stay at school |
 
-        <div class="phase">
-            <div class="phase-title">Phase 3: Dual Maintenance (Ongoing)</div>
-            <ul>
-                <li><strong>0604.ai:</strong> Continue unrestricted, personal, experimental</li>
-                <li><strong>China site:</strong> Professional updates, lesson plans, PD resources</li>
-                <li><strong>Cross-link:</strong> "Full technical details at 0604.ai" on China site</li>
-            </ul>
-        </div>
+**ICP Question:** If the server has NO public IP and is only reachable from the school LAN, ICP may not be required. The law targets "internet accessible" sites. Intranet is a gray area — consult school IT.
 
-        <div class="recommendation">
-            <h3>My Recommendation</h3>
-            <p><strong>Start with Option A (school internal server) + plan for Option C (school subdomain).</strong></p>
-            <ul>
-                <li>Internal server gets you unblocked TODAY for school use</li>
-                <li>School subdomain gets you professional shareability for PD</li>
-                <li>Keeps 0604.ai untouched as your unrestricted playground</li>
-                <li>Minimum personal legal exposure (school owns the ICP)</li>
-                <li>If school refuses both, fall back to Option B (VPS with personal sponsor)</li>
-            </ul>
-        </div>
+**Best for:** Quick win. Internal PD sharing. Student access on campus.
 
-        <h2>Next Steps</h2>
-        <table>
-            <tr>
-                <th>Task</th>
-                <th>Who</th>
-                <th>Priority</th>
-            </tr>
-            <tr>
-                <td>Talk to school IT about internal hosting</td>
-                <td>William</td>
-                <td><span class="tag tag-red">High</span></td>
-            </tr>
-            <tr>
-                <td>Document school IT response</td>
-                <td>Kimi</td>
-                <td><span class="tag tag-yellow">Medium</span></td>
-            </tr>
-            <tr>
-                <td>Prepare sanitized China-version content</td>
-                <td>HER</td>
-                <td><span class="tag tag-yellow">Medium</span></td>
-            </tr>
-            <tr>
-                <td>Set up internal server if approved</td>
-                <td>HER / HIM</td>
-                <td><span class="tag tag-green">Low</span></td>
-            </tr>
-            <tr>
-                <td>Research school ICP status</td>
-                <td>Kimi</td>
-                <td><span class="tag tag-yellow">Medium</span></td>
-            </tr>
-        </table>
+---
 
-        <footer>
-            <p>This is a business/legal decision, not a technical one. The tech is easy. The compliance path depends on your school's willingness to support.</p>
-            <p style="margin-top: 1rem;">Research sources: Alibaba Cloud ICP docs, MIIT regulations, AppInChina guide, Chinafy analysis, MSA Advisory 2026 guide.</p>
-        </footer>
-    </main>
-</body>
-</html>
+### Option B: China VPS (Alibaba Cloud / Tencent Cloud)
+
+**Setup:** Rent a VPS in mainland China. Apply for ICP through the provider.
+
+| Provider | Price (approx) | Notes |
+|----------|----------------|-------|
+| **Alibaba Cloud ECS** | ¥80–200/month | Most foreigner-friendly console |
+| **Tencent Cloud CVM** | ¥80–200/month | Good documentation |
+| **Huawei Cloud** | Similar pricing | Government-friendly |
+
+| Pros | Cons |
+|------|------|
+| ✅ Accessible from anywhere in China | ❌ ICP required — 20-30 day wait |
+| ✅ Professional appearance | ❌ Foreigner needs Chinese entity/sponsor |
+| ✅ School can whitelist easily | ❌ Annual review/re-verification |
+| ✅ Scalable | ❌ Content monitoring by PSB |
+
+**ICP Path for a Foreign Teacher:**
+1. School applies as the entity (using school's business license)
+2. You are listed as the website administrator
+3. School IT manages the filing
+4. Domain registered under school's name
+
+**Best for:** Public-facing professional presence. Shareable outside school.
+
+---
+
+### Option C: School Subdomain Under Existing ICP
+
+**Setup:** School already has ICP for their main website. Add `ai.nasjx.com` or `tech.nasjx.cn` as a subdomain.
+
+| Pros | Cons |
+|------|------|
+| ✅ No new ICP needed (under school's existing filing) | ❌ Requires school cooperation and trust |
+| ✅ Fastest path to compliance | ❌ School owns the domain |
+| ✅ Zero cost | ❌ Content may need school approval |
+| ✅ Uses school's infrastructure | ❌ Less independence |
+
+**Best for:** If school IT is supportive and you want the fastest path.
+
+---
+
+### Option D: Hong Kong Server (Compromise)
+
+**Setup:** Host in Hong Kong. No ICP needed. Better China access than US.
+
+| Pros | Cons |
+|------|------|
+| ✅ No ICP | ❌ Not mainland China — may still be blocked by school |
+| ✅ Better latency than US | ❌ More expensive than mainland VPS |
+| ✅ Less censorship | ❌ Not truly "China hosted" |
+
+**Best for:** If school only checks "not US-hosted" rather than "mainland ICP."
+
+---
+
+## Content Strategy: What Goes Where
+
+### China Site (Professional, Compliant)
+
+| Include | Exclude |
+|---------|---------|
+| AI lesson plans | VPN setup guides |
+| Student project demos | "How to bypass censorship" |
+| Hardware recommendations | Cracked software references |
+| Open-source tool guides | Personal agent journals |
+| School AI testing results | Political commentary |
+| Teacher training resources | Anything anti-government |
+
+**Tone:** Professional, educational, focused on pedagogy.
+
+### 0604.ai (Unrestricted, Personal)
+
+Everything else. Full agent logs, personal experiments, VPN guides, philosophy, the Samantha journal.
+
+---
+
+## The VPN Problem
+
+**Current 0604.ai content:** You document Docker Hub being blocked, using mirrors, Tailscale mesh networks.
+
+**Risk:** On a China-hosted site with ICP, mentioning VPNs or circumvention tools could:
+1. Trigger content review
+2. Cause ICP revocation
+3. Create liability for the sponsoring entity (your school)
+
+**Solution:** Keep all VPN/network circumvention content on 0604.ai only. The China site talks about "using approved China mirrors" and "local-first infrastructure" — frame it as technical resilience, not circumvention.
+
+---
+
+## Recommended Action Plan
+
+### Phase 1: Quick Win (This Week)
+1. **Talk to school IT.** Ask:
+   - "Can we host an internal AI resource site on the school LAN?"
+   - "Does our school have existing ICP? Could we add a subdomain?"
+   - "What's the actual compliance requirement — mainland server or just not-US server?"
+
+2. **Set up HIM at school** (if you have hardware available)
+   - Static HTML site (what you already have)
+   - Nginx or Caddy web server
+   - Accessible only from school network
+
+### Phase 2: Professional Site (Next Month)
+1. **If school supports ICP filing:** Register subdomain, apply through school
+2. **If school doesn't:** Rent Alibaba Cloud VPS, find a Chinese friend/sponsor to help with ICP
+3. **Port content:** Copy AI education pages from 0604.ai, sanitize (remove VPN refs)
+4. **Test whitelist:** Verify school network allows access
+
+### Phase 3: Dual Maintenance (Ongoing)
+- **0604.ai:** Continue unrestricted, personal, experimental
+- **China site:** Professional updates, lesson plans, PD resources
+- **Cross-link:** "Full technical details at 0604.ai" on China site
+
+---
+
+## Questions for You (William)
+
+1. **Has school IT ever mentioned ICP specifically, or just "China-hosted"?**
+   - If just "China-hosted," Hong Kong might work (Option D)
+   - If "ICP required," you need mainland (Option B or C)
+
+2. **Would school IT support hosting a server on-site?**
+   - If yes → Option A (fastest, cheapest)
+   - If no → Option B or C
+
+3. **Do you have a trusted Chinese colleague who could sponsor ICP?**
+   - Personal friend with a company = easier path
+   - School sponsorship = more bureaucratic but safer
+
+4. **How urgent is this?**
+   - Next PD session soon? → Quick internal server
+   - Long-term strategy? → Proper ICP + VPS
+
+5. **Content scope for China site:**
+   - Just your AI lessons?
+   - Or include other teachers' content too?
+   - Who else will contribute?
+
+---
+
+## My Recommendation
+
+**Start with Option A (school internal server) + plan for Option C (school subdomain).**
+
+Reasoning:
+- Internal server gets you unblocked TODAY for school use
+- School subdomain gets you professional shareability for PD
+- Keeps 0604.ai untouched as your unrestricted playground
+- Minimum personal legal exposure (school owns the ICP)
+- If school refuses both, fall back to Option B (VPS with personal sponsor)
+
+---
+
+## Next Steps (Assign to Agents)
+
+| Task | Agent | Priority |
+|------|-------|----------|
+| Talk to school IT about internal hosting | William | 🔴 High |
+| Document school IT response | Kimi | 🟡 Medium |
+| Prepare sanitized China-version content | HER | 🟡 Medium |
+| Set up internal server if approved | HER/HIM | 🟢 Low (pending approval) |
+| Research school ICP status | Kimi | 🟡 Medium |
+
+---
+
+*Research sources: Alibaba Cloud ICP docs, MIIT regulations, AppInChina guide, Chinafy analysis, MSA Advisory 2026 guide.*
+
+*This is a business/legal decision, not a technical one. The tech is easy. The compliance path depends on your school's willingness to support.*

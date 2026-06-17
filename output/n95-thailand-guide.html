@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N95 Thailand Setup Guide</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+        h1 { color: #1a73e8; border-bottom: 2px solid #1a73e8; padding-bottom: 10px; }
+        h2 { color: #34a853; margin-top: 30px; }
+        .section { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .warning { background: #fef3e8; border-left: 4px solid #f9ab00; padding: 15px; margin: 15px 0; }
+        .success { background: #e8f5e9; border-left: 4px solid #34a853; padding: 15px; margin: 15px 0; }
+        code { background: #e8eaed; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; }
+        pre { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f1f3f4; font-weight: 600; }
+        .status-online { color: #34a853; font-weight: bold; }
+        .status-offline { color: #ea4335; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>🌴 N95 Thailand Setup Guide</h1>
+    <p><strong>Date:</strong> 2026-06-09 | <strong>Status:</strong> <span class="status-online">Ready for Deployment</span></p>
+
+    <div class="success">
+        <strong>✅ N95 is configured and ready for Thailand!</strong><br>
+        Tailscale IP: <code>100.114.211.47</code> | Hostname: <code>N95</code>
+    </div>
+
+    <h2>📋 What is N95?</h2>
+    <div class="section">
+        <p>N95 is a portable mini PC that will serve as your media and streaming companion in Thailand.</p>
+        <ul>
+            <li><strong>Hardware:</strong> Intel N95 CPU, 32GB RAM, 477GB SSD</li>
+            <li><strong>Primary Use:</strong> Disney Plus streaming + video playback</li>
+            <li><strong>Secondary:</strong> Photo/video backup, file sharing, remote access</li>
+            <li><strong>Connectivity:</strong> Tailscale VPN (secure, works anywhere)</li>
+        </ul>
+    </div>
+
+    <h2>🎬 Disney Plus Streaming</h2>
+    <div class="section">
+        <h3>Option 1: Browser (Recommended)</h3>
+        <ol>
+            <li>Open <strong>Google Chrome</strong> on N95</li>
+            <li>Navigate to <a href="https://www.disneyplus.com">disneyplus.com</a></li>
+            <li>Log in with your Disney Plus account</li>
+            <li>Start streaming!</li>
+        </ol>
+
+        <h3>Option 2: VLC Media Player</h3>
+        <ol>
+            <li>Open VLC (pre-installed)</li>
+            <li>Media → Open Network Stream</li>
+            <li>Enter URL if available</li>
+        </ol>
+
+        <div class="warning">
+            <strong>⚠️ VPN Note:</strong> Disney Plus may require a US/UK IP address. If content is blocked:
+            <ul>
+                <li>Use Tailscale with a US exit node (if configured)</li>
+                <li>Or use a travel VPN service</li>
+                <li>Hotel WiFi in Thailand may work without VPN</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>📁 File Sharing & Backup</h2>
+    <div class="section">
+        <h3>Local Directories</h3>
+        <pre>/media/thailand/
+├── photos/      ← Trip photos (phone/camera)
+├── videos/      ← Trip videos
+├── documents/   ← Travel docs, bookings
+└── movies/      ← Downloaded movies for offline</pre>
+
+        <h3>Backup to Home (HIM)</h3>
+        <p>When you have internet, sync photos/videos to HIM's 8TB storage:</p>
+        <pre>cd /media/thailand
+rsync -avz photos/ dell01@100.71.125.55:/mnt/data8tb/n95-backup/photos/
+rsync -avz videos/ dell01@100.71.125.55:/mnt/data8tb/n95-backup/videos/</pre>
+
+        <h3>Access from Other Devices</h3>
+        <p>Any device on the same Tailscale network can access N95:</p>
+        <pre># From HIM (school) or HER (home)
+ssh dell01@100.114.211.47
+# Or browse files via SFTP</pre>
+    </div>
+
+    <h2>🌐 Remote Access</h2>
+    <div class="section">
+        <h3>From School (HIM)</h3>
+        <pre>ssh dell01@100.114.211.47
+# Check if N95 is online
+ping 100.114.211.47</pre>
+
+        <h3>From Home (HER)</h3>
+        <pre>ssh dell01@100.114.211.47
+# Same, via Tailscale mesh network</pre>
+
+        <h3>Web Interface</h3>
+        <p>N95 has a simple web server for browsing files:</p>
+        <pre>http://100.114.211.47:8080</pre>
+    </div>
+
+    <h2>⚡ Quick Commands</h2>
+    <div class="section">
+        <table>
+            <tr>
+                <th>Task</th>
+                <th>Command</th>
+            </tr>
+            <tr>
+                <td>Check disk space</td>
+                <td><code>df -h</code></td>
+            </tr>
+            <tr>
+                <td>Check memory</td>
+                <td><code>free -h</code></td>
+            </tr>
+            <tr>
+                <td>Check CPU</td>
+                <td><code>htop</code></td>
+            </tr>
+            <tr>
+                <td>Translate text</td>
+                <td><code>trans :th "Hello"</code> (Thai)</td>
+            </tr>
+            <tr>
+                <td>Play video</td>
+                <td><code>vlc filename.mp4</code></td>
+            </tr>
+            <tr>
+                <td>Convert video</td>
+                <td><code>ffmpeg -i input.mp4 output.mp4</code></td>
+            </tr>
+            <tr>
+                <td>Check Tailscale</td>
+                <td><code>tailscale status</code></td>
+            </tr>
+            <tr>
+                <td>Backup to HIM</td>
+                <td><code>rsync -avz /media/thailand/photos/ dell01@100.71.125.55:/mnt/data8tb/n95-backup/photos/</code></td>
+            </tr>
+        </table>
+    </div>
+
+    <h2>🔧 Troubleshooting</h2>
+    <div class="section">
+        <h3>Can't connect to Disney Plus?</h3>
+        <ul>
+            <li>Check internet: <code>ping 8.8.8.8</code></li>
+            <li>Try Chrome (not Firefox)</li>
+            <li>Check if VPN needed for content</li>
+            <li>Try mobile hotspot vs hotel WiFi</li>
+        </ul>
+
+        <h3>Can't reach N95 from home/school?</h3>
+        <ul>
+            <li>Check N95 is online: <code>tailscale status</code> on N95</li>
+            <li>Check N95 has internet: <code>ping 8.8.8.8</code></li>
+            <li>Check firewall: <code>sudo ufw status</code></li>
+            <li>Restart Tailscale: <code>sudo systemctl restart tailscaled</code></li>
+        </ul>
+
+        <h3>Disk full?</h3>
+        <ul>
+            <li>Check: <code>df -h</code></li>
+            <li>Clean: <code>rm -rf /media/thailand/movies/old-file.mp4</code></li>
+            <li>Offload to HIM: <code>rsync -avz /media/thailand/photos/ dell01@100.71.125.55:/mnt/data8tb/n95-backup/</code></li>
+        </ul>
+    </div>
+
+    <h2>📞 Support</h2>
+    <div class="section">
+        <p><strong>Contact:</strong> William Morris (WeChat)</p>
+        <p><strong>Technical:</strong> HIM (100.71.125.55) or HER (100.66.203.53)</p>
+        <p><strong>Emergency:</strong> If N95 fails, Disney Plus works on any phone/laptop with browser</p>
+    </div>
+
+    <h2>📝 Pre-Trip Checklist</h2>
+    <div class="section">
+        <ul>
+            <li>☐ Power on N95, verify Tailscale connects</li>
+            <li>☐ Test Disney Plus in Chrome</li>
+            <li>☐ Create /media/thailand/ directories</li>
+            <li>☐ Pack HDMI cable (connect N95 to hotel TV)</li>
+            <li>☐ Pack USB-C power adapter</li>
+            <li>☐ Download some movies offline (to /media/thailand/movies/)</li>
+            <li>☐ Test VPN if needed for Disney Plus</li>
+        </ul>
+    </div>
+
+    <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;">
+        <p><strong>N95 Thailand Setup</strong> | Generated by HER | 2026-06-09</p>
+        <p>Last updated: <span id="last-updated">2026-06-09</span></p>
+    </footer>
+
+    <script>
+        document.getElementById('last-updated').textContent = new Date().toLocaleDateString();
+    </script>
+</body>
+</html>

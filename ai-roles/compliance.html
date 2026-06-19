@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Role-Based Compliance Guide | NAS Jiaxing 角色合规指南</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #1a1a2e;
+            --primary-blue: #16213e;
+            --accent-gold: #e94560;
+            --text-light: #f1f1f1;
+            --text-muted: #b8b8b8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0f; color: var(--text-light); line-height: 1.7; }
+        .hero {
+            min-height: 50vh; display: flex; align-items: center; justify-content: center;
+            text-align: center; background: linear-gradient(135deg, var(--primary-dark), var(--primary-blue));
+            padding: 2rem;
+        }
+        .hero h1 { font-family: 'Playfair Display', serif; font-size: 3rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        .section { margin: 4rem 0; padding: 2rem; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .section h2 { font-family: 'Playfair Display', serif; color: var(--accent-gold); margin-bottom: 1.5rem; font-size: 2rem; }
+        .bilingual { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .lang-block { padding: 1.5rem; background: rgba(255,255,255,0.05); border-radius: 10px; }
+        .lang-label { display: inline-block; padding: 0.3rem 0.8rem; background: var(--accent-gold); color: white; border-radius: 20px; font-size: 0.8rem; margin-bottom: 1rem; }
+        .checklist { list-style: none; }
+        .checklist li { padding: 0.8rem 0; padding-left: 2rem; position: relative; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .checklist li::before { content: '☐'; position: absolute; left: 0; color: var(--accent-gold); }
+        .checklist li.checked::before { content: '☑'; }
+        .role-card { background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 10px; margin: 1rem 0; border-left: 4px solid var(--accent-gold); }
+        .role-card h3 { color: var(--accent-gold); margin-bottom: 1rem; }
+        .highlight { background: rgba(233, 69, 96, 0.1); border-left: 4px solid var(--accent-gold); padding: 1.5rem; margin: 1.5rem 0; border-radius: 0 10px 10px 0; }
+        .nav-links { display: flex; gap: 1rem; justify-content: center; margin: 2rem 0; flex-wrap: wrap; }
+        .nav-links a { padding: 0.5rem 1rem; background: var(--primary-dark); color: var(--text-light); text-decoration: none; border-radius: 25px; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.1); }
+        .nav-links a:hover { background: var(--accent-gold); }
+        .meta { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 4rem; }
+        @media (max-width: 768px) { .bilingual { grid-template-columns: 1fr; } .hero h1 { font-size: 2rem; } }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div>
+            <h1>Role-Based Compliance Guide</h1>
+            <p>PIPL-Compliant Local AI Usage by Role / 按角色的PIPL合规本地AI使用指南</p>
+            <p style="margin-top:1rem; font-size:0.9rem; opacity:0.7;">NAS Jiaxing | Updated: 2026-06-19</p>
+        </div>
+    </div>
+
+    <div class="nav-links">
+        <a href="../">← All Resources</a>
+        <a href="vp.html">VP Guide</a>
+        <a href="slt.html">SLT Guide</a>
+        <a href="safeguarding.html">Safeguarding</a>
+    </div>
+
+    <div class="container">
+        <!-- VP Section -->
+        <div class="section">
+            <h2>Vice Principal / 副校长</h2>
+            <div class="bilingual">
+                <div class="lang-block">
+                    <span class="lang-label">EN</span>
+                    <div class="role-card">
+                        <h3>Permitted Uses</h3>
+                        <ul class="checklist">
+                            <li class="checked">Anonymized incident report drafting</li>
+                            <li class="checked">Generic parent communication templates</li>
+                            <li class="checked">Staff meeting agenda generation</li>
+                            <li class="checked">Policy framework review (no school name)</li>
+                            <li class="checked">General strategic planning language</li>
+                        </ul>
+                    </div>
+                    <div class="role-card">
+                        <h3>Prohibited Uses</h3>
+                        <ul class="checklist">
+                            <li>Student names in any query</li>
+                            <li>Parent contact details</li>
+                            <li>Specific behavioral incidents with identifying details</li>
+                            <li>Staff performance data</li>
+                            <li>Financial information</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="lang-block">
+                    <span class="lang-label">中文</span>
+                    <div class="role-card">
+                        <h3>允许用途</h3>
+                        <ul class="checklist">
+                            <li class="checked">匿名事件报告起草</li>
+                            <li class="checked">通用家长沟通模板</li>
+                            <li class="checked">员工会议议程生成</li>
+                            <li class="checked">政策框架审查（无学校名称）</li>
+                            <li class="checked">一般战略规划语言</li>
+                        </ul>
+                    </div>
+                    <div class="role-card">
+                        <h3>禁止用途</h3>
+                        <ul class="checklist">
+                            <li>查询中包含学生姓名</li>
+                            <li>家长联系详情</li>
+                            <li>包含识别细节的具体行为事件</li>
+                            <li>员工绩效数据</li>
+                            <li>财务信息</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="highlight">
+                <strong>Audit Requirement:</strong> All VP queries logged with case number references. Pastoral data auto-encrypted. Monthly review by Head of School.<br><br>
+                <strong>审计要求：</strong>所有副校长查询记录案例编号参考。教牧数据自动加密。校长月度审查。
+            </div>
+        </div>
+
+        <!-- SLT Section -->
+        <div class="section">
+            <h2>Senior Leadership Team / 高级领导团队</h2>
+            <div class="bilingual">
+                <div class="lang-block">
+                    <span class="lang-label">EN</span>
+                    <div class="role-card">
+                        <h3>Permitted Uses</h3>
+                        <ul class="checklist">
+                            <li class="checked">Generic strategic planning frameworks</li>
+                            <li class="checked">Anonymized policy templates</li>
+                            <li class="checked">Board report structure (no financial data)</li>
+                            <li class="checked">Inspection self-assessment criteria</li>
+                            <li class="checked">General professional development content</li>
+                        </ul>
+                    </div>
+                    <div class="role-card">
+                        <h3>Prohibited Uses</h3>
+                        <ul class="checklist">
+                            <li>Staff names in restructuring plans</li>
+                            <li>Budget figures or financial projections</li>
+                            <li>Student enrollment data</li>
+                            <li>Competitive intelligence about other schools</li>
+                            <li>Inspection findings with specific details</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="lang-block">
+                    <span class="lang-label">中文</span>
+                    <div class="role-card">
+                        <h3>允许用途</h3>
+                        <ul class="checklist">
+                            <li class="checked">通用战略规划框架</li>
+                            <li class="checked">匿名政策模板</li>
+                            <li class="checked">董事会报告结构（无财务数据）</li>
+                            <li class="checked">检查自我评估标准</li>
+                            <li class="checked">一般专业发展内容</li>
+                        </ul>
+                    </div>
+                    <div class="role-card">
+                        <h3>禁止用途</h3>
+                        <ul class="checklist">
+                            <li>重组计划中的员工姓名</li>
+                            <li>预算数字或财务预测</li>
+                            <li>学生入学数据</li>
+                            <li>关于其他学校的竞争情报</li>
+                            <li>包含具体细节的检查结果</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="highlight">
+                <strong>Audit Requirement:</strong> All SLT queries require secondary approval. Strategic data encrypted at rest. Quarterly review by Board Chair.<br><br>
+                <strong>审计要求：</strong>所有高级领导团队查询需要二次批准。战略数据静态加密。董事会主席季度审查。
+            </div>
+        </div>
+
+        <!-- Safeguarding Section -->
+        <div class="section">
+            <h2>Safeguarding Lead / 安全保障负责人</h2>
+            <div class="bilingual">
+                <div class="lang-block">
+                    <span class="lang-label">EN</span>
+                    <div class="role-card">
+                        <h3>Permitted Uses</h3>
+                        <ul class="checklist">
+                            <li class="checked">Anonymized case number references only</li>
+                            <li class="checked">Generic referral letter templates</li>
+                            <li class="checked">Fictional training scenarios</li>
+                            <li class="checked">Coded event chronologies</li>
+                            <li class="checked">General safeguarding policy language</li>
+                        </ul>
+                    </div>
+                    <div class="role-card">
+                        <h3>Strictly Prohibited</h3>
+                        <ul class="checklist">
+                            <li>Child names or identifying details</li>
+                            <li>Parent names or contact information</li>
+                            <li>Medical or psychological reports</li>
+                            <li>Police or social services reference numbers</li>
+                            <li>Photographs or images of children</li>
+                            <li>Real case studies in training materials</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="lang-block">
+                    <span class="lang-label">中文</span>
+                    <div class="role-card">
+                        <h3>允许用途</h3>
+                        <ul class="checklist">
+                            <li class="checked">仅限匿名案例编号参考</li>
+                            <li class="checked">通用转介信模板</li>
+                            <li class="checked">虚构培训场景</li>
+                            <li class="checked">编码事件年表</li>
+                            <li class="checked">一般安全保障政策语言</li>
+                        </ul>
+                    </div>
+                    <div class="role-card">
+                        <h3>严格禁止</h3>
+                        <ul class="checklist">
+                            <li>儿童姓名或识别细节</li>
+                            <li>家长姓名或联系信息</li>
+                            <li>医疗或心理报告</li>
+                            <li>警方或社会服务参考编号</li>
+                            <li>儿童照片或图像</li>
+                            <li>培训材料中的真实案例研究</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="highlight">
+                <strong>Audit Requirement:</strong> All safeguarding queries logged with dual authorization. Data encrypted with school-specific keys. Weekly review by Principal and VP. Access to logs restricted to Designated Safeguarding Lead.<br><br>
+                <strong>审计要求：</strong>所有安全保障查询记录双重授权。数据使用学校特定密钥加密。校长和副校长每周审查。日志访问权限仅限于指定安全保障负责人。
+            </div>
+        </div>
+
+        <!-- Quick Reference -->
+        <div class="section">
+            <h2>Quick Reference: Before Using AI / 使用AI前的快速检查</h2>
+            <div class="bilingual">
+                <div class="lang-block">
+                    <span class="lang-label">EN</span>
+                    <div class="highlight">
+                        <ol style="padding-left: 1.5rem;">
+                            <li>Have I removed all names?</li>
+                            <li>Have I removed all dates?</li>
+                            <li>Have I removed contact details?</li>
+                            <li>Have I removed identifying details?</li>
+                            <li>Have I removed financial data?</li>
+                            <li>Am I using a local AI system?</li>
+                            <li>Is my query logged for audit?</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="lang-block">
+                    <span class="lang-label">中文</span>
+                    <div class="highlight">
+                        <ol style="padding-left: 1.5rem;">
+                            <li>我是否已删除所有姓名？</li>
+                            <li>我是否已删除所有日期？</li>
+                            <li>我是否已删除联系详情？</li>
+                            <li>我是否已删除识别细节？</li>
+                            <li>我是否已删除财务数据？</li>
+                            <li>我是否正在使用本地AI系统？</li>
+                            <li>我的查询是否已记录用于审计？</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Links -->
+        <div class="section">
+            <h2>Related Resources / 相关资源</h2>
+            <div class="bilingual">
+                <div class="lang-block">
+                    <span class="lang-label">EN</span>
+                    <ul class="checklist">
+                        <li><a href="vp.html" style="color: var(--accent-gold);">VP Detailed Guide</a></li>
+                        <li><a href="slt.html" style="color: var(--accent-gold);">SLT Detailed Guide</a></li>
+                        <li><a href="safeguarding.html" style="color: var(--accent-gold);">Safeguarding Detailed Guide</a></li>
+                        <li><a href="../local-ai-deployment/" style="color: var(--accent-gold);">Local AI Deployment Workshop</a></li>
+                        <li><a href="../nas-jiaxing-compliance/" style="color: var(--accent-gold);">Full Compliance Guide</a></li>
+                    </ul>
+                </div>
+                <div class="lang-block">
+                    <span class="lang-label">中文</span>
+                    <ul class="checklist">
+                        <li><a href="vp.html" style="color: var(--accent-gold);">副校长详细指南</a></li>
+                        <li><a href="slt.html" style="color: var(--accent-gold);">高级领导团队详细指南</a></li>
+                        <li><a href="safeguarding.html" style="color: var(--accent-gold);">安全保障详细指南</a></li>
+                        <li><a href="../local-ai-deployment/" style="color: var(--accent-gold);">本地AI部署研讨会</a></li>
+                        <li><a href="../nas-jiaxing-compliance/" style="color: var(--accent-gold);">完整合规指南</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="meta">
+        <p>NAS Jiaxing — Role-Based Compliance Guide</p>
+        <p>Built by HER | Reviewed by Kimi | 0604.ai</p>
+        <p>Last Updated: 2026-06-19</p>
+    </div>
+</body>
+</html>

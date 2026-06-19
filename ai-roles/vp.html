@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vice Principal - Local AI Usage Guide | NAS Jiaxing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #2C1810;
+            --primary-brown: #4A2C17;
+            --primary-gold: #B8860B;
+            --accent-rust: #C75B39;
+            --accent-sage: #6B8E6B;
+            --text-dark: #2C1810;
+            --text-light: #F5E6D3;
+            --bg-light: #FAF6F0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-light); color: var(--text-dark); line-height: 1.7; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        .hero {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-brown));
+            color: var(--text-light);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        .hero h1 { font-family: 'Playfair Display', serif; font-size: 3rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; opacity: 0.9; }
+        .section { margin: 3rem 0; padding: 2rem; background: white; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .section h2 { font-family: 'Playfair Display', serif; color: var(--primary-dark); margin-bottom: 1.5rem; font-size: 2rem; }
+        .danger-box { background: #fff3f3; border-left: 5px solid var(--accent-rust); padding: 1.5rem; margin: 1rem 0; border-radius: 0 10px 10px 0; }
+        .benefit-box { background: #f3fff5; border-left: 5px solid var(--accent-sage); padding: 1.5rem; margin: 1rem 0; border-radius: 0 10px 10px 0; }
+        .scenario-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 1.5rem; }
+        .scenario-card { background: var(--bg-light); padding: 1.5rem; border-radius: 10px; border-top: 4px solid var(--primary-gold); }
+        .scenario-card h3 { color: var(--primary-dark); margin-bottom: 0.5rem; }
+        .scenario-card .tag { display: inline-block; background: var(--primary-gold); color: white; padding: 0.2rem 0.6rem; border-radius: 15px; font-size: 0.75rem; margin-bottom: 0.5rem; }
+        .prompt-box { background: #1a1a2e; color: #f1f1f1; padding: 1.5rem; border-radius: 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; margin: 1rem 0; overflow-x: auto; }
+        .prompt-box .comment { color: #6b8e6b; }
+        .download-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
+        .download-card { background: white; border: 2px solid var(--primary-gold); padding: 1.5rem; border-radius: 10px; text-align: center; }
+        .download-card a { display: inline-block; background: var(--primary-gold); color: white; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-weight: 500; margin-top: 1rem; }
+        .nav-links { display: flex; gap: 1rem; justify-content: center; margin: 2rem 0; flex-wrap: wrap; }
+        .nav-links a { padding: 0.5rem 1rem; background: var(--primary-dark); color: var(--text-light); text-decoration: none; border-radius: 25px; font-size: 0.9rem; }
+        .nav-links a:hover { background: var(--primary-gold); }
+        .comparison-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+        .comparison-table th { background: var(--primary-dark); color: white; padding: 1rem; text-align: left; }
+        .comparison-table td { padding: 1rem; border-bottom: 1px solid #ddd; }
+        .comparison-table tr:nth-child(even) { background: var(--bg-light); }
+        .warning { color: var(--accent-rust); font-weight: 600; }
+        .success { color: var(--accent-sage); font-weight: 600; }
+        @media (max-width: 768px) { .scenario-grid, .download-grid { grid-template-columns: 1fr; } }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="hero">
+        <h1>Vice Principal — Local AI Usage Guide</h1>
+        <p>Pastoral Leadership, Incident Management & Strategic Communication</p>
+        <p style="margin-top:1rem; font-size:0.9rem; opacity:0.7;">NAS Jiaxing | Updated: 2026-06-19</p>
+    </div>
+
+    <div class="nav-links">
+        <a href="../">← All Roles</a>
+        <a href="slt.html">SLT Guide →</a>
+        <a href="safeguarding.html">Safeguarding →</a>
+        <a href="../nas-jiaxing-compliance/">Compliance Guide →</a>
+    </div>
+
+    <div class="container">
+        <!-- DANGERS -->
+        <div class="section">
+            <h2>⚠️ The Danger: How VPs Currently Use Cloud AI</h2>
+            <div class="danger-box">
+                <h3>Real Incident (Names Changed)</h3>
+                <p>A VP uploaded a pastoral incident report to ChatGPT to "make it sound more professional." The report contained:</p>
+                <ul style="margin:1rem 0; padding-left:2rem;">
+                    <li>Student's full name and grade</li>
+                    <li>Detailed behavioral description</li>
+                    <li>Parent contact information</li>
+                    <li>Internal safeguarding flags</li>
+                </ul>
+                <p><strong>Result:</strong> Data processed on US servers. Potential PIPL violation. No audit trail. No way to delete.</p>
+            </div>
+            
+            <div class="danger-box">
+                <h3>Common Cloud AI Misuse by VPs</h3>
+                <table class="comparison-table">
+                    <tr><th>Task</th><th>What Gets Leaked</th><th>Risk Level</th></tr>
+                    <tr><td>Drafting incident reports</td><td>Student names, behavioral details, safeguarding flags</td><td class="warning">CRITICAL</td></tr>
+                    <tr><td>Summarizing parent emails</td><td>Parent contact info, family issues, medical details</td><td class="warning">HIGH</td></tr>
+                    <tr><td>Writing staff communication</td><td>Staff performance issues, disciplinary context</td><td class="warning">HIGH</td></tr>
+                    <tr><td>Strategic planning documents</td><td>School vulnerabilities, future plans</td><td class="warning">MEDIUM</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- BENEFITS -->
+        <div class="section">
+            <h2>✅ The Solution: Local AI for VPs</h2>
+            <div class="benefit-box">
+                <h3>Why Local AI Changes Everything</h3>
+                <ul style="margin:1rem 0; padding-left:2rem;">
+                    <li><strong>Zero Data Exposure:</strong> Incident reports never leave the server room</li>
+                    <li><strong>Full Audit Trail:</strong> Every query logged with your user ID and timestamp</li>
+                    <li><strong>Auto-Encryption:</strong> Pastoral queries automatically encrypted</li>
+                    <li><strong>Role-Based Access:</strong> Only VPs can access pastoral data</li>
+                    <li><strong>PIPL Compliant:</strong> Data never leaves China's jurisdiction</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- USAGE SCENARIOS -->
+        <div class="section">
+            <h2>📋 Detailed Usage Scenarios</h2>
+            <div class="scenario-grid">
+                <div class="scenario-card">
+                    <span class="tag">PASTORAL</span>
+                    <h3>Incident Report Drafting</h3>
+                    <p><strong>Current (Dangerous):</strong> Copy-paste into ChatGPT</p>
+                    <p><strong>Local AI Method:</strong> Use the anonymized prompt template</p>
+                    <div class="prompt-box">
+<span class="comment"># PROMPT: Incident Report Drafting</span>
+<span class="comment"># NEVER include student names — use "Student A" or case numbers</span>
+
+Draft a professional incident report with these details:
+- Date: [INSERT]
+- Location: [INSERT]
+- Involved parties: Student A (Grade 7), Student B (Grade 7)
+- Witnesses: Teacher A, Teacher B
+- Incident type: [physical/verbal/other]
+- Brief description: [2-3 sentences, factual]
+
+Include: summary, action taken, follow-up required, parent notification status.
+                    </div>
+                    <a href="downloads/vp-incident-template.md" download style="display:inline-block; background:var(--primary-gold); color:white; padding:0.5rem 1rem; border-radius:20px; text-decoration:none; font-size:0.9rem; margin-top:0.5rem;">📥 Download Template</a>
+                </div>
+
+                <div class="scenario-card">
+                    <span class="tag">COMMUNICATION</span>
+                    <h3>Parent Communication Drafting</h3>
+                    <p><strong>Current (Dangerous):</strong> Upload full email thread to cloud AI</p>
+                    <p><strong>Local AI Method:</strong> Summarize context, generate neutral draft</p>
+                    <div class="prompt-box">
+<span class="comment"># PROMPT: Parent Communication</span>
+<span class="comment"># Remove all identifying information before processing</span>
+
+Draft a professional email to parents regarding:
+- Topic: [academic concern / behavioral update / positive news]
+- Tone: [formal / supportive / collaborative]
+- Key points: [bullet points, anonymized]
+- Requested action: [if any]
+
+Length: 150-200 words. Include opening, details, next steps, closing.
+                    </div>
+                    <a href="downloads/vp-parent-comm-template.md" download style="display:inline-block; background:var(--primary-gold); color:white; padding:0.5rem 1rem; border-radius:20px; text-decoration:none; font-size:0.9rem; margin-top:0.5rem;">📥 Download Template</a>
+                </div>
+
+                <div class="scenario-card">
+                    <span class="tag">STRATEGIC</span>
+                    <h3>Staff Meeting Agendas</h3>
+                    <p><strong>Current (Risky):</strong> Use cloud AI to organize sensitive topics</p>
+                    <p><strong>Local AI Method:</strong> Generate structured agenda from anonymized topics</p>
+                    <div class="prompt-box">
+<span class="comment"># PROMPT: Staff Meeting Agenda</span>
+
+Create a structured staff meeting agenda with:
+- Meeting duration: [60/90 minutes]
+- Topics: [list of general topics, no names]
+- Priority: [high/medium/low for each]
+
+Format: Title, time allocation, discussion points, action items template.
+                    </div>
+                    <a href="downloads/vp-agenda-template.md" download style="display:inline-block; background:var(--primary-gold); color:white; padding:0.5rem 1rem; border-radius:20px; text-decoration:none; font-size:0.9rem; margin-top:0.5rem;">📥 Download Template</a>
+                </div>
+
+                <div class="scenario-card">
+                    <span class="tag">COMPLIANCE</span>
+                    <h3>Policy Document Review</h3>
+                    <p><strong>Current (Risky):</strong> Upload full policy to cloud AI for "review"</p>
+                    <p><strong>Local AI Method:</strong> Check specific sections against guidelines</p>
+                    <div class="prompt-box">
+<span class="comment"># PROMPT: Policy Review</span>
+
+Review this policy section for compliance with:
+- Safeguarding requirements
+- Data protection principles
+- Parent communication standards
+
+Policy excerpt:
+[PASTE SECTION HERE - remove school name]
+
+Flag: gaps, vague language, missing procedures.
+Suggest: specific improvements.
+                    </div>
+                    <a href="downloads/vp-policy-review-template.md" download style="display:inline-block; background:var(--primary-gold); color:white; padding:0.5rem 1rem; border-radius:20px; text-decoration:none; font-size:0.9rem; margin-top:0.5rem;">📥 Download Template</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPEN SOURCE ALTERNATIVES -->
+        <div class="section">
+            <h2>🛠️ Open Source Tools & Alternatives</h2>
+            <table class="comparison-table">
+                <tr><th>Task</th><th>Cloud Tool (Risky)</th><th>Local Alternative (Safe)</th></tr>
+                <tr><td>Document drafting</td><td>ChatGPT, Claude, Gemini</td><td class="success">Ollama + Qwen/Llama (self-hosted)</td></tr>
+                <tr><td>Email summarization</td><td>Grammarly, Notion AI</td><td class="success">Local LLM with privacy-preserving prompts</td></tr>
+                <tr><td>Meeting notes</td><td>Otter.ai, Microsoft Copilot</td><td class="success">Whisper (local transcription) + Ollama</td></tr>
+                <tr><td>Document storage</td><td>Google Drive, OneDrive</td><td class="success">Nextcloud (self-hosted) + Tailscale</td></tr>
+                <tr><td>Calendar/scheduling</td><td>Google Calendar</td><td class="success">Calendar + local ICS files</td></tr>
+            </table>
+            
+            <div class="benefit-box" style="margin-top:2rem;">
+                <h3>Our Systems at NAS Jiaxing</h3>
+                <p>We have already built and deployed these tools:</p>
+                <ul style="margin:1rem 0; padding-left:2rem;">
+                    <li><strong>HER (Enterprise Server):</strong> AMD Ryzen 9, 96GB RAM, RX 7900 XTX — handles all major AI tasks</li>
+                    <li><strong>HIM (Standard Server):</strong> AMD Ryzen 7, 32GB RAM, 8TB storage — fleet management, backups</li>
+                    <li><strong>Grammar Platform:</strong> <a href="https://0604.ai" style="color:var(--primary-gold);">0604.ai</a> — Custom grammar and vocabulary tool</li>
+                    <li><strong>Quiz System:</strong> Live at <a href="http://100.66.203.53:4567" style="color:var(--primary-gold);">Kahoot-style system</a></li>
+                    <li><strong>Backup Infrastructure:</strong> 4-layer architecture (GitHub + GitLab + HIM + Direct Link)</li>
+                </ul>
+                <p><strong>All data stays on school premises. Full audit logs. Zero cloud exposure.</strong></p>
+            </div>
+        </div>
+
+        <!-- DOWNLOADS -->
+        <div class="section">
+            <h2>📥 Downloadable Resources</h2>
+            <div class="download-grid">
+                <div class="download-card">
+                    <h3>📄 VP Prompt Library</h3>
+                    <p>20+ ready-to-use prompts for pastoral, communication, and strategic tasks</p>
+                    <a href="downloads/vp-prompt-library.md" download>Download</a>
+                </div>
+                <div class="download-card">
+                    <h3>📊 Incident Report Template</h3>
+                    <p>Word template with anonymized fields and AI-ready structure</p>
+                    <a href="downloads/vp-incident-template.docx" download>Download</a>
+                </div>
+                <div class="download-card">
+                    <h3>🔒 Data Handling Checklist</h3>
+                    <p>What to remove before using AI — quick reference card</p>
+                    <a href="downloads/vp-data-checklist.pdf" download>Download</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- LINKS -->
+        <div class="section">
+            <h2>🔗 Related Resources</h2>
+            <div class="scenario-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                <a href="../local-ai-deployment/" class="scenario-card" style="text-decoration:none; color:inherit;">
+                    <h3>🏗️ Local AI Deployment</h3>
+                    <p>Full workshop on building your own AI server</p>
+                </a>
+                <a href="../ai-fleet.html" class="scenario-card" style="text-decoration:none; color:inherit;">
+                    <h3>🖥️ AI Fleet Overview</h3>
+                    <p>HER, HIM, and all school machines</p>
+                </a>
+                <a href="../nas-jiaxing-compliance/" class="scenario-card" style="text-decoration:none; color:inherit;">
+                    <h3>🛡️ Compliance Guide</h3>
+                    <p>PIPL checklist and safeguarding procedures</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

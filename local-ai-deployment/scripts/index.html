@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sample Scripts - Local AI Deployment</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; color: #264653; }
+        h1 { font-family: 'Playfair Display', serif; color: #2A9D8F; }
+        .script-card { background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin: 1rem 0; border-left: 4px solid #E9C46A; }
+        .script-card h3 { margin-top: 0; }
+        .download { display: inline-block; background: #2A9D8F; color: white; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; }
+        .download:hover { background: #264653; }
+        .back { display: inline-block; margin-bottom: 1rem; color: #2A9D8F; text-decoration: none; }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <a href="../" class="back">← Back to Presentation</a>
+    <h1>Sample Scripts</h1>
+    <p>Downloadable automation scripts for your local AI deployment. All scripts are tested on Ubuntu 24.04 LTS.</p>
+
+    <div class="script-card">
+        <h3>🔧 install-ollama.sh</h3>
+        <p>Full Ubuntu setup: Ollama, Docker, Open WebUI, model pulls, auto-start. Run this first on a fresh Ubuntu install.</p>
+        <a href="install-ollama.sh" class="download" download>Download</a>
+    </div>
+
+    <div class="script-card">
+        <h3>🔒 harden-ubuntu.sh</h3>
+        <p>SSH hardening, firewall rules, fail2ban, automatic security updates. Run as root after initial setup.</p>
+        <a href="harden-ubuntu.sh" class="download" download>Download</a>
+    </div>
+
+    <div class="script-card">
+        <h3>📊 backup-script.sh</h3>
+        <p>Daily model backups, weekly system snapshots, retention policy. Set up as a cron job for automated backups.</p>
+        <a href="backup-script.sh" class="download" download>Download</a>
+    </div>
+
+    <div class="script-card">
+        <h3>🧪 test-inference.sh</h3>
+        <p>Benchmark script: test all models, measure response time, log results. Use to verify performance after installation.</p>
+        <a href="test-inference.sh" class="download" download>Download</a>
+    </div>
+
+    <p style="margin-top: 2rem; color: #666; font-size: 0.9rem;">
+        See the <a href="../materials/Secure_Local_AI_Deployment_Guide.md" style="color: #2A9D8F;">full implementation guide</a> for usage instructions.
+    </p>
+</body>
+</html>

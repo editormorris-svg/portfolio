@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local AI Deployment Guide | NAS Jiaxing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #1a1a2e;
+            --primary-blue: #16213e;
+            --accent-gold: #e94560;
+            --text-light: #f1f1f1;
+            --text-muted: #b8b8b8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-blue));
+            padding: 2rem;
+        }
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .section {
+            margin: 4rem 0;
+            padding: 2rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--accent-gold);
+            margin-bottom: 1.5rem;
+        }
+        .bilingual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .lang-block {
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+        .lang-label {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: var(--accent-gold);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        .checklist {
+            list-style: none;
+        }
+        .checklist li {
+            padding: 0.8rem 0;
+            padding-left: 2rem;
+            position: relative;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            color: var(--accent-gold);
+        }
+        .checklist li.checked::before {
+            content: '☑';
+        }
+        .highlight {
+            background: rgba(233, 69, 96, 0.1);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 10px 10px 0;
+        }
+        .link-card {
+            display: block;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--text-light);
+            margin: 1rem 0;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .link-card:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+        .link-card h4 {
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+        }
+        .link-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .meta {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 4rem;
+        }
+        @media (max-width: 768px) {
+            .bilingual { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div>
+            <h1>Secure Local AI Deployment</h1>
+            <p>NAS Jiaxing Implementation Guide — PIPL Compliant, On-Premises AI for International Schools</p>
+            <p style="margin-top:1rem; font-size:0.9rem; opacity:0.7;">Updated: 2026-06-19 | Built by HER | Reviewed by Kimi</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Overview Section -->
+        <div class="section">
+            <div class="bilingual">
+                <div class="lang-block">
+                    <span class="lang-label">EN</span>
+                    <h3>Why Local AI?</h3>
+                    <p>Cloud AI services (ChatGPT, Claude, etc.) process data on offshore servers, creating compliance risks under PIPL (Personal Information Protection Law) and safeguarding obligations. Local deployment keeps all student data within the school network.</p>
+                    <div class="highlight">
+                        <strong>Key Benefit:</strong> Zero data leaves the building. Full audit trail. Fixed costs.
+                    </div>
+                </div>
+                <div class="lang-block">
+                    <span class="lang-label">中文</span>
+                    <h3>为什么选择本地AI？</h3>
+                    <p>云端AI服务（ChatGPT、Claude等）在境外服务器处理数据，违反《个人信息保护法》及学校安全保障义务。本地部署确保所有学生数据留在校内网络。</p>
+                    <div class="highlight">
+                        <strong>核心优势：</strong>数据零出境。完整审计追踪。固定成本。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Compliance Checklist -->
+        <div class="section">
+            <h2>PIPL Compliance Checklist / 个人信息保护合规清单</h2>
+            <div class="bilingual">
+                <div class="lang-block">
+                    <span class="lang-label">EN</span>
+                    <ul class="checklist">
+                        <li>Data stored on physical hardware in China</li>
+                        <li>Explicit consent obtained for AI processing</li>
+                        <li>Data minimization: only necessary data processed</li>
+                        <li>Retention period defined (e.g., 30 days for query logs)</li>
+                        <li>Deletion procedure documented</li>
+                        <li>Data processing agreement on file</li>
+                        <li>DPIA completed before deployment</li>
+                        <li>Staff training on data protection completed</li>
+                        <li>Incident response plan documented</li>
+                        <li>Regular audits scheduled (quarterly)</li>
+                    </ul>
+                </div>
+                <div class="lang-block">
+                    <span class="lang-label">中文</span>
+                    <ul class="checklist">
+                        <li>数据存储于中国境内物理服务器</li>
+                        <li>获得AI处理的明确同意</li>
+                        <li>数据最小化：仅处理必要数据</li>
+                        <li>定义保留期限（如查询日志30天）</li>
+                        <li>删除程序已记录</li>
+                        <li>数据处理协议已存档</li>
+                        <li>部署前完成数据保护影响评估</li>
+                        <li>完成员工数据保护培训</li>
+                        <li>事件响应计划已记录</li>
+                        <li>定期审计已安排（季度）</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Safeguarding Section -->
+        <div class="section">
+            <h2>Safeguarding with AI / AI安全保障</h2>
+            <div class="bilingual">
+                <div class="lang-block">
+                    <span class="lang-label">EN</span>
+                    <p>All AI queries are logged with user ID, timestamp, and role. Pastoral and SEN data is auto-encrypted. Unauthorized queries containing student names are blocked.</p>
+                    <div class="highlight">
+                        <strong>Audit Sample:</strong><br>
+                        [2026-06-19 10:05:42] USER: admin | ROLE: VP<br>
+                        QUERY: "Summarize pastoral report #2026-044"<br>
+                        STATUS: ✓ ALLOWED | NOTE: SEN flag — auto-encrypted
+                    </div>
+                </div>
+                <div class="lang-block">
+                    <span class="lang-label">中文</span>
+                    <p>所有AI查询记录用户ID、时间戳和角色。教牧和特殊教育需求数据自动加密。包含学生姓名的未授权查询被阻止。</p>
+                    <div class="highlight">
+                        <strong>审计示例：</strong><br>
+                        [2026-06-19 10:05:42] 用户：admin | 角色：副校长<br>
+                        查询："总结教牧报告 #2026-044"<br>
+                        状态：✓ 允许 | 备注：SEN标记 — 自动加密
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Infrastructure -->
+        <div class="section">
+            <h2>Infrastructure / 基础设施</h2>
+            <div class="bilingual">
+                <div class="lang-block">
+                    <span class="lang-label">EN</span>
+                    <p><strong>Current Deployment:</strong></p>
+                    <ul style="list-style:none; margin-top:1rem;">
+                        <li>🖥️ Server: HIM (AMD Ryzen 7 7800X3D, 32GB RAM)</li>
+                        <li>📍 Location: NAS Jiaxing Server Room</li>
+                        <li>🔒 Network: School LAN only (no public IP)</li>
+                        <li>💾 Backup: 8TB local + GitHub + GitLab</li>
+                        <li>🌐 Remote Admin: Tailscale VPN (encrypted)</li>
+                    </ul>
+                </div>
+                <div class="lang-block">
+                    <span class="lang-label">中文</span>
+                    <p><strong>当前部署：</strong></p>
+                    <ul style="list-style:none; margin-top:1rem;">
+                        <li>🖥️ 服务器：HIM（AMD Ryzen 7 7800X3D，32GB内存）</li>
+                        <li>📍 位置：NAS嘉兴服务器机房</li>
+                        <li>🔒 网络：仅学校局域网（无公网IP）</li>
+                        <li>💾 备份：8TB本地 + GitHub + GitLab</li>
+                        <li>🌐 远程管理：Tailscale VPN（加密）</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Resources -->
+        <div class="section">
+            <h2>Related Resources / 相关资源</h2>
+            <a href="/local-ai-deployment/" class="link-card">
+                <h4>📚 Secure Local AI Deployment Workshop</h4>
+                <p>Full 20-slide PD workshop with hardware builds, sample scripts, and implementation roadmap. 包含完整的20页专业发展研讨会，硬件配置、示例脚本和实施路线图。</p>
+            </a>
+            <a href="/ai-pd-workshop/" class="link-card">
+                <h4>🎓 AI Tools for Educators</h4>
+                <p>First PD workshop — AI basics, hands-on lesson planning, 6 ready-to-use tools. 第一个PD研讨会——AI基础、实践课程规划、6个即用工具。</p>
+            </a>
+            <a href="/ai-fleet.html" class="link-card">
+                <h4>🖥️ AI Fleet Overview</h4>
+                <p>Complete hardware inventory and network architecture for NAS Jiaxing. NAS嘉兴完整硬件清单和网络架构。</p>
+            </a>
+            <a href="/output/china-compliance-strategy.html" class="link-card">
+                <h4>🇨🇳 China Compliance Strategy</h4>
+                <p>Two-site strategy for ICP compliance and public-facing content. 双站点ICP合规策略及面向公众的内容方案。</p>
+            </a>
+        </div>
+
+        <div class="meta">
+            <p>NAS Jiaxing — Secure Local AI Deployment</p>
+            <p>Built by HER | Reviewed by Kimi | 0604.ai</p>
+            <p>Last Updated: 2026-06-19</p>
+        </div>
+    </div>
+</body>
+</html>

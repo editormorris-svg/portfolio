@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Server Build — Dual G292-Z20 Inference Cluster</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.2rem;
+            text-align: center;
+        }
+        .stat-card .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent2);
+            margin-bottom: 0.3rem;
+        }
+        .stat-card .label {
+            font-size: 0.85rem;
+            color: var(--fg-dim);
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+        .comparison-table th {
+            background: var(--bg-hover);
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 2px solid var(--border-light);
+            font-weight: 600;
+            color: var(--accent);
+        }
+        .comparison-table td {
+            padding: 0.8rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .comparison-table tr:hover {
+            background: var(--bg-hover);
+        }
+        .highlight-win {
+            color: var(--accent3);
+            font-weight: 600;
+        }
+        .highlight-lose {
+            color: var(--danger);
+            font-weight: 600;
+        }
+        .use-case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .use-case-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+        }
+        .use-case-card h3 {
+            color: var(--accent2);
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+        .use-case-card .verdict {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .verdict-a2 {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid var(--accent3);
+            color: var(--accent3);
+        }
+        .verdict-pro {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+        }
+        .cost-breakdown {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .cost-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .cost-row:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--accent2);
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--border-light);
+        }
+        .server-diagram {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+        .server-diagram pre {
+            background: var(--bg);
+            padding: 1rem;
+            border-radius: var(--radius);
+            overflow-x: auto;
+            font-size: 0.85rem;
+            color: var(--accent2);
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <a href="index.html" class="logo">0604<span>.ai</span></a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="hardware.html">Hardware</a>
+                <a href="ai-stack.html">AI Stack</a>
+                <a href="services.html">Services</a>
+                <a href="network.html">Network</a>
+                <a href="backup.html">Backup</a>
+                <a href="ai-server-build.html">AI Server Build</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <span class="hero-emoji">🖥️</span>
+        <h1>Dual G292-Z20 AI Inference Cluster</h1>
+        <p class="hero-subtitle">
+            Building a 16-GPU, 1TB RAM inference cluster for a fraction of the cost of enterprise cards.
+            <br>Designed for multi-tenant AI workloads, video generation, and LLM serving at school scale.
+        </p>
+        <div class="hero-meta">
+            <span class="badge badge-green">● In Procurement</span>
+            <span class="badge badge-blue">16× Tesla A2</span>
+            <span class="badge badge-purple">1TB Cluster RAM</span>
+        </div>
+    </section>
+
+    <main class="content">
+        <div class="container">
+
+            <!-- Key Stats -->
+            <h2 id="overview">Cluster Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="value">16</div>
+                    <div class="label">Tesla A2 GPUs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">256</div>
+                    <div class="label">GB Total VRAM</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">1TB</div>
+                    <div class="label">System RAM</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">128</div>
+                    <div class="label">CPU Cores (EPYC)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">251</div>
+                    <div class="label">FP16 TFLOPS</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">~¥65K</div>
+                    <div class="label">Total Build Cost</div>
+                </div>
+            </div>
+
+            <!-- Server Architecture -->
+            <h2 id="architecture">Architecture</h2>
+            <div class="server-diagram">
+                <pre>
+┌─────────────────────────────────────────────────────────────────┐
+│                    42U TOTEN G36822 Rack                         │
+├─────────────────────────────┬───────────────────────────────────┤
+│                             │                                   │
+│   ┌───────────────────┐     │   ┌───────────────────┐          │
+│   │  Server Node 1    │     │   │  Server Node 2    │          │
+│   │  GIGABYTE G292-Z20│◄───►│   │  GIGABYTE G292-Z20│          │
+│   │                   │ 25GbE│   │                   │          │
+│   │  EPYC 7532 32C    │ RDMA │   │  EPYC 7532 32C    │          │
+│   │  512GB DDR4-2666  │     │   │  512GB DDR4-2666  │          │
+│   │                   │     │   │                   │          │
+│   │  ┌─┬─┬─┬─┬─┬─┬─┐ │     │   │  ┌─┬─┬─┬─┬─┬─┬─┐ │          │
+│   │  │A│A│A│A│A│A│A│ │     │   │  │A│A│A│A│A│A│A│ │          │
+│   │  │2│2│2│2│2│2│2│ │     │   │  │2│2│2│2│2│2│2│ │          │
+│   │  └─┴─┴─┴─┴─┴─┴─┘ │     │   │  └─┴─┴─┴─┴─┴─┴─┘ │          │
+│   │  8× Tesla A2 16GB │     │   │  8× Tesla A2 16GB │          │
+│   │  128GB VRAM       │     │   │  128GB VRAM       │          │
+│   └───────────────────┘     │   └───────────────────┘          │
+│                             │                                   │
+│   2× 2200W PSU per server   │   1TB NVMe boot (2× Samsung)    │
+│                             │   25GbE Mellanox ConnectX-4        │
+│                             │                                   │
+└─────────────────────────────┴───────────────────────────────────┘
+                │
+                ▼
+         School Network (VLAN isolated)
+                │
+    ┌───────────┼───────────┐
+    ▼           ▼           ▼
+ Student      Student    Admin
+ Workstations  Chromebooks  Access
+                </pre>
+            </div>
+
+            <!-- Parts Breakdown -->
+            <h2 id="parts">Parts Breakdown</h2>
+
+            <h3>Server Node 1 (×2 identical)</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Spec</th>
+                        <th>Qty</th>
+                        <th>Unit Price</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Chassis</td>
+                        <td>GIGABYTE G292-Z20 (2U, 8-GPU)</td>
+                        <td>2</td>
+                        <td>¥4,700</td>
+                        <td>¥9,400</td>
+                    </tr>
+                    <tr>
+                        <td>CPU</td>
+                        <td>AMD EPYC 7532 (32C/64T, 2.4GHz, SP3)</td>
+                        <td>2</td>
+                        <td>Included</td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td>RAM</td>
+                        <td>Micron 4R4 RDIMM 64GB DDR4-2666</td>
+                        <td>16</td>
+                        <td>¥1,380</td>
+                        <td>¥22,080</td>
+                    </tr>
+                    <tr>
+                        <td>GPU</td>
+                        <td>NVIDIA Tesla A2 16GB (60W, PCIe 4.0)</td>
+                        <td>16</td>
+                        <td>¥2,043</td>
+                        <td>¥32,688</td>
+                    </tr>
+                    <tr>
+                        <td>Boot Storage</td>
+                        <td>Samsung 980 1TB NVMe</td>
+                        <td>2</td>
+                        <td>¥333</td>
+                        <td>¥666</td>
+                    </tr>
+                    <tr>
+                        <td>Network</td>
+                        <td>Mellanox ConnectX-4 25GbE</td>
+                        <td>2</td>
+                        <td>~¥600</td>
+                        <td>~¥1,200</td>
+                    </tr>
+                    <tr>
+                        <td>PSU</td>
+                        <td>Delta 2200W dual redundant</td>
+                        <td>2×2</td>
+                        <td>Included</td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td>Rack</td>
+                        <td>TOTEN G36822 42U (1166×600×800mm)</td>
+                        <td>1</td>
+                        <td>¥1,311</td>
+                        <td>¥1,311</td>
+                    </tr>
+                    <tr>
+                        <td>Accessories</td>
+                        <td>Rails, PDU, cables, fans</td>
+                        <td>1 set</td>
+                        <td>~¥1,500</td>
+                        <td>~¥1,500</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="cost-breakdown">
+                <div class="cost-row">
+                    <span>Server nodes (2× G292-Z20 + EPYC 7532)</span>
+                    <span>¥9,400</span>
+                </div>
+                <div class="cost-row">
+                    <span>16× Tesla A2 16GB</span>
+                    <span>¥32,688</span>
+                </div>
+                <div class="cost-row">
+                    <span>16× 64GB Micron DDR4-2666 RDIMM</span>
+                    <span>¥22,080</span>
+                </div>
+                <div class="cost-row">
+                    <span>2× Samsung 980 1TB NVMe</span>
+                    <span>¥666</span>
+                </div>
+                <div class="cost-row">
+                    <span>2× Mellanox ConnectX-4 25GbE</span>
+                    <span>~¥1,200</span>
+                </div>
+                <div class="cost-row">
+                    <span>42U TOTEN Rack + accessories</span>
+                    <span>~¥2,811</span>
+                </div>
+                <div class="cost-row">
+                    <span>Total Estimated Cost</span>
+                    <span>~¥68,845</span>
+                </div>
+            </div>
+
+            <p class="note">
+                <strong>Note:</strong> First GPU batch (8 cards) already ordered. Second batch pending verification.
+                RAM partially delivered (6 of 16 sticks on-hand, 10 arriving Tuesday 2026-06-30).
+                Servers and rack shipping by 2026-06-24.
+            </p>
+
+            <!-- Comparison -->
+            <h2 id="comparison">GPU Comparison: Tesla A2 Cluster vs. Popular Cards</h2>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>RTX Pro6000D<br><small>(¥49,000)</small></th>
+                        <th>A100 80GB<br><small>(~¥80,000)</small></th>
+                        <th>H100 80GB<br><small>(~¥150,000)</small></th>
+                        <th>Our Cluster<br><small>16× A2 (¥32,688)</small></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>VRAM</strong></td>
+                        <td>84 GB</td>
+                        <td>80 GB</td>
+                        <td>80 GB</td>
+                        <td class="highlight-win">256 GB</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CUDA Cores</strong></td>
+                        <td>18,176</td>
+                        <td>6,912</td>
+                        <td>16,896</td>
+                        <td class="highlight-win">40,960</td>
+                    </tr>
+                    <tr>
+                        <td><strong>FP16 TFLOPS</strong></td>
+                        <td>125</td>
+                        <td>312</td>
+                        <td class="highlight-win">989</td>
+                        <td class="highlight-win">251</td>
+                    </tr>
+                    <tr>
+                        <td><strong>FP8 Support</strong></td>
+                        <td class="highlight-win">✅ Yes</td>
+                        <td>❌ No</td>
+                        <td class="highlight-win">✅ Yes</td>
+                        <td>❌ No</td>
+                    </tr>
+                    <tr>
+                        <td><strong>NVLink</strong></td>
+                        <td>❌ No</td>
+                        <td class="highlight-win">✅ Yes (600GB/s)</td>
+                        <td class="highlight-win">✅ Yes (900GB/s)</td>
+                        <td>❌ No (PCIe only)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Power (TDP)</strong></td>
+                        <td>300W</td>
+                        <td>400W</td>
+                        <td>700W</td>
+                        <td>960W (16×60W)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cost per TFLOPS</strong></td>
+                        <td>¥392</td>
+                        <td>¥256</td>
+                        <td>¥152</td>
+                        <td class="highlight-win">¥130</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cost per GB VRAM</strong></td>
+                        <td>¥583</td>
+                        <td>¥1,000</td>
+                        <td>¥1,875</td>
+                        <td class="highlight-win">¥128</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Form Factor</strong></td>
+                        <td>Dual-slot</td>
+                        <td>Dual-slot</td>
+                        <td>Dual-slot</td>
+                        <td>16× single-slot</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Parallel Jobs</strong></td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td class="highlight-win">Up to 16</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="note">
+                <strong>Key insight:</strong> Our 16× Tesla A2 cluster costs 3× less than a single RTX Pro6000D 
+                but delivers 3× more total VRAM, 2.25× more CUDA cores, and supports 16 parallel inference jobs. 
+                The trade-off is no NVLink (PCIe bandwidth only) and lower per-card compute density.
+            </p>
+
+            <!-- Use Case Analysis -->
+            <h2 id="use-cases">Use Case Analysis</h2>
+            <div class="use-case-grid">
+
+                <div class="use-case-card">
+                    <h3>🎓 Multi-Student LLM Inference</h3>
+                    <p>
+                        <strong>Scenario:</strong> 30 students running Qwen2.5-7B or Llama-3-8B concurrently 
+                        for writing assistance, coding help, and research.
+                    </p>
+                    <p>
+                        <strong>Need:</strong> High parallelism, fault isolation, 8GB+ VRAM per instance.
+                    </p>
+                    <div class="verdict verdict-a2">
+                        ✅ A2 Cluster Wins — 16 separate cards = 16 isolated inference engines. 
+                        One student can't starve others. Noisy neighbor problem eliminated.
+                    </div>
+                </div>
+
+                <div class="use-case-card">
+                    <h3>🎬 Video Generation (Wan 2.1 / CogVideo)</h3>
+                    <p>
+                        <strong>Scenario:</strong> Generating 5-second 480p video clips using diffusion models 
+                        that require 12-16GB VRAM per generation.
+                    </p>
+                    <p>
+                        <strong>Need:</strong> Large contiguous VRAM, fast memory bandwidth, FP16 support.
+                    </p>
+                    <div class="verdict verdict-a2">
+                        ✅ A2 Cluster Wins — 16 cards = 16 parallel video generations. 
+                        60W per card = 960W total vs. 300W for one Pro6000D. Better throughput per watt.
+                    </div>
+                </div>
+
+                <div class="use-case-card">
+                    <h3>🧠 Massive Single-Model Inference (70B+ LLM)</h3>
+                    <p>
+                        <strong>Scenario:</strong> Running a 70B parameter model like Qwen-72B or Llama-3-70B 
+                        that requires 140GB+ VRAM in FP16.
+                    </p>
+                    <p>
+                        <strong>Need:</strong> Contiguous memory space, fast inter-GPU communication.
+                    </p>
+                    <div class="verdict verdict-pro">
+                        ⚠️ Pro6000D / A100 / H100 Win — Single 84GB card or NVLink-connected pair 
+                        beats PCIe-only 16GB cards. Model sharding across 16× A2 is possible but inefficient.
+                    </div>
+                </div>
+
+                <div class="use-case-card">
+                    <h3>📚 Fine-Tuning Small Models (7B-13B)</h3>
+                    <p>
+                        <strong>Scenario:</strong> LoRA fine-tuning of 7B models on school-specific datasets 
+                        (curriculum, student work, etc.).
+                    </p>
+                    <p>
+                        <strong>Need:</strong> 16-24GB VRAM, fast FP16, multiple experiments in parallel.
+                    </p>
+                    <div class="verdict verdict-a2">
+                        ✅ A2 Cluster Wins — Each card can run one fine-tuning job. 16 concurrent experiments 
+                        with different hyperparameters. A100 would do one job at 2× speed but no parallel exploration.
+                    </div>
+                </div>
+
+                <div class="use-case-card">
+                    <h3>🖼️ Batch Image Generation (Stable Diffusion)</h3>
+                    <p>
+                        <strong>Scenario:</strong> Generating 100+ images for school materials, 
+                        art projects, or presentation visuals.
+                    </p>
+                    <p>
+                        <strong>Need:</strong> High throughput, memory for 512×512 or 1024×1024 generation.
+                    </p>
+                    <div class="verdict verdict-a2">
+                        ✅ A2 Cluster Wins — 16 cards = 16× parallel pipelines. SDXL needs ~8GB. 
+                        Pro6000D would idle 76GB while generating one image. A2s saturate compute.
+                    </div>
+                </div>
+
+                <div class="use-case-card">
+                    <h3>🔬 Research / Embedding Models</h3>
+                    <p>
+                        <strong>Scenario:</strong> Computing embeddings for 100K documents, 
+                        running RAG pipelines, or similarity search.
+                    </p>
+                    <p>
+                        <strong>Need:</strong> Batch processing, memory for model + large batches.
+                    </p>
+                    <div class="verdict verdict-a2">
+                        ✅ A2 Cluster Wins — Embedding models (BGE, GTE) are small. 16 cards can process 
+                        16 document batches simultaneously. Perfect for indexing school knowledge base.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verdict -->
+            <h2 id="verdict">The Verdict</h2>
+            <div class="callout">
+                <strong>For our use case — multi-tenant school AI inference — the 16× Tesla A2 cluster is the superior value play.</strong>
+            </div>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Factor</th>
+                        <th>16× A2 Cluster</th>
+                        <th>1× RTX Pro6000D</th>
+                        <th>1× A100 80GB</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Total Cost</strong></td>
+                        <td class="highlight-win">¥32,688 (GPUs only)</td>
+                        <td>¥49,000</td>
+                        <td>¥80,000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total VRAM</strong></td>
+                        <td class="highlight-win">256 GB</td>
+                        <td>84 GB</td>
+                        <td>80 GB</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Parallel Jobs</strong></td>
+                        <td class="highlight-win">16</td>
+                        <td>1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fault Tolerance</strong></td>
+                        <td class="highlight-win">Lose 1/16 = 6.25% capacity</td>
+                        <td>Lose 100% if card fails</td>
+                        <td>Lose 100% if card fails</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cost per Parallel Job</strong></td>
+                        <td class="highlight-win">¥2,043</td>
+                        <td>¥49,000</td>
+                        <td>¥80,000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Best For</strong></td>
+                        <td>Multi-tenant, inference, parallel workloads</td>
+                        <td>Single massive model, simplicity</td>
+                        <td>Training, large models, NVLink</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>
+                The Pro6000D only makes sense if you specifically need 84GB on a single card for one massive model 
+                (e.g., 70B+ LLM without sharding). For our school deployment — multiple students, multiple models, 
+                multiple tasks — the A2 cluster wins on every metric that matters: cost, parallelism, fault tolerance, 
+                and VRAM density.
+            </p>
+
+            <!-- Deployment Notes -->
+            <h2 id="software">Software Stack</h2>
+            <ul>
+                <li><strong>OS:</strong> Ubuntu 22.04 LTS or 24.04 LTS</li>
+                <li><strong>Container Runtime:</strong> Docker + NVIDIA Container Toolkit</li>
+                <li><strong>Orchestration:</strong> Kubernetes or Docker Swarm</li>
+                <li><strong>Inference Engine:</strong> vLLM (multi-GPU, continuous batching) or TGI</li>
+                <li><strong>Local Models:</strong> Ollama for student workstations</li>
+                <li><strong>Monitoring:</strong> Prometheus + Grafana for GPU utilization</li>
+                <li><strong>Queue:</strong> Redis + Celery or simple round-robin scheduler</li>
+            </ul>
+
+            <h2 id="status">Current Status</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Ordered</th>
+                        <th>Ship Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2× G292-Z20 servers</td>
+                        <td>2026-06-22</td>
+                        <td>2026-06-24</td>
+                        <td>🚚 Shipping</td>
+                    </tr>
+                    <tr>
+                        <td>1× TOTEN 42U rack</td>
+                        <td>2026-06-22</td>
+                        <td>2026-06-24</td>
+                        <td>🚚 Shipping</td>
+                    </tr>
+                    <tr>
+                        <td>8× Tesla A2 (batch 1)</td>
+                        <td>2026-06-22</td>
+                        <td>2026-06-24</td>
+                        <td>🚚 Shipping</td>
+                    </tr>
+                    <tr>
+                        <td>16× 64GB DDR4 RDIMM</td>
+                        <td>2026-06-24</td>
+                        <td>6 now + 10 on Tue</td>
+                        <td>📦 Partial</td>
+                    </tr>
+                    <tr>
+                        <td>8× Tesla A2 (batch 2)</td>
+                        <td>—</td>
+                        <td>—</td>
+                        <td>⏳ Pending</td>
+                    </tr>
+                    <tr>
+                        <td>2× NVMe boot drives</td>
+                        <td>—</td>
+                        <td>—</td>
+                        <td>⏳ Pending</td>
+                    </tr>
+                    <tr>
+                        <td>2× 25GbE NICs</td>
+                        <td>—</td>
+                        <td>—</td>
+                        <td>⏳ Pending</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="note">
+                <strong>Next milestone:</strong> First boot test with 6 RAM sticks. Verify all 8 slots per server, 
+                check EPYC 7532 detects memory correctly, confirm BIOS POST. Then install first 4 GPUs and 
+                test <code>nvidia-smi</code> detection before accepting batch 2 order.
+            </p>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>0604.ai — Building local AI infrastructure for education. <a href="index.html">← Back to Home</a></p>
+        </div>
+    </footer>
+</body>
+</html>

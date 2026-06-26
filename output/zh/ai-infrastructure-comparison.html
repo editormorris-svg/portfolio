@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 基础设施对比 — 自建 vs 购买 | NAS Jiaxing</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --earth-dark: #2C1810;
+  --earth-brown: #4A2C17;
+  --earth-warm: #6B4423;
+  --earth-gold: #B8860B;
+  --earth-sand: #D4A574;
+  --earth-cream: #F5E6D3;
+  --earth-light: #FAF6F0;
+  --accent-rust: #C75B39;
+  --accent-sage: #6B8E6B;
+  --accent-navy: #2E3A59;
+  --text-dark: #2C1810;
+  --winner: #2d6a4f;
+  --winner-bg: #d8f3dc;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', 'Noto Serif SC', sans-serif;
+  background-color: var(--earth-light);
+  color: var(--text-dark);
+  line-height: 1.7;
+}
+@media print {
+  body { background: white; color: black; }
+  .navbar, .hero { display: none; }
+  .section { padding: 1rem 0; page-break-inside: avoid; }
+  .no-print { display: none; }
+  .comparison-table th { background: #eee !important; color: black !important; }
+  .winner { background: #e8f5e9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  background: linear-gradient(to bottom, rgba(44,24,16,0.95), rgba(44,24,16,0.85));
+  backdrop-filter: blur(10px);
+  padding: 0.8rem 2rem;
+  z-index: 1000;
+}
+.nav-container {
+  max-width: 1400px; margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.nav-logo {
+  font-family: 'Noto Serif SC', serif; font-size: 1.5rem; font-weight: 700;
+  color: var(--earth-cream); text-decoration: none;
+}
+.nav-links { display: flex; gap: 1.5rem; list-style: none; }
+.nav-links a {
+  color: var(--earth-sand); text-decoration: none; font-size: 0.9rem; transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--earth-cream); }
+.lang-toggle {
+  background: rgba(255,255,255,0.15); color: var(--earth-cream);
+  padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; text-decoration: none;
+}
+.hero {
+  margin-top: 60px;
+  background: linear-gradient(135deg, var(--earth-dark) 0%, var(--earth-brown) 100%);
+  color: var(--earth-cream); padding: 3rem 2rem; text-align: center;
+}
+.hero h1 { font-family: 'Noto Serif SC', serif; font-size: 2.2rem; margin-bottom: 0.5rem; }
+.hero p { font-size: 1.05rem; max-width: 700px; margin: 0 auto 1rem; opacity: 0.9; }
+.print-btn {
+  display: inline-block; background: var(--earth-sand); color: var(--earth-dark);
+  padding: 0.4rem 1.2rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600;
+  cursor: pointer; border: none; margin-top: 0.5rem;
+}
+.section { max-width: 1200px; margin: 0 auto; padding: 2.5rem 2rem; }
+.section-title {
+  font-family: 'Noto Serif SC', serif; font-size: 1.6rem; color: var(--earth-dark);
+  margin-bottom: 1rem; padding-left: 1rem; border-left: 4px solid var(--accent-rust);
+}
+.subtitle { color: var(--earth-warm); font-size: 0.95rem; margin-bottom: 1.5rem; }
+.comparison-table {
+  width: 100%; border-collapse: collapse; margin: 1rem 0;
+  font-size: 0.9rem; background: white; border-radius: 8px;
+  overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.comparison-table th, .comparison-table td {
+  padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #e0d5c7;
+}
+.comparison-table th {
+  background: var(--earth-cream); color: var(--earth-dark); font-weight: 600;
+  font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.comparison-table td { font-size: 0.9rem; }
+.comparison-table tr:hover { background: rgba(245,230,211,0.3); }
+.comparison-table .winner { background: var(--winner-bg); color: var(--winner); font-weight: 600; }
+.comparison-table .number { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+.comparison-table .price { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--accent-rust); }
+.comparison-table .ours { border-left: 3px solid var(--accent-rust); }
+.comparison-table .col-header {
+  background: var(--earth-dark); color: var(--earth-cream);
+  font-weight: 600; font-size: 0.9rem; text-align: center;
+}
+.comparison-table .col-header.ours-header { background: var(--accent-rust); }
+.scenario-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem;
+}
+.scenario-card {
+  background: white; border-radius: 8px; padding: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 4px solid var(--accent-navy);
+}
+.scenario-card h4 { font-size: 1rem; margin-bottom: 0.5rem; color: var(--earth-dark); }
+.scenario-card .winner-tag {
+  display: inline-block; padding: 0.2rem 0.6rem; border-radius: 12px;
+  font-size: 0.8rem; font-weight: 600; margin-bottom: 0.5rem;
+}
+.winner-tag.spark { background: #e3f2fd; color: #1565c0; }
+.winner-tag.ours { background: #fbe9e7; color: #bf360c; }
+.winner-tag.cloud { background: #f3e5f5; color: #6a1b9a; }
+.winner-tag.tie { background: #e8f5e9; color: #2e7d32; }
+.scenario-card p { font-size: 0.9rem; color: var(--earth-warm); margin-bottom: 0.3rem; }
+.price-note {
+  background: linear-gradient(135deg, var(--earth-cream) 0%, #fff 100%);
+  border-left: 4px solid var(--earth-gold); border-radius: 0 8px 8px 0;
+  padding: 1rem 1.2rem; margin: 1rem 0; font-size: 0.9rem;
+}
+.price-note code { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: #f0ebe5; padding: 0.1rem 0.4rem; border-radius: 4px; }
+.highlight-box {
+  background: linear-gradient(135deg, var(--accent-rust) 0%, #a0522d 100%);
+  color: white; border-radius: 8px; padding: 1.5rem; margin: 1rem 0;
+}
+.highlight-box h3 { font-family: 'Noto Serif SC', serif; font-size: 1.2rem; margin-bottom: 0.5rem; }
+.highlight-box p { font-size: 0.95rem; opacity: 0.95; margin-bottom: 0.3rem; }
+.footnote { font-size: 0.8rem; color: var(--earth-warm); margin-top: 1rem; font-style: italic; }
+</style>
+</head>
+<body>
+
+<nav class="navbar no-print">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">0604<span style="color:var(--earth-sand);">.ai</span></a>
+    <ul class="nav-links">
+      <li><a href="../index.html">首页</a></li>
+      <li><a href="../hardware.html">硬件</a></li>
+      <li><a href="../ai-stack.html">AI 栈</a></li>
+      <li><a href="../services.html">服务</a></li>
+      <li><a href="../ai-fleet.html">设备群</a></li>
+      <li><a href="../tech-lab.html">技术实验室</a></li>
+      <li><a href="ai-infrastructure-comparison.html" style="color:var(--earth-cream);">对比</a></li>
+    </ul>
+    <a href="../ai-infrastructure-comparison.html" class="lang-toggle">EN</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>AI 基础设施对比</h1>
+  <p>¥33,000 价位自建 vs 购买。学校场景下哪个更合适？</p>
+  <button class="print-btn no-print" onclick="window.print()">🖨️ 打印 / 保存 PDF</button>
+</div>
+
+<div class="section">
+  <h2 class="section-title">候选方案</h2>
+  <p class="subtitle">所有系统定价在 ¥33,000 左右（约 $4,700 美元）。云端成本按一年重度使用计算。</p>
+
+  <table class="comparison-table">
+    <tr>
+      <th style="width:22%">指标</th>
+      <th class="col-header" style="width:26%">NVIDIA DGX Spark<br><small style="font-weight:400;font-size:0.75rem;">¥33,833 (4TB)</small></th>
+      <th class="col-header ours-header" style="width:26%">双节点 G292-Z20<br><small style="font-weight:400;font-size:0.75rem;">~¥50,000 总价</small></th>
+      <th class="col-header" style="width:26%">单节点 G292-Z20<br><small style="font-weight:400;font-size:0.75rem;">~¥25,000 总价</small></th>
+    </tr>
+    <tr>
+      <td><strong>GPU 型号</strong></td>
+      <td>GB10 Grace Blackwell<br><small>单芯片，桌面级</small></td>
+      <td class="ours">8× NVIDIA Tesla A2 16GB<br><small>企业级被动散热</small></td>
+      <td>4× NVIDIA Tesla A2 16GB<br><small>可扩展至 8</small></td>
+    </tr>
+    <tr>
+      <td><strong>总显存</strong></td>
+      <td class="number">128 GB <small>统一内存</small></td>
+      <td class="ours winner number">256 GB <small>独立显存</small></td>
+      <td class="number">128 GB <small>独立显存</small></td>
+    </tr>
+    <tr>
+      <td><strong>FP16 算力</strong></td>
+      <td class="number winner">~500 TFLOPS</td>
+      <td class="ours number">~126 TFLOPS</td>
+      <td class="number">~63 TFLOPS</td>
+    </tr>
+    <tr>
+      <td><strong>FP4 / 量化</strong></td>
+      <td class="winner">1,000 TOPS<br><small>第五代 Tensor Core</small></td>
+      <td class="ours">不支持<br><small>Ampere 架构无 FP4</small></td>
+      <td>不支持</td>
+    </tr>
+    <tr>
+      <td><strong>CPU 核心</strong></td>
+      <td class="number">20 <small>ARM (Grace)</small></td>
+      <td class="ours winner number">128 <small>x86 EPYC 7532</small></td>
+      <td class="number winner">64 <small>x86 EPYC 7532</small></td>
+    </tr>
+    <tr>
+      <td><strong>系统内存</strong></td>
+      <td class="number">128 GB <small>与 GPU 共享</small></td>
+      <td class="ours winner number">1,024 GB <small>DDR4 ECC</small></td>
+      <td class="number winner">512 GB <small>DDR4 ECC</small></td>
+    </tr>
+    <tr>
+      <td><strong>存储</strong></td>
+      <td class="number winner">4 TB NVMe</td>
+      <td class="ours number">~2 TB NVMe<br><small>8× 2.5" 盘位，可扩展</small></td>
+      <td class="number">~1 TB NVMe</td>
+    </tr>
+    <tr>
+      <td><strong>GPU 隔离</strong></td>
+      <td>单设备 — 无隔离</td>
+      <td class="ours winner">8 块独立 GPU<br><small>故障隔离，按模型分配</small></td>
+      <td class="winner">4–8 块独立 GPU</td>
+    </tr>
+    <tr>
+      <td><strong>网络</strong></td>
+      <td>10 GbE + 200 GbE QSFP<br><small>用于 DGX 互联</small></td>
+      <td class="ours winner">25 GbE ConnectX-4<br><small>每节点 2× 端口</small></td>
+      <td class="winner">25 GbE ConnectX-4</td>
+    </tr>
+    <tr>
+      <td><strong>功耗 (TDP)</strong></td>
+      <td class="winner number">240 W</td>
+      <td class="ours number">~4,400 W <small>2× 2200W 电源</small></td>
+      <td class="number">~2,200 W</td>
+    </tr>
+    <tr>
+      <td><strong>形态</strong></td>
+      <td class="winner">1.2 kg，口袋书大小<br><small>桌面友好，静音</small></td>
+      <td class="ours">2× 2U 机架 + 42U 机柜<br><small>需要服务器机房</small></td>
+      <td>1× 2U 机架<br><small>需要服务器机房或机架</small></td>
+    </tr>
+    <tr>
+      <td><strong>PCIe 扩展</strong></td>
+      <td>0 <small>零插槽</small></td>
+      <td class="ours winner">20× PCIe x16 插槽<br><small>每服务器 10 个</small></td>
+      <td class="winner">10× PCIe x16 插槽</td>
+    </tr>
+    <tr>
+      <td><strong>软件栈</strong></td>
+      <td class="winner">预装 DGX OS<br><small>TensorRT-LLM, NIM, NeMo</small></td>
+      <td class="ours">Ubuntu + Docker<br><small>vLLM, Ollama, Open WebUI</small></td>
+      <td>Ubuntu + Docker</td>
+    </tr>
+    <tr>
+      <td><strong>冗余</strong></td>
+      <td>单点故障</td>
+      <td class="ours winner">双节点，8 GPU 故障转移<br><small>一台服务器故障 → 4 GPU 仍可用</small></td>
+      <td>双电源，无节点冗余</td>
+    </tr>
+    <tr>
+      <td><strong>总价（含全部）</strong></td>
+      <td class="price">¥33,833</td>
+      <td class="ours price">~¥50,000<br><small>含机箱、CPU、内存、网络</small></td>
+      <td class="price">~¥25,000</td>
+    </tr>
+  </table>
+
+  <div class="price-note">
+    <strong>💡 价格说明：</strong> DGX Spark 是完整的即插即用系统。双 G292-Z20 的 <code>~¥50,000</code> 包含所有部件 — 机箱、CPU、电源、内存、网络、机柜。仅 GPU 成本为 <code>¥32,684</code>，与 Spark 价格相当。剩余的 <code>~¥17,000</code> 用于企业级服务器机箱、EPYC CPU、DDR4 ECC 内存和 42U 机柜。
+  </div>
+</div>
+
+<div class="section">
+  <h2 class="section-title">场景决策矩阵</h2>
+  <p class="subtitle">学校场景下哪个系统更适合具体用例？</p>
+
+  <div class="scenario-grid">
+    <div class="scenario-card">
+      <span class="winner-tag spark">DGX Spark 胜出</span>
+      <h4>单个大模型推理（200B+ 参数）</h4>
+      <p>128GB 统一内存意味着无 CPU-GPU PCIe 瓶颈。Blackwell 的 FP4 量化让有效容量翻倍。</p>
+      <p><small><strong>自建方案：</strong> 256GB 显存可以容纳模型，但 126 TFLOPS vs 500 TFLOPS 意味着推理速度慢 4 倍。</small></p>
+    </div>
+    <div class="scenario-card">
+      <span class="winner-tag ours">自建方案胜出</span>
+      <h4>同时运行 8 个模型</h4>
+      <p>每 GPU 一个模型，无竞争。学生可同时运行 Llama、Qwen、Mistral、代码模型、视觉模型。</p>
+      <p><small><strong>DGX Spark：</strong> 需要加载/卸载模型，或运行更小的量化版本。</small></p>
+    </div>
+    <div class="scenario-card">
+      <span class="winner-tag ours">自建方案胜出</span>
+      <h4>多用户 API 服务器（vLLM/Ollama）</h4>
+      <p>1TB 系统内存处理大上下文窗口、RAG 向量库和并发预处理。128 核 CPU 负责编排。</p>
+      <p><small><strong>DGX Spark：</strong> 128GB 共享内存对 20+ 并发用户、128K 上下文是瓶颈。</small></p>
+    </div>
+    <div class="scenario-card">
+      <span class="winner-tag ours">自建方案胜出</span>
+      <h4>视频生成（ComfyUI）</h4>
+      <p>每 GPU 更多显存 = 更大批次、更高分辨率。每 GPU 24GB+ 优于统一 128GB 的竞争。</p>
+      <p><small><strong>DGX Spark：</strong> 单视频原型优秀，但多用户负载下会卡顿。</small></p>
+    </div>
+    <div class="scenario-card">
+      <span class="winner-tag spark">DGX Spark 胜出</span>
+      <h4>微调 70B+ 模型（LoRA/QLoRA）</h4>
+      <p>更快的计算 + 统一内存 = 更快的梯度更新。Blackwell 支持 FP4 训练。</p>
+      <p><small><strong>自建方案：</strong> 可以做，但每步慢 4 倍。跨 8 GPU 分布式微调很复杂。</small></p>
+    </div>
+    <div class="scenario-card">
+      <span class="winner-tag ours">自建方案胜出</span>
+      <h4>7×24 生产推理集群</h4>
+      <p>双节点冗余。一台服务器故障，另一台仍有 4 GPU。热插拔电源，企业级散热。</p>
+      <p><small><strong>DGX Spark：</strong> 单点故障。无冗余。坏了全部停止。</small></p>
+    </div>
+    <div class="scenario-card">
+      <span class="winner-tag spark">DGX Spark 胜出</span>
+      <h4>桌面原型 → 云端部署</h4>
+      <p>与云端 DGX 相同的 Grace Blackwell 架构。本地原型，零代码改动部署到 DGX Cloud。</p>
+      <p><small><strong>自建方案：</strong> A2 GPU 仅限数据中心。无云端等价方案。自定义基础设施栈。</small></p>
+    </div>
+    <div class="scenario-card">
+      <span class="winner-tag spark">DGX Spark 胜出</span>
+      <h4>电费敏感</h4>
+      <p>240W vs 4,400W。按 ¥0.6/度计算，7×24 运行：Spark 年电费 ¥1,260，双节点 ¥23,100。</p>
+      <p><small><strong>自建方案：</strong> 每 TFLOPS 成本更优，但电费是真实的。需预算空调。</small></p>
+    </div>
+    <div class="scenario-card">
+      <span class="winner-tag tie">平局 — 取决于场景</span>
+      <h4>课堂演示 / 教师培训</h4>
+      <p>Spark：携带到任何教室，插上电源，30 秒演示。自建方案：固定机房，只能远程访问。</p>
+      <p><small><strong>结论：</strong> 移动演示用 Spark。永久学校基础设施用自建方案。</small></p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2 class="section-title">云端对比：¥50,000 能买多少 API 调用？</h2>
+  <p class="subtitle">如果用同样的钱买 API 调用，而不是买硬件。</p>
+
+  <table class="comparison-table">
+    <tr>
+      <th>服务</th>
+      <th>模型</th>
+      <th>每百万 tokens 价格</th>
+      <th>¥50,000 可买...</th>
+      <th>结论</th>
+    </tr>
+    <tr>
+      <td><strong>SiliconFlow（国内）</strong></td>
+      <td>DeepSeek-V3</td>
+      <td class="number">¥1 / 百万 tokens</td>
+      <td class="number">500 亿 tokens</td>
+      <td>文本最便宜，但无隐私。所有数据离开学校。</td>
+    </tr>
+    <tr>
+      <td><strong>OpenAI API</strong></td>
+      <td>gpt-4o</td>
+      <td class="number">$2.50 / 百万输入<br>$10 / 百万输出</td>
+      <td class="number">~25 亿 tokens<br><small>（混合使用）</small></td>
+      <td>需要 VPN。受审查。无法控制学生数据。</td>
+    </tr>
+    <tr>
+      <td><strong>Kimi API</strong></td>
+      <td>Kimi K2.5</td>
+      <td class="number">¥1.60 / 百万 tokens</td>
+      <td class="number">310 亿 tokens</td>
+      <td>国内可访问。但无法离线。学生作文上传 Moonshot。</td>
+    </tr>
+    <tr>
+      <td><strong>阿里云百炼</strong></td>
+      <td>Qwen3-235B</td>
+      <td class="number">¥1 / 百万 tokens</td>
+      <td class="number">500 亿 tokens</td>
+      <td>国内本地化。仍是云端。仍是共享基础设施。</td>
+    </tr>
+    <tr class="winner">
+      <td><strong>本地自建方案</strong></td>
+      <td>任意（Llama, Qwen, Mistral...）</td>
+      <td class="number">¥0 / 无限</td>
+      <td class="number">∞ tokens，永久<br><small>一次性 ¥5万 投入后</small></td>
+      <td class="winner">零单 token 成本。零数据泄露。可离线运行。</td>
+    </tr>
+  </table>
+
+  <div class="price-note">
+    <strong>💡 云端计算：</strong> 按 ¥50,000 计算，云端 API 在前 3–6 个月的重度使用下更便宜。之后，本地方案免费。对于 3 年学校部署，本地基础设施可节省 <strong>¥150,000–300,000</strong> API 费用。
+  </div>
+</div>
+
+<div class="section">
+  <h2 class="section-title">PD 演示结论</h2>
+
+  <div class="highlight-box">
+    <h3>🎯 一句话总结</h3>
+    <p><strong>DGX Spark</strong> 是桌面级超级计算机 — 适合单个开发者快速运行单个大模型。</p>
+    <p>你的 <strong>双 G292-Z20</strong> 是生产级推理集群 — 为服务多用户、多模型、冗余和扩展而构建。</p>
+    <p style="margin-top:0.8rem;font-size:1.05rem;"><strong>对于学校商业化方案，DGX Spark 是玩具。你的机架才是真正的基础设施。</strong></p>
+  </div>
+
+  <div class="highlight-box" style="background: linear-gradient(135deg, var(--accent-navy) 0%, #1a1a2e 100%);">
+    <h3>💡 实用组合</h3>
+    <p>桌面上放一个 DGX Spark 用于<strong>原型开发</strong>（快速迭代，与云端相同 Blackwell 架构），然后部署到双 G292 集群用于生产（规模、冗余、多租户）。</p>
+    <p style="margin-top:0.5rem;"><strong>组合价格：</strong> ¥33,833 + ¥50,000 = <strong>¥83,833</strong>，获得完整的原型到生产流水线。</p>
+  </div>
+</div>
+
+<div class="section">
+  <h2 class="section-title">快速参考：规格一览</h2>
+  <table class="comparison-table">
+    <tr>
+      <th>系统</th>
+      <th>价格</th>
+      <th>显存</th>
+      <th>FP16</th>
+      <th>CPU</th>
+      <th>内存</th>
+      <th>功耗</th>
+      <th>最适合</th>
+    </tr>
+    <tr>
+      <td><strong>DGX Spark</strong></td>
+      <td class="price">¥33,833</td>
+      <td class="number">128G</td>
+      <td class="number winner">500T</td>
+      <td class="number">20c ARM</td>
+      <td class="number">128G</td>
+      <td class="number winner">240W</td>
+      <td>单模型、快速推理、原型开发</td>
+    </tr>
+    <tr class="winner">
+      <td><strong>双 G292</strong></td>
+      <td class="price">~¥50,000</td>
+      <td class="number winner">256G</td>
+      <td class="number">251T</td>
+      <td class="number winner">128c x86</td>
+      <td class="number winner">1TB</td>
+      <td class="number">4,400W</td>
+      <td>多模型、多用户、生产、冗余</td>
+    </tr>
+    <tr>
+      <td><strong>单 G292</strong></td>
+      <td class="price">~¥25,000</td>
+      <td class="number">128G</td>
+      <td class="number">126T</td>
+      <td class="number">64c x86</td>
+      <td class="number">512G</td>
+      <td class="number">2,200W</td>
+      <td>预算入门，可扩展至双节点</td>
+    </tr>
+    <tr>
+      <td><strong>云端 API</strong></td>
+      <td class="price">¥0–50,000</td>
+      <td class="number">N/A</td>
+      <td class="number">N/A</td>
+      <td class="number">N/A</td>
+      <td class="number">N/A</td>
+      <td class="number winner">0W</td>
+      <td>无 capex，但数据外泄，按 token 计费</td>
+    </tr>
+  </table>
+</div>
+
+<div class="section">
+  <p class="footnote">
+    <strong>来源：</strong> DGX Spark 规格来自 NVIDIA 产品页（2025）。G292-Z20 规格来自技嘉数据手册。Tesla A2 规格来自 NVIDIA 技术简报。价格来自淘宝订单（2026-06-22）和 NVIDIA 官方商店。云端定价来自 SiliconFlow、OpenAI、Kimi、阿里云，截至 2026-06。所有 TFLOPS 估算为理论峰值 FP16。实际推理性能取决于模型、量化和批次大小。
+  </p>
+  <p class="footnote">
+    <strong>最后更新：</strong> 2026-06-26 | <strong>制作者：</strong> HER + Kimi 为 William Morris 的 NAS Jiaxing 教师培训而制作
+  </p>
+</div>
+
+</body>
+</html>

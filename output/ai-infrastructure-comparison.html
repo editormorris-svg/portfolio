@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Infrastructure Comparison — Build vs. Buy | NAS Jiaxing</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --earth-dark: #2C1810;
+  --earth-brown: #4A2C17;
+  --earth-warm: #6B4423;
+  --earth-gold: #B8860B;
+  --earth-sand: #D4A574;
+  --earth-cream: #F5E6D3;
+  --earth-light: #FAF6F0;
+  --accent-rust: #C75B39;
+  --accent-sage: #6B8E6B;
+  --accent-navy: #2E3A59;
+  --text-dark: #2C1810;
+  --winner: #2d6a4f;
+  --winner-bg: #d8f3dc;
+  --runner: #40916c;
+  --neutral: #6c757d;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--earth-light);
+  color: var(--text-dark);
+  line-height: 1.7;
+}
+@media print {
+  body { background: white; color: black; }
+  .navbar, .hero { display: none; }
+  .section { padding: 1rem 0; page-break-inside: avoid; }
+  .no-print { display: none; }
+  .comparison-table th { background: #eee !important; color: black !important; }
+  .winner { background: #e8f5e9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  background: linear-gradient(to bottom, rgba(44,24,16,0.95), rgba(44,24,16,0.85));
+  backdrop-filter: blur(10px);
+  padding: 0.8rem 2rem;
+  z-index: 1000;
+}
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--earth-cream);
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 1.5rem; list-style: none; }
+.nav-links a {
+  color: var(--earth-sand);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--earth-cream); }
+.lang-toggle {
+  background: rgba(255,255,255,0.15);
+  color: var(--earth-cream);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+.hero {
+  margin-top: 60px;
+  background: linear-gradient(135deg, var(--earth-dark) 0%, var(--earth-brown) 100%);
+  color: var(--earth-cream);
+  padding: 3rem 2rem;
+  text-align: center;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+}
+.hero p { font-size: 1.05rem; max-width: 700px; margin: 0 auto 1rem; opacity: 0.9; }
+.print-btn {
+  display: inline-block; background: var(--earth-sand); color: var(--earth-dark);
+  padding: 0.4rem 1.2rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600;
+  cursor: pointer; border: none; margin-top: 0.5rem;
+}
+.print-btn:hover { background: var(--earth-cream); }
+.section {
+  max-width: 1200px; margin: 0 auto; padding: 2.5rem 2rem;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem; color: var(--earth-dark); margin-bottom: 1rem;
+  padding-left: 1rem; border-left: 4px solid var(--accent-rust);
+}
+.subtitle { color: var(--earth-warm); font-size: 0.95rem; margin-bottom: 1.5rem; }
+.comparison-table {
+  width: 100%; border-collapse: collapse; margin: 1rem 0;
+  font-size: 0.9rem; background: white; border-radius: 8px;
+  overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.comparison-table th, .comparison-table td {
+  padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #e0d5c7;
+}
+.comparison-table th {
+  background: var(--earth-cream); color: var(--earth-dark); font-weight: 600;
+  font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.comparison-table td { font-size: 0.9rem; }
+.comparison-table tr:hover { background: rgba(245,230,211,0.3); }
+.comparison-table .winner {
+  background: var(--winner-bg); color: var(--winner); font-weight: 600;
+}
+.comparison-table .number { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+.comparison-table .price { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--accent-rust); }
+.comparison-table .ours { border-left: 3px solid var(--accent-rust); }
+.comparison-table .col-header {
+  background: var(--earth-dark); color: var(--earth-cream);
+  font-weight: 600; font-size: 0.9rem; text-align: center;
+}
+.comparison-table .col-header.ours-header { background: var(--accent-rust); }
+.scenario-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem;
+}
+.scenario-card {
+  background: white; border-radius: 8px; padding: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 4px solid var(--accent-navy);
+}
+.scenario-card h4 { font-size: 1rem; margin-bottom: 0.5rem; color: var(--earth-dark); }
+.scenario-card .winner-tag {
+  display: inline-block; padding: 0.2rem 0.6rem; border-radius: 12px;
+  font-size: 0.8rem; font-weight: 600; margin-bottom: 0.5rem;
+}
+.winner-tag.spark { background: #e3f2fd; color: #1565c0; }
+.winner-tag.ours { background: #fbe9e7; color: #bf360c; }
+.winner-tag.cloud { background: #f3e5f5; color: #6a1b9a; }
+.winner-tag.tie { background: #e8f5e9; color: #2e7d32; }
+.scenario-card p { font-size: 0.9rem; color: var(--earth-warm); margin-bottom: 0.3rem; }
+.price-note {
+  background: linear-gradient(135deg, var(--earth-cream) 0%, #fff 100%);
+  border-left: 4px solid var(--earth-gold); border-radius: 0 8px 8px 0;
+  padding: 1rem 1.2rem; margin: 1rem 0; font-size: 0.9rem;
+}
+.price-note code { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: #f0ebe5; padding: 0.1rem 0.4rem; border-radius: 4px; }
+.highlight-box {
+  background: linear-gradient(135deg, var(--accent-rust) 0%, #a0522d 100%);
+  color: white; border-radius: 8px; padding: 1.5rem; margin: 1rem 0;
+}
+.highlight-box h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 0.5rem; }
+.highlight-box p { font-size: 0.95rem; opacity: 0.95; margin-bottom: 0.3rem; }
+.footnote {
+  font-size: 0.8rem; color: var(--earth-warm); margin-top: 1rem; font-style: italic;
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar no-print">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">0604<span style="color:var(--earth-sand);">.ai</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="hardware.html">Hardware</a></li>
+      <li><a href="ai-stack.html">AI Stack</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="ai-fleet.html">Fleet</a></li>
+      <li><a href="tech-lab.html">Tech Lab</a></li>
+      <li><a href="ai-infrastructure-comparison.html" style="color:var(--earth-cream);">Compare</a></li>
+    </ul>
+    <a href="zh/ai-infrastructure-comparison.html" class="lang-toggle">中文</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>AI Infrastructure Comparison</h1>
+  <p>Build vs. Buy at the ~¥33,000 price point. What works for schools?</p>
+  <button class="print-btn no-print" onclick="window.print()">🖨️ Print / Save PDF</button>
+</div>
+
+<div class="section">
+  <h2 class="section-title">The Contenders</h2>
+  <p class="subtitle">All systems priced at or near ¥33,000 (≈$4,700 USD). Cloud costs calculated for 1-year heavy use.</p>
+
+  <table class="comparison-table">
+    <tr>
+      <th style="width:22%">Metric</th>
+      <th class="col-header" style="width:26%">NVIDIA DGX Spark<br><small style="font-weight:400;font-size:0.75rem;">¥33,833 (4TB)</small></th>
+      <th class="col-header ours-header" style="width:26%">Your Dual G292-Z20<br><small style="font-weight:400;font-size:0.75rem;">~¥50,000 total</small></th>
+      <th class="col-header" style="width:26%">Single G292-Z20<br><small style="font-weight:400;font-size:0.75rem;">~¥25,000 total</small></th>
+    </tr>
+    <tr>
+      <td><strong>GPU Model</strong></td>
+      <td>GB10 Grace Blackwell<br><small>1 chip, desktop</small></td>
+      <td class="ours">8× NVIDIA Tesla A2 16GB<br><small>enterprise passively cooled</small></td>
+      <td>4× NVIDIA Tesla A2 16GB<br><small>expandable to 8</small></td>
+    </tr>
+    <tr>
+      <td><strong>Total VRAM</strong></td>
+      <td class="number">128 GB <small>unified</small></td>
+      <td class="ours winner number">256 GB <small>discrete</small></td>
+      <td class="number">128 GB <small>discrete</small></td>
+    </tr>
+    <tr>
+      <td><strong>FP16 Compute</strong></td>
+      <td class="number winner">~500 TFLOPS</td>
+      <td class="ours number">~126 TFLOPS</td>
+      <td class="number">~63 TFLOPS</td>
+    </tr>
+    <tr>
+      <td><strong>FP4 / Quantization</strong></td>
+      <td class="winner">1,000 TOPS<br><small>5th gen Tensor Cores</small></td>
+      <td class="ours">N/A<br><small>Ampere — no FP4</small></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>CPU Cores</strong></td>
+      <td class="number">20 <small>ARM (Grace)</small></td>
+      <td class="ours winner number">128 <small>x86 EPYC 7532</small></td>
+      <td class="number winner">64 <small>x86 EPYC 7532</small></td>
+    </tr>
+    <tr>
+      <td><strong>System RAM</strong></td>
+      <td class="number">128 GB <small>shared with GPU</small></td>
+      <td class="ours winner number">1,024 GB <small>DDR4 ECC</small></td>
+      <td class="number winner">512 GB <small>DDR4 ECC</small></td>
+    </tr>
+    <tr>
+      <td><strong>Storage</strong></td>
+      <td class="number winner">4 TB NVMe</td>
+      <td class="ours number">~2 TB NVMe<br><small>8× 2.5" bays, expandable</small></td>
+      <td class="number">~1 TB NVMe</td>
+    </tr>
+    <tr>
+      <td><strong>GPU Isolation</strong></td>
+      <td>1 device — none</td>
+      <td class="ours winner">8 separate GPUs<br><small>fault isolation, per-model allocation</small></td>
+      <td class="winner">4–8 separate GPUs</td>
+    </tr>
+    <tr>
+      <td><strong>Network</strong></td>
+      <td>10 GbE + 200 GbE QSFP<br><small>to other DGX boxes</small></td>
+      <td class="ours winner">25 GbE ConnectX-4<br><small>per node, 2× ports</small></td>
+      <td class="winner">25 GbE ConnectX-4</td>
+    </tr>
+    <tr>
+      <td><strong>Power (TDP)</strong></td>
+      <td class="winner number">240 W</td>
+      <td class="ours number">~4,400 W <small>2× 2200W PSU</small></td>
+      <td class="number">~2,200 W</td>
+    </tr>
+    <tr>
+      <td><strong>Form Factor</strong></td>
+      <td class="winner">1.2 kg, paperback-sized<br><small>desk-friendly, silent</small></td>
+      <td class="ours">2× 2U rackmount + 42U cabinet<br><small>server room required</small></td>
+      <td>1× 2U rackmount<br><small>server room or rack</small></td>
+    </tr>
+    <tr>
+      <td><strong>PCIe Expansion</strong></td>
+      <td>0 <small>zero slots</small></td>
+      <td class="ours winner">20× PCIe x16 slots<br><small>10 per server</small></td>
+      <td class="winner">10× PCIe x16 slots</td>
+    </tr>
+    <tr>
+      <td><strong>Software Stack</strong></td>
+      <td class="winner">DGX OS pre-loaded<br><small>TensorRT-LLM, NIM, NeMo</small></td>
+      <td class="ours">Ubuntu + Docker<br><small>vLLM, Ollama, Open WebUI</small></td>
+      <td>Ubuntu + Docker</td>
+    </tr>
+    <tr>
+      <td><strong>Redundancy</strong></td>
+      <td>Single point of failure</td>
+      <td class="ours winner">Dual-node, 8 GPU failover<br><small>one server dies → 4 GPUs still up</small></td>
+      <td>Dual PSU, no node redundancy</td>
+    </tr>
+    <tr>
+      <td><strong>Price (complete)</strong></td>
+      <td class="price">¥33,833</td>
+      <td class="ours price">~¥50,000<br><small>includes all RAM, storage, networking</small></td>
+      <td class="price">~¥25,000</td>
+    </tr>
+  </table>
+
+  <div class="price-note">
+    <strong>💡 Price Note:</strong> The DGX Spark price is for a complete plug-and-play system.
+    Your dual G292-Z20 <code>~¥50,000</code> includes everything — chassis, CPUs, PSUs, RAM, networking, rack.
+    The GPU-only cost for dual is <code>¥32,684</code>, matching the Spark's price. The remaining <code>~¥17,000</code> covers enterprise server chassis, EPYC CPUs, DDR4 ECC RAM, and 42U rack.
+  </div>
+</div>
+
+<div class="section">
+  <h2 class="section-title">Scenario Decision Matrix</h2>
+  <p class="subtitle">Which system wins for specific use cases at a school?</p>
+
+  <div class="scenario-grid">
+    <div class="scenario-card">
+      <span class="winner-tag spark">DGX Spark wins</span>
+      <h4>Single 200B+ Parameter Model</h4>
+      <p>Unified 128GB memory means no CPU-GPU PCIe bottleneck. FP4 quantization on Blackwell gives 2× effective capacity.</p>
+      <p><small><strong>Your build:</strong> 256GB VRAM can hold the model, but 126 TFLOPS vs 500 TFLOPS means 4× slower inference.</small></p>
+    </div>
+    <div class="scenario-card">
+      <span class="winner-tag ours">Your build wins</span>
+      <h4>8 Models Simultaneously</h4>
+      <p>One model per GPU. No contention. Students can run Llama, Qwen, Mistral, Code models, vision models — all at once.</p>
+      <p><small><strong>DGX Spark:</strong> Would need to load/unload models or run smaller quantized versions.</small></p>
+    </div>
+    <div class="scenario-card">
+      <span class="winner-tag ours">Your build wins</span>
+      <h4>Multi-User API Server (vLLM/Ollama)</h4>
+      <p>1TB system RAM handles large context windows, RAG vector stores, and concurrent preprocessing. 128 CPU cores orchestrate.</p>
+      <p><small><strong>DGX Spark:</strong> 128GB shared RAM is a bottleneck for 20+ concurrent users with 128K context.</small></p>
+    </div>
+    <div class="scenario-card">
+      <span class="winner-tag ours">Your build wins</span>
+      <h4>Video Generation (ComfyUI)</h4>
+      <p>More VRAM per workload = larger batches, higher resolution. 24GB+ per GPU beats unified 128GB under contention.</p>
+      <p><small><strong>DGX Spark:</strong> Excellent for single-video prototype, stalls under multi-user load.</small></p>
+    </div>
+    <div class="scenario-card">
+      <span class="winner-tag spark">DGX Spark wins</span>
+      <h4>Fine-Tuning 70B+ Models (LoRA/QLoRA)</h4>
+      <p>Faster compute + unified memory = faster gradient updates. FP4 training support on Blackwell.</p>
+      <p><small><strong>Your build:</strong> Can do it, but 4× slower per step. Distributed fine-tuning across 8 GPUs is complex.</small></p>
+    </div>
+    <div class="scenario-card">
+      <span class="winner-tag ours">Your build wins</span>
+      <h4>24/7 Production Inference Cluster</h4>
+      <p>Dual-node redundancy. If one server fails, the other serves 4 GPUs. Hot-swappable PSUs, enterprise cooling.</p>
+      <p><small><strong>DGX Spark:</strong> Single point of failure. No redundancy. If it dies, everything stops.</small></p>
+    </div>
+    <div class="scenario-card">
+      <span class="winner-tag spark">DGX Spark wins</span>
+      <h4>Desk Prototype → Cloud Deploy</h4>
+      <p>Same Grace Blackwell architecture as cloud DGX. Prototype locally, deploy to DGX Cloud with zero code changes.</p>
+      <p><small><strong>Your build:</strong> A2 GPUs are data-center only. No cloud equivalent. Custom infra stack.</small></p>
+    </div>
+    <div class="scenario-card">
+      <span class="winner-tag spark">DGX Spark wins</span>
+      <h4>Power Bill Matters</h4>
+      <p>240W vs 4,400W. At ¥0.6/kWh, running 24/7: Spark costs ¥1,260/year, your dual build costs ¥23,100/year.</p>
+      <p><small><strong>Your build:</strong> Cost per TFLOPS is better, but the power bill is real. Budget for cooling.</small></p>
+    </div>
+    <div class="scenario-card">
+      <span class="winner-tag tie">Tie — depends</span>
+      <h4>Classroom Demo / Teacher Training</h4>
+      <p>Spark: carry to any room, plug in, demo in 30 seconds. Your build: fixed in server room, remote access only.</p>
+      <p><small><strong>Verdict:</strong> Spark for mobile demos. Your build for permanent school infrastructure.</small></p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2 class="section-title">Cloud Comparison: What Would ¥50,000 Buy?</h2>
+  <p class="subtitle">If you spent the same money on API calls instead of hardware.</p>
+
+  <table class="comparison-table">
+    <tr>
+      <th>Service</th>
+      <th>Model</th>
+      <th>Price per 1M tokens</th>
+      <th>¥50,000 buys...</th>
+      <th>Verdict</th>
+    </tr>
+    <tr>
+      <td><strong>SiliconFlow (China)</strong></td>
+      <td>DeepSeek-V3</td>
+      <td class="number">¥1 / 1M tokens</td>
+      <td class="number">50 billion tokens</td>
+      <td>Cheapest for text, but no privacy. All data leaves school.</td>
+    </tr>
+    <tr>
+      <td><strong>OpenAI API</strong></td>
+      <td>gpt-4o</td>
+      <td class="number">$2.50 / 1M input<br>$10 / 1M output</td>
+      <td class="number">~2.5 billion tokens<br><small>(mixed use)</small></td>
+      <td>Requires VPN. Censored. No student data control.</td>
+    </tr>
+    <tr>
+      <td><strong>Kimi API</strong></td>
+      <td>Kimi K2.5</td>
+      <td class="number">¥1.60 / 1M tokens</td>
+      <td class="number">31 billion tokens</td>
+      <td>China-accessible. But no offline. Student essays go to Moonshot.</td>
+    </tr>
+    <tr>
+      <td><strong>Aliyun Bailian</strong></td>
+      <td>Qwen3-235B</td>
+      <td class="number">¥1 / 1M tokens</td>
+      <td class="number">50 billion tokens</td>
+      <td>China-local. Still cloud. Still shared infrastructure.</td>
+    </tr>
+    <tr class="winner">
+      <td><strong>Your Local Build</strong></td>
+      <td>Any (Llama, Qwen, Mistral...)</td>
+      <td class="number">¥0 / unlimited</td>
+      <td class="number">∞ tokens, forever<br><small>after ¥50k capex</small></td>
+      <td class="winner">Zero per-token cost. Zero data exfiltration. Works offline.</td>
+    </tr>
+  </table>
+
+  <div class="price-note">
+    <strong>💡 Cloud Math:</strong> At ¥50,000, cloud APIs are cheaper for the first 3–6 months of heavy use. After that, the local build is free. For a 3-year school deployment, local infrastructure saves <strong>¥150,000–300,000</strong> in API fees.
+  </div>
+</div>
+
+<div class="section">
+  <h2 class="section-title">Bottom Line for PD</h2>
+
+  <div class="highlight-box">
+    <h3>🎯 The One-Liner</h3>
+    <p>The <strong>DGX Spark</strong> is a desktop supercomputer — incredible for a single developer running one big model fast.</p>
+    <p>Your <strong>dual G292-Z20</strong> is a production inference cluster — built for serving multiple users, multiple models, with redundancy and scale.</p>
+    <p style="margin-top:0.8rem;font-size:1.05rem;"><strong>For a school commercialization plan, the DGX Spark is a toy. Your rack is the real infrastructure.</strong></p>
+  </div>
+
+  <div class="highlight-box" style="background: linear-gradient(135deg, var(--accent-navy) 0%, #1a1a2e 100%);">
+    <h3>💡 The Useful Combo</h3>
+    <p>A DGX Spark on your desk for <strong>prototyping</strong> before pushing to the rack? That's a useful combo.</p>
+    <p>Prototype with Spark (fast iteration, same Blackwell architecture as cloud), then deploy to your dual-G292 cluster for production (scale, redundancy, multi-tenant).</p>
+    <p style="margin-top:0.5rem;"><strong>Combined price:</strong> ¥33,833 + ¥50,000 = <strong>¥83,833</strong> for a complete prototype-to-production pipeline.</p>
+  </div>
+</div>
+
+<div class="section">
+  <h2 class="section-title">Quick Reference: Specs at a Glance</h2>
+  <table class="comparison-table">
+    <tr>
+      <th>System</th>
+      <th>Price</th>
+      <th>VRAM</th>
+      <th>FP16</th>
+      <th>CPU</th>
+      <th>RAM</th>
+      <th>Power</th>
+      <th>Best For</th>
+    </tr>
+    <tr>
+      <td><strong>DGX Spark</strong></td>
+      <td class="price">¥33,833</td>
+      <td class="number">128G</td>
+      <td class="number winner">500T</td>
+      <td class="number">20c ARM</td>
+      <td class="number">128G</td>
+      <td class="number winner">240W</td>
+      <td>Single model, fast inference, prototyping</td>
+    </tr>
+    <tr class="winner">
+      <td><strong>Your Dual G292</strong></td>
+      <td class="price">~¥50,000</td>
+      <td class="number winner">256G</td>
+      <td class="number">251T</td>
+      <td class="number winner">128c x86</td>
+      <td class="number winner">1TB</td>
+      <td class="number">4,400W</td>
+      <td>Multi-model, multi-user, production, redundancy</td>
+    </tr>
+    <tr>
+      <td><strong>Single G292</strong></td>
+      <td class="price">~¥25,000</td>
+      <td class="number">128G</td>
+      <td class="number">126T</td>
+      <td class="number">64c x86</td>
+      <td class="number">512G</td>
+      <td class="number">2,200W</td>
+      <td>Budget entry, expandable to dual</td>
+    </tr>
+    <tr>
+      <td><strong>Cloud APIs</strong></td>
+      <td class="price">¥0–50,000</td>
+      <td class="number">N/A</td>
+      <td class="number">N/A</td>
+      <td class="number">N/A</td>
+      <td class="number">N/A</td>
+      <td class="number winner">0W</td>
+      <td>No capex, but data leaves, per-token cost</td>
+    </tr>
+  </table>
+</div>
+
+<div class="section">
+  <p class="footnote">
+    <strong>Sources:</strong> DGX Spark specs from NVIDIA product page (2025). G292-Z20 specs from Gigabyte datasheet. Tesla A2 specs from NVIDIA technical brief. Prices from Taobao orders (2026-06-22) and NVIDIA store. Cloud pricing from SiliconFlow, OpenAI, Kimi, Aliyun as of 2026-06. All TFLOPS estimates are theoretical peak FP16. Real-world inference performance depends on model, quantization, and batch size.
+  </p>
+  <p class="footnote">
+    <strong>Last updated:</strong> 2026-06-26 | <strong>Created by:</strong> HER + Kimi for William Morris PD at NAS Jiaxing
+  </p>
+</div>
+
+</body>
+</html>
